@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'tecnico-tareas-index')
-@section('contenido')
+<x-admin-layout ruta="tecnico-tareas-index">
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
 
@@ -31,9 +29,7 @@
 
     <!-- Modal de chat CHAT-->
     @livewire('admin.tecnico.notificaciones.cliente-contactos')
-@stop
 
-@push('modals')
     @livewire('admin.tecnico.tareas.create-task')
     @livewire('admin.tecnico.tareas.reportes.reporte-principal')
     @livewire('admin.tecnico.tareas.edit-task')
@@ -53,8 +49,5 @@
 
     {{-- iframe --}}
     @livewire('admin.tecnico.tareas.modales.iframe')
-@endpush
 
-@section('js')
-
-@stop
+</x-admin-layout>

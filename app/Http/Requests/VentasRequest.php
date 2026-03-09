@@ -74,6 +74,7 @@ class VentasRequest extends FormRequest
             'items.*.unit_name' => 'required',
             'items.*.descripcion' => [
                 'required',
+                'max:500',
                 'regex:/^[\pL\pN\s\.\,\-\_\(\)\[\]\{\}\:\;\'\"\!\?\@\/\\\&\%\#\*\+\=]*$/u'
             ],
             'items.*.valor_unitario' => 'required',
@@ -87,6 +88,8 @@ class VentasRequest extends FormRequest
             'items.*.codigo_afectacion' => 'required',
             'items.*.afecto_icbper' => 'required',
             'items.*.tipo' => 'required',
+            'items.*.descripcion_pdf' => 'nullable|string|max:500',
+            'items.*.imeis' => 'nullable|array',
 
             //pago anticipado
             'pago_anticipado' => 'boolean',
@@ -116,6 +119,8 @@ class VentasRequest extends FormRequest
             'items.between' => 'Debes Añadir al menos 1 producto o servicio',
             'datosDetraccion.cuenta_bancaria.required' => 'La cuenta bancaria es obligatoria si hay detracción',
             'datosDetraccion.codigo_detraccion.required' => 'El código detracción es obligatorio',
+            'items.*.descripcion.max' => 'La descripción no puede superar los 500 caracteres (límite SUNAT).',
+            'items.*.descripcion_pdf.max' => 'La descripción PDF no puede superar los 500 caracteres.',
         ];
         return $messages;
     }

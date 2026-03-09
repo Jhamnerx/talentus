@@ -5,7 +5,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Recibos ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">Recibos ✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -14,10 +14,11 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
+                <input wire:model.live='search' id="action-search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400"
                     type="search" placeholder="Buscar recibo" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-slate-500 group-hover:text-slate-500 dark:group-hover:text-slate-300 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -26,6 +27,12 @@
                     </svg>
                 </button>
             </form>
+
+            <!-- Filter by client -->
+            <div class="w-64">
+                <x-form.select wire:model.live="cliente_id" placeholder="Filtrar por cliente" :async-data="route('api.clientes.index')"
+                    option-label="razon_social" option-description="numero_documento" option-value="id" clearable />
+            </div>
 
             <!-- Create recibo button -->
             @can('crear-recibos')
@@ -53,7 +60,7 @@
             @can('reportes-recibos')
                 <div class="relative inline-flex">
 
-                    <x-form.button wire:click="OpenModalReporte" spinner="OpenModalReporte" label="Descagar Reporte"
+                    <x-form.button wire:click="OpenModalReporte" spinner="OpenModalReporte" label="Descargar Reporte"
                         positive md icon="arrow-down-tray" />
 
                 </div>
@@ -62,28 +69,28 @@
 
         </div>
         <!-- Left side -->
-        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
+        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500 dark:text-slate-400" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
                     <button wire:click="statusSearch('')"
                         :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">Todas
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 dark:border-gray-600 hover:border-slate-300 dark:hover:border-gray-500 dark:text-slate-300 shadow-sm duration-150 ease-in-out">Todas
                         <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click="statusSearch('PAID')"
                         :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 1"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm  duration-150 ease-in-out">Pagadas
-                        <span class="ml-1 text-slate-400">{{ $totales['pagadas'] }}</span></button>
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 dark:border-gray-600 hover:border-slate-300 dark:hover:border-gray-500 dark:text-slate-300 shadow-sm  duration-150 ease-in-out">Pagadas
+                        <span class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['pagadas'] }}</span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click="statusSearch('UNPAID')"
                         :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 2"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">Vencidas
-                        <span class="ml-1 text-slate-400">{{ $totales['vencidas'] }}</span></button>
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 dark:border-gray-600 hover:border-slate-300 dark:hover:border-gray-500 dark:text-slate-300 shadow-sm duration-150 ease-in-out">Vencidas
+                        <span class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['vencidas'] }}</span></button>
                 </li>
             </ul>
         </div>
@@ -93,10 +100,10 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
-        <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Recibos <span
-                    class="text-slate-400 font-medium">{{ $recibos->total() }}</span>
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700 mb-8">
+        <header class="px-5 py-4 border-b border-slate-200 dark:border-gray-700">
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">Recibos <span
+                    class="text-slate-400 dark:text-slate-500 font-medium">{{ $recibos->total() }}</span>
             </h2>
         </header>
         <div>
@@ -105,7 +112,7 @@
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-gray-900 border-t border-b border-slate-200 dark:border-gray-700">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
@@ -131,6 +138,9 @@
                                 <div class="font-semibold text-left">Total</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Saldo</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado Pago</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -153,12 +163,12 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
 
                         <!-- Row -->
 
                         @foreach ($recibos as $recibo)
-                            <tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center">
                                         <label class="inline-flex">
@@ -201,7 +211,8 @@
                                 @endcan
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $recibo->clientes->razon_social }}
+                                    <div class="font-medium text-slate-800 dark:text-slate-200">
+                                        {{ $recibo->clientes->razon_social }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -212,6 +223,18 @@
                                             ${{ $recibo->total }}
                                         @endif
 
+                                    </div>
+                                </td>
+                                {{-- Saldo = total - pagos registrados --}}
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @php $saldo = round($recibo->total - ($recibo->payments_sum_monto ?? 0), 2); @endphp
+                                    <div
+                                        class="font-medium {{ $saldo > 0 ? 'text-orange-500' : 'text-emerald-500' }}">
+                                        @if ($recibo->divisa == 'PEN')
+                                            S/. {{ number_format($saldo, 2) }}
+                                        @else
+                                            ${{ number_format($saldo, 2) }}
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -250,27 +273,29 @@
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div>{{ $recibo->fecha_emision->format('d-m-Y') }}</div>
+                                    <div class="text-slate-600 dark:text-slate-300">
+                                        {{ $recibo->fecha_emision->format('d-m-Y') }}</div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div>
+                                    <div class="text-slate-600 dark:text-slate-300">
                                         @if ($recibo->fecha_pago)
                                             {{ $recibo->fecha_pago->format('d-m-Y') }}
                                         @endif
-
                                     </div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div>{{ $recibo->tipo_venta }}</div>
+                                    <div class="text-slate-600 dark:text-slate-300">{{ $recibo->tipo_venta }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
-                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                                @click.prevent="open = !open" :aria-expanded="open">
+                                            <button
+                                                class="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-300 rounded-full"
+                                                :class="{ 'bg-slate-100 dark:bg-gray-700 text-slate-500': open }"
+                                                aria-haspopup="true" @click.prevent="open = !open"
+                                                :aria-expanded="open">
                                                 <span class="sr-only">Menu</span>
                                                 <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                     <circle cx="16" cy="16" r="2" />
@@ -278,7 +303,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right z-10 absolute transform -translate-x-3/4 top-full left-0 min-w-36 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 py-1.5 rounded shadow-lg overflow-hidden mt-1 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700 focus:outline-none"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -289,12 +314,26 @@
                                                 x-transition:leave-end="opacity-0" x-cloak>
 
                                                 <ul>
+                                                    {{-- Ver Pagos --}}
+                                                    <li>
+                                                        <a href="javascript: void(0)" @click.prevent="open = false"
+                                                            wire:click="abrirModalPagos({{ $recibo->id }})"
+                                                            class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                            role="menuitem" tabindex="-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor"
+                                                                class="h-5 w-5 mr-3 text-gray-400 group-hover:text-indigo-500">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                            </svg>
+                                                            Ver Pagos
+                                                        </a>
+                                                    </li>
                                                     @can('editar-recibos')
                                                         <li>
-
                                                             <a href="{{ route('admin.ventas.recibos.edit', $recibo) }}"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-27"
+                                                                class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
@@ -304,7 +343,6 @@
                                                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
                                                                     </path>
                                                                 </svg> Editar
-
                                                             </a>
                                                         </li>
                                                     @endcan
@@ -313,8 +351,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="openModalDelete({{ $recibo->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-28"
+                                                                class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
@@ -332,18 +369,15 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="toogleEstado({{ $recibo->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-28"
+                                                                class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
                                                                 role="menuitem" tabindex="-1">
-
                                                                 <svg class="h-5 w-5 mr-3 text-gray-400 group-hover:text-green-500"
                                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke-width="1.5"
-                                                                    stroke="currentColor" class="size-6">
+                                                                    stroke="currentColor">
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                                         d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
                                                                 </svg>
-
                                                                 Cambiar Estado
                                                             </a>
                                                         </li>
@@ -352,8 +386,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click="modalOpenSend({{ $recibo->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-32"
+                                                                class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
@@ -367,17 +400,16 @@
                                                         </li>
                                                     @endcan
 
-                                                    @can('estados-recibos')
+                                                    {{-- @can('estados-recibos')
                                                         @if ($recibo->pago_estado == 'PAID')
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="markPaid({{ $recibo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
-                                                                    disabled="true" id="headlessui-menu-item-33"
+                                                                    class="text-gray-400 dark:text-gray-500 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-300">
+                                                                        class="h-5 w-5 mr-3 text-gray-300 dark:text-gray-600">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -391,12 +423,11 @@
                                                                 <a href="javascript: void(0)"
                                                                     @click.prevent="open = !open"
                                                                     wire:click.prevent="markUnPaid({{ $recibo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-34"
+                                                                    class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-red-400">
+                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-400">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -409,12 +440,11 @@
                                                                 <a href="javascript: void(0)"
                                                                     @click.prevent="open = !open"
                                                                     wire:click.prevent="markPaid({{ $recibo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-33"
+                                                                    class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
+                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-lime-500">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -427,12 +457,11 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="markUnPaid({{ $recibo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
-                                                                    disabled="true" id="headlessui-menu-item-34"
+                                                                    class="text-gray-400 dark:text-gray-500 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-300">
+                                                                        class="h-5 w-5 mr-3 text-gray-300 dark:text-gray-600">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -441,7 +470,7 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-                                                    @endcan
+                                                    @endcan --}}
 
 
                                                 </ul>
@@ -456,9 +485,11 @@
                             </tr>
                         @endforeach
                         @if ($recibos->count() < 1)
-                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
-                            </td>
+                            <tr>
+                                <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-8 text-center">
+                                    <div class="text-gray-500 dark:text-gray-400">No hay Registros</div>
+                                </td>
+                            </tr>
                         @endif
 
 
@@ -474,5 +505,8 @@
         {{ $recibos->links() }}
 
     </div>
+
+    {{-- Modal de gestión de pagos --}}
+    <livewire:admin.shared.pagos-modal />
 
 </div>

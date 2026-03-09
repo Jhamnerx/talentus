@@ -1,9 +1,9 @@
-<div class="overflow-x-auto border border-violet-400 rounded-lg">
+<div class="overflow-x-auto border border-violet-400 dark:border-violet-600 rounded-lg">
 
     <table class="w-full">
         <!-- Table header -->
         <thead
-            class="text-xs font-semibold uppercase text-white  bg-gradient-to-r from-slate-800  to-indigo-500 border-t border-b rounded-lg border-slate-200">
+            class="text-xs font-semibold uppercase text-white bg-linear-to-r from-slate-800 to-indigo-500 border-t border-b rounded-lg border-slate-200 dark:border-gray-700">
             <tr>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <div class="font-semibold text-left">CODIGO</div>
@@ -38,27 +38,27 @@
             </tr>
         </thead>
         <!-- Table body -->
-        <tbody class="text-xs divide-y divide-slate-200 listaItems">
+        <tbody class="text-xs divide-y divide-slate-200 dark:divide-gray-600 listaItems">
 
             @foreach ($prepayments->all() as $clave => $prepayment)
-            <tr class="main bg-slate-100" wire:key="item-prepay-{{ $clave }}">
+            <tr class="main bg-slate-100 dark:bg-gray-800" wire:key="item-prepay-{{ $clave }}">
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         {{ $prepayment['serie_correlativo_ref'] }}
                     </div>
 
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
 
                     </div>
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap min-w-36 md:min-w-0">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         1
                     </div>
                 </td>
@@ -69,18 +69,18 @@
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         -{{ $prepayment['valor_venta_ref'] }}
                     </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         -{{ $prepayment['igv'] }}
                     </div>
 
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         -{{ $prepayment['total_invoice_ref'] }}
                     </div>
                 </td>
@@ -102,10 +102,10 @@
             @endif
             {{-- fila para añadir --}}
             @foreach ($items->all() as $clave => $item)
-            <tr class="main bg-slate-100" wire:key="item-{{ $clave }}">
+            <tr class="main bg-slate-100 dark:bg-gray-800" wire:key="item-{{ $clave }}">
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         {{ $items[$clave]['codigo'] }}
                     </div>
                     @if ($errors->has('items.' . $clave . '.codigo'))
@@ -117,7 +117,7 @@
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         {{ $items[$clave]['unit_name'] }}
                     </div>
 
@@ -138,11 +138,25 @@
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                     <x-form.textarea required wire:model.live="items.{{ $clave }}.descripcion" />
+                    @php $hasImeis = !empty($items[$clave]['imeis'] ?? null); @endphp
+                    <div class="flex flex-wrap items-center gap-3 mt-1">
+                        @if($hasImeis)
+                            <a href="#" wire:click.prevent="editarImeis({{ $clave }})" class="text-xs text-indigo-400 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 hover:underline">✏️ IMEIs</a>
+                        @endif
+                        <div x-data="{ showPdf: false }">
+                            <a href="#" @click.prevent="showPdf = !showPdf" class="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
+                                <span x-text="showPdf ? '▲ Descripción PDF' : '+ Descripción PDF'"></span>
+                            </a>
+                            <div x-show="showPdf" style="display: none;" class="mt-1">
+                                <x-form.textarea wire:model.live="items.{{ $clave }}.descripcion_pdf" placeholder="Descripción para factura impresa" />
+                            </div>
+                        </div>
+                    </div>
 
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         {{ $items[$clave]['valor_unitario'] }}
                     </div>
 
@@ -154,7 +168,7 @@
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         {{ $items[$clave]['igv'] }}
                     </div>
 
@@ -165,7 +179,7 @@
                     @endif
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         {{ $items[$clave]['total'] }}
                     </div>
 
@@ -191,7 +205,7 @@
             @if ($items->count() < 1) <tr>
                 <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-900 dark:text-gray-200">
                         AÑADIR PRODUCTOS
                     </div>
 

@@ -4,8 +4,8 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Ciudades ✨</h1>
-            <span>Configura las ciudades de esta empresa</span>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">Ciudades ✨</h1>
+            <span class="text-slate-500 dark:text-slate-400">Configura las ciudades de esta empresa</span>
         </div>
 
         <!-- Right: Actions -->
@@ -14,10 +14,11 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Search</label>
-                <input id="action-search" wire:model.live='search' class="form-input pl-9 focus:border-slate-300"
+                <input id="action-search" wire:model.live='search'
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-500"
                     type="search" placeholder="Buscar Ciudad por nombre…" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 dark:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -41,45 +42,47 @@
         </div>
 
     </div>
-    <div class="overflow-x-auto">
-        <table class="table-auto w-full">
+
+    <div
+        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 overflow-x-auto min-h-screen">
+        <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
             <!-- Table header -->
             <thead
-                class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-900/20">
                 <tr>
-                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <div class="font-semibold text-left">Nombre</div>
+                    <th class="px-4 py-3 text-left whitespace-nowrap">
+                        <div class="font-semibold">Nombre</div>
                     </th>
-                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <div class="font-semibold text-left">Prefijo</div>
+                    <th class="px-4 py-3 text-left whitespace-nowrap">
+                        <div class="font-semibold">Prefijo</div>
                     </th>
                     @canany(['admin.settings.ciudades.edit', 'admin.settings.ciudades.delete'])
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <th class="px-4 py-3 text-center whitespace-nowrap">
                             <div class="font-semibold">Acciones</div>
                         </th>
                     @endcanany
-
                 </tr>
             </thead>
             <!-- Table body -->
-            <tbody class="text-sm divide-y divide-slate-200">
-                <!-- Row -->
+            <tbody class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
 
                 @foreach ($ciudades as $ciudad)
-                    <tr wire:key='ciudad-{{ $ciudad->id }}'>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-left">{{ strtoupper($ciudad->nombre) }}</div>
+                    <tr wire:key='ciudad-{{ $ciudad->id }}' class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <div class="text-left text-gray-800 dark:text-gray-100">{{ strtoupper($ciudad->nombre) }}
+                            </div>
                         </td>
 
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-left font-medium text-sky-500">{{ $ciudad->prefijo }}</div>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <div class="text-left font-medium text-sky-500 dark:text-sky-400">{{ $ciudad->prefijo }}
+                            </div>
                         </td>
                         @canany(['admin.settings.ciudades.edit', 'admin.settings.ciudades.delete'])
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
+                            <td class="px-4 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center justify-center space-x-1">
                                     @can('admin.settings.ciudades.edit')
                                         <button wire:click.prevent='openModalEdit({{ $ciudad->id }})'
-                                            class="text-slate-400 hover:text-slate-500 rounded-full">
+                                            class="text-slate-400 hover:text-slate-500 dark:text-gray-500 dark:hover:text-gray-300 rounded-full">
                                             <span class="sr-only">Edit</span>
                                             <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                 <path
@@ -89,7 +92,7 @@
                                     @endcan
                                     @can('admin.settings.ciudades.delete')
                                         <button wire:click.prevent='openModalDelete({{ $ciudad->id }})'
-                                            class="text-rose-500 hover:text-rose-600 rounded-full">
+                                            class="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 rounded-full">
                                             <span class="sr-only">Delete</span>
                                             <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                 <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
@@ -98,7 +101,6 @@
                                             </svg>
                                         </button>
                                     @endcan
-
                                 </div>
                             </td>
                         @endcanany
@@ -107,17 +109,16 @@
                 @endforeach
                 @if ($ciudades->count() < 1)
                     <tr>
-                        <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
+                        <td colspan="10" class="px-4 py-10 whitespace-nowrap col-span-full">
+                            <div class="text-center text-gray-400 dark:text-gray-500">No hay Registros</div>
                         </td>
                     </tr>
                 @endif
             </tbody>
         </table>
-
     </div>
+
     <div class="mt-8 w-full">
         {{ $ciudades->links() }}
-
     </div>
 </div>

@@ -1,0 +1,1 @@
+tipo-<?php echo e($tipo->id); ?><?php /**PATH C:\laragon2\www\talentus\storage\framework\views/750b5ab265d5441382a8d56aa6695dce.blade.php ENDPATH**/ ?>

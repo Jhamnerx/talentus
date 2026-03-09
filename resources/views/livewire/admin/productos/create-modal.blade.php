@@ -3,15 +3,6 @@
     <div class="grid grid-cols-12 gap-6">
 
         <div class="col-span-12">
-            <div class="flex flex-wrap gap-4">
-                <x-form.radio md id="tipo_1" name="tipo" left-label="Producto" checked value="producto"
-                    wire:model.live="tipo" />
-                <x-form.radio md id="tipo_2" name="tipo" label="Servicio" value="servicio" wire:model.live="tipo" />
-            </div>
-
-        </div>
-
-        <div class="col-span-12">
 
             <x-form.textarea id="descripcion" name="descripcion" wire:model="descripcion" label="Descripción:"
                 placeholder="Descripcion del producto" />
@@ -23,15 +14,17 @@
             <x-form.select id="categoria_id" name="categoria_id" label="Selecciona una categoria"
                 wire:model.live="categoria_id" placeholder="Selecciona una categoria" :async-data="[
                     'api' => route('api.categorias.index'),
-                ]" option-label="nombre" option-value="id" />
+                ]"
+                option-label="nombre" option-value="id" />
         </div>
 
-        <div class="col-span-12 md:col-span-4 {{ $categoria_id == '1' ? '' : 'hidden' }}">
+        <div class="col-span-12 md:col-span-4 {{ $es_dispositivo ? '' : 'hidden' }}">
 
             <x-form.select label="Modelo Vinculado:" name="modelo_id" wire:model.live="modelo_id"
                 placeholder="Selecciona un modelo" :async-data="[
                     'api' => route('api.dispositivos.modelos.index'),
-                ]" option-label="modelo" option-value="id" option-description="marca" />
+                ]" option-label="modelo" option-value="id"
+                option-description="marca" />
         </div>
 
 
@@ -45,8 +38,7 @@
         <div class="col-span-12 md:col-span-4">
 
             <x-form.select id="unit_code" name="unit_code" label="Unidad:" wire:model.live="unit_code"
-                placeholder="Selecciona una opcion" :async-data="route('api.unit.index')" option-label="name"
-                option-value="codigo" />
+                placeholder="Selecciona una opcion" :async-data="route('api.unit.index')" option-label="name" option-value="codigo" />
         </div>
 
 
@@ -57,21 +49,25 @@
         </div>
 
         <div class="col-span-12 md:col-span-3">
-            <x-form.select id="divisa_p" label="Divisa:"
-                :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
-                option-label="name" option-value="id" wire:model="divisa" :clearable="false" icon='currency-dollar' />
+            <x-form.select id="divisa_p" label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
+                wire:model="divisa" :clearable="false" icon='currency-dollar' />
         </div>
 
         <div class="col-span-12 md:col-span-3">
 
             <x-form.currency id="valor_unitario" name="valor_unitario" label="Valor unitario:" placeholder="9.99"
-                icon="currency-dollar" precision="4" wire:model.blur="valor_unitario" />
+                icon="currency-dollar" precision="4" wire:model.live.blur="valor_unitario" />
         </div>
 
         <div class="col-span-12 md:col-span-3">
 
             <x-form.currency id="precio_unitario" name="precio_unitario" label="Precio unitario:" placeholder="9.99"
-                icon="currency-dollar" precision="4" wire:model.blur="precio_unitario" />
+                icon="currency-dollar" precision="4" wire:model.live.blur="precio_unitario" />
+        </div>
+
+        <div class="col-span-12">
+            <x-form.checkbox id="es_dispositivo" name="es_dispositivo" md left-label="¿Es un Dispositivo?"
+                wire:model.live="es_dispositivo" />
         </div>
 
         <div class="col-span-12">
@@ -98,8 +94,8 @@
 </x-form.modal.card>
 
 @push('scripts')
-<script>
-    // Get a file input reference
+    <script>
+        // Get a file input reference
         const input = document.querySelector(".imagen-upload");
         // const img = document.querySelector(".img");
 
@@ -140,5 +136,5 @@
             });
 
         });
-</script>
+    </script>
 @endpush

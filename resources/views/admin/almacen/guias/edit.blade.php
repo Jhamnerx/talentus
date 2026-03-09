@@ -1,8 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'almacen-guias')
-
-
-@section('contenido')
+<x-admin-layout>
 
     <div
         class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
@@ -39,4 +35,4 @@
 
     @livewire('admin.guias-remision.edit', ['guia' => $guia])
 
-@stop
+</x-admin-layout>

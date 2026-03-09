@@ -1,118 +1,12 @@
 {
-  "_iziToast-BMxtxNnE.js": {
-    "file": "assets/iziToast-BMxtxNnE.js",
-    "name": "iziToast"
-  },
   "resources/css/app.css": {
-    "file": "assets/app-Bs4_gvhB.css",
+    "file": "assets/app-jnCMWccz.css",
     "src": "resources/css/app.css",
-    "isEntry": true
-  },
-  "resources/css/cliente.css": {
-    "file": "assets/cliente-BA3k1leE.css",
-    "src": "resources/css/cliente.css",
-    "isEntry": true
-  },
-  "resources/css/fontawesome-all.min.css": {
-    "file": "assets/fontawesome-all-BGoowDde.css",
-    "src": "resources/css/fontawesome-all.min.css",
-    "isEntry": true
-  },
-  "resources/fonts/fa-brands-400.eot": {
-    "file": "assets/fa-brands-400-BniAJAuf.eot",
-    "src": "resources/fonts/fa-brands-400.eot"
-  },
-  "resources/fonts/fa-brands-400.svg": {
-    "file": "assets/fa-brands-400-D0SGUlJe.svg",
-    "src": "resources/fonts/fa-brands-400.svg"
-  },
-  "resources/fonts/fa-brands-400.ttf": {
-    "file": "assets/fa-brands-400-D2k7E3SQ.ttf",
-    "src": "resources/fonts/fa-brands-400.ttf"
-  },
-  "resources/fonts/fa-brands-400.woff": {
-    "file": "assets/fa-brands-400-Byanlnsj.woff",
-    "src": "resources/fonts/fa-brands-400.woff"
-  },
-  "resources/fonts/fa-brands-400.woff2": {
-    "file": "assets/fa-brands-400-CQYQ2tpV.woff2",
-    "src": "resources/fonts/fa-brands-400.woff2"
-  },
-  "resources/fonts/fa-light-300.eot": {
-    "file": "assets/fa-light-300-Ddzzy1ai.eot",
-    "src": "resources/fonts/fa-light-300.eot"
-  },
-  "resources/fonts/fa-light-300.svg": {
-    "file": "assets/fa-light-300-B75IKSrQ.svg",
-    "src": "resources/fonts/fa-light-300.svg"
-  },
-  "resources/fonts/fa-light-300.ttf": {
-    "file": "assets/fa-light-300-Bs7JY2J-.ttf",
-    "src": "resources/fonts/fa-light-300.ttf"
-  },
-  "resources/fonts/fa-light-300.woff": {
-    "file": "assets/fa-light-300-CyDSRxiQ.woff",
-    "src": "resources/fonts/fa-light-300.woff"
-  },
-  "resources/fonts/fa-light-300.woff2": {
-    "file": "assets/fa-light-300-DRq1WQm1.woff2",
-    "src": "resources/fonts/fa-light-300.woff2"
-  },
-  "resources/fonts/fa-regular-400.eot": {
-    "file": "assets/fa-regular-400-C2GxrME4.eot",
-    "src": "resources/fonts/fa-regular-400.eot"
-  },
-  "resources/fonts/fa-regular-400.svg": {
-    "file": "assets/fa-regular-400-C3TMpuhn.svg",
-    "src": "resources/fonts/fa-regular-400.svg"
-  },
-  "resources/fonts/fa-regular-400.ttf": {
-    "file": "assets/fa-regular-400-DK4k0xq3.ttf",
-    "src": "resources/fonts/fa-regular-400.ttf"
-  },
-  "resources/fonts/fa-regular-400.woff": {
-    "file": "assets/fa-regular-400-CMVxDNep.woff",
-    "src": "resources/fonts/fa-regular-400.woff"
-  },
-  "resources/fonts/fa-regular-400.woff2": {
-    "file": "assets/fa-regular-400-BzHW4h0S.woff2",
-    "src": "resources/fonts/fa-regular-400.woff2"
-  },
-  "resources/fonts/fa-solid-900.eot": {
-    "file": "assets/fa-solid-900-Bh5Cv63f.eot",
-    "src": "resources/fonts/fa-solid-900.eot"
-  },
-  "resources/fonts/fa-solid-900.svg": {
-    "file": "assets/fa-solid-900-CT2YlFmG.svg",
-    "src": "resources/fonts/fa-solid-900.svg"
-  },
-  "resources/fonts/fa-solid-900.ttf": {
-    "file": "assets/fa-solid-900-DXcCQJMR.ttf",
-    "src": "resources/fonts/fa-solid-900.ttf"
-  },
-  "resources/fonts/fa-solid-900.woff": {
-    "file": "assets/fa-solid-900-BGbgH7lG.woff",
-    "src": "resources/fonts/fa-solid-900.woff"
-  },
-  "resources/fonts/fa-solid-900.woff2": {
-    "file": "assets/fa-solid-900-CiOq61Qs.woff2",
-    "src": "resources/fonts/fa-solid-900.woff2"
-  },
-  "resources/fonts/seolight-icon.eot": {
-    "file": "assets/seolight-icon-Bhz5uU7u.eot",
-    "src": "resources/fonts/seolight-icon.eot"
-  },
-  "resources/fonts/seolight-icon.svg": {
-    "file": "assets/seolight-icon-DvFsnd5t.svg",
-    "src": "resources/fonts/seolight-icon.svg"
-  },
-  "resources/fonts/seolight-icon.ttf": {
-    "file": "assets/seolight-icon-B844Yoxl.ttf",
-    "src": "resources/fonts/seolight-icon.ttf"
-  },
-  "resources/fonts/seolight-icon.woff": {
-    "file": "assets/seolight-icon-CBMhmC9k.woff",
-    "src": "resources/fonts/seolight-icon.woff"
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
   },
   "resources/images/404-illustration.svg": {
     "file": "assets/404-illustration-1CNBzie-.svg",
@@ -424,7 +318,7 @@
   },
   "resources/images/cliente/footer-bg-2-2.png": {
     "file": "assets/footer-bg-1-3-BJYKoBi1.png",
-    "src": "resources/images/cliente/shapes/footer-bg-1-3.png"
+    "src": "resources/images/cliente/footer-bg-2-2.png"
   },
   "resources/images/cliente/loader.png": {
     "file": "assets/loader-SKFHWXF3.png",
@@ -652,7 +546,7 @@
   },
   "resources/images/cliente/shapes/footer-bg-1-3.png": {
     "file": "assets/footer-bg-1-3-BJYKoBi1.png",
-    "src": "resources/images/cliente/shapes/footer-bg-1-3.png"
+    "src": "resources/images/cliente/footer-bg-2-2.png"
   },
   "resources/images/cliente/shapes/footer-bg-2-1.png": {
     "file": "assets/footer-bg-2-1-CEuuTWTS.png",
@@ -660,7 +554,7 @@
   },
   "resources/images/cliente/shapes/footer-bg-2-2.png": {
     "file": "assets/footer-bg-1-3-BJYKoBi1.png",
-    "src": "resources/images/cliente/shapes/footer-bg-1-3.png"
+    "src": "resources/images/cliente/footer-bg-2-2.png"
   },
   "resources/images/cliente/shapes/sec-stripe-1-1.png": {
     "file": "assets/sec-stripe-1-1-ezczVw_B.png",
@@ -912,15 +806,15 @@
   },
   "resources/images/slider-bg-1.png": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider-bg-1.png"
   },
   "resources/images/slider-bg.jpg": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider-bg-1.png"
   },
   "resources/images/slider/slider-bg.jpg": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider-bg-1.png"
   },
   "resources/images/task-image-01.jpg": {
     "file": "assets/task-image-01-yEnpb4kW.jpg",
@@ -1147,24 +1041,12 @@
     "src": "resources/images/user-avatar-80.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-TUxmkysN.js",
+    "file": "assets/app-CWE3-T0Q.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
-    "imports": [
-      "_iziToast-BMxtxNnE.js"
-    ],
     "css": [
-      "assets/app-BI2sCKC-.css"
-    ]
-  },
-  "resources/js/cliente.js": {
-    "file": "assets/cliente-4Wx52Y1M.js",
-    "name": "cliente",
-    "src": "resources/js/cliente.js",
-    "isEntry": true,
-    "imports": [
-      "_iziToast-BMxtxNnE.js"
+      "assets/app-Dz2Vt4Vt.css"
     ]
   }
 }

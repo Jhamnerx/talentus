@@ -1,10 +1,18 @@
-<x-form.modal.card title="REGISTRAR RAPIDO DE VEHICULO" blur wire:model.live="modalOpen" align="center">
+<x-form.modal.card title="REGISTRAR RAPIDO DE VEHICULO" blur wire:model.live="modalOpen" align="center" persistent>
 
     <div class="grid grid-cols-12 gap-6">
 
-        <div class="col-span-6 sm:col-span-6">
-
-            <x-form.input wire:model.change="placa" label="Placa Unidad:" placeholder="ABC-780" />
+        <div class="col-span-12 sm:col-span-12">
+            <x-form.input wire:model.live.change="placa" label="Placa Unidad:" placeholder="ABC-780" class="uppercase"
+                x-on:input="$event.target.value = $event.target.value.toUpperCase()">
+                <x-slot name="append">
+                    <x-form.button class="h-full" icon="magnifying-glass" rounded="rounded-r-md" primary flat
+                        wire:click="buscarPlaca" wire:loading.attr="disabled" spinner="buscarPlaca" />
+                </x-slot>
+            </x-form.input>
+            @if ($errorConsultaPlaca)
+                <p class="mt-1 text-sm text-red-600">{{ $errorConsultaPlaca }}</p>
+            @endif
         </div>
 
         <div class="col-span-6 sm:col-span-6">

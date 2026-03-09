@@ -36,6 +36,7 @@ class VentasDetalle extends Model
         'descuento_factor' => 'decimal:5',
         'sub_total' => 'decimal:2',
         'total' => 'decimal:2',
+        'imeis' => 'array',
     ];
     public function getActivitylogOptions(): LogOptions
     {
@@ -46,7 +47,7 @@ class VentasDetalle extends Model
     }
     public function venta(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Ventas::class);
+        return $this->belongsTo(\App\Models\Ventas::class, 'ventas_id');
     }
 
     public function producto(): BelongsTo

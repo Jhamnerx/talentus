@@ -7,10 +7,12 @@ use App\Models\SimCard;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\CambiosLineas;
+use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\Auth;
 
 class AsignLinea extends Component
 {
+    use WireUiActions;
 
     public $modalAsign = false;
     public $sim_card_id, $lineas_id, $motivo;
@@ -35,108 +37,75 @@ class AsignLinea extends Component
 
     public function clearSimCardId()
     {
+        $this->sim_card_id = null;
         $this->reset('sim_card');
     }
     public function clearLineaId()
     {
+        $this->lineas_id = null;
         $this->reset('linea');
     }
 
     public function updatedSimCardId($value)
     {
 
-        $value ? $this->sim_card  = SimCard::findOr($value, fn () => null) : null;
+        $value ? $this->sim_card  = SimCard::findOr($value, fn() => null) : null;
     }
 
     public function updatedLineasId($value)
     {
 
-        $value ? $this->linea  = Lineas::findOr($value, fn () => null) : null;
+        $value ? $this->linea  = Lineas::findOr($value, fn() => null) : null;
     }
     public function save()
     {
-
-
         $this->validate([
             'sim_card_id' => 'required|exists:sim_card,id',
-            'lineas_id' => 'required',
+            'lineas_id' => 'required|exists:lineas,id',
         ]);
 
-
-        //verificar si enviamos el id de la linea
-        if ($this->lineas_id) {
-
-            # Si la linea esta asignada hacer lo siguiente
-            if ($this->linea->sim_card) {
-
-                $this->setOldSimCard($this->linea, $this->linea->sim_card->sim_card);
-                #Registra el cambio
-                CambiosLineas::create([
-                    'tipo_cambio' => 'Asignacion de numero',
-                    'sim_card_id' => $this->sim_card_id,
-                    'old_numero' => $this->sim_card->linea ? $this->sim_card->linea->id : null,
-                    'new_numero' => $this->lineas_id,
-                    'user_id' => auth()->user()->id,
-                ]);
-
-                #colocar nulo la linea en el sim card
-                $this->linea->sim_card->lineas_id = null;
-                $this->linea->sim_card->save();
-
-                //asignamos la nueva linea al sim card
-                $this->sim_card->lineas_id = $this->lineas_id;
-                $this->sim_card->save();
-
-                //NOTIFY
-                $this->afterSave();
-            } else {
-                # si no esta asignada
-                # Si la linea no esta asignada hacer lo siguiente
-                #lo mismo pero no verificamos el antiguo sim card
-                #Registra el cambio
-                CambiosLineas::create([
-                    'tipo_cambio' => 'Asinacion de numero',
-                    'sim_card_id' => $this->sim_card_id,
-                    'old_numero' => $this->sim_card->linea ? $this->sim_card->linea->id : NULL,
-                    'new_numero' => $this->lineas_id,
-                    'user_id' => auth()->user()->id,
-                ]);
-
-                //asignamos la nueva linea al sim card
-                $this->sim_card->lineas_id = $this->lineas_id;
-                $this->sim_card->save();
-
-                #Colocar el old sim card a la linea
-                $this->linea->old_sim_card = null;
-                $this->linea->save();
-
-                #NOTIFY
-                $this->afterSave();
-            }
+        // Verificar que el SIM card NO tenga línea asignada
+        if ($this->sim_card->lineas_id) {
+            $this->notification()->warning(
+                title: 'SIM CARD YA TIENE LÍNEA',
+                description: 'Este SIM card ya tiene el número ' . $this->sim_card->linea->numero . ' asignado. Usa "Cambiar número" en su lugar.'
+            );
+            return;
         }
-    }
 
-    public function setOldSimCard(Lineas $linea, $sim_card_old)
-    {
-        $linea->old_sim_card = $sim_card_old;
+        // Verificar que la línea NO tenga sim card asignado
+        if ($this->linea->sim_card) {
+            $this->notification()->warning(
+                title: 'LÍNEA YA TIENE CHIP',
+                description: 'Esta línea ya tiene el chip ' . $this->linea->sim_card->sim_card . ' asignado. Usa "Cambiar chip" en su lugar.'
+            );
+            return;
+        }
 
-        $linea->save();
+        // Asignación simple: ambos están disponibles
+        $this->sim_card->lineas_id = $this->lineas_id;
+        $this->sim_card->save();
 
-        $old = $linea->old_sim_cards()->create([
-            'old_sim_card' =>  $sim_card_old,
+        // Registrar el cambio como nueva asignación
+        CambiosLineas::create([
+            'tipo_cambio' => 'Nueva asignación',
+            'sim_card_id' => $this->sim_card_id,
+            'old_numero' => null,
+            'new_numero' => $this->lineas_id,
+            'motivo' => $this->motivo,
             'user_id' => Auth::user()->id,
         ]);
+
+        $this->afterSave();
     }
 
     public function afterSave()
     {
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'LINEA ASIGNADA A SIM CARD',
-            mensaje: 'Se asigno la linea ' . $this->linea->numero . ' al sim card: ' . $this->sim_card->sim_card
+        $this->notification()->success(
+            title: 'ASIGNACIÓN EXITOSA',
+            description: 'Se asignó la línea ' . $this->linea->numero . ' al chip ' . $this->sim_card->sim_card
         );
-        $this->reset('sim_card', 'linea', 'sim_card_id', 'lineas_id');
+        $this->reset('sim_card', 'linea', 'sim_card_id', 'lineas_id', 'motivo');
         $this->closeModal();
         $this->dispatch('update-table');
     }

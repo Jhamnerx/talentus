@@ -1,7 +1,5 @@
-@extends('layouts.admin')
-
-@section('contenido')
+<x-admin-layout>
 
     @livewire('admin.facturacion.nota.index', [], key('nota-f-index'))
 
-@stop
+</x-admin-layout>

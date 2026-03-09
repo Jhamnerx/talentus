@@ -4,7 +4,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Dispositivos ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-gray-100 font-bold">Dispositivos ✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -12,11 +12,12 @@
             <!-- Search form -->
             <form class="relative">
                 <label class="sr-only">Buscar</label>
-                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
-                    placeholder="Buscar Dispositivo" />
+                <input wire:model.live="search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+                    type="search" placeholder="Buscar Dispositivo" />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-500 group-hover:text-slate-500 dark:group-hover:text-gray-400 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -119,16 +120,32 @@
                     Consultando a fota web...
                 </div>
 
+                <!-- Botón para ver dispositivos no registrados -->
+                <div class="relative inline-flex">
+                    <button wire:click.prevent="consultarDispositivosNoRegistrados()" wire:loading.attr="disabled"
+                        wire:loading.class="bg-purple-400" wire:loading.class.remove="hover:bg-purple-700 bg-purple-600"
+                        class="btn bg-purple-600 hover:bg-purple-700 text-white border-slate-200 hover:border-slate-300">
+                        <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path
+                                d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+                        </svg>
+                        <span class="hidden xs:block ml-2">Ver No Registrados</span>
+                    </button>
+                </div>
+                <div class="relative inline-flex" wire:loading wire:target="consultarDispositivosNoRegistrados">
+                    <span class="text-purple-600 dark:text-purple-400 text-sm">Consultando...</span>
+                </div>
+
             </div>
         </div>
 
     </div>
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total dispositivos <span
-                    class="text-slate-400 font-medium">{{ $dispositivos->total() }}</span>
+            <h2 class="font-semibold text-slate-800 dark:text-gray-100">Total dispositivos <span
+                    class="text-slate-400 dark:text-gray-400 font-medium">{{ $dispositivos->total() }}</span>
             </h2>
 
         </header>
@@ -139,7 +156,7 @@
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-900/50 border-t border-b border-slate-200 dark:border-gray-700">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">IMEI</div>
@@ -168,7 +185,7 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
                         <!-- Row -->
                         @foreach ($dispositivos as $dispositivo)
                             <tr wire:key="device-{{ $dispositivo->id }}">
@@ -176,7 +193,7 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div
-                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
+                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-gray-700 rounded-full mr-2 sm:mr-3">
                                             @if ($dispositivo->modelo->image)
                                                 <img class="ml-1"
                                                     src="{{ Storage::url($dispositivo->modelo->image->url) }}.webp"
@@ -189,19 +206,23 @@
 
                                         </div>
                                         @if ($dispositivo->of_client)
-                                            <div class="font-medium text-blue-400">{{ $dispositivo->imei }}</div>
+                                            <div class="font-medium text-blue-400 dark:text-blue-300">
+                                                {{ $dispositivo->imei }}</div>
                                         @else
-                                            <div class="font-medium text-slate-800">{{ $dispositivo->imei }}</div>
+                                            <div class="font-medium text-slate-800 dark:text-gray-200">
+                                                {{ $dispositivo->imei }}</div>
                                         @endif
 
                                     </div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $dispositivo->modelo->modelo }}</div>
+                                    <div class="text-left text-slate-800 dark:text-gray-200">
+                                        {{ $dispositivo->modelo->modelo }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $dispositivo->modelo->marca }}</div>
+                                    <div class="text-left text-slate-800 dark:text-gray-200">
+                                        {{ $dispositivo->modelo->marca }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     @if ($dispositivo->in_fota)
@@ -276,24 +297,24 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                     @if (!empty($dispositivo->vehiculoActual()))
-                                        <div class="font-medium text-sky-500">
+                                        <div class="font-medium text-sky-500 dark:text-sky-400">
                                             {{ $dispositivo->vehiculoActual()->placa }}
                                         </div>
                                     @else
-                                        <div class="font-medium text-emerald-500">
+                                        <div class="font-medium text-emerald-500 dark:text-emerald-400">
                                             Equipo Disponible
                                         </div>
                                     @endif
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left text-slate-800 text-sm">
+                                    <div class="text-left text-slate-800 dark:text-gray-300 text-sm">
                                         {{ $dispositivo->user ? $dispositivo->user->name : '' }}
 
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left text-slate-800 text-sm">
+                                    <div class="text-left text-slate-800 dark:text-gray-300 text-sm">
                                         {{ $dispositivo->created_at->format('d-m-Y h:m') }}
 
                                     </div>
@@ -301,9 +322,11 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
-                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                                @click.prevent="open = !open" :aria-expanded="open">
+                                            <button
+                                                class="text-slate-400 dark:text-gray-500 hover:text-slate-500 dark:hover:text-gray-400 rounded-full"
+                                                :class="{ 'bg-slate-100 dark:bg-gray-700 text-slate-500 dark:text-gray-300': open }"
+                                                aria-haspopup="true" @click.prevent="open = !open"
+                                                :aria-expanded="open">
                                                 <span class="sr-only">Menu</span>
                                                 <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                     <circle cx="16" cy="16" r="2" />
@@ -311,7 +334,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black dark:ring-gray-700 ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700 focus:outline-none"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -325,12 +348,12 @@
                                                     <li>
                                                         <a href="javascript: void(0)"
                                                             wire:click.prevent='openModalEdit({{ $dispositivo->id }})'
-                                                            class="text-gray-700 cursor-pointer group flex items-center px-4 py-2 text-sm font-normal"
+                                                            class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer group flex items-center px-4 py-2 text-sm font-normal"
                                                             disabled="false" id="headlessui-menu-item-27"
                                                             role="menuitem" tabindex="-1">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor"
-                                                                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-blue-500">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
                                                                     d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -342,12 +365,12 @@
 
                                                     <li>
                                                         <a href="javascript: void(0)"
-                                                            wire:click.prevent="verInfoDispositivo({{ $dispositivo }}) "class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                            wire:click.prevent="verInfoDispositivo({{ $dispositivo }}) "class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                             disabled="false" id="headlessui-menu-item-29"
                                                             role="menuitem" tabindex="-1"><svg
                                                                 xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor"
-                                                                class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
+                                                                class="h-5 w-5  mr-3 text-gray-400 dark:text-gray-500 group-hover:text-violet-500">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
                                                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
@@ -376,7 +399,7 @@
                             <tr>
                                 <td colspan="8"
                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                    <div class="text-center">No hay Registros</div>
+                                    <div class="text-center text-slate-500 dark:text-gray-400">No hay Registros</div>
                                 </td>
                             </tr>
                         @endif
@@ -392,4 +415,287 @@
         {{ $dispositivos->links() }}
 
     </div>
+
+    <!-- Modal de dispositivos no registrados con WireUI -->
+    <x-form.modal.card wire:model="showModalNoRegistrados" title="" width="7xl" blur>
+        <x-slot name="title">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-linear-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">📋 Dispositivos No Registrados</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                        Dispositivos en Fota Web que no están en tu sistema
+                    </p>
+                </div>
+            </div>
+        </x-slot>
+
+        <!-- Selector de modelo y botón guardar -->
+        @if (count($dispositivosNoRegistrados) > 0)
+            <!-- Selección rápida por modelo de Fota -->
+            <div
+                class="mb-4 p-4 bg-linear-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
+                <div class="flex items-center gap-2 mb-3">
+                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                    </svg>
+                    <h3 class="text-sm font-bold text-blue-900 dark:text-blue-100">⚡ Selección Rápida por Modelo</h3>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    @foreach ($this->modelosFota as $modeloInfo)
+                        @php
+                            $imeisDelModelo = $modeloInfo['imeis'];
+                            $todosSeleccionados = !array_diff($imeisDelModelo, $dispositivosSeleccionados);
+                            $algunoSeleccionado = !empty(array_intersect($imeisDelModelo, $dispositivosSeleccionados));
+                        @endphp
+                        <button wire:click="seleccionarPorModelo('{{ $modeloInfo['modelo'] }}')"
+                            class="group relative inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200
+                                {{ $todosSeleccionados
+                                    ? 'bg-blue-600 text-white shadow-lg scale-105'
+                                    : ($algunoSeleccionado
+                                        ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border-2 border-blue-400 dark:border-blue-600'
+                                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-blue-900/30') }}">
+                            @if ($todosSeleccionados)
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                                </svg>
+                            @elseif($algunoSeleccionado)
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                                </svg>
+                            @endif
+                            <span class="font-bold">{{ $modeloInfo['modelo'] }}</span>
+                            <span
+                                class="{{ $todosSeleccionados ? 'bg-white/20' : 'bg-blue-100 dark:bg-blue-800/50' }} px-2 py-0.5 rounded-full text-xs font-bold">
+                                {{ $modeloInfo['count'] }}
+                            </span>
+                        </button>
+                    @endforeach
+                </div>
+                <p class="text-xs text-blue-600 dark:text-blue-400 mt-3">
+                    💡 Haz click en un modelo para seleccionar todos sus dispositivos
+                </p>
+            </div>
+
+            <div
+                class="mb-6 p-4 bg-linear-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl border-2 border-indigo-200 dark:border-indigo-800">
+                <div class="flex flex-col md:flex-row gap-4 items-start md:items-end">
+                    <div class="flex-1">
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                            📦 Selecciona el modelo para los dispositivos
+                        </label>
+                        <x-form.select wire:model.live="modeloSeleccionado"
+                            placeholder="Selecciona un modelo TELTONIKA" :options="$this->modelosTeltonika" option-label="modelo"
+                            option-value="id" />
+                    </div>
+
+                    <div class="flex gap-2">
+
+                        <x-form.button wire:click="guardarDispositivosSeleccionados"
+                            spinner="guardarDispositivosSeleccionados" primary icon="check"
+                            label="Guardar Seleccionados ({{ count($dispositivosSeleccionados) }})" />
+                    </div>
+                </div>
+                {{ json_encode($dispositivosSeleccionados) }}
+                {{ $modeloSeleccionado }}
+                @if (count($dispositivosSeleccionados) > 0)
+                    <div class="mt-3 flex items-center gap-2">
+                        <span class="flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-indigo-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        </span>
+                        <p class="text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                            {{ count($dispositivosSeleccionados) }} dispositivo(s) seleccionado(s)
+                        </p>
+                    </div>
+                @endif
+            </div>
+        @endif
+
+        <!-- Estadísticas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div
+                class="bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-4 border-2 border-blue-200 dark:border-blue-800">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-blue-500 dark:bg-blue-600 rounded-lg shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wide">Total
+                            Fota
+                            Web</p>
+                        <p class="text-2xl font-bold text-blue-900 dark:text-blue-100">
+                            {{ number_format($totalFotaWeb) }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-linear-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-4 border-2 border-green-200 dark:border-green-800">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-green-500 dark:bg-green-600 rounded-lg shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wide">
+                            Registrados</p>
+                        <p class="text-2xl font-bold text-green-900 dark:text-green-100">
+                            {{ number_format($totalLocal) }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-linear-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-4 border-2 border-purple-200 dark:border-purple-800">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-purple-500 dark:bg-purple-600 rounded-lg shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wide">No
+                            Registrados</p>
+                        <p class="text-2xl font-bold text-purple-900 dark:text-purple-100">
+                            {{ number_format(count($dispositivosNoRegistrados)) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de dispositivos -->
+        @if (count($dispositivosNoRegistrados) > 0)
+            <div class="mb-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="flex h-3 w-3 relative">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+                    </span>
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Mostrando <span
+                            class="font-bold text-purple-600 dark:text-purple-400">{{ count($dispositivosNoRegistrados) }}</span>
+                        dispositivos
+                    </p>
+                </div>
+                <x-form.button wire:click="exportarNoRegistrados" emerald label="Exportar CSV" icon="arrow-down-tray"
+                    sm />
+            </div>
+
+            <div class="overflow-x-auto max-h-125 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-900/50 sticky top-0 z-10">
+                        <tr>
+                            <th class="px-4 py-3 text-center">
+                                <input type="checkbox" wire:model.live="seleccionarTodos"
+                                    wire:click="toggleSeleccionarTodos"
+                                    class="w-5 h-5 text-purple-600 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-purple-500 dark:focus:ring-purple-600 focus:ring-2 cursor-pointer" />
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                IMEI</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                Serial</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                Modelo</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                Descripción</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                Compañía</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                Última Conexión</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                                Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        @foreach ($dispositivosNoRegistrados as $dispositivo)
+                            <tr class="hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all duration-200"
+                                wire:key="no-reg-{{ $dispositivo['imei'] }}">
+                                <td class="px-4 py-3 text-center">
+                                    <input type="checkbox" value="{{ $dispositivo['imei'] }}"
+                                        wire:model.live="dispositivosSeleccionados"
+                                        class="w-5 h-5 text-purple-600 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-purple-500 dark:focus:ring-purple-600 focus:ring-2 cursor-pointer" />
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <span class="font-mono text-sm font-bold text-gray-900 dark:text-gray-100">
+                                        {{ $dispositivo['imei'] }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                                    {{ $dispositivo['serial'] }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <x-form.badge rounded blue label="{{ $dispositivo['modelo'] }}" />
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 max-w-xs truncate">
+                                    {{ $dispositivo['descripcion'] ?: '-' }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                                    {{ $dispositivo['company_name'] }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                                    @if ($dispositivo['seen_at'])
+                                        {{ \Carbon\Carbon::parse($dispositivo['seen_at'])->format('d/m/Y H:i') }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    @if ($dispositivo['activity_status'] === 'Active')
+                                        <x-form.badge rounded positive
+                                            label="{{ $dispositivo['activity_status'] }}" />
+                                    @else
+                                        <x-form.badge rounded secondary
+                                            label="{{ $dispositivo['activity_status'] }}" />
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="text-center py-12">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
+                    <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">¡Todo sincronizado!</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Todos los dispositivos de Fota Web ya están
+                    registrados en tu sistema.</p>
+            </div>
+        @endif
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-3">
+                <x-form.button flat label="Cerrar" wire:click="cerrarModalNoRegistrados" />
+            </div>
+        </x-slot>
+    </x-form.modal.card>
 </div>

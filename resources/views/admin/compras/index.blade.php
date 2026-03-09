@@ -1,18 +1,9 @@
-@extends('layouts.admin')
-@section('ruta', 'compras-facturas')
-@section('contenido')
+<x-admin-layout>
 
     @livewire('admin.compras.index')
 
-@stop
-
-@push('modals')
     @livewire('admin.compras.delete')
-@endpush
 
-
-
-@section('js')
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -74,5 +65,4 @@
         })
     </script>
 
-
-@stop
+</x-admin-layout>

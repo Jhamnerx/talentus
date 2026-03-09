@@ -1,0 +1,1 @@
+categoria-<?php echo e($categoria->id); ?><?php /**PATH C:\laragon2\www\talentus\storage\framework\views/b765989149dafa9c48633fdbbffbb84a.blade.php ENDPATH**/ ?>

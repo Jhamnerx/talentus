@@ -9,7 +9,6 @@ use App\Models\Productos;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ProductosController extends Controller
 {
@@ -23,7 +22,12 @@ class ProductosController extends Controller
 
     public function index()
     {
-        return view('admin.almacen.productos.index');
+        return view('admin.almacen.productos.index', ['tipo' => 'producto']);
+    }
+
+    public function servicios()
+    {
+        return view('admin.almacen.servicios.index', ['tipo' => 'servicio']);
     }
 
     public function create()

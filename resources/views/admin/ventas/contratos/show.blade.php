@@ -1,12 +1,5 @@
-@extends('layouts.admin')
-@section('ruta', 'ventas-contratos')
-@section('contenido')
+<x-admin-layout ruta="ventas-contratos">
 
     <!-- Table -->
 
-
-@stop
-
-@section('js')
-
-@stop
+</x-admin-layout>

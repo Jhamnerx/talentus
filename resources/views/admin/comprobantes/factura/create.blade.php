@@ -1,23 +1,12 @@
-@extends('layouts.admin')
-
-@section('contenido')
+<x-admin-layout>
 
     @livewire('admin.facturacion.ventas.emitir', [
-        'comprobante_slug' => Request::segment(3),
-        'detalle_ids' => $detalle_ids,
-        'cobro_id' => $cobro_id,
+        'comprobante_slug' => Request::segment(2),
+        'notificacion_ids' => $notificacion_ids,
     ])
 
-@stop
-
-@push('modals')
     @livewire('admin.productos.create-modal')
     @livewire('admin.clientes.save')
     @livewire('admin.facturacion.ventas.modal-detraccion')
-@endpush
 
-
-{{-- section de js --}}
-@section('js')
-
-@stop
+</x-admin-layout>

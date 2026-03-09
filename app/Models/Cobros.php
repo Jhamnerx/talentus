@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CobroEstado;
 use App\Scopes\EmpresaScope;
 use App\Observers\CobrosObserver;
 use Spatie\Activitylog\LogOptions;
@@ -33,14 +34,14 @@ class Cobros extends Model
 
     protected $table = 'cobros';
     protected $casts = [
-
         'clientes_id' => 'integer',
         'vehiculos_id' => 'integer',
         'contratos_id' => 'integer',
         'fecha_inicio' => 'date:Y-m-d',
         'fecha_vencimiento' => 'date:Y-m-d',
         'vencido' => 'boolean',
-
+        'auto_renovar' => 'boolean',
+        'estado_cobro' => CobroEstado::class,
     ];
     //SCOPE GLOBAL DE EMPRES
     protected static function booted()
@@ -68,6 +69,26 @@ class Cobros extends Model
     public function scopeVerificado($query, $estado = 0)
     {
         return $query->where('verificado', $estado);
+    }
+
+    public function scopeActivos($query)
+    {
+        return $query->where('estado_cobro', CobroEstado::ACTIVO);
+    }
+
+    public function scopeSuspendidos($query)
+    {
+        return $query->where('estado_cobro', CobroEstado::SUSPENDIDO);
+    }
+
+    public function scopeCancelados($query)
+    {
+        return $query->where('estado_cobro', CobroEstado::CANCELADO);
+    }
+
+    public function scopeEstadoCobro($query, CobroEstado $estado)
+    {
+        return $query->where('estado_cobro', $estado);
     }
     //Relacion uno a muchos inversa
 
@@ -110,11 +131,26 @@ class Cobros extends Model
         foreach ($cobroItems as $cobroItem) {
 
             $cobroItem['cobros_id'] = $cobro->id;
-            // if ($type == 'create') {
-            //     $cobroItem['estado'] = 1;
-            // } else {
-            //     $cobroItem['estado'] = 0;
-            // }
+
+            // Si existe plan_id, calcular monto_unidad y cantidad_unidades
+            if (isset($cobroItem['plan_id'])) {
+                $plan = \App\Models\Plan::find($cobroItem['plan_id']);
+
+                if ($plan) {
+                    // Sistema NUEVO: No llenar campo 'plan' legacy cuando se usa plan_id
+                    // El accessor getMontoCalculadoAttribute() calcula el monto desde la relación
+                    $cobroItem['plan'] = null;
+                }
+            }
+
+            // Guardar el monto convertido (ya incluye tipo de cambio + descuento RECIBO)
+            if (isset($cobroItem['monto']) && $cobroItem['monto'] > 0) {
+                $cobroItem['monto_unidad'] = $cobroItem['monto'];
+            }
+
+            // Remover campos que no son de la tabla
+            unset($cobroItem['placa']);
+            unset($cobroItem['monto']);
 
             $cobro->detalle()->create($cobroItem);
         }

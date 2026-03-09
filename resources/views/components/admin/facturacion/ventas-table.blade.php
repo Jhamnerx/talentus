@@ -1,6 +1,6 @@
-<div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
+<div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-600 mb-8">
     <header class="px-5 py-4">
-        <h2 class="font-semibold text-slate-800">Ventas <span class="text-slate-400 font-medium">{{ $ventas->total()
+        <h2 class="font-semibold text-slate-800 dark:text-gray-100">Ventas <span class="text-slate-400 dark:text-gray-400 font-medium">{{ $ventas->total()
                 }}</span></h2>
     </header>
     <div>
@@ -10,7 +10,7 @@
             <table class="table-auto  w-full">
                 <!-- Table header -->
                 <thead
-                    class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                    class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-700 border-t border-b border-slate-200 dark:border-gray-600">
                     <tr>
 
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -27,6 +27,12 @@
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">TOTAL</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">IGV</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">SALDO</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">ESTADO</div>
@@ -56,13 +62,13 @@
                     </tr>
                 </thead>
                 <!-- Table body -->
-                <tbody class="text-sm divide-y divide-slate-200">
+                <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
                     <!-- Row -->
                     @foreach ($ventas as $venta)
                     <tr>
 
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div>{{ $venta->fecha_hora_emision->format('d-m-Y / H:i:s') }}
+                            <div class="text-gray-900 dark:text-gray-100">{{ $venta->fecha_hora_emision->format('d-m-Y / H:i:s') }}
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -84,10 +90,10 @@
                         </td>
 
                         <td class="px-2 first:pl-5 last:pr-5 py-3">
-                            <div class="font-medium text-slate-900">
+                            <div class="font-medium text-slate-900 dark:text-gray-100">
                                 {{ $venta->cliente->razon_social }}
                             </div>
-                            <div class="font-sm text-slate-700">
+                            <div class="font-sm text-slate-700 dark:text-gray-300">
                                 <p class="text-xs">
                                     {{ $venta->cliente->numero_documento }}
                                 </p>
@@ -102,16 +108,16 @@
                                     <button class="inline-flex justify-center items-center group" aria-haspopup="true"
                                         @click.prevent="open = !open" :aria-expanded="open">
                                         <div class="flex items-center truncate">
-                                            <span class="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
+                                            <span class="truncate ml-2 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-slate-800 dark:group-hover:text-gray-100">
                                                 {{ $venta->forma_pago }}
                                             </span>
-                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 dark:text-gray-400"
                                                 viewBox="0 0 12 12">
                                                 <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                                             </svg>
                                         </div>
                                     </button>
-                                    <div class="origin-top-right z-10 absolute top-full left-0 min-w-44 bg-white border border-slate-300 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                                    <div class="origin-top-right z-10 absolute top-full left-0 min-w-44 bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 py-1.5 rounded shadow-lg overflow-hidden mt-1"
                                         @click.outside="open = false" @keydown.escape.window="open = false"
                                         x-show="open" x-transition:enter="transition ease-out duration-200 transform"
                                         x-transition:enter-start="opacity-0 -translate-y-2"
@@ -119,10 +125,10 @@
                                         x-transition:leave="transition ease-out duration-200"
                                         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
                                         x-cloak>
-                                        <div class="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
-                                            <div class="font-medium text-slate-800">Detalle de cuotas.
+                                        <div class="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200 dark:border-gray-600">
+                                            <div class="font-medium text-slate-800 dark:text-gray-100">Detalle de cuotas.
                                             </div>
-                                            <div class="text-sm text-slate-600">
+                                            <div class="text-sm text-slate-600 dark:text-gray-300">
                                                 Adelanto:
                                                 {{ $venta->divisa == 'USD' ? "$ " . $venta->adelanto : 'S/. ' .
                                                 $venta->adelanto }}
@@ -172,7 +178,7 @@
                                 <!-- End -->
                             </div>
                             @else
-                            <div class="font-medium text-slate-800">
+                            <div class="font-medium text-slate-800 dark:text-gray-100">
                                 {{ $venta->forma_pago }}
                             </div>
                             @endif
@@ -183,6 +189,19 @@
 
                                 {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }} {{ $venta->total }}
 
+                            </div>
+                        </td>
+                        {{-- IGV --}}
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-medium text-slate-600 dark:text-slate-300">
+                                {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }} {{ number_format($venta->igv, 2) }}
+                            </div>
+                        </td>
+                        {{-- Saldo pendiente --}}
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            @php $saldo = round($venta->total - ($venta->payments_sum_monto ?? 0), 2); @endphp
+                            <div class="font-medium {{ $saldo > 0 ? 'text-orange-500' : 'text-emerald-500' }}">
+                                {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }} {{ number_format($saldo, 2) }}
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -947,7 +966,7 @@
                                     @endif
                                     @endif
 
-                                    <x-dropdown.header label="Estado de pago">
+                                    {{-- <x-dropdown.header label="Estado de pago">
                                         @if ($venta->pago_estado == 'PAID')
                                         <x-dropdown.item disabled="true" icon="check-circle"
                                             label="Marcar como Pagada" />
@@ -960,6 +979,11 @@
 
                                         <x-dropdown.item disabled icon="x-mark" label="Marcar como No Pagada" />
                                         @endif
+                                    </x-dropdown.header> --}}
+
+                                    <x-dropdown.header label="Pagos">
+                                        <x-dropdown.item wire:click.prevent='abrirModalPagos({{ $venta->id }})'
+                                            icon="banknotes" label="Ver Pagos" />
                                     </x-dropdown.header>
                                 </x-form.dropdown>
                             </div>

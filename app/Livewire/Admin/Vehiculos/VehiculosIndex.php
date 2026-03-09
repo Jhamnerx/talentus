@@ -16,6 +16,8 @@ class VehiculosIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $clientes_id = null;
+    public $marca_filter = null;
 
     protected $listeners = [
         'update-table' => 'render',
@@ -33,62 +35,76 @@ class VehiculosIndex extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-        $vehiculos = Vehiculos::whereHas('sim_card', function ($query) {
-            $query->where('sim_card', 'LIKE', '%' . $this->search . '%')
-                ->orWhere('operador', 'LIKE', '%' . $this->search . '%');
-            $query->orwhereHas('linea', function ($linea) {
-                $linea->where('numero', 'LIKE', '%' . $this->search . '%');
-            });
-        })->orwhereHas('cliente', function ($query) {
-
-            $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
-        })->orwhereHas('dispositivosAsignados', function ($query) {
-            // Usando la relación directa a los dispositivos
-            $query->where('dispositivos.imei', 'LIKE', '%' . $this->search . '%');
-        })->orWhere('placa', 'like', '%' . $this->search . '%')
-            ->orWhere('marca', 'like', '%' . $this->search . '%')
-            ->orWhere('modelo', 'like', '%' . $this->search . '%')
-            ->orWhere('tipo', 'like', '%' . $this->search . '%')
-            ->orWhere('color', 'like', '%' . $this->search . '%')
-            ->orWhere('motor', 'like', '%' . $this->search . '%')
-            ->orWhere('serie', 'like', '%' . $this->search . '%')
-            ->orWhere('dispositivo_imei', 'like', '%' . $this->search . '%')
-            ->orWhere('old_numero', 'like', '%' . $this->search . '%')
-            ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
-            ->orWhere('year', 'like', '%' . $this->search . '%')
+        $vehiculos = Vehiculos::query()
+            ->with(['planSubscriptions'])
+            ->when($this->clientes_id, function ($query) {
+                $query->where('clientes_id', $this->clientes_id);
+            })
+            ->when($this->marca_filter, function ($query) {
+                $query->where('marca', $this->marca_filter);
+            })
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->whereHas('sim_card', function ($query) {
+                        $query->where('sim_card', 'LIKE', '%' . $this->search . '%')
+                            ->orWhere('operador', 'LIKE', '%' . $this->search . '%');
+                        $query->orwhereHas('linea', function ($linea) {
+                            $linea->where('numero', 'LIKE', '%' . $this->search . '%');
+                        });
+                    })->orwhereHas('cliente', function ($query) {
+                        $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
+                    })->orwhereHas('dispositivosAsignados', function ($query) {
+                        $query->where('dispositivos.imei', 'LIKE', '%' . $this->search . '%');
+                    })->orWhere('placa', 'like', '%' . $this->search . '%')
+                        ->orWhere('marca', 'like', '%' . $this->search . '%')
+                        ->orWhere('modelo', 'like', '%' . $this->search . '%')
+                        ->orWhere('tipo', 'like', '%' . $this->search . '%')
+                        ->orWhere('color', 'like', '%' . $this->search . '%')
+                        ->orWhere('motor', 'like', '%' . $this->search . '%')
+                        ->orWhere('serie', 'like', '%' . $this->search . '%')
+                        ->orWhere('dispositivo_imei', 'like', '%' . $this->search . '%')
+                        ->orWhere('old_numero', 'like', '%' . $this->search . '%')
+                        ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
+                        ->orWhere('year', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->when(!empty($desde), function ($query) use ($desde, $hasta) {
+                $query->whereRaw(
+                    "(created_at >= ? AND created_at <= ?)",
+                    [
+                        $desde . " 00:00:00",
+                        $hasta . " 23:59:59"
+                    ]
+                );
+            })
             ->orderBy('id', 'desc')
             ->paginate(15);
 
+        $total = Vehiculos::count();
 
-        $total = Vehiculos::all()->count();
+        // Obtener marcas únicas para el filtro
+        $marcas = Vehiculos::select('marca')
+            ->distinct()
+            ->whereNotNull('marca')
+            ->where('marca', '!=', '')
+            ->orderBy('marca')
+            ->pluck('marca');
 
-
-        if (!empty($desde)) {
-
-
-            $vehiculos = Vehiculos::whereRaw(
-                "(created_at >= ? AND created_at <= ?)",
-                [
-                    $desde . " 00:00:00",
-                    $hasta . " 23:59:59"
-                ]
-            )->whereRaw(
-                "(placa like ? OR marca like  ? OR tipo like ? OR year like ?)",
-                [
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                ]
-            )
-                ->orderBy('id')
-                ->paginate(15);
-        }
-        return view('livewire.admin.vehiculos.vehiculos-index', compact('vehiculos', 'total'));
+        return view('livewire.admin.vehiculos.vehiculos-index', compact('vehiculos', 'total', 'marcas'));
     }
 
     public function updatingSearch()
     {
+        $this->resetPage();
+    }
+
+    public function clearFilters()
+    {
+        $this->clientes_id = null;
+        $this->marca_filter = null;
+        $this->search = '';
+        $this->from = '';
+        $this->to = '';
         $this->resetPage();
     }
 
@@ -145,9 +161,19 @@ class VehiculosIndex extends Component
         $this->dispatch('open-modal-suspend-vehiculo', $vehiculo);
     }
 
+    public function activarVehiculo(Vehiculos $vehiculo)
+    {
+        $this->dispatch('open-modal-activar-vehiculo', $vehiculo);
+    }
+
     public function createMantenimiento(Vehiculos $vehiculo)
     {
         $this->dispatch('open-modal-save-mantenimiento', from: 'vehiculos-index', vehiculo: $vehiculo);
+    }
+
+    public function abrirModalSuscripcion(Vehiculos $vehiculo): void
+    {
+        $this->dispatch('abrir-modal-suscripcion', vehiculoId: $vehiculo->id);
     }
 
     public function openModalAddVehiculo()
@@ -178,15 +204,5 @@ class VehiculosIndex extends Component
                 mensaje: 'No se pudo exportar: ' . $th->getMessage(),
             );
         }
-    }
-
-    public function getDevicesWox()
-    {
-        $this->dispatch('get-devices-wox');
-    }
-
-    public function openModalInfoWox(Vehiculos $vehiculo)
-    {
-        $this->dispatch('open-modal-info-wox', vehiculo: $vehiculo);
     }
 }

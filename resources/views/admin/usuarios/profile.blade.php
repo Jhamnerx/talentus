@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('contenido')
+<x-admin-layout>
     <div class="relative flex">
         <div id="profile-sidebar"
             class="absolute z-20 top-0 bottom-0 w-full md:w-auto md:static md:top-auto md:bottom-auto -mr-px md:translate-x-0 transform transition-transform duration-200 ease-in-out"
@@ -42,8 +40,8 @@
                         <!-- Search form -->
                         <form class="relative">
                             <label for="profile-search" class="sr-only">Buscar</label>
-                            <input id="profile-search" class="form-input w-full pl-9 focus:border-slate-300" type="search"
-                                placeholder="Search…" />
+                            <input id="profile-search" class="form-input w-full pl-9 focus:border-slate-300"
+                                type="search" placeholder="Search…" />
                             <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                                 <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                                     viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -59,14 +57,16 @@
                             <div class="text-xs font-semibold text-slate-400 uppercase mb-3">Equipo de Trabajo</div>
                             <ul class="mb-6">
                                 <li class="-mx-2">
-                                    <button class="w-full p-2 rounded bg-indigo-100" @click="profileSidebarOpen = false">
+                                    <button class="w-full p-2 rounded bg-indigo-100"
+                                        @click="profileSidebarOpen = false">
                                         <div class="flex items-center">
                                             <div class="relative mr-2">
                                                 <img class="w-8 h-8 rounded-full" src="{{ $user->profile_photo_url }}"
                                                     width="32" height="32" alt="User 08" />
                                             </div>
                                             <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">{{ $user->name }}</span>
+                                                <span
+                                                    class="text-sm font-medium text-slate-800">{{ $user->name }}</span>
                                             </div>
                                         </div>
                                     </button>
@@ -454,12 +454,4 @@
 
         </div> --}}
     </div>
-@stop
-
-@section('js')
-
-
-
-
-
-@stop
+</x-admin-layout>

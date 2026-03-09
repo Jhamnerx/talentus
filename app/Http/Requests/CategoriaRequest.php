@@ -26,8 +26,10 @@ class CategoriaRequest extends FormRequest
 
 
         $rules = [
-            'nombre' => 'required|unique:categorias',
-            'descripcion' => 'nullable',
+            'nombre'               => 'required|unique:categorias',
+            'descripcion'          => 'nullable',
+            'es_equipo_gps'        => 'boolean',
+            'es_servicio_monitoreo' => 'boolean',
         ];
 
 

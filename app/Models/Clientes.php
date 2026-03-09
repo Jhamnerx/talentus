@@ -101,13 +101,6 @@ class Clientes extends Model
     }
 
 
-    //Relacion uno a muchos inversa
-    public function empresa()
-    {
-        return $this->belongsTo(Empresa::class, 'empresa_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
-    }
-
-
     public function certificados()
     {
         return $this->hasMany(Certificados::class, 'certificados_id');
@@ -137,5 +130,10 @@ class Clientes extends Model
     public function tipoDocumento(): HasOne
     {
         return $this->hasOne(TipoDocumento::class, 'codigo', 'tipo_documento_id');
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'customer_id')->withoutGlobalScope(EmpresaScope::class);
     }
 }

@@ -8,7 +8,6 @@ use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Admin\WhatsAppApi;
-use App\Http\Controllers\Admin\UtilesController;
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
 class TablaHistorial extends Component
@@ -74,15 +73,9 @@ class TablaHistorial extends Component
         $this->dispatch('deleteTarea', $task);
     }
 
-    public function sendGroupWhatsApp(Tareas $task)
-    {
-        $util = new UtilesController();
-        $respuesta = $util->whatsAppSendMessageInstalationGroup($task);
-    }
+    // Método sendGroupWhatsApp() eliminado - ahora se usa otro servicio para notificaciones
 
-    public function infoTask(Tareas $tarea)
-    {
-    }
+    public function infoTask(Tareas $tarea) {}
 
     public function exportTask(Tareas $tarea)
     {
@@ -92,7 +85,7 @@ class TablaHistorial extends Component
             ->setOption(['isHtml5ParserEnabled' => true])->setPaper('Legal')->output();
 
         return response()->streamDownload(
-            fn () => print($pdfContent),
+            fn() => print($pdfContent),
             "reporte_tarea-" . $tarea->token . ".pdf"
         );
     }

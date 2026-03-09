@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin\Certificados\Actas;
 
-use App\Http\Controllers\Admin\UtilesController;
 use App\Models\Actas;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,27 +12,66 @@ class ActasIndex extends Component
     use WithPagination;
 
     public $search;
+    public $vehiculoId;
+    public $estadoFiltro = '';
+    public $vigenciaFiltro = '';
 
     protected $listeners = [
         'update-table' => 'render',
     ];
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    public function updatingVehiculoId()
+    {
+        $this->resetPage();
+    }
+    public function updatingEstadoFiltro()
+    {
+        $this->resetPage();
+    }
+    public function updatingVigenciaFiltro()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
 
         $query = Actas::query();
 
-        $query->whereHas('ciudades', function ($query) {
-            $query->where('nombre', 'like', '%' . $this->search . '%')
-                ->orWhere('prefijo', 'like', '%' . $this->search . '%');
-        })->orWhereHas('vehiculo', function ($query) {
-            $query->where('placa', 'like', '%' . $this->search . '%');
-        })->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha_instalacion', 'like', '%' . $this->search . '%')
-            ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
-            ->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orWhere('codigo', 'like', '%' . $this->search . '%');
+        $query->where(function ($q) {
+            $q->whereHas('ciudades', function ($q2) {
+                $q2->where('nombre', 'like', '%' . $this->search . '%')
+                    ->orWhere('prefijo', 'like', '%' . $this->search . '%');
+            })->orWhereHas('vehiculo', function ($q2) {
+                $q2->where('placa', 'like', '%' . $this->search . '%');
+            })->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
+                ->orWhere('fecha_instalacion', 'like', '%' . $this->search . '%')
+                ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
+                ->orWhere('numero', 'like', '%' . $this->search . '%')
+                ->orWhere('fecha', 'like', '%' . $this->search . '%')
+                ->orWhere('codigo', 'like', '%' . $this->search . '%');
+        });
+
+        if ($this->vehiculoId) {
+            $query->where('vehiculos_id', $this->vehiculoId);
+        }
+
+        if ($this->estadoFiltro !== '' && $this->estadoFiltro !== null) {
+            $query->where('estado', (int) $this->estadoFiltro);
+        }
+
+        if ($this->vigenciaFiltro !== '' && $this->vigenciaFiltro !== null) {
+            $today = \Carbon\Carbon::today();
+            if ($this->vigenciaFiltro === 'vigente') {
+                $query->where('estado', 1)->where('fin_cobertura', '>=', $today);
+            } elseif ($this->vigenciaFiltro === 'vencida') {
+                $query->where('estado', 1)->where('fin_cobertura', '<', $today);
+            }
+        }
 
 
         $actas = $query->orderBy('created_at', 'desc')->paginate(10);

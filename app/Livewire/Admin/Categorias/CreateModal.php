@@ -10,59 +10,67 @@ use App\Http\Requests\CategoriaRequest;
 class CreateModal extends Component
 {
     public $modalCreate = false;
-
     public $nombre, $descripcion;
+    public bool $es_equipo_gps = false;
+    public bool $es_servicio_monitoreo = false;
 
     public function render()
     {
-        return view('livewire.admin.categorias.create-modal');
+        $equipoGpsOcupado   = Categoria::where('es_equipo_gps', true)->first();
+        $monitoreoOcupado   = Categoria::where('es_servicio_monitoreo', true)->first();
+
+        return view('livewire.admin.categorias.create-modal', compact('equipoGpsOcupado', 'monitoreoOcupado'));
     }
 
     #[On('open-modal-create')]
     public function openModal()
     {
+
+        $this->resetValidation();
+        $this->resetProp();
         $this->modalCreate = true;
     }
+
     public function closeModal()
     {
-
         $this->modalCreate = false;
+        $this->resetProp();
     }
-
 
     public function save()
     {
         $request = new CategoriaRequest();
         $datos = $this->validate($request->rules(), $request->messages());
 
+        // Validar exclusividad de flags
+        if ($this->es_equipo_gps && Categoria::where('es_equipo_gps', true)->exists()) {
+            $this->addError('es_equipo_gps', 'Ya existe una categoría configurada como Equipo GPS.');
+            return;
+        }
+        if ($this->es_servicio_monitoreo && Categoria::where('es_servicio_monitoreo', true)->exists()) {
+            $this->addError('es_servicio_monitoreo', 'Ya existe una categoría configurada como Servicio de Monitoreo.');
+            return;
+        }
+
         try {
             $categoria = Categoria::create($datos);
-            $this->afterSave($categoria);
+            $this->closeModal();
+            $this->notification()->success(
+                title: 'CATEGORIA REGISTRADA',
+                description: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
+            );
+            $this->dispatch('categoria-saved');
+            $this->resetProp();
         } catch (\Throwable $th) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR:',
-                mensaje: $th->getMessage(),
+            $this->notification()->error(
+                title: 'ERROR',
+                description: $th->getMessage()
             );
         }
     }
 
-    public function afterSave($categoria)
-    {
-        $this->closeModal();
-        $this->dispatch(
-            'notify',
-            icon: 'success',
-            title: 'CATEGORIA REGISTRADA',
-            mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
-        );
-        $this->dispatch('pg:eventRefresh-TablaCategorias');
-        $this->resetProp();
-    }
-
     public function resetProp()
     {
-        $this->reset(['nombre', 'descripcion']);
+        $this->reset(['nombre', 'descripcion', 'es_equipo_gps', 'es_servicio_monitoreo']);
     }
 }

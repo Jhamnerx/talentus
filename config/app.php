@@ -55,8 +55,6 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'token_sunat' => env('TOKEN_API_CONSULTA_SUNAT'), // Token de la API de SUNAT
-
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

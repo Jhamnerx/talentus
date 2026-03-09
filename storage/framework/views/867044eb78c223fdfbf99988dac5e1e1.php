@@ -1,0 +1,1 @@
+presupuesto-<?php echo e($presupuesto->id); ?><?php /**PATH C:\laragon2\www\talentus\storage\framework\views/22bca6a17b746bc8cd920766ca610935.blade.php ENDPATH**/ ?>

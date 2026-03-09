@@ -1,8 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'almacen-guias')
-
-
-@section('contenido')
+<x-admin-layout>
 
     <div
         class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
@@ -38,9 +34,7 @@
     </div>
     @livewire('admin.guias-remision.create')
 
-@stop
-
-@push('modals')
     @livewire('admin.sim-card.save')
     @livewire('admin.productos.create-modal')
-@endpush
+
+</x-admin-layout>

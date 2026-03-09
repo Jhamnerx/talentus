@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Ventas\Recibos;
 
 use App\Models\Recibos;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,12 +13,16 @@ class RecibosIndex extends Component
     use WithPagination;
     public $search;
 
+    public $cliente_id = null;
+
     public $status = null;
 
     protected $listeners = [
         'render'
     ];
 
+
+    #[On('recibo-delete')]
     public function render()
     {
 
@@ -31,7 +36,9 @@ class RecibosIndex extends Component
             ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
             ->orWhere('divisa', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
+            ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
             ->with('clientes')
+            ->withSum('payments', 'monto')
             ->orderBy('id', 'desc')
             ->paginate(15);
 
@@ -60,8 +67,10 @@ class RecibosIndex extends Component
                 ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
                 ->orWhere('divisa', 'like', '%' . $this->search . '%')
                 ->orWhere('total', 'like', '%' . $this->search . '%')
+                ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
                 ->estado($this->status)
                 ->with('clientes')
+                ->withSum('payments', 'monto')
                 ->orderBy('id', 'desc')
                 ->paginate(15);;
         }
@@ -83,6 +92,11 @@ class RecibosIndex extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function abrirModalPagos(int $id): void
+    {
+        $this->dispatch('abrir-pagos-modal', id: $id, type: 'Recibos');
     }
 
     public function markPaid(Recibos $recibo)

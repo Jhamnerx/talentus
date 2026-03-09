@@ -25,7 +25,8 @@
 
             <div class="flex">
                 <x-form.button flat label="Cancelar" x-on:click="close" wire:click.prevent='closeModal' />
-                <x-form.button primary label="Anular" wire:click.prevent='anularComprobante' />
+                <x-form.button primary label="Anular" wire:click.prevent='anularComprobante'
+                    spinner="anularComprobante" />
             </div>
         </div>
     </x-slot>

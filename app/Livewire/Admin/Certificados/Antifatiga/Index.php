@@ -11,26 +11,40 @@ class Index extends Component
     use WithPagination;
 
     public $search;
+    public $estadoFiltro = '';
 
     protected $listeners = [
         'update-table' => 'render',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    public function updatingEstadoFiltro()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-
         $query = CertificadosAntifatiga::query();
 
-        $query->whereHas('ciudades', function ($query) {
-            $query->where('nombre', 'like', '%' . $this->search . '%')
-                ->orWhere('prefijo', 'like', '%' . $this->search . '%');
-        })->orWhereHas('vehiculo', function ($query) {
-            $query->where('placa', 'like', '%' . $this->search . '%');
-        })->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha_instalacion', 'like', '%' . $this->search . '%')
-            ->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
-            ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%');
+        $query->where(function ($q) {
+            $q->whereHas('ciudades', function ($q2) {
+                $q2->where('nombre', 'like', '%' . $this->search . '%')
+                    ->orWhere('prefijo', 'like', '%' . $this->search . '%');
+            })->orWhereHas('vehiculo', function ($q2) {
+                $q2->where('placa', 'like', '%' . $this->search . '%');
+            })->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
+                ->orWhere('fecha_instalacion', 'like', '%' . $this->search . '%')
+                ->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
+                ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%');
+        });
 
+        if ($this->estadoFiltro !== '' && $this->estadoFiltro !== null) {
+            $query->where('estado', (int) $this->estadoFiltro);
+        }
 
         $certificados = $query->orderBy('created_at', 'desc')->paginate(10);
 

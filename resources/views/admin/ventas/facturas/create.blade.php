@@ -1,14 +1,7 @@
-@extends('layouts.admin')
-@section('ruta', 'ventas-facturas')
-
-
-@section('contenido')
+<x-admin-layout ruta="ventas-facturas">
 
     @livewire('admin.ventas.facturas.create')
 
-
-@stop
-
-@push('modals')
     @livewire('admin.clientes.save')
-@endpush
+
+</x-admin-layout>

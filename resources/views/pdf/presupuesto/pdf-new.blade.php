@@ -75,34 +75,37 @@
 
     <div>
 
-        <div class="header row">
+        <div class="header row" style="display:table; width:100%; border-collapse:collapse; margin-bottom:12px;">
 
-            <div class="medium-6 columns">
-
-                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($plantilla->logo)) }}">
-
+            {{-- Columna 1: Logo --}}
+            <div style="display:table-cell; width:30%; vertical-align:middle; padding-right:10px;">
+                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($plantilla->logo)) }}"
+                    style="max-width:160px;">
             </div>
 
-            <div class="medium-3 columns">
-                <div class="header-contact">
-                    <img class="icon-mail"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/mail.png')) }}">
-                    <p>gerencia@talentustechnology.com<br>
-                        administracion@talentustechnology.com<br>
-                        soporte@talentustechnology.com.com</p>
+            {{-- Columna 2: Datos empresa --}}
+            <div style="display:table-cell; width:40%; vertical-align:middle; text-align:center; padding:0 10px;">
+                @php
+                    $dir = $plantilla->direccion;
+                    $dirTexto = is_array($dir) ? implode(', ', array_filter($dir)) : $dir;
+                @endphp
+                <strong
+                    style="font-size:14px; display:block; margin-bottom:4px;">{{ $plantilla->razon_social }}</strong>
+                <span style="font-size:11px; color:#444; display:block; margin-bottom:2px;">{{ $dirTexto }}</span>
+                @if ($plantilla->telefono)
+                    <span style="font-size:11px; color:#444;">Telf: {{ $plantilla->telefono }}</span>
+                @endif
+            </div>
+
+            {{-- Columna 3: RUC + Número cotización (caja con borde) --}}
+            <div style="display:table-cell; width:30%; vertical-align:middle; text-align:center; padding-left:10px;">
+                <div style="border:2px solid #aaa; border-radius:8px; padding:12px 10px; line-height:2;">
+                    <strong style="font-size:12px; display:block;">R.U.C. {{ $plantilla->ruc }}</strong>
+                    <strong style="font-size:12px; display:block; text-transform:uppercase;">COTIZACIÓN</strong>
+                    <strong
+                        style="font-size:13px; display:block; color:#e87320;">{{ $presupuesto->serie_correlativo }}</strong>
                 </div>
             </div>
-
-            <div class="medium-3 columns">
-                <div class="header-contact">
-                    <img class="icon-telephone"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/phone.png')) }}">
-                    <p>+51 977 794 338<br>
-                        Lunes a Viernes<br>
-                        9am a 7pm Lineas abiertas</p>
-                </div>
-            </div>
-
 
         </div>
         <!--header-->

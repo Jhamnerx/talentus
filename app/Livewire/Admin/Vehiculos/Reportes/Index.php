@@ -119,8 +119,14 @@ class Index extends Component
     {
         $this->dispatch('verDetalleReporte', reporte: $reporte);
     }
+
     public function openModalRecordatorio(Reportes $reporte)
     {
         $this->dispatch('crearRecordatorio', reporte: $reporte);
+    }
+
+    public function openModalEstadoTransmision()
+    {
+        $this->dispatch('abrirEstadoTransmision');
     }
 }

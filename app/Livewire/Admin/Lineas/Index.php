@@ -3,8 +3,6 @@
 namespace App\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -105,10 +103,23 @@ class Index extends Component
 
     public function activar(Lineas $linea)
     {
+        $fechaSuspension = $linea->fecha_suspencion;
+
         $linea->fecha_suspencion = NULL;
         $linea->date_to_suspend = NULL;
         $linea->estado = 1;
         $linea->save();
+
+        // Registrar reactivación en historial
+        \App\Models\CambiosLineas::create([
+            'tipo_cambio' => 'Reactivación',
+            'sim_card_id' => $linea->sim_card_id,
+            'old_numero' => $linea->id,
+            'new_numero' => $linea->id,
+            'fecha_suspencion' => $fechaSuspension,
+            'fecha_suspencion_fin' => now(),
+            'user_id' => Auth::user()->id,
+        ]);
     }
 
     public function openModalImport()
@@ -173,5 +184,10 @@ class Index extends Component
     public function openModalAsign()
     {
         $this->dispatch('open-modal-asign');
+    }
+
+    public function openModalCambiarChip(Lineas $linea)
+    {
+        $this->dispatch('open-modal-cambiar-chip', linea: $linea);
     }
 }

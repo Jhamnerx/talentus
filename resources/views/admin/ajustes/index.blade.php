@@ -1,7 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-ajustes')
-@section('panel', "settingsPanel: 'account',")
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
 
@@ -53,7 +50,8 @@
                                 <div class="sm:w-1/3">
                                     <label class="block text-sm font-medium mb-1" for="business-id">Business
                                         ID</label>
-                                    <input id="business-id" class="form-input w-full" type="text" value="Kz4tSEqtUmA" />
+                                    <input id="business-id" class="form-input w-full" type="text"
+                                        value="Kz4tSEqtUmA" />
                                 </div>
                                 <div class="sm:w-1/3">
                                     <label class="block text-sm font-medium mb-1" for="location">Location</label>
@@ -110,7 +108,8 @@
                     <footer>
                         <div class="flex flex-col px-6 py-5 border-t border-slate-200">
                             <div class="flex self-end">
-                                <button class="btn border-slate-200 hover:border-slate-300 text-slate-600">Cancelar</button>
+                                <button
+                                    class="btn border-slate-200 hover:border-slate-300 text-slate-600">Cancelar</button>
                                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">Guardar
                                     Cambios</button>
                             </div>
@@ -124,5 +123,4 @@
 
     </div>
 
-
-@stop
+</x-admin-layout>

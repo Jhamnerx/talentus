@@ -10,12 +10,7 @@ import {
 } from "chart.js";
 
 // Import utilities
-// Import TailwindCSS variables
-import resolveConfig from "tailwindcss/resolveConfig";
-import { tailwindConfig, formatValue } from "../utils";
-
-// Tailwind config
-const fullConfig = resolveConfig(tailwindConfig);
+import { getCssVariable, adjustColorOpacity } from "../utils";
 
 Chart.register(
     BarController,
@@ -31,6 +26,33 @@ Chart.register(
 const cardVentaDolares = () => {
     const ctx = document.getElementById("card-ventas-dolares");
     if (!ctx) return;
+
+    const darkMode = localStorage.getItem("dark-mode") === "true";
+
+    const textColor = {
+        light: "#9CA3AF",
+        dark: "#6B7280",
+    };
+
+    const gridColor = {
+        light: "#F3F4F6",
+        dark: adjustColorOpacity("#374151", 0.6),
+    };
+
+    const tooltipBodyColor = {
+        light: "#6B7280",
+        dark: "#9CA3AF",
+    };
+
+    const tooltipBgColor = {
+        light: "#ffffff",
+        dark: "#374151",
+    };
+
+    const tooltipBorderColor = {
+        light: "#E5E7EB",
+        dark: "#4B5563",
+    };
 
     fetch("/admin/json-data-ventas?divisa=usd")
         .then((a) => {
@@ -49,13 +71,9 @@ const cardVentaDolares = () => {
                         {
                             label: "Facturas",
                             data: dataset1,
-                            // data: [
-                            //     800, 1600, 900, 1300, 1950, 1700,
-                            // ],
-                            backgroundColor:
-                                tailwindConfig().theme.colors.blue[400],
+                            backgroundColor: getCssVariable("--color-blue-400"),
                             hoverBackgroundColor:
-                                tailwindConfig().theme.colors.blue[500],
+                                getCssVariable("--color-blue-500"),
                             barPercentage: 0.66,
                             categoryPercentage: 0.66,
                         },
@@ -63,13 +81,10 @@ const cardVentaDolares = () => {
                         {
                             label: "Recibos",
                             data: dataset2,
-                            // data: [
-                            //     4900, 2600, 5350, 4800, 5200, 4800,
-                            // ],
                             backgroundColor:
-                                tailwindConfig().theme.colors.indigo[500],
+                                getCssVariable("--color-indigo-500"),
                             hoverBackgroundColor:
-                                tailwindConfig().theme.colors.indigo[600],
+                                getCssVariable("--color-indigo-600"),
                             barPercentage: 0.66,
                             categoryPercentage: 0.66,
                         },
@@ -86,8 +101,13 @@ const cardVentaDolares = () => {
                     },
                     scales: {
                         y: {
+                            border: {
+                                display: false,
+                            },
                             grid: {
-                                drawBorder: false,
+                                color: darkMode
+                                    ? gridColor.dark
+                                    : gridColor.light,
                             },
                             ticks: {
                                 maxTicksLimit: 5,
@@ -95,6 +115,9 @@ const cardVentaDolares = () => {
                                     value.toLocaleString("es-US", {
                                         style: "decimal",
                                     }),
+                                color: darkMode
+                                    ? textColor.dark
+                                    : textColor.light,
                             },
                         },
                         x: {
@@ -106,9 +129,16 @@ const cardVentaDolares = () => {
                                     month: "MMM YY",
                                 },
                             },
+                            border: {
+                                display: false,
+                            },
                             grid: {
                                 display: false,
-                                drawBorder: false,
+                            },
+                            ticks: {
+                                color: darkMode
+                                    ? textColor.dark
+                                    : textColor.light,
                             },
                         },
                     },
@@ -130,6 +160,15 @@ const cardVentaDolares = () => {
                                         currencyDisplay: "symbol",
                                     }),
                             },
+                            bodyColor: darkMode
+                                ? tooltipBodyColor.dark
+                                : tooltipBodyColor.light,
+                            backgroundColor: darkMode
+                                ? tooltipBgColor.dark
+                                : tooltipBgColor.light,
+                            borderColor: darkMode
+                                ? tooltipBorderColor.dark
+                                : tooltipBorderColor.light,
                         },
                     },
                     interaction: {
@@ -161,8 +200,7 @@ const cardVentaDolares = () => {
                                 );
                             items.forEach((item) => {
                                 const li = document.createElement("li");
-                                li.style.marginRight =
-                                    tailwindConfig().theme.margin[4];
+                                li.style.marginRight = "1rem";
                                 // Button element
                                 const button = document.createElement("button");
                                 button.style.display = "inline-flex";
@@ -178,14 +216,10 @@ const cardVentaDolares = () => {
                                 // Color box
                                 const box = document.createElement("span");
                                 box.style.display = "block";
-                                box.style.width =
-                                    tailwindConfig().theme.width[3];
-                                box.style.height =
-                                    tailwindConfig().theme.height[3];
-                                box.style.borderRadius =
-                                    tailwindConfig().theme.borderRadius.full;
-                                box.style.marginRight =
-                                    tailwindConfig().theme.margin[2];
+                                box.style.width = "0.75rem";
+                                box.style.height = "0.75rem";
+                                box.style.borderRadius = "9999px";
+                                box.style.marginRight = "0.5rem";
                                 box.style.borderWidth = "3px";
                                 box.style.borderColor = item.fillStyle;
                                 box.style.pointerEvents = "none";
@@ -195,26 +229,20 @@ const cardVentaDolares = () => {
                                 labelContainer.style.display = "flex";
                                 labelContainer.style.alignItems = "center";
                                 const value = document.createElement("span");
-                                value.style.color =
-                                    tailwindConfig().theme.colors.slate[800];
-                                value.style.fontSize =
-                                    tailwindConfig().theme.fontSize["2xl"][0];
-                                value.style.lineHeight =
-                                    tailwindConfig().theme.fontSize[
-                                        "2xl"
-                                    ][1].lineHeight;
-                                value.style.fontWeight =
-                                    tailwindConfig().theme.fontWeight.bold;
-                                value.style.marginRight =
-                                    tailwindConfig().theme.margin[2];
+                                value.style.color = darkMode
+                                    ? "#F1F5F9"
+                                    : "#1E293B";
+                                value.style.fontSize = "1.5rem";
+                                value.style.lineHeight = "2rem";
+                                value.style.fontWeight = "700";
+                                value.style.marginRight = "0.5rem";
                                 value.style.pointerEvents = "none";
                                 const label = document.createElement("span");
-                                label.style.color =
-                                    tailwindConfig().theme.colors.slate[500];
-                                label.style.fontSize =
-                                    tailwindConfig().theme.fontSize.sm[0];
-                                label.style.lineHeight =
-                                    tailwindConfig().theme.fontSize.sm[1].lineHeight;
+                                label.style.color = darkMode
+                                    ? "#94A3B8"
+                                    : "#64748B";
+                                label.style.fontSize = "0.875rem";
+                                label.style.lineHeight = "1.25rem";
                                 const theValue = c.data.datasets[
                                     item.datasetIndex
                                 ].data.reduce((a, b) => a + b, 0);
@@ -240,6 +268,32 @@ const cardVentaDolares = () => {
                         },
                     },
                 ],
+            });
+
+            document.addEventListener("darkMode", (e) => {
+                const { mode } = e.detail;
+                if (mode === "on") {
+                    chart.options.scales.x.ticks.color = textColor.dark;
+                    chart.options.scales.y.ticks.color = textColor.dark;
+                    chart.options.scales.y.grid.color = gridColor.dark;
+                    chart.options.plugins.tooltip.bodyColor =
+                        tooltipBodyColor.dark;
+                    chart.options.plugins.tooltip.backgroundColor =
+                        tooltipBgColor.dark;
+                    chart.options.plugins.tooltip.borderColor =
+                        tooltipBorderColor.dark;
+                } else {
+                    chart.options.scales.x.ticks.color = textColor.light;
+                    chart.options.scales.y.ticks.color = textColor.light;
+                    chart.options.scales.y.grid.color = gridColor.light;
+                    chart.options.plugins.tooltip.bodyColor =
+                        tooltipBodyColor.light;
+                    chart.options.plugins.tooltip.backgroundColor =
+                        tooltipBgColor.light;
+                    chart.options.plugins.tooltip.borderColor =
+                        tooltipBorderColor.light;
+                }
+                chart.update("none");
             });
         });
 };

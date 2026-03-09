@@ -10,7 +10,6 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Admin\UtilesController;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class Pending extends Component
@@ -121,13 +120,9 @@ class Pending extends Component
     {
         $this->render();
     }
-    public function sendWhatsApp(Tareas $task)
-    {
-        $util = new UtilesController();
-        $respuesta = $util->whatsAppSendMessageInstalation($task);
-        $task->sent_message = true;
-        $task->save();
-    }
+
+    // Método sendWhatsApp() eliminado - ahora se usa otro servicio para notificaciones
+
     public function openModalNotificationClient(Tareas $tarea)
     {
         $this->dispatch('send-notificacion-client', $tarea);

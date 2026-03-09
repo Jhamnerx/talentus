@@ -30,6 +30,11 @@ class CambiosLineas extends Model
         return $this->belongsTo(Lineas::class, 'old_numero');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id');

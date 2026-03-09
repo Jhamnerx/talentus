@@ -6,7 +6,6 @@ use Livewire\Component;
 use App\Models\Productos;
 use Livewire\Attributes\On;
 use App\Models\Dispositivos;
-use App\Models\ModelosDispositivo;
 use Illuminate\Support\Collection;
 use App\Http\Requests\DispositivosRequest;
 

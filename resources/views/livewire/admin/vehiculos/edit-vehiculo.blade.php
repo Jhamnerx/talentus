@@ -3,36 +3,36 @@
     <div class="grid grid-cols-12 gap-6">
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.change="placa" label="Placa Unidad:" placeholder="ABC-780" />
+            <x-form.input wire:model.live.change="placa" label="Placa Unidad:" placeholder="ABC-780" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live="marca" label="Marca:" placeholder="TOYOTA" />
+            <x-form.input wire:model="marca" label="Marca:" placeholder="TOYOTA" />
         </div>
 
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live="modelo" label="Modelo:" placeholder="HILUX" />
+            <x-form.input wire:model="modelo" label="Modelo:" placeholder="HILUX" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live="tipo" label="Tipo:" placeholder="PICK UP" />
+            <x-form.input wire:model="tipo" label="Tipo:" placeholder="PICK UP" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live="year" label="Año:" placeholder="2024" />
+            <x-form.input wire:model="year" label="Año:" placeholder="2024" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live="color" label="COLOR:" placeholder="ROJO AZUL BLANCO" />
+            <x-form.input wire:model="color" label="COLOR:" placeholder="ROJO AZUL BLANCO" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live="motor" label="MOTOR:" placeholder="1GDG066086" />
+            <x-form.input wire:model="motor" label="MOTOR:" placeholder="1GDG066086" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live="serie" label="SERIE:" placeholder="8AJHA8CD9K2629775" />
+            <x-form.input wire:model="serie" label="SERIE:" placeholder="8AJHA8CD9K2629775" />
         </div>
 
         <div class="col-span-12 sm:col-span-12">
@@ -120,8 +120,8 @@
             <!-- Lista de dispositivos seleccionados -->
             <div class="col-span-12">
                 @if (count($dispositivos) > 0)
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                             <tr>
                                 <th scope="col" class="px-6 py-3">IMEI</th>
                                 <th scope="col" class="px-6 py-3">Modelo</th>
@@ -131,17 +131,18 @@
                         </thead>
                         <tbody>
                             @foreach ($dispositivos as $index => $dispositivo)
-                                <tr class="bg-white border-b">
-                                    <td class="px-6 py-4">{{ $dispositivo['imei'] }}</td>
-                                    <td class="px-6 py-4">{{ $dispositivo['modelo'] }}</td>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-6 py-4 dark:text-gray-300">{{ $dispositivo['imei'] }}</td>
+                                    <td class="px-6 py-4 dark:text-gray-300">{{ $dispositivo['modelo'] }}</td>
                                     <td class="px-6 py-4">
                                         <input type="radio" name="dispositivo_principal"
                                             wire:click="marcarComoPrincipal({{ $index }})"
-                                            {{ $dispositivo_principal === $index ? 'checked' : '' }}>
+                                            {{ $dispositivo_principal === $index ? 'checked' : '' }}
+                                            class="accent-indigo-500">
                                     </td>
                                     <td class="px-6 py-4">
                                         <button type="button" wire:click="quitarDispositivo({{ $index }})"
-                                            class="text-red-500 hover:text-red-700">
+                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -155,8 +156,8 @@
                         </tbody>
                     </table>
                 @else
-                    <div class="text-center p-4 bg-gray-100 rounded">
-                        <p>No se han seleccionado dispositivos</p>
+                    <div class="text-center p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                        <p class="dark:text-gray-300">No se han seleccionado dispositivos</p>
                     </div>
                 @endif
             </div>

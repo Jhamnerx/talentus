@@ -41,6 +41,7 @@ class User extends Authenticatable
         'telefonos',
         'password',
         'series_id',
+        'fcm_token',
     ];
 
     // protected $attributes = [
@@ -140,5 +141,37 @@ class User extends Authenticatable
     public function series()
     {
         return $this->hasOne(Series::class, 'id', 'series_id');
+    }
+
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'team_user')
+            ->withTimestamps()
+            ->withPivot('role_in_team');
+    }
+
+    public function createdTickets()
+    {
+        return $this->hasMany(Ticket::class, 'created_by');
+    }
+
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to');
+    }
+
+    public function ticketMessages()
+    {
+        return $this->hasMany(TicketMessage::class, 'author_id');
+    }
+
+    /**
+     * Specifies the user's FCM token(s)
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
     }
 }

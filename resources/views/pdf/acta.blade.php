@@ -208,6 +208,33 @@
             bottom: 60px;
             right: 30px;
         }
+
+        /* Marca de agua estado */
+        .watermark {
+            position: fixed;
+            top: 38%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 72px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            opacity: 0.12;
+            z-index: 9999;
+            border-top: 10px solid;
+            border-bottom: 10px solid;
+            padding: 10px 0;
+        }
+
+        .watermark-anulada {
+            color: #cc0000;
+            border-color: #cc0000;
+        }
+
+        .watermark-vencida {
+            color: #cc5500;
+            border-color: #cc5500;
+        }
     </style>
 
 </head>
@@ -337,16 +364,20 @@
                     ->eye('circle')
                     ->encoding('UTF-8')
                     ->generate(
-                        ' VEHICULO: ' .
+                        'VEHICULO: ' .
                             $acta->vehiculo->placa .
-                            '|' .
-                            " \n VALIDA: " .
+                            "\nCLIENTE: " .
+                            ($acta->vehiculo->cliente
+                                ? strtoupper($acta->vehiculo->cliente->razon_social)
+                                : 'NO REGISTRADO') .
+                            "\nRUC: " .
+                            ($acta->vehiculo->cliente ? $acta->vehiculo->cliente->numero_documento : 'PENDIENTE') .
+                            "\nVALIDA: " .
                             $acta->inicio_cobertura->format('d-m-Y') .
                             ' HASTA ' .
                             $acta->fin_cobertura->format('d-m-Y') .
-                            "
-            \nCONSULTAR VALIDEZ EN: " .
-                            route('consulta.actas', $acta->codigo),
+                            "\nCONSULTAR VALIDEZ EN: https://talentustechnology.com/consultas/acta/" .
+                            $acta->codigo,
                     ),
             );
         @endphp
@@ -362,6 +393,12 @@
         Código de verificación: {{ $acta->unique_hash }}
     </div>
 </div>
+
+@if (!$acta->estado)
+    <div class="watermark watermark-anulada">ANULADA</div>
+@elseif ($acta->estaVencida())
+    <div class="watermark watermark-vencida">VENCIDA</div>
+@endif
 </body>
 
 </html>

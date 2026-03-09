@@ -138,7 +138,7 @@ class Dispositivos extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class)->using(DispositivosUsers::class);
+        return $this->belongsToMany(User::class, 'dispositivos_users', 'dispositivo_id', 'user_id')->withoutGlobalScope(EmpresaScope::class)->using(DispositivosUsers::class);
     }
 
     public function user()

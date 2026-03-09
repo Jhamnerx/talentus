@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Models\MetodoPago;
 use App\Enums\VentasStatus;
 use App\Models\EnvioResumen;
+use App\Models\Comprobantes;
 use App\Models\GuiaRemision;
 use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
 use App\Models\PaymentMethods;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\PaymentMethodType;
 use App\Observers\VentasObserver;
 use Spatie\Activitylog\LogOptions;
 use App\Models\EnvioResumenDetalle;
@@ -148,7 +150,7 @@ class Ventas extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'id');
     }
 
     public function user(): BelongsTo
@@ -156,14 +158,16 @@ class Ventas extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function notaCredito(): BelongsTo
+    public function notaCredito(): HasOne
     {
-        return $this->belongsTo(NotaCredito::class);
+        return $this->hasOne(Comprobantes::class, 'invoice_id')
+            ->where('tipo_comprobante_id', '07');
     }
 
-    public function notaDebito(): BelongsTo
+    public function notaDebito(): HasOne
     {
-        return $this->belongsTo(NotaDebito::class);
+        return $this->hasOne(Comprobantes::class, 'invoice_id')
+            ->where('tipo_comprobante_id', '08');
     }
 
     public function getSerie(): BelongsTo
@@ -185,6 +189,15 @@ class Ventas extends Model
     {
         return $this->hasMany(Anticipos::class, 'venta_id', 'id');
     }
+
+    /**
+     * Relación polimórfica con los pagos
+     */
+    public function payments()
+    {
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
+
     //CREAR ITEM DETALLE VENTA
 
     public static function createItems(Ventas $venta, $ventaItems, $decrease_stock = false)

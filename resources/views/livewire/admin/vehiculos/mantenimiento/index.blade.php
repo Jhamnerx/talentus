@@ -5,7 +5,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Mantenimiento Vehiculos 🚗</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">Mantenimiento Vehiculos 🚗</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -14,7 +14,8 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
+                <input wire:model.live='search' id="action-search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-500"
                     type="search" placeholder="Buscar por numero" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
@@ -84,10 +85,10 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
-        <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Mantenimientos # <span
-                    class="text-slate-400 font-medium">{{ $mantenimientos->total() }}</span>
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700 mb-8">
+        <header class="px-5 py-4 border-b border-slate-200 dark:border-gray-700">
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">Mantenimientos # <span
+                    class="text-slate-400 dark:text-gray-500 font-medium">{{ $mantenimientos->total() }}</span>
             </h2>
         </header>
         <div>
@@ -97,7 +98,7 @@
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-700/50 border-t border-b border-slate-200 dark:border-gray-600">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
@@ -144,7 +145,7 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
                         <!-- Row -->
 
                         @foreach ($mantenimientos as $mantenimiento)
@@ -161,7 +162,8 @@
                                     <div class="font-medium text-blue-500">{{ $mantenimiento->numero }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $mantenimiento->vehiculo->placa }}
+                                    <div class="font-medium text-slate-800 dark:text-gray-200">
+                                        {{ $mantenimiento->vehiculo->placa }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -177,7 +179,7 @@
 
                                     </div>
                                     @if ($mantenimiento->vehiculo->cliente)
-                                        <div class="font-sm text-slate-900">
+                                        <div class="font-sm text-slate-900 dark:text-gray-400">
                                             <p class="text-xs">
                                                 {{ $mantenimiento->vehiculo->cliente->numero_documento }}
                                             </p>
@@ -187,11 +189,12 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                    <div class="font-medium text-slate-800">{{ $mantenimiento->detalle_trabajo }}
+                                    <div class="font-medium text-slate-800 dark:text-gray-200">
+                                        {{ $mantenimiento->detalle_trabajo }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">
+                                    <div class="font-medium text-slate-800 dark:text-gray-200">
                                         {{ $mantenimiento->fecha_hora_mantenimiento->format('d-m-Y') }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -202,11 +205,13 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $mantenimiento->nota }}</div>
+                                    <div class="font-medium text-slate-800 dark:text-gray-200">
+                                        {{ $mantenimiento->nota }}</div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $mantenimiento->user->name }}</div>
+                                    <div class="font-medium text-slate-800 dark:text-gray-200">
+                                        {{ $mantenimiento->user->name }}</div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -262,9 +267,11 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">
                                             <div class="relative inline-block h-full text-left">
-                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                    :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                                    @click.prevent="open = !open" :aria-expanded="open">
+                                                <button
+                                                    class="text-slate-400 hover:text-slate-500 dark:text-gray-500 dark:hover:text-gray-300 rounded-full"
+                                                    :class="{ 'bg-slate-100 dark:bg-gray-700 text-slate-500 dark:text-gray-300': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
                                                     <span class="sr-only">Menu</span>
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                         <circle cx="16" cy="16" r="2" />
@@ -272,7 +279,7 @@
                                                         <circle cx="22" cy="16" r="2" />
                                                     </svg>
                                                 </button>
-                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 dark:ring-gray-700 divide-y divide-gray-100 dark:divide-gray-700 focus:outline-none"
                                                     @click.outside="open = false" @keydown.escape.window="open = false"
                                                     x-show="open"
                                                     x-transition:enter="transition ease-out duration-200 transform"
@@ -286,12 +293,11 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent='openModalEdit({{ $mantenimiento->id }})'
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-27"
+                                                                    class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-100 dark:hover:bg-gray-700"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                        class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-blue-500">
                                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                                             stroke-width="2"
                                                                             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -305,12 +311,11 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent='openModalDelete({{ $mantenimiento->id }})'
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-28"
+                                                                    class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-100 dark:hover:bg-gray-700"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                        class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-red-500">
                                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                                             stroke-width="2"
                                                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -325,12 +330,11 @@
                                                             <li @click="open = false">
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="createTask({{ $mantenimiento->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
+                                                                    class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-100 dark:hover:bg-gray-700"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         viewBox="0 0 64 64"
-                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-yellow-500">
+                                                                        class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-yellow-500">
                                                                         <g stroke-linecap="round" stroke-width="3"
                                                                             fill="none" stroke="currentColor"
                                                                             stroke-linejoin="round" class="nc-icon-wrapper">
@@ -355,12 +359,11 @@
                                                                 <li>
                                                                     <a href="javascript: void(0)"
                                                                         wire:click.prevent="markAs({{ $mantenimiento->id }}, 'CANCELADO')"
-                                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                        disabled="false" id="headlessui-menu-item-34"
+                                                                        class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-100 dark:hover:bg-gray-700"
                                                                         role="menuitem" tabindex="-1">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                             viewBox="0 0 24 24" stroke="currentColor"
-                                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-rose-600">
+                                                                            class="h-5 w-5  mr-3 text-gray-400 dark:text-gray-500 group-hover:text-rose-600">
                                                                             <path stroke-linecap="round"
                                                                                 stroke-linejoin="round" stroke-width="2"
                                                                                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -372,12 +375,11 @@
                                                                 <li>
                                                                     <a href="javascript: void(0)"
                                                                         wire:click.prevent="markAs({{ $mantenimiento->id }}, 'COMPLETADA')"
-                                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                        disabled="false" id="headlessui-menu-item-33"
+                                                                        class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-100 dark:hover:bg-gray-700"
                                                                         role="menuitem" tabindex="-1">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                             viewBox="0 0 24 24" stroke="currentColor"
-                                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
+                                                                            class="h-5 w-5  mr-3 text-gray-400 dark:text-gray-500 group-hover:text-lime-500">
                                                                             <path stroke-linecap="round"
                                                                                 stroke-linejoin="round" stroke-width="2"
                                                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -401,7 +403,7 @@
                         @endforeach
                         @if ($mantenimientos->count() < 1)
                             <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
+                                <div class="text-center text-slate-500 dark:text-gray-500">No hay Registros</div>
                             </td>
                         @endif
 

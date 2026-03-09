@@ -133,4 +133,14 @@ class Actas extends Model
 
         $this->vehiculo->cliente->notify(new EnviarActaCliente($this, $pdf, $data));
     }
+
+    public function estaVigente(): bool
+    {
+        return (bool) $this->estado && $this->fin_cobertura->gte(\Carbon\Carbon::today());
+    }
+
+    public function estaVencida(): bool
+    {
+        return (bool) $this->estado && $this->fin_cobertura->lt(\Carbon\Carbon::today());
+    }
 }

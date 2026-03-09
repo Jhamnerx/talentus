@@ -17,3 +17,13 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+/*
+|--------------------------------------------------------------------------
+| Scheduled Tasks
+|--------------------------------------------------------------------------
+|
+| Las tareas programadas ahora se definen en bootstrap/app.php
+| usando el método ->withSchedule()
+|
+*/

@@ -1,14 +1,14 @@
 <div class="col-span-12 md:col-span-6 xl:col-span-4">
-    <div class="bg-white rounded shadow-lg overflow-auto w-full max-h-full"
+    <div class="bg-white dark:bg-gray-800 rounded shadow-lg overflow-auto w-full max-h-full"
         @keydown.escape.window="modalOpen = false, files = null">
-        <div class="px-5 py-3 border-b border-slate-200">
+        <div class="px-5 py-3 border-b border-slate-200 dark:border-gray-700">
             <div class="flex justify-between items-center">
-                <div class="font-semibold text-slate-800 uppercase">CERTIFICADO FORMATO P12</div>
+                <div class="font-semibold text-slate-800 dark:text-gray-100 uppercase">CERTIFICADO FORMATO P12</div>
             </div>
         </div>
         <!-- content -->
 
-        <div class="px-4 py-5 bg-white sm:p-6" x-data="{ file: @entangle('file').live, files: null }">
+        <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:p-6" x-data="{ file: @entangle('file').live, files: null }">
 
             @if ($file)
                 <div class="px-5 py-2">
@@ -27,7 +27,7 @@
                     <span>{{ $file->getClientOriginalName() }}</span>
                 </div>
             @else
-                <div class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 border-dashed rounded-md"
+                <div class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 dark:border-gray-600 border-dashed rounded-md"
                     x-on:dragover="$el.classList.add('border-emerald-400')"
                     x-on:dragleave="$el.classList.remove('border-emerald-400')">
                     <input wire:model.live="file" type="file"
@@ -35,15 +35,15 @@
                         id="file" x-on:change="files = $event.target.files; console.log($event.target.files);"
                         accept=".p12">
                     <div class="space-y-1 text-center">
-                        <div x-show="!file" class="flex text-sm text-gray-600">
+                        <div x-show="!file" class="flex text-sm text-gray-600 dark:text-gray-400">
                             <label for="file"
-                                class="relative cursor-pointer z-60 bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                class="relative cursor-pointer z-60 bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                 <span>Subir Archivo</span>
 
                             </label>
                             <p class="pl-1">o arrastra y suelta</p>
                         </div>
-                        <p class="text-xs text-gray-500">ARCHIVOS ACEPTADOS P12</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">ARCHIVOS ACEPTADOS P12</p>
                     </div>
                 </div>
 
@@ -59,7 +59,7 @@
             </p>
         @enderror
         <!-- Modal footer -->
-        <div class="px-5 py-4 border-t border-slate-200">
+        <div class="px-5 py-4 border-t border-slate-200 dark:border-gray-700">
             <div class="flex flex-wrap justify-end space-x-2">
 
                 <x-form.button wire:click='uploadCertificado' spinner="uploadCertificado" label="Subir y Convertir"

@@ -10,12 +10,8 @@ import {
 } from "chart.js";
 import "chartjs-adapter-moment";
 
-// Import TailwindCSS variables
-import resolveConfig from "tailwindcss/resolveConfig";
-import { tailwindConfig, formatValue } from "../utils";
-
-// Tailwind config
-const fullConfig = resolveConfig(tailwindConfig);
+// Import utilities
+import { getCssVariable } from "../utils";
 
 Chart.register(DoughnutController, ArcElement, TimeScale, Tooltip);
 
@@ -24,6 +20,9 @@ Chart.register(DoughnutController, ArcElement, TimeScale, Tooltip);
 const CardVentas = () => {
     const ctx = document.getElementById("dashboard-card-06");
     if (!ctx) return;
+
+    const darkMode = localStorage.getItem("dark-mode") === "true";
+
     // eslint-disable-next-line no-unused-vars
     const chart = new Chart(ctx, {
         type: "doughnut",
@@ -34,16 +33,16 @@ const CardVentas = () => {
                     label: "Top Countries",
                     data: [35, 30, 35],
                     backgroundColor: [
-                        tailwindConfig().theme.colors.indigo[500],
-                        tailwindConfig().theme.colors.blue[400],
-                        tailwindConfig().theme.colors.indigo[800],
+                        getCssVariable("--color-indigo-500"),
+                        getCssVariable("--color-blue-400"),
+                        getCssVariable("--color-indigo-800"),
                     ],
                     hoverBackgroundColor: [
-                        tailwindConfig().theme.colors.indigo[600],
-                        tailwindConfig().theme.colors.blue[500],
-                        tailwindConfig().theme.colors.indigo[900],
+                        getCssVariable("--color-indigo-600"),
+                        getCssVariable("--color-blue-500"),
+                        getCssVariable("--color-indigo-900"),
                     ],
-                    hoverBorderColor: tailwindConfig().theme.colors.white,
+                    hoverBorderColor: getCssVariable("--color-white"),
                 },
             ],
         },
@@ -88,20 +87,20 @@ const CardVentas = () => {
                         c.options.plugins.legend.labels.generateLabels(c);
                     items.forEach((item) => {
                         const li = document.createElement("li");
-                        li.style.margin = tailwindConfig().theme.margin[1];
+                        li.style.margin = "0.25rem";
                         // Button element
                         const button = document.createElement("button");
                         button.classList.add("btn-xs");
-                        button.style.backgroundColor =
-                            tailwindConfig().theme.colors.white;
-                        button.style.borderWidth =
-                            tailwindConfig().theme.borderWidth[1];
-                        button.style.borderColor =
-                            tailwindConfig().theme.colors.slate[200];
-                        button.style.color =
-                            tailwindConfig().theme.colors.slate[500];
+                        button.style.backgroundColor = darkMode
+                            ? "#1E293B"
+                            : "#ffffff";
+                        button.style.borderWidth = "1px";
+                        button.style.borderColor = darkMode
+                            ? "#475569"
+                            : "#E2E8F0";
+                        button.style.color = darkMode ? "#94A3B8" : "#64748B";
                         button.style.boxShadow =
-                            tailwindConfig().theme.boxShadow.md;
+                            "0 4px 6px -1px rgb(0 0 0 / 0.1)";
                         button.style.opacity = item.hidden ? ".3" : "";
                         button.onclick = () => {
                             c.toggleDataVisibility(item.index, !item.index);
@@ -110,13 +109,11 @@ const CardVentas = () => {
                         // Color box
                         const box = document.createElement("span");
                         box.style.display = "block";
-                        box.style.width = tailwindConfig().theme.width[2];
-                        box.style.height = tailwindConfig().theme.height[2];
+                        box.style.width = "0.5rem";
+                        box.style.height = "0.5rem";
                         box.style.backgroundColor = item.fillStyle;
-                        box.style.borderRadius =
-                            tailwindConfig().theme.borderRadius.sm;
-                        box.style.marginRight =
-                            tailwindConfig().theme.margin[1];
+                        box.style.borderRadius = "0.125rem";
+                        box.style.marginRight = "0.25rem";
                         box.style.pointerEvents = "none";
                         // Label
                         const label = document.createElement("span");

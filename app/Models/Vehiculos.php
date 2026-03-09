@@ -6,6 +6,7 @@ use App\Scopes\EmpresaScope;
 use Spatie\Activitylog\LogOptions;
 use App\Observers\VehiculosObserver;
 use Illuminate\Database\Eloquent\Model;
+use Laravelcm\Subscriptions\Traits\HasPlanSubscriptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -18,6 +19,7 @@ class Vehiculos extends Model
     use HasFactory;
     use SoftDeletes;
     use LogsActivity;
+    use HasPlanSubscriptions;
     protected static $recordEvents = ['deleted', 'created', 'updated'];
 
     public function getActivitylogOptions(): LogOptions
@@ -30,6 +32,10 @@ class Vehiculos extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'vehiculos';
     protected $primaryKey = 'id';
+
+    protected $casts = [
+        'gpswox_id' => 'integer',
+    ];
 
     //GLOBAL SCOPE EMPRESA
     protected static function booted()

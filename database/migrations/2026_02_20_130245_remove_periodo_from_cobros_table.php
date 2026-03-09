@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('cobros', function (Blueprint $table) {
+            $table->dropColumn([
+                'periodo',
+                'fecha_vencimiento',
+                'fecha_inicio',
+                'monto_unidad',
+                'cantidad_unidades',
+                'observacion',
+            ]);
+        });
+
+        Schema::table('detalles_cobros', function (Blueprint $table) {
+            $table->date('fecha')->nullable()->change();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('cobros', function (Blueprint $table) {
+            $table->string('periodo')->default('MENSUAL')->after('comentario');
+            $table->date('fecha_vencimiento')->nullable()->after('tipo_pago');
+            $table->date('fecha_inicio')->nullable()->after('tipo_pago');
+            $table->decimal('monto_unidad', 10, 2)->default(30)->after('divisa');
+            $table->integer('cantidad_unidades')->nullable()->after('monto_unidad');
+            $table->string('observacion')->nullable()->after('nota');
+        });
+    }
+};

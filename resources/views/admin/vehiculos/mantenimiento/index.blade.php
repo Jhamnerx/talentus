@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'vehiculos-mantenimiento')
-@section('contenido')
+<x-admin-layout ruta="vehiculos-mantenimiento">
 
     <!-- Tabla -->
     @livewire('admin.vehiculos.mantenimiento.index')
@@ -9,10 +7,6 @@
     @livewire('admin.vehiculos.mantenimiento.create-task')
     @livewire('admin.vehiculos.mantenimiento.delete')
     @livewire('admin.vehiculos.mantenimiento.export')
-
-@stop
-
-@section('js')
 
     <script>
         window.addEventListener('mark-as', event => {
@@ -28,4 +22,4 @@
         })
     </script>
 
-@stop
+</x-admin-layout>

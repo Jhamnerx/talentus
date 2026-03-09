@@ -1,18 +1,10 @@
-@extends('layouts.admin')
-@section('ruta', 'ventas-recibos')
-
-
-@section('contenido')
+<x-admin-layout ruta="ventas-recibos">
 
     @livewire('admin.ventas.recibos.create', [
-        'detalle_ids' => $detalle_ids,
-        'cobro_id' => $cobro_id,
+        'notificacion_ids' => $notificacion_ids,
     ])
 
-
-@stop
-
-@push('modals')
     @livewire('admin.clientes.save')
     @livewire('admin.productos.create-modal')
-@endpush
+
+</x-admin-layout>

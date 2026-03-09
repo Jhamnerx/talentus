@@ -22,47 +22,30 @@ class VehiculosRequest extends FormRequest
      */
     public function rules($dispositivo_id, $numero, $vehicle = null)
     {
-
         $this->vehiculo = Vehiculos::where('dispositivos_id', $dispositivo_id)->withTrashed()->first();
         $this->vehiculo2 = Vehiculos::where('numero', $numero)->withTrashed()->first();
 
-        $rules = [
-            'placa' => 'required|unique:vehiculos',
-            "marca" => 'nullable',
-            "modelo" => 'nullable',
-            "tipo" => 'nullable',
-            "year" => 'nullable',
-            "color" => 'nullable',
-            "motor" => 'nullable',
-            "serie" => 'nullable',
-            "clientes_id"  => "required",
-            "dispositivos_id" =>
-            'nullable|unique:vehiculos',
-            "modelo_gps" => 'nullable',
-            "operador" => 'nullable',
-            "sim_card" => 'nullable',
-            "dispositivo_imei" => 'nullable',  // Cambiado a nullable, ya no es obligatorio
-            "descripcion" => 'nullable',
+        $ignoreId = $vehicle ? ',' . $vehicle->id : '';
 
-            // "dispositivos_id" => "required|unique:vehiculos",
-
+        return [
+            'placa'           => 'required|unique:vehiculos,placa' . $ignoreId,
+            'marca'           => 'required',
+            'modelo'          => 'required',
+            'tipo'            => 'required',
+            'year'            => 'required',
+            'color'           => 'required',
+            'motor'           => 'required',
+            'serie'           => 'required',
+            'clientes_id'     => 'required',
+            'sim_card_id'     => 'required',
+            'numero'          => 'required|unique:vehiculos,numero' . $ignoreId,
+            'dispositivos_id' => 'nullable|unique:vehiculos,dispositivos_id' . $ignoreId,
+            'modelo_gps'      => 'nullable',
+            'operador'        => 'nullable',
+            'sim_card'        => 'nullable',
+            'dispositivo_imei' => 'nullable',
+            'descripcion'     => 'nullable',
         ];
-
-        // Solo validar sim_card_id y numero como requeridos si no se está editando
-        if (!$vehicle) {
-            $rules["sim_card_id"] = 'required';
-            $rules["numero"] = 'required|unique:vehiculos,numero';
-        } else {
-            // En modo edición, hacer estos campos opcionales
-            $rules["sim_card_id"] = 'nullable';
-            $rules["numero"] = 'nullable|unique:vehiculos,numero,' . $vehicle->id;
-        }
-
-        if ($vehicle) {
-            $rules['placa'] = 'required|unique:vehiculos,placa,' . $vehicle->id;
-            $rules['dispositivos_id'] = 'nullable|unique:vehiculos,dispositivos_id,' . $vehicle->id;
-        }
-        return $rules;
     }
 
     /**

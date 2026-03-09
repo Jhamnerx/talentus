@@ -6,9 +6,8 @@ use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\Vehiculos;
 use App\Models\Mantenimiento;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Admin\MantenimientoController;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 
 class Save extends Component
@@ -17,19 +16,11 @@ class Save extends Component
     public $modalOpen = false;
 
 
-    public $numero, $detalle_trabajo, $fecha_hora_mantenimiento, $notify_admin = true, $notify_client = false, $nota, $estado, $vehiculo_id;
-    public $updates;
+    public $detalle_trabajo, $fecha_hora_mantenimiento, $notify_admin = true, $notify_client = false, $nota, $estado, $vehiculo_id;
 
     protected function rules()
     {
-
-        return  [
-            'numero' =>
-            [
-                'required',
-                Rule::unique('mantenimientos', 'numero')
-                    ->where(fn($query) => $query->where('empresa_id', session('empresa'))),
-            ],
+        return [
             'detalle_trabajo' => 'nullable',
             'fecha_hora_mantenimiento' => 'date|required',
             'notify_admin' => 'boolean|required',
@@ -41,10 +32,7 @@ class Save extends Component
 
     protected function messages()
     {
-
         return [
-            'numero.required' => 'El campo número es obligatorio',
-            'numero.unique' => 'Número ya esta registrado',
             'vehiculo_id.required' => 'Selecciona un vehículo',
             'notify_admin.boolean' => 'Debe ser verdadero o false',
             'notify_client.boolean' => 'Debe ser verdadero o false',
@@ -59,30 +47,31 @@ class Save extends Component
     #[On('open-modal-save-mantenimiento')]
     public function openModalSaveMantenimiento($from, Vehiculos $vehiculo = null)
     {
-
-        $this->numero =  $this->getNextSequenceNumber();
-
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
 
         if ($vehiculo) {
             $this->vehiculo_id = $vehiculo->id;
         }
-        $this->openModal();;
+        $this->openModal();
     }
 
 
-    public function getNextSequenceNumber()
+    private function generarNumeroSeguro(): string
     {
-        $maxNumero = Mantenimiento::max('numero');
+        $anio = now()->year;
+        $prefijo = "MT{$anio}-";
+        $pos = strlen($prefijo) + 1;
 
-        if ($maxNumero) {
-            preg_match('/(\d+)$/', $maxNumero, $matches);
-            $numericPart = $matches ? intval($matches[0]) : 0;
-            $nextNumero = $numericPart + 1;
-            return str_replace($numericPart, $nextNumero, $maxNumero);
-        } else {
-            return 1;
-        }
+        $ultimo = Mantenimiento::where('numero', 'like', $prefijo . '%')
+            ->lockForUpdate()
+            ->orderByRaw("CAST(SUBSTRING(numero, {$pos}) AS UNSIGNED) DESC")
+            ->value('numero');
+
+        $siguiente = $ultimo
+            ? (int) substr($ultimo, strlen($prefijo)) + 1
+            : 1;
+
+        return $prefijo . str_pad($siguiente, 4, '0', STR_PAD_LEFT);
     }
 
 
@@ -106,7 +95,11 @@ class Save extends Component
     {
         $values = $this->validate();
 
-        $mantenimiento = Mantenimiento::create($values);
+        $mantenimiento = DB::transaction(function () use ($values) {
+            $values['numero'] = $this->generarNumeroSeguro();
+            return Mantenimiento::create($values);
+        });
+
         $this->afterSave($mantenimiento->vehiculo->placa);
     }
 
@@ -134,7 +127,6 @@ class Save extends Component
     #[On(['open-modal-mantenimiento'])]
     public function listenUpdatedNumero($placa)
     {
-        $this->numero =  $this->getNextSequenceNumber();
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
         $this->vehiculo_id = Vehiculos::where('placa', $placa)->first()->id;
         $this->openModal();

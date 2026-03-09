@@ -4,7 +4,8 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">SIM CARDS - TARJETAS FISICAS</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">SIM CARDS - TARJETAS FISICAS
+            </h1>
         </div>
 
         <!-- Right: Actions -->
@@ -28,7 +29,8 @@
 
             <!-- Add  button -->
             @can('crear-sim_card')
-                <button wire:click.prevent='openModalCreate()' class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                <button wire:click.prevent='openModalCreate()'
+                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white cursor-pointer">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
                             d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -40,7 +42,7 @@
 
             @can('asignar.linea-sim_card')
                 <button wire:click.prevent="openModalAsign()"
-                    class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300">
+                    class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300 cursor-pointer">
                     <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                         <path
                             d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
@@ -87,16 +89,16 @@
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                <div class="z-10 absolute top-full right-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1"
                     @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
                     x-transition:enter="transition ease-out duration-100 transform"
                     x-transition:enter-start="opacity-0 -translate-y-2"
                     x-transition:enter-end="opacity-100 translate-y-0"
                     x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600" x-ref="options">
+                    <div class="font-medium text-sm text-slate-600 dark:text-slate-300" x-ref="options">
                         <button wire:click="filter(1)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
                             :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -107,7 +109,7 @@
                             <span>Hoy</span>
                         </button>
                         <button wire:click="filter(7)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -118,7 +120,7 @@
                             <span>Ultimos 7 días</span>
                         </button>
                         <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -129,7 +131,7 @@
                             <span>Ultimo Mes</span>
                         </button>
                         <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -141,7 +143,7 @@
                             <span>Ultimos 12 Meses</span>
                         </button>
                         <button wire:click="filter(0)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -161,7 +163,7 @@
                 <div class="relative inline-flex">
                     <a href="{{ route('admin.export.lineas') }}">
                         <button
-                            class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
+                            class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300 cursor-pointer">
                             <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
                                 <path
                                     d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
@@ -177,7 +179,7 @@
             @can('importar-sim_card')
                 <div class="relative inline-flex">
                     <button wire:click="openModalImport()" aria-controls="basic-modal"
-                        class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
+                        class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300 cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 icon icon-tabler icon-tabler-upload"
                             viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round"
                             stroke-linejoin="round">
@@ -195,21 +197,21 @@
 
     </div>
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200">
+    <div class="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total sim cards <span
-                    class="text-slate-400 font-medium">{{ $sim_cards->total() }}</span>
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">Total sim cards <span
+                    class="text-slate-400 dark:text-slate-500 font-medium">{{ $sim_cards->total() }}</span>
             </h2>
 
         </header>
-        <div>
+        <div class="min-h-125">
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
 
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">SIM CARD</div>
@@ -239,7 +241,7 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-slate-700">
 
                         @foreach ($sim_cards as $sim_card)
                             <tr wire:key="{{ $sim_card->id }}">
@@ -260,24 +262,27 @@
                                             </svg>
                                         </div>
                                         @if (!empty($sim_card->sim_card))
-                                            <div class="font-medium text-slate-800">{{ $sim_card->sim_card }}</div>
+                                            <div class="font-medium text-slate-800 dark:text-slate-100">
+                                                {{ $sim_card->sim_card }}</div>
                                         @else
-                                            <div class="font-medium text-slate-800"></div>
+                                            <div class="font-medium text-slate-800 dark:text-slate-100"></div>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     @if (!empty($sim_card->linea))
-                                        <div class="text-left">{{ $sim_card->linea->numero }}</div>
+                                        <div class="text-left text-slate-800 dark:text-slate-100">
+                                            {{ $sim_card->linea->numero }}</div>
                                     @else
-                                        <div class="text-left"># -</div>
+                                        <div class="text-left text-slate-500 dark:text-slate-400"># -</div>
                                     @endif
 
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $sim_card->operador }}</div>
+                                    <div class="text-left text-slate-800 dark:text-slate-100">{{ $sim_card->operador }}
+                                    </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                     @if (!empty($sim_card->vehiculos))
@@ -294,7 +299,7 @@
                                                     </svg>
                                                 </button>
                                                 <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
-                                                    <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2"
+                                                    <div class="bg-slate-800 dark:bg-slate-700 p-2 rounded overflow-hidden mb-2"
                                                         x-show="open"
                                                         x-transition:enter="transition ease-out duration-200 transform"
                                                         x-transition:enter-start="opacity-0 translate-y-2"
@@ -373,9 +378,11 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
-                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                                @click.prevent="open = !open" :aria-expanded="open">
+                                            <button
+                                                class="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
+                                                :class="{ 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300': open }"
+                                                aria-haspopup="true" @click.prevent="open = !open"
+                                                :aria-expanded="open">
                                                 <span class="sr-only">Menu</span>
                                                 <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                     <circle cx="16" cy="16" r="2" />
@@ -383,7 +390,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black dark:ring-slate-700 ring-opacity-5 divide-y divide-gray-100 dark:divide-slate-700 focus:outline-none"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -397,7 +404,7 @@
                                                     <li>
                                                         <a href="javascript: void(0)"
                                                             wire:click.prevent="openModalEdit({{ $sim_card->id }})"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                            class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                             disabled="false" id="headlessui-menu-item-27"
                                                             role="menuitem" tabindex="-1">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -411,11 +418,29 @@
 
                                                         </a>
                                                     </li>
+                                                    @if ($sim_card->linea)
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalCambiarNumero({{ $sim_card->id }})"
+                                                                class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-indigo-500"
+                                                                    fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                                                </svg>
+                                                                Cambiar número
+                                                            </a>
+                                                        </li>
+                                                    @endif
                                                     @can('ver.cambios-sim_card')
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="openModalCambios({{ $sim_card->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-27"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -447,7 +472,7 @@
                             <tr>
                                 <td colspan="6"
                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                    <div class="text-center">No hay Registros</div>
+                                    <div class="text-center text-slate-500 dark:text-slate-400">No hay Registros</div>
                                 </td>
                             </tr>
                         @endif

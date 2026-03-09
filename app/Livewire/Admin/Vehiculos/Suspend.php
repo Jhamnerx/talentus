@@ -3,7 +3,9 @@
 namespace App\Livewire\Admin\Vehiculos;
 
 use Livewire\Component;
+use App\Models\Actas;
 use App\Models\Vehiculos;
+use App\Models\DetalleCobros;
 use Livewire\Attributes\On;
 
 class Suspend extends Component
@@ -20,41 +22,48 @@ class Suspend extends Component
             $this->vehiculo->setAttribute('old_sim_card', $this->vehiculo->sim_card->sim_card);
         }
 
-        // Si el vehículo tiene un dispositivo asociado
-        if ($this->vehiculo->dispositivo_imei && $this->vehiculo->dispositivos_id) {
-            // Registrar fecha de desinstalación en vehiculos_dispositivos
-            $vehiculoDispositivo = \App\Models\VehiculoDispositivos::where('vehiculo_id', $this->vehiculo->id)
-                ->where('dispositivo_id', $this->vehiculo->dispositivos_id)
-                ->whereNull('fecha_desinstalacion')
-                ->latest('fecha_instalacion')
-                ->first();
+        // Desinstalar TODOS los dispositivos activos del vehículo
+        $vehiculoDispositivos = \App\Models\VehiculoDispositivos::where('vehiculo_id', $this->vehiculo->id)
+            ->whereNull('fecha_desinstalacion')
+            ->get();
 
-            if ($vehiculoDispositivo) {
-                $vehiculoDispositivo->fecha_desinstalacion = now();
-                if ($this->remove) {
-                    $vehiculoDispositivo->is_principal = false; // Marcar como no principal si se está removiendo
-                }
-                $vehiculoDispositivo->save();
+        foreach ($vehiculoDispositivos as $vd) {
+            $vd->fecha_desinstalacion = now();
+            if ($this->remove) {
+                $vd->is_principal = false;
             }
-            // Cambiar estado del dispositivo a STOCK
-            $dispositivo = \App\Models\Dispositivos::find($this->vehiculo->dispositivos_id);
-            if ($dispositivo) {
-                $dispositivo->estado = \App\Models\Dispositivos::STOCK;
-                $dispositivo->save();
-            }
+            $vd->save();
         }
 
         if ($this->remove) {
             $this->vehiculo->setAttribute('old_imei', $this->vehiculo->dispositivo_imei);
-            $this->vehiculo->setAttribute('dispositivo_imei', NULL);
-            $this->vehiculo->setAttribute('dispositivos_id', NULL);
+            $this->vehiculo->setAttribute('dispositivo_imei', null);
+            $this->vehiculo->setAttribute('dispositivos_id', null);
         }
 
         $this->vehiculo->setAttribute('numero', NULL);
         $this->vehiculo->setAttribute('sim_card_id', NULL);
         $this->vehiculo->setAttribute('estado', 2);
         $this->vehiculo->save();
-        // return redirect()->route('admin.vehiculos.index');
+
+        // Cancelar suscripción del paquete laravelcm/laravel-subscriptions
+        $subscription = $this->vehiculo->planSubscription('gps-tracking');
+        $subscription?->cancel(immediately: true);
+
+        // Marcar DetalleCobros activos como inactivo (estado = false)
+        DetalleCobros::where('vehiculo_id', $this->vehiculo->id)
+            ->where('estado', true)
+            ->update(['estado' => false]);
+
+        // Anular la última acta activa del vehículo
+        $ultimaActa = Actas::where('vehiculos_id', $this->vehiculo->id)
+            ->where('estado', 1)
+            ->latest()
+            ->first();
+        if ($ultimaActa) {
+            $ultimaActa->estado = 0;
+            $ultimaActa->save();
+        }
 
         $this->afterSuspend($this->vehiculo->placa);
     }
@@ -69,6 +78,8 @@ class Suspend extends Component
 
     public function afterSuspend($placa)
     {
+        $this->modalSuspend = false;
+        $this->remove = false;
 
         $this->dispatch(
             'notify-toast',
@@ -77,7 +88,6 @@ class Suspend extends Component
             mensaje: 'se suspendio el vehiculo: ' . $placa,
         );
 
-        $this->remove = false;
         $this->dispatch('update-table');
     }
 

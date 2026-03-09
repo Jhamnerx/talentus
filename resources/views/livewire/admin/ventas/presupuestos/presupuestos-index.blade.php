@@ -5,7 +5,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">COTIZACIONES ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold dark:text-slate-100">COTIZACIONES ✨</h1>
 
         </div>
 
@@ -15,10 +15,11 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
+                <input wire:model.live='search' id="action-search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400"
                     type="search" placeholder="Buscar Presupuesto" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2 dark:text-slate-500 dark:group-hover:text-slate-300"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -27,6 +28,12 @@
                     </svg>
                 </button>
             </form>
+
+            <!-- Filter by client -->
+            <div class="w-64">
+                <x-form.select wire:model.live="cliente_id" placeholder="Filtrar por cliente" :async-data="route('api.clientes.index')"
+                    option-label="razon_social" option-description="numero_documento" option-value="id" clearable />
+            </div>
 
             <!-- Create invoice button -->
             @can('crear-cotizaciones')
@@ -56,7 +63,7 @@
                     <button wire:click.prevent="status('null')"
                         :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Todas
                         <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
                 </li>
@@ -64,25 +71,28 @@
                     <button wire:click.prevent="status('0')"
                         :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 1"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Pendientes
-                        <span class="ml-1 text-slate-400">{{ $totales['pendientes'] }}</span></button>
+                        <span
+                            class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['pendientes'] }}</span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click.prevent="status('1')"
                         :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 2"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Aceptadas
-                        <span class="ml-1 text-slate-400">{{ $totales['aceptadas'] }}</span></button>
+                        <span
+                            class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['aceptadas'] }}</span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click.prevent="status('2')"
                         :class="clickeado === 3 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 3"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Rechazadas
-                        <span class="ml-1 text-slate-400">{{ $totales['rechazadas'] }}</span></button>
+                        <span
+                            class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['rechazadas'] }}</span></button>
                 </li>
             </ul>
         </div>
@@ -95,7 +105,7 @@
                     <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
                             class="table-items-count"></span> Items Seleccionados</div>
                     <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Eliminar</button>
+                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600 dark:bg-gray-800 dark:border-gray-600 dark:text-rose-400 dark:hover:border-gray-500">Eliminar</button>
                 </div>
             </div>
         </div>
@@ -104,10 +114,10 @@
 
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
+    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8 dark:bg-gray-800 dark:border-gray-700">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Presupuestos <span
-                    class="text-slate-400 font-medium">{{ $presupuestos->total() }}</span>
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">Presupuestos <span
+                    class="text-slate-400 font-medium dark:text-slate-500">{{ $presupuestos->total() }}</span>
             </h2>
         </header>
         <div>
@@ -116,7 +126,7 @@
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200 dark:text-slate-400 dark:bg-slate-900/20 dark:border-gray-700">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
@@ -163,7 +173,7 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
 
                         <!-- Row -->
 
@@ -188,7 +198,8 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="space-x-1">
                                             <a target="_blank" href="{{ route('admin.pdf.presupuesto', $presupuesto) }}">
-                                                <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                <button
+                                                    class="text-slate-400 hover:text-slate-500 rounded-full dark:text-slate-500 dark:hover:text-slate-300">
                                                     <span class="sr-only">Descargar</span>
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                         <path
@@ -217,10 +228,10 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                    <div class="font-medium text-slate-900">
+                                    <div class="font-medium text-slate-900 dark:text-slate-100">
                                         {{ $presupuesto->clientes->razon_social }}
                                     </div>
-                                    <div class="font-sm text-slate-700">
+                                    <div class="font-sm text-slate-700 dark:text-slate-400">
                                         <p class="text-xs">
                                             {{ $presupuesto->clientes->numero_documento }}
                                         </p>
@@ -246,7 +257,7 @@
                                                         </svg>
                                                     </div>
                                                 </button>
-                                                <div class="origin-top-right z-10 absolute top-full left-0 min-w-44 bg-white border border-slate-300 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                                                <div class="origin-top-right z-10 absolute top-full left-0 min-w-44 bg-white border border-slate-300 py-1.5 rounded shadow-lg overflow-hidden mt-1 dark:bg-gray-800 dark:border-gray-600"
                                                     @click.outside="open = false"
                                                     @keydown.escape.window="open = false" x-show="open"
                                                     x-transition:enter="transition ease-out duration-200 transform"
@@ -255,10 +266,12 @@
                                                     x-transition:leave="transition ease-out duration-200"
                                                     x-transition:leave-start="opacity-100"
                                                     x-transition:leave-end="opacity-0" x-cloak>
-                                                    <div class="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
-                                                        <div class="font-medium text-slate-800">Detalle de cuotas.
+                                                    <div
+                                                        class="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200 dark:border-gray-600">
+                                                        <div class="font-medium text-slate-800 dark:text-slate-200">
+                                                            Detalle de cuotas.
                                                         </div>
-                                                        <div class="text-sm text-slate-600">
+                                                        <div class="text-sm text-slate-600 dark:text-slate-400">
                                                             Adelanto:
                                                             {{ $presupuesto->divisa == 'USD' ? "$ " . $presupuesto->adelanto : 'S/. ' . $presupuesto->adelanto }}
                                                         </div>
@@ -308,7 +321,7 @@
                                             <!-- End -->
                                         </div>
                                     @else
-                                        <div class="font-medium text-slate-800">
+                                        <div class="font-medium text-slate-800 dark:text-slate-200">
                                             {{ $presupuesto->forma_pago }}
                                         </div>
                                     @endif
@@ -316,15 +329,17 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div>{{ $presupuesto->fecha->format('Y-m-d') }}</div>
+                                    <div class="dark:text-slate-300">{{ $presupuesto->fecha->format('Y-m-d') }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div>{{ $presupuesto->fecha_caducidad->format('Y-m-d') }}</div>
+                                    <div class="dark:text-slate-300">
+                                        {{ $presupuesto->fecha_caducidad->format('Y-m-d') }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
-                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                            <button
+                                                class="text-slate-400 hover:text-slate-500 rounded-full dark:text-slate-500 dark:hover:text-slate-400"
                                                 :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
                                                 @click.prevent="open = !open" :aria-expanded="open">
                                                 <span class="sr-only">Menu</span>
@@ -334,7 +349,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:divide-gray-700"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -348,7 +363,7 @@
                                                     @can('editar-cotizaciones')
                                                         <li>
                                                             <a href="{{ route('admin.ventas.presupuestos.edit', $presupuesto) }}"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-27"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -368,7 +383,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent='openModalDelete({{ $presupuesto->id }})'
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-28"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -462,7 +477,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click="modalOpenSend({{ $presupuesto->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-32"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -481,7 +496,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="markAccept({{ $presupuesto->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-33"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -499,7 +514,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="markReject({{ $presupuesto->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-34"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"

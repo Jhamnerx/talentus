@@ -12,13 +12,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Styles -->
-    @vite('resources/css/cliente.css')
-
-    @vite('resources/css/fontawesome-all.min.css')
-
+    @vite('resources/css/app.css')
 
     @livewireStyles
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body class="font-sans antialiased">
@@ -28,8 +25,7 @@
     <!-- Page Content -->
     <main class="min-h-full">
 
-        @yield('contenido')
-
+        {{ $slot }}
 
     </main>
 
@@ -38,44 +34,10 @@
 
     @livewireScripts
 
-    @yield('js')
-
-
-
-    @vite('resources/js/cliente.js')
-
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap-select.min.js') }}"></script>
-
-    <script src="{{ asset('plugins/isotope.js') }}"></script>
-    <script src="{{ asset('plugins/jquery.waypoints.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery.counterup.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('plugins/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('plugins/TweenMax.min.js') }}"></script>
-    <script src="{{ asset('plugins/input-case-enforcer/input-case-enforcer.min.js') }}"></script>
-    <script src="{{ asset('plugins/wow.js') }}"></script>
-
+    @vite('resources/js/app.js')
 
     @stack('scripts')
 
-    <script>
-        window.addEventListener('save-review', event => {
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'GRACIAS POR TU RESPUESTAS',
-                    text: 'Estamos comprometidos a ayudarte!',
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
-
-                })
-            });
-
-        })
-    </script>
 </body>
 
 </html>

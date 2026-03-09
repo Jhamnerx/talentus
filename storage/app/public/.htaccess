@@ -1,0 +1,13 @@
+# Bloquear ejecución de archivos PHP en public/storage
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+# Solo permitir archivos de imagen, PDF y documentos
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps|cgi|pl|exe)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

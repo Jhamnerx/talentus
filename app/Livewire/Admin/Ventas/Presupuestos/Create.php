@@ -17,7 +17,7 @@ use App\Models\TipoComprobantes;
 use Illuminate\Support\Collection;
 use App\Http\Requests\VentasRequest;
 use App\Http\Requests\PresupuestosRequest;
-use App\Http\Controllers\Admin\UtilesController;
+use App\Services\FactilizaService;
 use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 
@@ -87,8 +87,9 @@ class Create extends Component
         $this->detalle_cuotas = collect();
 
         //  CONSULTAR TIPO CAMBIO
-        $util = new UtilesController;
-        $this->tipo_cambio = $util->tipoCambio();
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarTipoCambio();
+        $this->tipo_cambio = $resultado['venta'] ?? 0;
 
         $this->plantilla = plantilla::first();
 

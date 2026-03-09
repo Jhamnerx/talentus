@@ -10,6 +10,7 @@ use Livewire\Attributes\On;
 use App\Models\Dispositivos;
 use App\Http\Requests\VehiculosRequest;
 use App\Models\Lineas;
+use App\Services\FactilizaService;
 
 class SaveVehiculo extends Component
 {
@@ -19,6 +20,8 @@ class SaveVehiculo extends Component
 
     public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $dispositivo_imei = '', $modelo_gps,
         $sim_card_id, $numero, $sim_card, $operador, $clientes_id, $dispositivos_id, $descripcion;
+
+    public $errorConsultaPlaca = null;
 
     // Nuevas propiedades para múltiples dispositivos
     public $dispositivos = [];
@@ -201,10 +204,9 @@ class SaveVehiculo extends Component
 
     public function updatedNumero($numero)
     {
-
         if ($numero) {
-
             $linea = Lineas::where('numero', $numero)->first();
+            if (!$linea) return;
             $this->operador = $linea->operador;
             $this->sim_card_id = $linea->sim_card ? $linea->sim_card->id : null;
             $this->sim_card = $linea->sim_card ? $linea->sim_card->sim_card : null;
@@ -247,5 +249,43 @@ class SaveVehiculo extends Component
     {
 
         $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
+    }
+
+    public function buscarPlaca()
+    {
+        $this->errorConsultaPlaca = null;
+
+        if (empty($this->placa)) {
+            $this->errorConsultaPlaca = 'Ingrese una placa para buscar';
+            return;
+        }
+
+        try {
+            // Limpiar la placa: quitar espacios, guiones y convertir a mayúsculas
+            $placaLimpia = strtoupper(str_replace([' ', '-'], '', $this->placa));
+
+            $factilizaService = app(FactilizaService::class);
+            $resultado = $factilizaService->consultarPlaca($placaLimpia);
+
+            if (($resultado['status'] ?? 0) == 200 && ($resultado['success'] ?? false)) {
+                //$this->placa = $resultado['placa'] ?? $this->placa;
+                $this->marca = $resultado['marca'] ?? $this->marca;
+                $this->modelo = $resultado['modelo'] ?? $this->modelo;
+                $this->serie = $resultado['serie'] ?? $this->serie;
+                $this->color = $resultado['color'] ?? $this->color;
+                $this->motor = $resultado['motor'] ?? $this->motor;
+
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'success',
+                    title: 'PLACA ENCONTRADA',
+                    mensaje: 'Datos del vehículo cargados correctamente'
+                );
+            } else {
+                $this->errorConsultaPlaca = $resultado['message'] ?? 'No se encontraron datos para esta placa';
+            }
+        } catch (\Throwable $th) {
+            $this->errorConsultaPlaca = 'Error al consultar la placa: ' . $th->getMessage();
+        }
     }
 }

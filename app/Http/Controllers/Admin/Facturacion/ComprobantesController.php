@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Facturacion;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class ComprobantesController extends Controller
 {
@@ -28,16 +27,16 @@ class ComprobantesController extends Controller
         return view('admin.comprobantes.notas-index');
     }
 
-    public function emitirFactura($detalle_ids = null, $cobro_id = null)
+    public function emitirFactura($notificacion_ids = null)
     {
-        $detalle_ids = $detalle_ids ? json_decode($detalle_ids, true) : [];
-        return view('admin.comprobantes.factura.create', compact('detalle_ids', 'cobro_id'));
+        $notificacion_ids = $notificacion_ids ? json_decode($notificacion_ids, true) : [];
+        return view('admin.comprobantes.factura.create', compact('notificacion_ids'));
     }
 
-    public function emitirBoleta($detalle_ids = null, $cobro_id = null)
+    public function emitirBoleta($notificacion_ids = null)
     {
-        $detalle_ids = $detalle_ids ? json_decode($detalle_ids, true) : [];
-        return view('admin.comprobantes.boleta.create', compact('detalle_ids', 'cobro_id'));
+        $notificacion_ids = $notificacion_ids ? json_decode($notificacion_ids, true) : [];
+        return view('admin.comprobantes.boleta.create', compact('notificacion_ids'));
     }
 
     public function emitirNotaVenta()

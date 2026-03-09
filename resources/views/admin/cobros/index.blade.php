@@ -1,20 +1,8 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-cobros')
-
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.cobros.index')
-    {{-- delete --}}
-    @livewire('admin.cobros.delete')
 
-@stop
-
-@push('modals')
-    @livewire('admin.cobros.create-invoice')
-@endpush
-
-@section('js')
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -73,4 +61,4 @@
         })
     </script>
 
-@stop
+</x-admin-layout>

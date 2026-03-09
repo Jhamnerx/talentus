@@ -101,7 +101,7 @@ class ModalAddProducto extends Component
 
     function updatedProductSelectedId($id)
     {
-        $producto = Productos::find($id);
+        $producto = Productos::with('categoria')->find($id);
 
         $igv = $this->calcularIgvProducto($producto->valor_unitario);
 
@@ -120,6 +120,10 @@ class ModalAddProducto extends Component
         $this->selected->put('codigo_afectacion', $this->tipo_afectacion);
         $this->selected->put('afecto_icbper', $producto->afecto_icbper);
         $this->selected->put('tipo', $producto->tipo);
+        // Campos para detección de equipo GPS
+        $this->selected->put('es_dispositivo', (bool) $producto->es_dispositivo);
+        $this->selected->put('modelo_id', $producto->modelo_id);
+        $this->selected->put('categoria_es_gps', (bool) ($producto->categoria?->es_equipo_gps ?? false));
         $this->calcularMontosProducto();
     }
 

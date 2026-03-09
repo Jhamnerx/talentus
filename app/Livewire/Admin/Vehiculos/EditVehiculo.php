@@ -260,10 +260,9 @@ class EditVehiculo extends Component
     }
     public function updatedNumero($numero)
     {
-
         if ($numero) {
-
             $linea = Lineas::where('numero', $numero)->first();
+            if (!$linea) return;
             $this->operador = $linea->operador;
             $this->sim_card_id = $linea->sim_card ? $linea->sim_card->id : null;
             $this->sim_card = $linea->sim_card ? $linea->sim_card->sim_card : null;

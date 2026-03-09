@@ -121,7 +121,7 @@ class ClientesIndex extends Component
 
     public function openModalDelete(Clientes $cliente)
     {
-        $this->dispatch('open-modal-delete', cliente: $cliente);
+        $this->dispatch('abrir-modal-eliminar-cliente', cliente: $cliente);
     }
 
     public function toggleStatus(Clientes $cliente)

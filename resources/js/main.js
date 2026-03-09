@@ -7,8 +7,8 @@ import "chartjs-adapter-moment";
 
 moment.locale("es");
 
-// Import TailwindCSS variables
-import { tailwindConfig } from "./utils";
+// Import utilities
+import { getCssVariable } from "./utils";
 
 import cardVentaSoles from "./components/dashboard-ventas-soles";
 import cardVentaDolares from "./components/dashboard-ventas-dolares";
@@ -16,17 +16,15 @@ import CardVentas from "./components/card-top-ventas";
 
 Chart.defaults.font.family = '"Inter", sans-serif';
 Chart.defaults.font.weight = "500";
-Chart.defaults.color = tailwindConfig().theme.colors.slate[400];
-Chart.defaults.scale.grid.color = tailwindConfig().theme.colors.slate[100];
-Chart.defaults.plugins.tooltip.titleColor =
-    tailwindConfig().theme.colors.slate[800];
-Chart.defaults.plugins.tooltip.bodyColor =
-    tailwindConfig().theme.colors.slate[800];
+Chart.defaults.color = getCssVariable("--color-slate-400");
+Chart.defaults.scale.grid.color = getCssVariable("--color-slate-100");
+Chart.defaults.plugins.tooltip.titleColor = getCssVariable("--color-slate-800");
+Chart.defaults.plugins.tooltip.bodyColor = getCssVariable("--color-slate-800");
 Chart.defaults.plugins.tooltip.backgroundColor =
-    tailwindConfig().theme.colors.white;
+    getCssVariable("--color-white");
 Chart.defaults.plugins.tooltip.borderWidth = 1;
 Chart.defaults.plugins.tooltip.borderColor =
-    tailwindConfig().theme.colors.slate[200];
+    getCssVariable("--color-slate-200");
 Chart.defaults.plugins.tooltip.displayColors = false;
 Chart.defaults.plugins.tooltip.mode = "nearest";
 Chart.defaults.plugins.tooltip.intersect = false;

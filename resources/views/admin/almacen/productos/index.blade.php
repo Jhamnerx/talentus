@@ -1,17 +1,10 @@
-@extends('layouts.admin')
-@section('ruta', 'almacen-productos')
-@section('contenido')
+<x-admin-layout>
 
-    <!-- Table -->
-    @livewire('admin.productos.productos-index')
+    @livewire('admin.productos.index', ['tipo' => $tipo], key('productos-index-' . $tipo))
 
-@stop
+    @livewire('admin.productos.create-modal', [], key('create-producto-modal-' . $tipo))
+    @livewire('admin.productos.edit-modal', [], key('edit-producto-modal-' . $tipo))
+    @livewire('admin.productos.delete-modal', [], key('delete-producto-modal-' . $tipo))
 
-@push('modals')
-    @livewire('admin.productos.create-modal')
-    @livewire('admin.productos.edit-modal')
-    @livewire('admin.productos.delete')
-@endpush
 
-@section('js')
-@stop
+</x-admin-layout>

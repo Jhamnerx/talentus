@@ -30,4 +30,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'factiliza' => [
+        'token' => env('FACTILIZA_TOKEN'),
+    ],
+
+    'gpswox' => [
+        'base_uri' => env('GPSWOX_BASE_URI', ''),
+        'api_hash' => env('GPSWOX_API_HASH', ''),
+    ],
+
 ];

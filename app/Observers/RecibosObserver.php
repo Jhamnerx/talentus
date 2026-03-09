@@ -35,7 +35,7 @@ class RecibosObserver
      */
     public function created(Recibos $recibos)
     {
-        //
+        // CashDocument ahora se crea automáticamente en PaymentsObserver
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\ComprasDetalle;
-use App\Models\PaymentMethods;
+use App\Models\PaymentMethodType;
 use App\Observers\ComprasObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,10 +32,16 @@ class Compras extends Model
     protected $casts = [
         'id' => 'integer',
         'fecha_emision' => 'date:Y-m-d',
+        'fecha_vencimiento' => 'date:Y-m-d',
         'sub_total' => 'decimal:2',
         'igv' => 'decimal:2',
         'total' => 'decimal:2',
+        'total_percepcion' => 'decimal:2',
         'user_id' => 'integer',
+        'numero_cuotas' => 'integer',
+        'cuotas' => 'array',
+        'percepcion' => 'array',
+        'guias' => 'array',
     ];
 
     public function detalle(): HasMany
@@ -50,7 +56,7 @@ class Compras extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'id');
     }
 
     public function user(): BelongsTo
@@ -62,6 +68,45 @@ class Compras extends Model
     public function proveedor(): BelongsTo
     {
         return $this->belongsTo(Proveedores::class, 'proveedor_id', 'id')->withTrashed();
+    }
+
+    /**
+     * Pagos de gastos asociados a esta compra
+     */
+    public function expensePayments(): HasMany
+    {
+        return $this->hasMany(ExpensePayment::class, 'expense_id', 'id');
+    }
+    /**
+     * Relación polimórfica con los pagos (nueva tabla unificada)
+     */
+    public function payments()
+    {
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
+
+    /**
+     * Total pagado de esta compra (desde tabla unificada payments)
+     */
+    public function getTotalPagadoAttribute(): float
+    {
+        return (float) $this->payments()->sum('monto');
+    }
+
+    /**
+     * Saldo pendiente de pago
+     */
+    public function getSaldoPendienteAttribute(): float
+    {
+        return $this->total - $this->total_pagado;
+    }
+
+    /**
+     * Verifica si la compra está completamente pagada
+     */
+    public function isPaid(): bool
+    {
+        return $this->total_pagado >= $this->total;
     }
 
     //CREAR ITEM DETALLE VENTA

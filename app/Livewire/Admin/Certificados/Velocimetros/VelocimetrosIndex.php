@@ -10,25 +10,40 @@ class VelocimetrosIndex extends Component
 {
     use WithPagination;
     public $search;
+    public $estadoFiltro = '';
 
     protected $listeners = [
         'update-table' => 'render',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    public function updatingEstadoFiltro()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
+        $query = CertificadosVelocimetros::query()
+            ->where(function ($q) {
+                $q->whereHas('vehiculo', function ($q2) {
+                    $q2->where('placa', 'like', '%' . $this->search . '%')
+                        ->orWhere('motor', 'like', '%' . $this->search . '%');
+                })->orWhereHas('ciudades', function ($q2) {
+                    $q2->where('nombre', 'like', '%' . $this->search . '%');
+                })->orWhere('numero', 'like', '%' . $this->search . '%')
+                    ->orWhere('codigo', 'like', '%' . $this->search . '%')
+                    ->orWhere('fecha', 'like', '%' . $this->search . '%');
+            });
 
-        $certificados = CertificadosVelocimetros::whereHas('vehiculo', function ($query) {
-            $query->where('placa', 'like', '%' . $this->search . '%')
-                ->orwhere('motor', 'like', '%' . $this->search . '%');
-        })->orwhereHas('ciudades', function ($query) {
-            $query->where('nombre', 'like', '%' . $this->search . '%');
-        })
-            ->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('codigo', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orderBy('numero', 'desc')
-            ->paginate(10);
+        if ($this->estadoFiltro !== '' && $this->estadoFiltro !== null) {
+            $query->where('estado', (int) $this->estadoFiltro);
+        }
+
+        $certificados = $query->orderBy('numero', 'desc')->paginate(10);
 
 
         return view('livewire.admin.certificados.velocimetros.velocimetros-index', compact('certificados'));

@@ -104,6 +104,14 @@ class RecibosPagosVarios extends Model
         return $this->hasMany(DetalleRecibosPagos::class, 'recibos_id');
     }
 
+    /**
+     * Pagos asociados a este recibo de egreso (relación polimórfica)
+     */
+    public function payments()
+    {
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
+
     public static function createItems($recibo, $reciboItems)
     {
         foreach ($reciboItems as $reciboItem) {

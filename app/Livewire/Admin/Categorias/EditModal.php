@@ -6,69 +6,90 @@ use Livewire\Component;
 use App\Models\Categoria;
 use Livewire\Attributes\On;
 use App\Http\Requests\CategoriaRequest;
+use WireUi\Traits\WireUiActions;
 
 class EditModal extends Component
 {
+    use WireUiActions;
+
     public $modalEdit = false;
-
     public $nombre, $descripcion;
-    public Categoria $categoria;
-
+    public bool $es_equipo_gps = false;
+    public bool $es_servicio_monitoreo = false;
+    public bool $tieneProductos = false;
+    public ?Categoria $categoria = null;
 
     public function render()
     {
-        return view('livewire.admin.categorias.edit-modal');
+        $equipoGpsOcupado  = Categoria::where('es_equipo_gps', true)
+            ->when($this->categoria, fn($q) => $q->where('id', '!=', $this->categoria->id))
+            ->first();
+        $monitoreoOcupado  = Categoria::where('es_servicio_monitoreo', true)
+            ->when($this->categoria, fn($q) => $q->where('id', '!=', $this->categoria->id))
+            ->first();
+
+        return view('livewire.admin.categorias.edit-modal', compact('equipoGpsOcupado', 'monitoreoOcupado'));
     }
 
     #[On('open-modal-edit')]
     public function openModal(Categoria $categoria)
     {
-        $this->categoria = $categoria;
-        $this->nombre = $categoria->nombre;
-        $this->descripcion = $categoria->descripcion;
-        $this->modalEdit = true;
+        $this->resetValidation();
+        $this->categoria             = $categoria;
+        $this->nombre                = $categoria->nombre;
+        $this->descripcion           = $categoria->descripcion;
+        $this->es_equipo_gps         = (bool) $categoria->es_equipo_gps;
+        $this->es_servicio_monitoreo = (bool) $categoria->es_servicio_monitoreo;
+        $this->tieneProductos        = $categoria->productos()->exists();
+        $this->modalEdit             = true;
     }
 
     public function closeModal()
     {
-
         $this->modalEdit = false;
+        $this->resetProp();
     }
 
-    public function save()
+    public function update()
     {
         $request = new CategoriaRequest();
         $datos = $this->validate($request->rules($this->categoria), $request->messages());
 
+        // Si ya tiene productos, preservar los flags originales (no permitir modificarlos)
+        if ($this->tieneProductos) {
+            unset($datos['es_equipo_gps'], $datos['es_servicio_monitoreo']);
+        } else {
+            // Validar exclusividad (excluyendo la propia categoria)
+            if ($this->es_equipo_gps && Categoria::where('es_equipo_gps', true)->where('id', '!=', $this->categoria->id)->exists()) {
+                $this->addError('es_equipo_gps', 'Ya existe una categoría configurada como Equipo GPS.');
+                return;
+            }
+            if ($this->es_servicio_monitoreo && Categoria::where('es_servicio_monitoreo', true)->where('id', '!=', $this->categoria->id)->exists()) {
+                $this->addError('es_servicio_monitoreo', 'Ya existe una categoría configurada como Servicio de Monitoreo.');
+                return;
+            }
+        }
+
         try {
-
             $this->categoria->update($datos);
-            $this->afterSave($this->categoria);
-        } catch (\Throwable $th) {
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR:',
-                mensaje: $th->getMessage(),
+            $this->notification()->success(
+                title: 'CATEGORIA ACTUALIZADA',
+                description: 'La Categoria ' . $this->categoria->nombre . ' fue actualizada correctamente'
+            );
+            $this->closeModal();
+            $this->dispatch('categoria-saved');
+            $this->resetProp();
+        } catch (\Throwable $th) {
+            $this->notification()->error(
+                title: 'ERROR',
+                description: $th->getMessage()
             );
         }
     }
 
-    public function afterSave($categoria)
-    {
-        $this->closeModal();
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'CATEGORIA ACTUALIZADA',
-            mensaje: 'La Categoria ' . $categoria->nombre . ' fue actualizada correctamente'
-        );
-        $this->dispatch('pg:eventRefresh-TablaCategorias');
-        $this->resetProp();
-    }
     public function resetProp()
     {
-        $this->reset(['nombre', 'descripcion']);
+        $this->reset(['nombre', 'descripcion', 'categoria', 'es_equipo_gps', 'es_servicio_monitoreo', 'tieneProductos']);
     }
 }

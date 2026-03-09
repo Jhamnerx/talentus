@@ -8,34 +8,26 @@
     <meta http-equiv="Content-Security-Policy" content="frame-src 'self'">
     <link rel="icon" href="{{ asset('images/favicon2023.png') }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <!-- Styles -->
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
 
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
-    @yield('css')
 
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     {{-- CKEDITOR --}}
     <script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
 
-    @livewireStyles
+
+    <!-- Styles -->
+
     <wireui:scripts />
-</head>
-
-
-<body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
-    :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
-
-
-    <script>
-        if (localStorage.getItem('sidebar-expanded') == 'true') {
-            document.querySelector('body').classList.add('sidebar-expanded');
-        } else {
-            document.querySelector('body').classList.remove('sidebar-expanded');
-        }
-    </script>
+    @livewireStyles
 
     <script>
         if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
@@ -46,54 +38,49 @@
             document.querySelector('html').style.colorScheme = 'dark';
         }
     </script>
+</head>
 
-    <!-- Page wrapper -->
-    <div class="flex h-screen overflow-hidden">
 
-        <!-- Sidebar -->
-        @livewire('admin.sidebar')
+<body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
+    :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ page: '{{ $attributes->get('ruta', '') }}', {{ $attributes->get('panel', '') }} sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+
+    <x-form.notifications />
+    <x-form.dialog />
+    <script>
+        if (localStorage.getItem('sidebar-expanded') == 'true') {
+            document.querySelector('body').classList.add('sidebar-expanded');
+        } else {
+            document.querySelector('body').classList.remove('sidebar-expanded');
+        }
+    </script>
+
+    <div class="flex h-dvh overflow-hidden">
+
+        <x-admin.sidebar :variant="$attributes['sidebarVariant']" />
 
         <!-- Content area -->
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 dark:bg-gray-800">
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden @if ($attributes['background']) {{ $attributes['background'] }} @endif"
+            x-ref="contentarea">
 
-            <!-- Site header -->
+            {{-- <x-app.header :variant="$attributes['headerVariant']" /> --}}
             @livewire('admin.header', ['page' => request()->fullUrl(), 'variant' => 'v3'])
 
-            <x-banner />
-
-            <header class="sticky top-0 md:hidden bg-white border-b border-slate-200 z-10">
-                <div class="px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-center h-16 -mb-px">
-
-                        <div class="hover text-left mx-2">
-                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b
-                                    class="hover:text-talentus-200">{{ \App\Models\plantilla::first()->razon_social }}</b>
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-            </header>
-
-            <x-admin.comprobantes />
-
-            <main>
-
-
-                @yield('contenido')
-
+            <main class="grow">
+                {{ $slot }}
             </main>
 
         </div>
 
     </div>
 
-    @stack('modals')
+
+
 
     @livewireScripts
-
-
+    @stack('modals')
+    @stack('scripts')
 </body>
+
 <script>
     $(document).ready(function() {
         var Toast = Swal.mixin({
@@ -200,9 +187,6 @@
 
     });
 </script>
-@yield('js')
-
-@stack('scripts')
 
 @if (session('venta-registrada'))
     <script>

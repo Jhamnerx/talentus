@@ -2,9 +2,24 @@
 
     <div class="grid grid-cols-12 gap-4">
 
+        <div class="col-span-12 sm:col-span-6">
+            <x-form.select label="Seleccion tipo Doc.:" wire:model.live="tipo_documento_id"
+                placeholder="Selecciona un tipo" option-description="codigo" :async-data="route('api.documentos.index')" option-label="descripcion"
+                option-value="codigo" :clearable="false" />
+        </div>
 
         <div class="col-span-12 sm:col-span-6">
-            <x-form.input label="Número Documento:" placeholder="10203040" wire:model.live='numero_documento' />
+            <x-form.input label="Número Documento:" placeholder="10203040" wire:model='numero_documento'>
+                @if (in_array($tipo_documento_id, [1, 6]))
+                    <x-slot name="append">
+                        <x-form.button class="h-full" icon="magnifying-glass" rounded="rounded-r-md" primary flat
+                            wire:click="buscarDocumento" wire:loading.attr="disabled" />
+                    </x-slot>
+                @endif
+            </x-form.input>
+            @if ($errorConsulta)
+                <p class="mt-1 text-sm text-red-600">{{ $errorConsulta }}</p>
+            @endif
         </div>
 
         <div class="col-span-12">

@@ -98,7 +98,7 @@
                             </div>
                         @endif
 
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto min-h-screen">
                             <table class="table-auto w-full" @click.stop="$dispatch('vehiculosPanelOpen', true)">
 
                                 <thead

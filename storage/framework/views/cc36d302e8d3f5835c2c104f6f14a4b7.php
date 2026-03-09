@@ -1,0 +1,1 @@
+item-<?php echo e($clave); ?><?php /**PATH C:\laragon2\www\talentus\storage\framework\views/bf6fc7acd50f695831330a280eacf968.blade.php ENDPATH**/ ?>
