@@ -26,3 +26,4 @@ storage/app/talentus/
 storage/app/firebase/
 storage/talentus-scheduler.log
 composer.lock
+storage/fonts

@@ -652,7 +652,8 @@
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($subscription && $subEndsAt): ?>
                                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($subCancelada): ?>
                                                 <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold">
+                                                    <span
+                                                        class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold">
                                                         🚫 Cancelada
                                                     </span>
                                                 </div>
@@ -661,13 +662,13 @@
 
                                                 </div>
                                             <?php else: ?>
-                                            <div
-                                                class="text-xs <?php echo e($subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'); ?>">
-                                                <?php echo e($subActiva ? '✅' : '❌'); ?>
+                                                <div
+                                                    class="text-xs <?php echo e($subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'); ?>">
+                                                    <?php echo e($subActiva ? '✅' : '❌'); ?>
 
-                                                <?php echo e(\Carbon\Carbon::parse($subEndsAt)->format('d/m/Y')); ?>
+                                                    <?php echo e(\Carbon\Carbon::parse($subEndsAt)->format('d/m/Y')); ?>
 
-                                            </div>
+                                                </div>
                                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                         <?php elseif($detalle->vehiculo): ?>
                                             
