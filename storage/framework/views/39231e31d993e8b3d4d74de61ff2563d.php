@@ -31,13 +31,33 @@
 
             <!-- Filter by client -->
             <div class="w-64">
-                <x-form.select wire:model.live="cliente_id" placeholder="Filtrar por cliente" :async-data="route('api.clientes.index')"
-                    option-label="razon_social" option-description="numero_documento" option-value="id" clearable />
+                <?php if (isset($component)) { $__componentOriginal49b3de13d927faa5a3ecd49fc0b06061 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal49b3de13d927faa5a3ecd49fc0b06061 = $attributes; } ?>
+<?php $component = WireUi\Components\Select\Base::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.select'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\WireUi\Components\Select\Base::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model.live' => 'cliente_id','placeholder' => 'Filtrar por cliente','async-data' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('api.clientes.index')),'option-label' => 'razon_social','option-description' => 'numero_documento','option-value' => 'id','clearable' => true]); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal49b3de13d927faa5a3ecd49fc0b06061)): ?>
+<?php $attributes = $__attributesOriginal49b3de13d927faa5a3ecd49fc0b06061; ?>
+<?php unset($__attributesOriginal49b3de13d927faa5a3ecd49fc0b06061); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal49b3de13d927faa5a3ecd49fc0b06061)): ?>
+<?php $component = $__componentOriginal49b3de13d927faa5a3ecd49fc0b06061; ?>
+<?php unset($__componentOriginal49b3de13d927faa5a3ecd49fc0b06061); ?>
+<?php endif; ?>
             </div>
 
             <!-- Create invoice button -->
-            @can('crear-cotizaciones')
-                <a href="{{ route('admin.ventas.presupuestos.create') }}">
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('crear-cotizaciones')): ?>
+                <a href="<?php echo e(route('admin.ventas.presupuestos.create')); ?>">
                     <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                         <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                             <path
@@ -46,7 +66,7 @@
                         <span class="hidden xs:block ml-2">Crear</span>
                     </button>
                 </a>
-            @endcan
+            <?php endif; ?>
 
         </div>
 
@@ -65,7 +85,7 @@
                         @click="clickeado = 0"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Todas
-                        <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
+                        <span class="ml-1 text-indigo-200"><?php echo e($totales['total']); ?></span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click.prevent="status('0')"
@@ -74,7 +94,7 @@
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Pendientes
                         <span
-                            class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['pendientes'] }}</span></button>
+                            class="ml-1 text-slate-400 dark:text-slate-500"><?php echo e($totales['pendientes']); ?></span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click.prevent="status('1')"
@@ -83,7 +103,7 @@
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Aceptadas
                         <span
-                            class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['aceptadas'] }}</span></button>
+                            class="ml-1 text-slate-400 dark:text-slate-500"><?php echo e($totales['aceptadas']); ?></span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click.prevent="status('2')"
@@ -92,7 +112,7 @@
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out dark:border-gray-600 dark:hover:border-gray-500 dark:text-slate-300">
                         Rechazadas
                         <span
-                            class="ml-1 text-slate-400 dark:text-slate-500">{{ $totales['rechazadas'] }}</span></button>
+                            class="ml-1 text-slate-400 dark:text-slate-500"><?php echo e($totales['rechazadas']); ?></span></button>
                 </li>
             </ul>
         </div>
@@ -117,7 +137,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8 dark:bg-gray-800 dark:border-gray-700">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800 dark:text-slate-100">Presupuestos <span
-                    class="text-slate-400 font-medium dark:text-slate-500">{{ $presupuestos->total() }}</span>
+                    class="text-slate-400 font-medium dark:text-slate-500"><?php echo e($presupuestos->total()); ?></span>
             </h2>
         </header>
         <div>
@@ -140,13 +160,13 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 ">
                                 <div class="font-semibold text-left">#Número</div>
                             </th>
-                            @can('descargar-cotizaciones')
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('descargar-cotizaciones')): ?>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3">
 
                                     <div class="font-semibold text-left">Descargar</div>
 
                                 </th>
-                            @endcan
+                            <?php endif; ?>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Total</div>
@@ -177,27 +197,28 @@
 
                         <!-- Row -->
 
-                        @foreach ($presupuestos as $presupuesto)
-                            <tr wire:key="presupuesto-{{ $presupuesto->id }}">
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $presupuestos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $presupuesto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
+                            <tr <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processElementKey('presupuesto-{{ $presupuesto->id }}', get_defined_vars()); ?>wire:key="presupuesto-<?php echo e($presupuesto->id); ?>">
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center">
                                         <label class="inline-flex">
                                             <span class="sr-only">Select</span>
                                             <input class="table-item form-checkbox"
-                                                idPresupuesto="{{ $presupuesto->id }}" type="checkbox"
+                                                idPresupuesto="<?php echo e($presupuesto->id); ?>" type="checkbox"
                                                 @click="uncheckParent" />
                                         </label>
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3">
                                     <div class="font-medium text-sky-500">
-                                        #{{ $presupuesto->numero ? $presupuesto->numero : $presupuesto->serie_correlativo }}
+                                        #<?php echo e($presupuesto->numero ? $presupuesto->numero : $presupuesto->serie_correlativo); ?>
+
                                     </div>
                                 </td>
-                                @can('descargar-cotizaciones')
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('descargar-cotizaciones')): ?>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="space-x-1">
-                                            <a target="_blank" href="{{ route('admin.pdf.presupuesto', $presupuesto) }}">
+                                            <a target="_blank" href="<?php echo e(route('admin.pdf.presupuesto', $presupuesto)); ?>">
                                                 <button
                                                     class="text-slate-400 hover:text-slate-500 rounded-full dark:text-slate-500 dark:hover:text-slate-300">
                                                     <span class="sr-only">Descargar</span>
@@ -209,38 +230,43 @@
                                             </a>
                                         </div>
                                     </td>
-                                @endcan
+                                <?php endif; ?>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-medium text-emerald-500">
-                                        @if ($presupuesto->divisa == 'PEN')
-                                            S/. {{ $presupuesto->total }}
-                                        @else
-                                            ${{ $presupuesto->total }}
-                                        @endif
+                                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($presupuesto->divisa == 'PEN'): ?>
+                                            S/. <?php echo e($presupuesto->total); ?>
+
+                                        <?php else: ?>
+                                            $<?php echo e($presupuesto->total); ?>
+
+                                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div
-                                        class="inline-flex font-medium bg-{{ $presupuesto->estado->color() }}-100 text-{{ $presupuesto->estado->color() }}-600 rounded-full text-center px-2.5 py-0.5">
-                                        {{ $presupuesto->estado->name }}
+                                        class="inline-flex font-medium bg-<?php echo e($presupuesto->estado->color()); ?>-100 text-<?php echo e($presupuesto->estado->color()); ?>-600 rounded-full text-center px-2.5 py-0.5">
+                                        <?php echo e($presupuesto->estado->name); ?>
+
                                     </div>
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3">
                                     <div class="font-medium text-slate-900 dark:text-slate-100">
-                                        {{ $presupuesto->clientes->razon_social }}
+                                        <?php echo e($presupuesto->clientes->razon_social); ?>
+
                                     </div>
                                     <div class="font-sm text-slate-700 dark:text-slate-400">
                                         <p class="text-xs">
-                                            {{ $presupuesto->clientes->numero_documento }}
+                                            <?php echo e($presupuesto->clientes->numero_documento); ?>
+
                                         </p>
 
                                     </div>
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    @if ($presupuesto->forma_pago == 'CREDITO')
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($presupuesto->forma_pago == 'CREDITO'): ?>
                                         <div>
                                             <div class="relative inline-flex" x-data="{ open: false }">
                                                 <button class="inline-flex justify-center items-center group"
@@ -249,7 +275,8 @@
                                                     <div class="flex items-center truncate">
                                                         <span
                                                             class="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
-                                                            {{ $presupuesto->forma_pago }}
+                                                            <?php echo e($presupuesto->forma_pago); ?>
+
                                                         </span>
                                                         <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
                                                             viewBox="0 0 12 12">
@@ -273,7 +300,8 @@
                                                         </div>
                                                         <div class="text-sm text-slate-600 dark:text-slate-400">
                                                             Adelanto:
-                                                            {{ $presupuesto->divisa == 'USD' ? "$ " . $presupuesto->adelanto : 'S/. ' . $presupuesto->adelanto }}
+                                                            <?php echo e($presupuesto->divisa == 'USD' ? "$ " . $presupuesto->adelanto : 'S/. ' . $presupuesto->adelanto); ?>
+
                                                         </div>
 
                                                     </div>
@@ -295,24 +323,28 @@
                                                         </thead>
                                                         <tbody>
 
-                                                            @foreach ($presupuesto->detalle_cuotas as $key => $cuota)
+                                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $presupuesto->detalle_cuotas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $cuota): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                                                                 <tr
                                                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                                     <th scope="row"
                                                                         class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
 
-                                                                        Cuota-{{ $key + 1 }}
+                                                                        Cuota-<?php echo e($key + 1); ?>
+
 
                                                                     </th>
                                                                     <td class="px-6 py-4">
-                                                                        {{ $cuota['fecha'] }}
+                                                                        <?php echo e($cuota['fecha']); ?>
+
                                                                     </td>
                                                                     <td class="px-6 py-4">
-                                                                        {{ $presupuesto->divisa == 'PEN' ? 'S/ ' : '$ ' }}
-                                                                        {{ $cuota['importe'] }}
+                                                                        <?php echo e($presupuesto->divisa == 'PEN' ? 'S/ ' : '$ '); ?>
+
+                                                                        <?php echo e($cuota['importe']); ?>
+
                                                                     </td>
                                                                 </tr>
-                                                            @endforeach
+                                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
 
                                                         </tbody>
                                                     </table>
@@ -320,20 +352,21 @@
                                             </div>
                                             <!-- End -->
                                         </div>
-                                    @else
+                                    <?php else: ?>
                                         <div class="font-medium text-slate-800 dark:text-slate-200">
-                                            {{ $presupuesto->forma_pago }}
+                                            <?php echo e($presupuesto->forma_pago); ?>
+
                                         </div>
-                                    @endif
+                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="dark:text-slate-300">{{ $presupuesto->fecha->format('Y-m-d') }}</div>
+                                    <div class="dark:text-slate-300"><?php echo e($presupuesto->fecha->format('Y-m-d')); ?></div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="dark:text-slate-300">
-                                        {{ $presupuesto->fecha_caducidad->format('Y-m-d') }}</div>
+                                        <?php echo e($presupuesto->fecha_caducidad->format('Y-m-d')); ?></div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
@@ -360,9 +393,9 @@
                                                 x-transition:leave-end="opacity-0" x-cloak>
 
                                                 <ul>
-                                                    @can('editar-cotizaciones')
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('editar-cotizaciones')): ?>
                                                         <li>
-                                                            <a href="{{ route('admin.ventas.presupuestos.edit', $presupuesto) }}"
+                                                            <a href="<?php echo e(route('admin.ventas.presupuestos.edit', $presupuesto)); ?>"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-27"
                                                                 role="menuitem" tabindex="-1">
@@ -377,12 +410,12 @@
 
                                                             </a>
                                                         </li>
-                                                    @endcan
+                                                    <?php endif; ?>
 
-                                                    @can('eliminar-cotizaciones')
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('eliminar-cotizaciones')): ?>
                                                         <li>
                                                             <a href="javascript: void(0)"
-                                                                wire:click.prevent='openModalDelete({{ $presupuesto->id }})'
+                                                                wire:click.prevent='openModalDelete(<?php echo e($presupuesto->id); ?>)'
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-28"
                                                                 role="menuitem" tabindex="-1">
@@ -397,86 +430,15 @@
                                                                 Eliminar
                                                             </a>
                                                         </li>
-                                                    @endcan
+                                                    <?php endif; ?>
 
-                                                    {{-- 
-                                                    @can('convertir-cotizaciones')
-                                                        @if (!$presupuesto->invoice)
-                                                            <li @click="open = false">
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="convertToInvoice({{ $presupuesto->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-green-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                                        </path>
-                                                                    </svg> Convertir a Comprobante
-                                                                </a>
-                                                            </li>
-                                                        @else
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5 mr-3 text-gray-300">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                                        </path>
-                                                                    </svg> Convertir a Comprobante
-                                                                </a>
-                                                            </li>
-                                                        @endif
-                                                    @endcan --}}
-                                                    {{-- 
-                                                    @can('convertir-cotizaciones')
-                                                        @if (!$presupuesto->recibo)
-                                                            <li @click="open = false">
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="convertRecibo({{ $presupuesto->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-emerald-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                                        </path>
-                                                                    </svg> Convertir a Recibo
-                                                                </a>
-                                                            </li>
-                                                        @else
-                                                            <li>
-                                                                <a class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-300 ">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                                        </path>
-                                                                    </svg> Convertir a Recibo
-                                                                </a>
-                                                            </li>
-                                                        @endif
-                                                    @endcan --}}
+                                                    
+                                                    
 
-                                                    @can('enviar-cotizaciones')
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('enviar-cotizaciones')): ?>
                                                         <li>
                                                             <a href="javascript: void(0)"
-                                                                wire:click="modalOpenSend({{ $presupuesto->id }})"
+                                                                wire:click="modalOpenSend(<?php echo e($presupuesto->id); ?>)"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-32"
                                                                 role="menuitem" tabindex="-1">
@@ -490,12 +452,12 @@
                                                                 </svg> Enviar
                                                             </a>
                                                         </li>
-                                                    @endcan
+                                                    <?php endif; ?>
 
-                                                    @can('estados-cotizaciones')
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('estados-cotizaciones')): ?>
                                                         <li>
                                                             <a href="javascript: void(0)"
-                                                                wire:click.prevent="markAccept({{ $presupuesto->id }})"
+                                                                wire:click.prevent="markAccept(<?php echo e($presupuesto->id); ?>)"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-33"
                                                                 role="menuitem" tabindex="-1">
@@ -513,7 +475,7 @@
 
                                                         <li>
                                                             <a href="javascript: void(0)"
-                                                                wire:click.prevent="markReject({{ $presupuesto->id }})"
+                                                                wire:click.prevent="markReject(<?php echo e($presupuesto->id); ?>)"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
                                                                 disabled="false" id="headlessui-menu-item-34"
                                                                 role="menuitem" tabindex="-1">
@@ -527,7 +489,7 @@
                                                                 </svg> Marcar como Rechazada
                                                             </a>
                                                         </li>
-                                                    @endcan
+                                                    <?php endif; ?>
                                                 </ul>
 
 
@@ -538,12 +500,12 @@
 
                                 </td>
                             </tr>
-                        @endforeach
-                        @if ($presupuestos->count() < 1)
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($presupuestos->count() < 1): ?>
                             <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                 <div class="text-center">No hay Registros</div>
                             </td>
-                        @endif
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
 
                     </tbody>
@@ -554,9 +516,11 @@
     </div>
     <!-- Pagination -->
     <div class="mt-8 w-full">
-        {{ $presupuestos->links() }}
+        <?php echo e($presupuestos->links()); ?>
+
 
     </div>
 
 
 </div>
+<?php /**PATH C:\laragon2\www\talentus\resources\views/livewire/admin/ventas/presupuestos/presupuestos-index.blade.php ENDPATH**/ ?>

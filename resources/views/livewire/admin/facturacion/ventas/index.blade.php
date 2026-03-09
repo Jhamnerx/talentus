@@ -70,6 +70,12 @@
                     </button>
                 </form>
 
+                <!-- Filter by client -->
+                <div class="w-64">
+                    <x-form.select wire:model.live="cliente_id" placeholder="Filtrar por cliente" :async-data="route('api.clientes.index')"
+                        option-label="razon_social" option-description="numero_documento" option-value="id" clearable />
+                </div>
+
                 <!-- Create invoice button -->
                 @canany(['comprobantes-emitir-factura', 'comprobantes-emitir-boleta'])
                     <a href="{{ route('admin.factura.create') }}">

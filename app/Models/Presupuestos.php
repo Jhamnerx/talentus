@@ -97,7 +97,7 @@ class Presupuestos extends Model
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id');
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
     }
 
     //relacion uno a muchos
@@ -183,16 +183,11 @@ class Presupuestos extends Model
         $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
     }
 
-
-    public function factura()
-    {
-        return $this->hasOne(Facturas::class, 'presupuestos_id');
-    }
-
     public function invoice()
     {
         return $this->hasOne(Ventas::class, 'presupuestos_id');
     }
+
     public function recibo()
     {
         return $this->hasOne(Recibos::class, 'presupuestos_id');

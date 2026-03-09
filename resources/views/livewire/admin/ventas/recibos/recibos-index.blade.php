@@ -28,6 +28,12 @@
                 </button>
             </form>
 
+            <!-- Filter by client -->
+            <div class="w-64">
+                <x-form.select wire:model.live="cliente_id" placeholder="Filtrar por cliente" :async-data="route('api.clientes.index')"
+                    option-label="razon_social" option-description="numero_documento" option-value="id" clearable />
+            </div>
+
             <!-- Create recibo button -->
             @can('crear-recibos')
                 <a href="{{ route('admin.ventas.recibos.create') }}">
@@ -102,7 +108,7 @@
         </header>
         <div>
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead

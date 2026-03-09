@@ -2,18 +2,14 @@
 
 namespace App\Livewire\Admin\Ventas\Presupuestos;
 
-use Carbon\Carbon;
-use Livewire\Component;
-
 use App\Models\plantilla;
 use App\Models\Presupuestos;
-
-use Livewire\Attributes\Url;
-use Livewire\WithPagination;
-
-use App\Http\Controllers\Admin\RecibosController;
-use App\Http\Controllers\Admin\VentasFacturasController;
 use App\Models\Series;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class PresupuestosIndex extends Component
 {
@@ -24,6 +20,8 @@ class PresupuestosIndex extends Component
 
     #[Url(except: 'null')]
     public $estado = 'null';
+
+    public $cliente_id = null;
 
     protected $listeners = [
         'render'
@@ -37,6 +35,7 @@ class PresupuestosIndex extends Component
         })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
             ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
+            ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
 
@@ -62,6 +61,7 @@ class PresupuestosIndex extends Component
                 ->orWhere('numero', 'like', '%' . $this->search . '%')
                 ->orWhere('fecha', 'like', '%' . $this->search . '%')
                 ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
+                ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
                 ->estado($this->estado)
                 ->orderBy('created_at', 'DESC')
                 ->paginate(15);
@@ -121,9 +121,6 @@ class PresupuestosIndex extends Component
 
             try {
 
-
-                $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
-
                 $serie = Series::where('tipo_comprobante_id', 10)->first();
                 $numero = $serie->correlativo + 1;
 
@@ -141,7 +138,7 @@ class PresupuestosIndex extends Component
                     'estado' => 'COMPLETADO',
                     'pago_estado' => 'UNPAID',
                     'nota' => $presupuesto->nota,
-                    'user_id' => auth()->user()->id,
+                    'user_id' => Auth::user()->id,
 
                 ]);
 

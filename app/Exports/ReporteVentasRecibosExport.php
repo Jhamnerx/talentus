@@ -3,8 +3,11 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
+use App\Models\Cash;
 use App\Models\Ventas;
 use App\Models\Recibos;
+use App\Models\BankAccount;
+use App\Exports\ReporteResumenSheet;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
@@ -14,13 +17,13 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
     use Exportable;
 
     public function __construct(
-        public readonly string  $contexto,          // ventas | recibos | ambos
-        public readonly string  $agrupacion,         // mensual | semanal
+        public readonly string  $contexto,           // ventas | recibos | ambos
+        public readonly string  $agrupacion,          // mensual | semanal
         public readonly string  $fecha_inicio,
         public readonly string  $fecha_fin,
         public readonly ?string $estado,
         public readonly ?string $tipo_comprobante_id,
-        public readonly mixed  $cliente_id
+        public readonly mixed   $cliente_id
     ) {}
 
     // ─── WithMultipleSheets ──────────────────────────────────────────────
@@ -29,31 +32,42 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
     {
         $items = $this->fetchItems();
 
+        // Maximo de pagos en cualquier documento — define las columnas dinamicas
+        $maxPagos = (int) max(1, $items->max(fn($r) => count($r['_payments'] ?? [])) ?? 0);
+
+        $sheets = [];
+
+        // Primera hoja: resumen de totales
+        $sheets[] = new ReporteResumenSheet($this->buildResumen($items), $this->contexto);
+
+        // Hojas de detalle por periodo
         if ($items->isEmpty()) {
-            return [new ReportePeriodoSheet('Sin datos', collect(), $this->contexto)];
+            $sheets[] = new ReportePeriodoSheet('Sin datos', collect(), $this->contexto, $maxPagos);
+        } else {
+            $periodos = $items
+                ->groupBy('_group')
+                ->sortKeys()
+                ->map(fn($grupo, $label) => new ReportePeriodoSheet($label, $grupo, $this->contexto, $maxPagos))
+                ->values()
+                ->toArray();
+
+            $sheets = array_merge($sheets, $periodos);
         }
 
-        return $items
-            ->groupBy('_group')
-            ->map(fn($grupo, $label) => new ReportePeriodoSheet($label, $grupo, $this->contexto))
-            ->values()
-            ->toArray();
+        return $sheets;
     }
 
-    // ─── Query ───────────────────────────────────────────────────────────
+    // ─── Query principal ─────────────────────────────────────────────────
 
     private function fetchItems(): Collection
     {
-        $items = collect();
+        $items    = collect();
+        $hoy      = Carbon::today();
 
         if (in_array($this->contexto, ['ventas', 'ambos'])) {
             Ventas::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
-                ->with(['cliente', 'user'])
-                ->when(
-                    $this->estado && $this->estado !== 'Todos',
-                    fn($q) => $q->where('pago_estado', $this->estado)
-                )
+                ->with(['cliente', 'user', 'payments.paymentMethod', 'payments.destination', 'notaCredito', 'envioResumen'])
                 ->when(
                     $this->tipo_comprobante_id,
                     fn($q) => $q->where('tipo_comprobante_id', $this->tipo_comprobante_id)
@@ -62,54 +76,105 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                     $this->cliente_id,
                     fn($q) => $q->where('cliente_id', $this->cliente_id)
                 )
-                ->orderBy('fecha_emision')
+                ->orderBy('created_at')
                 ->get()
-                ->each(function ($v) use (&$items) {
-                    $fecha = Carbon::parse($v->fecha_emision);
-                    $base  = [
-                        '_group' => $this->getGroupLabel($fecha),
-                        '_sort'  => $fecha->format('Y-m-d'),
+                ->each(function ($v) use (&$items, $hoy) {
+                    $isAnulada   = !is_null($v->id_baja);
+                    $hasNC       = !is_null($v->notaCredito);
+                    $observacion = $isAnulada ? 'ANULADA' : ($hasNC ? 'CON NOTA CREDITO' : '');
+
+                    // Datos de comunicación de baja (solo si está anulada)
+                    $numBaja    = '';
+                    $motivoBaja = '';
+                    if ($isAnulada && $v->envioResumen) {
+                        // Extraer serie-correlativo de nombre_xml quitando el RUC al inicio
+                        $numBaja    = $v->envioResumen->nombre_xml
+                            ? preg_replace('/^\d+-/', '', $v->envioResumen->nombre_xml)
+                            : '';
+                        $motivoBaja = $v->envioResumen->fe_mensaje_sunat ?? '';
+                    }
+
+                    // Aplicar filtro de estado solo a registros activos (no anuladas/NC)
+                    if (
+                        !$isAnulada && !$hasNC
+                        && $this->estado
+                        && $this->estado !== 'Todos'
+                        && $v->pago_estado !== $this->estado
+                    ) {
+                        return;
+                    }
+
+                    $fecha       = Carbon::parse($v->fecha_emision);
+                    $esPaid      = (!$isAnulada && !$hasNC) && $v->pago_estado === 'PAID';
+                    $vto         = $v->fecha_vencimiento ? Carbon::parse($v->fecha_vencimiento) : null;
+                    $diasRetraso = (!$esPaid && !$isAnulada && !$hasNC && $vto && $vto->lt($hoy))
+                        ? (int) $vto->diffInDays($hoy)
+                        : 0;
+
+                    $esPen      = strtoupper($v->divisa ?? 'PEN') === 'PEN';
+                    $total      = (float) $v->total;
+                    $estadoPago = $isAnulada ? 'ANULADO' : ($hasNC ? 'CON NC' : ($esPaid ? 'PAGADO' : 'PENDIENTE'));
+                    $sortPrefix = ($isAnulada || $hasNC) ? 'ZZZZ_' : '';
+
+                    $row = [
+                        '_group'    => $this->getGroupLabel($fecha),
+                        '_sort'     => $sortPrefix . ($v->created_at?->format('Y-m-d H:i:s') ?? $fecha->format('Y-m-d')),
+                        '_payments' => $this->prepararPagos($v->payments),
+                    ];
+
+                    $financiero = [
+                        (float) ($v->op_gravadas   ?? 0),
+                        (float) ($v->op_exoneradas ?? 0),
+                        (float) ($v->op_inafectas  ?? 0),
+                        (float) ($v->sub_total     ?? 0),
+                        (float) ($v->igv           ?? 0),
+                        $total,
+                        $esPen ? 'SOLES' : 'DOLARES',
                     ];
 
                     if ($this->contexto === 'ventas') {
-                        $items->push($base + [
+                        $row['_suffix'] = [
+                            $v->user?->name ?? '',
+                            $v->fe_mensaje_sunat ?? '',
+                            $observacion,
+                            $numBaja,
+                            $motivoBaja,
+                        ];
+                        $row += array_merge([
                             $fecha->format('d/m/Y'),
                             $v->serie_correlativo ?? '',
                             $v->cliente?->razon_social ?? '',
                             $v->cliente?->numero_documento ?? '',
                             $v->forma_pago ?? '',
-                            $v->op_gravadas,
-                            $v->op_exoneradas,
-                            $v->op_inafectas,
-                            $v->sub_total,
-                            $v->igv,
-                            (float) $v->total,
-                            $v->divisa === 'PEN' ? 'SOLES' : 'DOLARES',
-                            $v->estado?->name ?? '',
-                            $v->pago_estado === 'PAID' ? 'PAGADO' : 'PENDIENTE',
-                            $v->user?->name ?? '',
-                            $v->fe_mensaje_sunat ?? '',
+                        ], $financiero, [
+                            $estadoPago,
+                            $vto?->format('d/m/Y') ?? '',
+                            $diasRetraso > 0 ? $diasRetraso : '',
                         ]);
-                    } else {
-                        $items->push($base + [
+                    } else { // ambos
+                        $row['_suffix'] = [$observacion, $numBaja, $motivoBaja];
+                        $row += array_merge([
                             'VENTA',
                             $fecha->format('d/m/Y'),
                             $v->serie_correlativo ?? '',
                             $v->cliente?->razon_social ?? '',
                             $v->cliente?->numero_documento ?? '',
                             $v->forma_pago ?? '',
-                            (float) $v->total,
-                            $v->divisa === 'PEN' ? 'SOLES' : 'DOLARES',
-                            $v->pago_estado === 'PAID' ? 'PAGADO' : 'PENDIENTE',
+                        ], $financiero, [
+                            $estadoPago,
+                            $vto?->format('d/m/Y') ?? '',
+                            $diasRetraso > 0 ? $diasRetraso : '',
                         ]);
                     }
+
+                    $items->push($row);
                 });
         }
 
         if (in_array($this->contexto, ['recibos', 'ambos'])) {
             Recibos::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
-                ->with(['clientes'])
+                ->with(['clientes', 'payments.paymentMethod', 'payments.destination'])
                 ->when(
                     $this->estado && $this->estado !== 'Todos',
                     fn($q) => $q->where('pago_estado', $this->estado)
@@ -118,46 +183,301 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                     $this->cliente_id,
                     fn($q) => $q->where('clientes_id', $this->cliente_id)
                 )
-                ->orderBy('fecha_emision')
+                ->orderBy('created_at')
                 ->get()
                 ->each(function ($r) use (&$items) {
-                    $fecha = Carbon::parse($r->fecha_emision);
-                    $base  = [
-                        '_group' => $this->getGroupLabel($fecha),
-                        '_sort'  => $fecha->format('Y-m-d'),
+                    $fecha     = Carbon::parse($r->fecha_emision);
+                    $esPaid    = $r->pago_estado === 'PAID';
+                    $fechaPago = $r->fecha_pago ? Carbon::parse($r->fecha_pago) : null;
+                    $esPen     = strtoupper($r->divisa ?? 'PEN') === 'PEN';
+                    $total     = (float) $r->total;
+
+                    $row = [
+                        '_group'    => $this->getGroupLabel($fecha),
+                        '_sort'     => $r->created_at?->format('Y-m-d H:i:s') ?? $fecha->format('Y-m-d'),
+                        '_payments' => $this->prepararPagos($r->payments),
                     ];
 
                     if ($this->contexto === 'recibos') {
-                        $items->push($base + [
+                        $row['_suffix'] = [];
+                        $row += [
                             $fecha->format('d/m/Y'),
                             ($r->serie ?? '') . '-' . ($r->numero ?? ''),
                             $r->clientes?->razon_social ?? '',
                             $r->clientes?->numero_documento ?? '',
-                            (float) $r->total,
-                            $r->divisa === 'PEN' ? 'SOLES' : 'DOLARES',
-                            $r->pago_estado === 'PAID' ? 'PAGADO' : 'PENDIENTE',
-                            $r->fecha_pago?->format('d/m/Y') ?? '',
-                        ]);
-                    } else {
-                        $items->push($base + [
+                            $r->tipo_venta ?? '',
+                            $esPen  ? $total : 0.00,
+                            !$esPen ? $total : 0.00,
+                            $esPaid ? 'PAGADO' : 'PENDIENTE',
+                            $fechaPago?->format('d/m/Y') ?? '',
+                            '',  // recibos no tienen dias de retraso
+                        ];
+                    } else { // ambos
+                        // Recibos en contexto ambos: campos financieros vacios para mantener columnas alineadas
+                        $row['_suffix'] = ['', '', ''];  // OBSERVACION, N° BAJA, MOTIVO BAJA
+                        $row += [
                             'RECIBO',
                             $fecha->format('d/m/Y'),
                             ($r->serie ?? '') . '-' . ($r->numero ?? ''),
                             $r->clientes?->razon_social ?? '',
                             $r->clientes?->numero_documento ?? '',
-                            '',
-                            (float) $r->total,
-                            $r->divisa === 'PEN' ? 'SOLES' : 'DOLARES',
-                            $r->pago_estado === 'PAID' ? 'PAGADO' : 'PENDIENTE',
-                        ]);
+                            $r->tipo_venta ?? '',
+                            '',  // op_gravadas
+                            '',  // op_exoneradas
+                            '',  // op_inafectas
+                            '',  // sub_total
+                            '',  // igv
+                            $total,
+                            $esPen ? 'SOLES' : 'DOLARES',
+                            $esPaid ? 'PAGADO' : 'PENDIENTE',
+                            $fechaPago?->format('d/m/Y') ?? '',
+                            '',  // dias de retraso
+                        ];
                     }
+
+                    $items->push($row);
                 });
         }
 
         return $items->sortBy('_sort')->values();
     }
 
+    // ─── Resumen consolidado para la hoja 1 ─────────────────────────────
+
+    private function buildResumen(Collection $items): array
+    {
+        // Reconstruir totales desde los registros ya cargados en fetchItems
+        // Para el resumen necesitamos re-consultar con eager loading limpio
+        $hoy = Carbon::today();
+
+        $resumen = [
+            'facturado_pen'     => 0.0,
+            'facturado_usd'     => 0.0,
+            'cobrado_pen'       => 0.0,
+            'cobrado_usd'       => 0.0,
+            'por_cobrar_pen'    => 0.0,
+            'por_cobrar_usd'    => 0.0,
+            'vencido_pen'       => 0.0,
+            'vencido_usd'       => 0.0,
+            'destinos'          => [],   // ['Caja General' => ['pen' => x, 'usd' => x], ...]
+            'metodos'           => [],   // ['Yape' => ['pen' => x, 'usd' => x], ...]
+            'por_cobrar_docs'   => [],   // detalle de documentos pendientes
+            'anuladas_pen'      => 0.0,
+            'anuladas_usd'      => 0.0,
+            'anuladas_count'    => 0,
+            'nc_pen'            => 0.0,
+            'nc_usd'            => 0.0,
+            'nc_count'          => 0,
+        ];
+
+        if (in_array($this->contexto, ['ventas', 'ambos'])) {
+            // Ventas activas (excluye anuladas y con nota de crédito)
+            Ventas::query()
+                ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->whereNull('id_baja')
+                ->whereDoesntHave('notaCredito')
+                ->with(['cliente', 'payments.paymentMethod', 'payments.destination'])
+                ->when($this->tipo_comprobante_id, fn($q) => $q->where('tipo_comprobante_id', $this->tipo_comprobante_id))
+                ->when($this->cliente_id, fn($q) => $q->where('cliente_id', $this->cliente_id))
+                ->get()
+                ->each(function ($v) use (&$resumen, $hoy) {
+                    $esPen  = strtoupper($v->divisa ?? 'PEN') === 'PEN';
+                    $total  = (float) $v->total;
+                    $esPaid = $v->pago_estado === 'PAID';
+
+                    // Facturado total
+                    $esPen ? $resumen['facturado_pen'] += $total : $resumen['facturado_usd'] += $total;
+
+                    if ($esPaid) {
+                        // Cobrado: sumar pagos reales
+                        foreach ($v->payments as $p) {
+                            $monto = (float) $p->monto;
+                            $div   = strtoupper($p->divisa ?? 'PEN') === 'PEN';
+                            $div ? $resumen['cobrado_pen'] += $monto : $resumen['cobrado_usd'] += $monto;
+
+                            // Por destino (omitir destinos sin label)
+                            $dest = $this->destinoLabel($p);
+                            if ($dest !== '') {
+                                $resumen['destinos'][$dest] ??= ['pen' => 0.0, 'usd' => 0.0];
+                                $div
+                                    ? $resumen['destinos'][$dest]['pen'] += $monto
+                                    : $resumen['destinos'][$dest]['usd'] += $monto;
+                            }
+
+                            // Por método
+                            $met = $p->paymentMethod?->description ?? 'Sin método';
+                            $resumen['metodos'][$met] ??= ['pen' => 0.0, 'usd' => 0.0];
+                            $div
+                                ? $resumen['metodos'][$met]['pen'] += $monto
+                                : $resumen['metodos'][$met]['usd'] += $monto;
+                        }
+                    } else {
+                        $esPen ? $resumen['por_cobrar_pen'] += $total : $resumen['por_cobrar_usd'] += $total;
+
+                        $vto         = $v->fecha_vencimiento ? Carbon::parse($v->fecha_vencimiento) : null;
+                        $diasRetraso = ($vto && $vto->lt($hoy)) ? (int) $vto->diffInDays($hoy) : 0;
+
+                        if ($diasRetraso > 0) {
+                            $esPen ? $resumen['vencido_pen'] += $total : $resumen['vencido_usd'] += $total;
+                        }
+
+                        $resumen['por_cobrar_docs'][] = [
+                            'tipo'         => 'VENTA',
+                            'documento'    => $v->serie_correlativo ?? '',
+                            'cliente'      => $v->cliente?->razon_social ?? '',
+                            'total_pen'    => $esPen ? $total : 0,
+                            'total_usd'    => !$esPen ? $total : 0,
+                            'vto'          => $vto?->format('d/m/Y') ?? '',
+                            'dias_retraso' => $diasRetraso,
+                        ];
+                    }
+                });
+
+            // Totales de ventas anuladas (id_baja IS NOT NULL)
+            $ventasAnuladas = Ventas::query()
+                ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->whereNotNull('id_baja')
+                ->when($this->tipo_comprobante_id, fn($q) => $q->where('tipo_comprobante_id', $this->tipo_comprobante_id))
+                ->when($this->cliente_id, fn($q) => $q->where('cliente_id', $this->cliente_id))
+                ->get();
+            foreach ($ventasAnuladas as $v) {
+                $esPen = strtoupper($v->divisa ?? 'PEN') === 'PEN';
+                $esPen
+                    ? $resumen['anuladas_pen'] += (float) $v->total
+                    : $resumen['anuladas_usd'] += (float) $v->total;
+            }
+            $resumen['anuladas_count'] = $ventasAnuladas->count();
+
+            // Totales de ventas con nota de crédito
+            $ventasConNc = Ventas::query()
+                ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->whereNull('id_baja')
+                ->whereHas('notaCredito')
+                ->when($this->tipo_comprobante_id, fn($q) => $q->where('tipo_comprobante_id', $this->tipo_comprobante_id))
+                ->when($this->cliente_id, fn($q) => $q->where('cliente_id', $this->cliente_id))
+                ->get();
+            foreach ($ventasConNc as $v) {
+                $esPen = strtoupper($v->divisa ?? 'PEN') === 'PEN';
+                $esPen
+                    ? $resumen['nc_pen'] += (float) $v->total
+                    : $resumen['nc_usd'] += (float) $v->total;
+            }
+            $resumen['nc_count'] = $ventasConNc->count();
+        }
+
+        if (in_array($this->contexto, ['recibos', 'ambos'])) {
+            Recibos::query()
+                ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->with(['clientes', 'payments.paymentMethod', 'payments.destination'])
+                ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
+                ->get()
+                ->each(function ($r) use (&$resumen) {
+                    $esPen  = strtoupper($r->divisa ?? 'PEN') === 'PEN';
+                    $total  = (float) $r->total;
+                    $esPaid = $r->pago_estado === 'PAID';
+
+                    $esPen ? $resumen['facturado_pen'] += $total : $resumen['facturado_usd'] += $total;
+
+                    if ($esPaid) {
+                        foreach ($r->payments as $p) {
+                            $monto = (float) $p->monto;
+                            $div   = strtoupper($p->divisa ?? 'PEN') === 'PEN';
+                            $div ? $resumen['cobrado_pen'] += $monto : $resumen['cobrado_usd'] += $monto;
+
+                            $dest = $this->destinoLabel($p);
+                            if ($dest !== '') {
+                                $resumen['destinos'][$dest] ??= ['pen' => 0.0, 'usd' => 0.0];
+                                $div
+                                    ? $resumen['destinos'][$dest]['pen'] += $monto
+                                    : $resumen['destinos'][$dest]['usd'] += $monto;
+                            }
+
+                            $met = $p->paymentMethod?->description ?? 'Sin método';
+                            $resumen['metodos'][$met] ??= ['pen' => 0.0, 'usd' => 0.0];
+                            $div
+                                ? $resumen['metodos'][$met]['pen'] += $monto
+                                : $resumen['metodos'][$met]['usd'] += $monto;
+                        }
+                    } else {
+                        $esPen ? $resumen['por_cobrar_pen'] += $total : $resumen['por_cobrar_usd'] += $total;
+
+                        $resumen['por_cobrar_docs'][] = [
+                            'tipo'        => 'RECIBO',
+                            'documento'   => ($r->serie ?? '') . '-' . ($r->numero ?? ''),
+                            'cliente'     => $r->clientes?->razon_social ?? '',
+                            'total_pen'   => $esPen ? $total : 0,
+                            'total_usd'   => !$esPen ? $total : 0,
+                            'vto'         => '',
+                            'dias_retraso' => 0,
+                        ];
+                    }
+                });
+        }
+
+        return $resumen;
+    }
+
     // ─── Helpers ─────────────────────────────────────────────────────────
+
+    private function prepararPagos($payments): array
+    {
+        return $payments->map(function ($p) {
+            $destino = $this->destinoLabel($p);
+            $metodo  = $p->paymentMethod?->description ?? '';
+            $ref     = $p->numero_operacion ?? $p->numero ?? '';
+            $monto   = number_format((float) $p->monto, 2);
+
+            $label    = implode(' / ', array_filter([$destino, $metodo]));
+            $montoRef = $ref ? "{$monto} / {$ref}" : $monto;
+
+            return ['label' => $label, 'monto_ref' => $montoRef];
+        })->values()->toArray();
+    }
+
+    /**
+     * Devuelve [destino, método, referencia] resumidos para mostrar en una sola fila de detalle.
+     * Si hay varios pagos, los concatena con " / ".
+     */
+    private function resumenPagos($payments): array
+    {
+        if ($payments->isEmpty()) {
+            return ['', '', ''];
+        }
+
+        $destinos    = [];
+        $metodos     = [];
+        $referencias = [];
+
+        foreach ($payments as $p) {
+            $destinos[]    = $this->destinoLabel($p);
+            $metodos[]     = $p->paymentMethod?->description ?? '';
+            $referencias[] = $p->numero_operacion ?? $p->numero ?? '';
+        }
+
+        return [
+            implode(' / ', array_unique(array_filter($destinos))),
+            implode(' / ', array_unique(array_filter($metodos))),
+            implode(' / ', array_unique(array_filter($referencias))),
+        ];
+    }
+
+    private function destinoLabel($payment): string
+    {
+        if (!$payment->destination_type || !$payment->destination_id) {
+            return '';
+        }
+
+        if ($payment->destination_type === Cash::class) {
+            $ref = $payment->destination?->reference_number;
+            return 'Caja' . ($ref ? ' N°' . $ref : ' General');
+        }
+
+        if ($payment->destination_type === BankAccount::class) {
+            return $payment->destination?->description ?? 'Cuenta Bancaria';
+        }
+
+        return '';
+    }
 
     private function getGroupLabel(Carbon $fecha): string
     {
@@ -168,15 +488,15 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
         }
 
         $meses = [
-            1  => 'Enero',
-            2  => 'Febrero',
-            3  => 'Marzo',
-            4  => 'Abril',
-            5  => 'Mayo',
-            6  => 'Junio',
-            7  => 'Julio',
-            8  => 'Agosto',
-            9  => 'Septiembre',
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
             10 => 'Octubre',
             11 => 'Noviembre',
             12 => 'Diciembre',

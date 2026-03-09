@@ -13,6 +13,8 @@ class RecibosIndex extends Component
     use WithPagination;
     public $search;
 
+    public $cliente_id = null;
+
     public $status = null;
 
     protected $listeners = [
@@ -34,6 +36,7 @@ class RecibosIndex extends Component
             ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
             ->orWhere('divisa', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
+            ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
             ->with('clientes')
             ->withSum('payments', 'monto')
             ->orderBy('id', 'desc')
@@ -64,6 +67,7 @@ class RecibosIndex extends Component
                 ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
                 ->orWhere('divisa', 'like', '%' . $this->search . '%')
                 ->orWhere('total', 'like', '%' . $this->search . '%')
+                ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
                 ->estado($this->status)
                 ->with('clientes')
                 ->withSum('payments', 'monto')

@@ -2,39 +2,44 @@
 
 namespace App\Exports;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ReportePeriodoSheet implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize, WithStyles
+class ReportePeriodoSheet implements FromView, WithTitle, ShouldAutoSize
 {
     public function __construct(
         private readonly string $label,
         private readonly Collection $items,
-        private readonly string $contexto
+        private readonly string $contexto,
+        private readonly int $maxPagos = 1,
     ) {}
 
     public function title(): string
     {
-        // Sheet names: max 31 chars, no special chars
-        $clean = preg_replace('/[\/\\\?\*\[\]:]+/', '-', $this->label);
+        $clean = preg_replace('/[\/\\\\\?\*\[\]:]+/', '-', $this->label);
         return mb_substr($clean, 0, 31);
     }
 
-    public function headings(): array
+    public function view(): View
     {
-        return match ($this->contexto) {
+        return view('exports.reporte-periodo', [
+            'headings' => $this->buildHeadings(),
+            'rows'     => $this->buildRows(),
+        ]);
+    }
+
+    private function buildHeadings(): array
+    {
+        $prefix = match ($this->contexto) {
             'ventas' => [
                 'FECHA EMISION',
                 'COMPROBANTE',
                 'CLIENTE',
-                'RUC',
+                'RUC/DNI',
                 'FORMA PAGO',
                 'OP. GRAVADAS',
                 'OP. EXONERADAS',
@@ -43,52 +48,87 @@ class ReportePeriodoSheet implements FromCollection, WithTitle, WithHeadings, Sh
                 'IGV',
                 'TOTAL',
                 'DIVISA',
-                'ESTADO',
                 'ESTADO PAGO',
-                'VENDEDOR',
-                'SUNAT',
+                'FECHA VENCIMIENTO',
+                'DIAS RETRASO',
             ],
             'recibos' => [
                 'FECHA EMISION',
                 'N° RECIBO',
                 'CLIENTE',
-                'RUC',
-                'TOTAL',
-                'DIVISA',
+                'RUC/DNI',
+                'FORMA PAGO',
+                'TOTAL PEN (S/)',
+                'TOTAL USD ($)',
                 'ESTADO PAGO',
                 'FECHA PAGO',
+                'DIAS RETRASO',
             ],
-            default => [ // ambos
+            default => [
                 'TIPO',
                 'FECHA EMISION',
                 'N° DOCUMENTO',
                 'CLIENTE',
-                'RUC',
+                'RUC/DNI',
                 'FORMA PAGO',
+                'OP. GRAVADAS',
+                'OP. EXONERADAS',
+                'OP. INAFECTAS',
+                'SUB TOTAL',
+                'IGV',
                 'TOTAL',
                 'DIVISA',
                 'ESTADO PAGO',
+                'FECHA VTO/PAGO',
+                'DIAS RETRASO',
             ],
         };
+
+        $paymentCols = [];
+        for ($i = 1; $i <= $this->maxPagos; $i++) {
+            $n = $this->maxPagos > 1 ? " $i" : '';
+            $paymentCols[] = "PAGO{$n} - DESTINO / METODO";
+            $paymentCols[] = "PAGO{$n} - MONTO / N° OP.";
+        }
+
+        $suffix = match ($this->contexto) {
+            'ventas'  => ['VENDEDOR', 'ESTADO SUNAT', 'OBSERVACION', 'N° COMUNICACION BAJA', 'MOTIVO BAJA'],
+            'recibos' => [],
+            default   => ['OBSERVACION', 'N° COMUNICACION BAJA', 'MOTIVO BAJA'],
+        };
+
+        return array_merge($prefix, $paymentCols, $suffix);
     }
 
-    public function collection(): Collection
+    private function buildRows(): array
     {
-        return $this->items->map(
-            fn($item) => array_values(Arr::except((array) $item, ['_group', '_sort']))
-        );
-    }
+        $contexto = $this->contexto;
+        $maxPagos = $this->maxPagos;
 
-    public function styles(Worksheet $sheet): array
-    {
-        return [
-            1 => [
-                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-                'fill' => [
-                    'fillType'   => Fill::FILL_SOLID,
-                    'startColor' => ['rgb' => '1E40AF'],
-                ],
-            ],
-        ];
+        return $this->items->map(function ($item) use ($contexto, $maxPagos) {
+            $item     = (array) $item;
+            $payments = $item['_payments'] ?? [];
+            $suffix   = $item['_suffix']   ?? [];
+            $base     = array_values(Arr::except($item, ['_group', '_sort', '_payments', '_suffix']));
+
+            $observacion = '';
+            if ($contexto === 'ventas' && isset($suffix[2])) {
+                $observacion = $suffix[2];
+            } elseif ($contexto !== 'recibos' && isset($suffix[0])) {
+                $observacion = $suffix[0];
+            }
+
+            $paymentCols = [];
+            for ($i = 0; $i < $maxPagos; $i++) {
+                $p = $payments[$i] ?? null;
+                $paymentCols[] = $p !== null ? ($p['label']     ?? '') : '';
+                $paymentCols[] = $p !== null ? ($p['monto_ref'] ?? '') : '';
+            }
+
+            return [
+                'cells'       => array_merge($base, $paymentCols, $suffix),
+                'observacion' => $observacion,
+            ];
+        })->toArray();
     }
 }
