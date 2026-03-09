@@ -38,7 +38,7 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.ventas.recibos.reportes');
+[$__name, $__params] = $__split('admin.reportes.ventas');
 
 $key = null;
 $__componentSlots = [];

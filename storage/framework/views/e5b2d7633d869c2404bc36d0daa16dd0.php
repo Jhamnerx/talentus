@@ -540,8 +540,21 @@
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($vehiculo->estado == 2): ?>
+                                        
+                                        <div class="space-y-1">
+                                            <span
+                                                class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400">
+                                                Suspendido
+                                            </span>
+                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($vehiculo->old_sim_card): ?>
+                                                <div class="text-xs text-gray-400 dark:text-gray-500">
+                                                    Antes: <?php echo e($vehiculo->old_sim_card); ?>
 
-                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($vehiculo->sim_card): ?>
+                                                </div>
+                                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                        </div>
+                                    <?php elseif($vehiculo->sim_card): ?>
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($vehiculo->sim_card->linea): ?>
                                             <div class="font-medium text-emerald-600">
                                                 #<?php echo e($vehiculo->sim_card->linea->numero); ?> -
@@ -556,7 +569,7 @@
                                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                     <?php else: ?>
                                         <div class="font-medium text-red-500">
-                                            AS <?php echo e($vehiculo->old_sim_card); ?>
+                                            <?php echo e($vehiculo->old_sim_card ? 'Ant: ' . $vehiculo->old_sim_card : 'Sin SIM'); ?>
 
                                         </div>
                                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -711,15 +724,41 @@
                                 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                     <?php
-                                        $subActiva = $vehiculo->planSubscriptions
-                                            ->whereNull('canceled_at')
-                                            ->filter(fn($s) => \Carbon\Carbon::parse($s->ends_at)->isFuture())
-                                            ->sortByDesc('ends_at')
+                                        $subCancelada = $vehiculo->planSubscriptions
+                                            ->whereNotNull('canceled_at')
+                                            ->sortByDesc('canceled_at')
                                             ->first();
-                                        $subVencida = !$subActiva && $vehiculo->planSubscriptions->isNotEmpty();
+                                        $subActiva =
+                                            $vehiculo->estado != 2
+                                                ? $vehiculo->planSubscriptions
+                                                    ->whereNull('canceled_at')
+                                                    ->filter(fn($s) => \Carbon\Carbon::parse($s->ends_at)->isFuture())
+                                                    ->sortByDesc('ends_at')
+                                                    ->first()
+                                                : null;
+                                        $subVencida =
+                                            !$subActiva && !$subCancelada && $vehiculo->planSubscriptions->isNotEmpty();
                                     ?>
 
-                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($subActiva): ?>
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($vehiculo->estado == 2 && $subCancelada): ?>
+                                        <button wire:click="abrirModalSuscripcion(<?php echo e($vehiculo->id); ?>)"
+                                            title="Suscripción cancelada — vehículo suspendido"
+                                            class="inline-flex flex-col items-center gap-0.5 group">
+                                            <span
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-full
+                                                bg-orange-100 dark:bg-orange-900/40
+                                                group-hover:ring-2 group-hover:ring-orange-400 transition">
+                                                <svg class="w-4 h-4 text-orange-600 dark:text-orange-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M18.364 5.636a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728M12 8v4m0 4h.01" />
+                                                </svg>
+                                            </span>
+                                            <span
+                                                class="text-xs font-medium text-orange-600 dark:text-orange-400">Cancelada</span>
+                                        </button>
+                                    <?php elseif($subActiva): ?>
                                         <?php
                                             $dias = (int) \Carbon\Carbon::now()
                                                 ->startOfDay()
@@ -902,6 +941,21 @@
                                                         <?php endif; ?>
 
                                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (\Illuminate\Support\Facades\Blade::check('role', 'admin')): ?>
+                                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($vehiculo->estado == 2): ?>
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="activarVehiculo(<?php echo e($vehiculo->id); ?>)"
+                                                                    class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-emerald-600"
+                                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                    Activar
+                                                                </a>
+                                                            </li>
+                                                            <?php else: ?>
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="suspendVehiculo(<?php echo e($vehiculo->id); ?>)"
@@ -930,6 +984,7 @@
                                                                     Suspender
                                                                 </a>
                                                             </li>
+                                                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                                                             <li>
                                                                 <a href="javascript: void(0)"

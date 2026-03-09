@@ -2,7 +2,7 @@
 
     <!-- Table -->
     @livewire('admin.ventas.recibos.recibos-index')
-    @livewire('admin.ventas.recibos.reportes')
+    @livewire('admin.reportes.ventas')
     @livewire('admin.ventas.recibos.send')
     @livewire('admin.ventas.recibos.eliminar-recibo')
 

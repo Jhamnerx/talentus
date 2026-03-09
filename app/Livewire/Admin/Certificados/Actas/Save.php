@@ -19,6 +19,8 @@ class Save extends Component
 
     public $numero, $vehiculos_id, $fecha_instalacion, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1, $plataforma = "basica";
 
+    public array $advertencias = [];
+
 
     public function render()
     {
@@ -88,8 +90,23 @@ class Save extends Component
 
     public function updatedVehiculosId(Vehiculos $vehiculo)
     {
+        $this->fecha_instalacion = $vehiculo->fecha_instalacion ? Carbon::parse($vehiculo->fecha_instalacion)->format('Y-m-d') : Carbon::now()->format('Y-m-d');
+        $this->advertencias = $this->verificarCamposVehiculo($vehiculo);
+    }
 
-        $this->fecha_instalacion = $vehiculo->fecha_instalacion ?  Carbon::parse($vehiculo->fecha_instalacion)->format('Y-m-d') : Carbon::now()->format('Y-m-d');
+    private function verificarCamposVehiculo(Vehiculos $vehiculo): array
+    {
+        $vehiculo->load(['cliente', 'dispositivoPrincipal.dispositivo.modelo']);
+        $faltantes = [];
+        if (!$vehiculo->cliente) $faltantes[] = 'Cliente no asignado';
+        if (!$vehiculo->marca)   $faltantes[] = 'Marca';
+        if (!$vehiculo->modelo)  $faltantes[] = 'Modelo del vehículo';
+        if (!$vehiculo->tipo)    $faltantes[] = 'Tipo';
+        if (!$vehiculo->color)   $faltantes[] = 'Color';
+        if (!$vehiculo->motor)   $faltantes[] = 'Motor';
+        if (!$vehiculo->serie)   $faltantes[] = 'Serie (VIN)';
+        if (!$vehiculo->dispositivoPrincipal) $faltantes[] = 'Dispositivo GPS principal no instalado';
+        return $faltantes;
     }
 
 
@@ -122,6 +139,7 @@ class Save extends Component
         $this->fondo = 1;
         $this->sello = 1;
         $this->plataforma = "basica";
+        $this->advertencias = [];
     }
 
     public function addVehiculo($placa)

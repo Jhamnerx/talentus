@@ -5,7 +5,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Certificados Velocimetros✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-gray-100 font-bold">Certificados Velocimetros✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -14,10 +14,11 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
+                <input wire:model.live='search' id="action-search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100 dark:placeholder-gray-500"
                     type="search" placeholder="Buscar certificados" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-500 group-hover:text-slate-500 dark:group-hover:text-gray-400 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -26,6 +27,12 @@
                     </svg>
                 </button>
             </form>
+
+            <!-- Filtro Estado -->
+            <div class="w-36">
+                <x-form.select wire:model.live="estadoFiltro" placeholder="Estado..." :options="[['value' => '1', 'label' => 'Activos'], ['value' => '0', 'label' => 'Anulados']]"
+                    option-label="label" option-value="value" :clearable="true" />
+            </div>
 
 
             <button wire:click="openModalSave()" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
@@ -78,10 +85,10 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700/60 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Certificados <span
-                    class="text-slate-400 font-medium">{{ $certificados->total() }}</span>
+            <h2 class="font-semibold text-slate-800 dark:text-gray-100">Certificados <span
+                    class="text-slate-400 dark:text-gray-500 font-medium">{{ $certificados->total() }}</span>
             </h2>
         </header>
         <div>
@@ -91,7 +98,7 @@
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-900/20 border-t border-b border-slate-200 dark:border-gray-700/60">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
@@ -129,11 +136,12 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700/60 dark:text-gray-300">
                         <!-- Row -->
 
                         @foreach ($certificados as $certificado)
-                            <tr wire:key='certv-{{ $certificado->id }}'>
+                            <tr wire:key='certv-{{ $certificado->id }}'
+                                class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center">
                                         <label class="inline-flex">
@@ -168,20 +176,22 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $certificado->vehiculo->placa }}
+                                    <div class="font-medium text-slate-800 dark:text-gray-100">
+                                        {{ $certificado->vehiculo->placa }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">
+                                    <div class="font-medium text-slate-800 dark:text-gray-100">
                                         {{ $certificado->vehiculo->cliente->razon_social }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-blue-800">{{ $certificado->velocimetro_modelo }}
+                                    <div class="font-medium text-blue-600 dark:text-blue-400">
+                                        {{ $certificado->velocimetro_modelo }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div>{{ $certificado->fecha }}</div>
+                                    <div class="dark:text-gray-300">{{ $certificado->fecha }}</div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
@@ -232,7 +242,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right z-10 absolute transform -translate-x-3/4 top-full left-0 min-w-36 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700/60 py-1.5 rounded shadow-lg overflow-hidden mt-1 ring-1 ring-black ring-opacity-5 dark:ring-gray-700 divide-y divide-gray-100 dark:divide-gray-700/60 focus:outline-none"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -247,7 +257,7 @@
 
                                                         <a href="javascript: void(0)"
                                                             wire:click.prevent="openModalEdit({{ $certificado->id }})"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                            class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700/50"
                                                             disabled="false" id="headlessui-menu-item-27"
                                                             role="menuitem" tabindex="-1">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -265,7 +275,7 @@
 
                                                         <button type="button"
                                                             wire:click.prevent="openModalDelete({{ $certificado->id }})"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                            class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700/50 w-full">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor"
                                                                 class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
@@ -283,7 +293,7 @@
 
                                                     <li>
                                                         <a wire:click.prevent="cambiarEstado('{{ $certificado->id }}', 'estado', '{{ $certificado->estado ? 0 : 1 }}')"
-                                                            class="text-gray-700 group hover:cursor-pointer flex items-center px-4 py-2 text-sm font-normal"
+                                                            class="text-gray-700 dark:text-gray-300 group hover:cursor-pointer flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700/50"
                                                             disabled="false" id="headlessui-menu-item-29"
                                                             role="menuitem" tabindex="-1">
                                                             @if (!$certificado->estado)
@@ -320,7 +330,7 @@
                                                     <li>
                                                         <a href="javascript: void(0)"
                                                             wire:click="modalOpenSend({{ $certificado->id }})"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                            class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700/50"
                                                             disabled="false" id="headlessui-menu-item-32"
                                                             role="menuitem" tabindex="-1">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"

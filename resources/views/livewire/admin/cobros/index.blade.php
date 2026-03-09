@@ -379,7 +379,8 @@
 
                                     // Datos de suscripción del vehículo (laravelcm/subscriptions)
                                     $subscription = $detalle->vehiculo?->planSubscriptions->first();
-                                    $subActiva = $subscription && $subscription->active();
+                                    $subCancelada = $subscription && $subscription->canceled_at !== null;
+                                    $subActiva = $subscription && !$subCancelada && $subscription->active();
                                     $subEndsAt = $subscription?->ends_at;
                                     // Plan: prioridad suscripción > detalle
                                     $subPlan = $subscription?->plan;
@@ -412,7 +413,11 @@
                                     }
 
                                     // Determinar colores y estado según días restantes
-                                    if ($diasRestantes < 0) {
+                                    if ($subCancelada) {
+                                        $bgColor = 'bg-gray-50 dark:bg-gray-900/20';
+                                        $textColor = 'text-gray-500 dark:text-gray-400';
+                                        $estadoTexto = 'CANCELADA';
+                                    } elseif ($diasRestantes < 0) {
                                         $bgColor = 'bg-red-50 dark:bg-red-900/10';
                                         $textColor = 'text-red-700 dark:text-red-400';
                                         $estadoTexto = 'VENCIDO';
@@ -596,11 +601,23 @@
                                     <!-- Suscripción (laravelcm/subscriptions) -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         @if ($subscription && $subEndsAt)
-                                            <div
-                                                class="text-xs {{ $subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400' }}">
-                                                {{ $subActiva ? '✅' : '❌' }}
-                                                {{ \Carbon\Carbon::parse($subEndsAt)->format('d/m/Y') }}
-                                            </div>
+                                            @if ($subCancelada)
+                                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                    <span
+                                                        class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold">
+                                                        🚫 Cancelada
+                                                    </span>
+                                                </div>
+                                                <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                                    {{ \Carbon\Carbon::parse($subEndsAt)->format('d/m/Y') }}
+                                                </div>
+                                            @else
+                                                <div
+                                                    class="text-xs {{ $subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400' }}">
+                                                    {{ $subActiva ? '✅' : '❌' }}
+                                                    {{ \Carbon\Carbon::parse($subEndsAt)->format('d/m/Y') }}
+                                                </div>
+                                            @endif
                                         @elseif ($detalle->vehiculo)
                                             {{-- Sin suscripción: indicar que hay que editar el cobro --}}
                                             <a href="{{ route('admin.cobros.edit', $detalle->cobro) }}"

@@ -63,7 +63,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\Button\Base::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:click' => 'OpenModalReporte','spinner' => 'OpenModalReporte','label' => 'Descagar Reporte','positive' => true,'md' => true,'icon' => 'arrow-down-tray']); ?>
+<?php $component->withAttributes(['wire:click' => 'OpenModalReporte','spinner' => 'OpenModalReporte','label' => 'Descargar Reporte','positive' => true,'md' => true,'icon' => 'arrow-down-tray']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>

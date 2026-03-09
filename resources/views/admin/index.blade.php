@@ -93,6 +93,10 @@
                         <button @click="setPreset('ano')"
                             class="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition">Este
                             año</button>
+                        <button @click="$dispatch('open-modal-reporte-ambos')"
+                            class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-indigo-300 dark:border-indigo-600 text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition">
+                            📊 Reporte Excel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -109,4 +113,8 @@
         </div>
 
     </div>
+
+    {{-- Modal de reporte ventas + recibos (se abre con evento open-modal-reporte-ambos) --}}
+    @livewire('admin.reportes.ventas')
+
 </x-admin-layout>

@@ -10,30 +10,61 @@ class CertificadosGpsIndex extends Component
 {
     use WithPagination;
     public $search;
-
+    public $estadoFiltro = '';
+    public $vigenciaFiltro = '';
 
     protected $listeners = [
         'update-table' => 'render',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    public function updatingEstadoFiltro()
+    {
+        $this->resetPage();
+    }
+    public function updatingVigenciaFiltro()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $certificados = Certificados::whereHas('ciudades', function ($query) {
-            $query->where('nombre', 'like', '%' . $this->search . '%')
-                ->orwhere('prefijo', 'like', '%' . $this->search . '%');
-        })->orwhereHas('vehiculo', function ($query) {
-            $query->where('placa', 'like', '%' . $this->search . '%');
-            $query->orWhereHas('cliente', function ($cliente) {
-                $cliente->where('razon_social', 'like', '%' . $this->search . '%');
+        $query = Certificados::query()
+            ->where(function ($q) {
+                $q->whereHas('ciudades', function ($q2) {
+                    $q2->where('nombre', 'like', '%' . $this->search . '%')
+                        ->orWhere('prefijo', 'like', '%' . $this->search . '%');
+                })->orWhereHas('vehiculo', function ($q2) {
+                    $q2->where('placa', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('cliente', function ($q3) {
+                            $q3->where('razon_social', 'like', '%' . $this->search . '%');
+                        })
+                        ->orWhereHas('dispositivos', function ($q3) {
+                            $q3->where('imei', 'like', '%' . $this->search . '%');
+                        });
+                })->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
+                    ->orWhere('numero', 'like', '%' . $this->search . '%')
+                    ->orWhere('codigo', 'like', '%' . $this->search . '%')
+                    ->orWhere('fecha', 'like', '%' . $this->search . '%');
             });
-            // Buscar por IMEI en la tabla pivot de dispositivos
-            $query->orWhereHas('dispositivos', function ($dispositivo) {
-                $dispositivo->where('imei', 'like', '%' . $this->search . '%');
-            });
-        })->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
-            ->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('codigo', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha', 'like', '%' . $this->search . '%')
+
+        if ($this->estadoFiltro !== '' && $this->estadoFiltro !== null) {
+            $query->where('estado', (int) $this->estadoFiltro);
+        }
+
+        if ($this->vigenciaFiltro !== '' && $this->vigenciaFiltro !== null) {
+            $today = \Carbon\Carbon::today();
+            if ($this->vigenciaFiltro === 'vigente') {
+                $query->where('estado', 1)->where('fin_cobertura', '>=', $today);
+            } elseif ($this->vigenciaFiltro === 'vencida') {
+                $query->where('estado', 1)->where('fin_cobertura', '<', $today);
+            }
+        }
+
+        $certificados = $query
             ->with('vehiculo.dispositivos.dispositivo.modelo', 'vehiculo.dispositivos')
             ->orderBy('numero', 'desc')
             ->paginate(10);

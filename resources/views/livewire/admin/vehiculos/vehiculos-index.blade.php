@@ -390,8 +390,20 @@
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-
-                                    @if ($vehiculo->sim_card)
+                                    @if ($vehiculo->estado == 2)
+                                        {{-- Vehículo suspendido: mostrar datos anteriores --}}
+                                        <div class="space-y-1">
+                                            <span
+                                                class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400">
+                                                Suspendido
+                                            </span>
+                                            @if ($vehiculo->old_sim_card)
+                                                <div class="text-xs text-gray-400 dark:text-gray-500">
+                                                    Antes: {{ $vehiculo->old_sim_card }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @elseif ($vehiculo->sim_card)
                                         @if ($vehiculo->sim_card->linea)
                                             <div class="font-medium text-emerald-600">
                                                 #{{ $vehiculo->sim_card->linea->numero }} -
@@ -404,7 +416,7 @@
                                         @endif
                                     @else
                                         <div class="font-medium text-red-500">
-                                            AS {{ $vehiculo->old_sim_card }}
+                                            {{ $vehiculo->old_sim_card ? 'Ant: ' . $vehiculo->old_sim_card : 'Sin SIM' }}
                                         </div>
                                     @endif
 
@@ -549,15 +561,41 @@
                                 {{-- Columna Suscripción --}}
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                     @php
-                                        $subActiva = $vehiculo->planSubscriptions
-                                            ->whereNull('canceled_at')
-                                            ->filter(fn($s) => \Carbon\Carbon::parse($s->ends_at)->isFuture())
-                                            ->sortByDesc('ends_at')
+                                        $subCancelada = $vehiculo->planSubscriptions
+                                            ->whereNotNull('canceled_at')
+                                            ->sortByDesc('canceled_at')
                                             ->first();
-                                        $subVencida = !$subActiva && $vehiculo->planSubscriptions->isNotEmpty();
+                                        $subActiva =
+                                            $vehiculo->estado != 2
+                                                ? $vehiculo->planSubscriptions
+                                                    ->whereNull('canceled_at')
+                                                    ->filter(fn($s) => \Carbon\Carbon::parse($s->ends_at)->isFuture())
+                                                    ->sortByDesc('ends_at')
+                                                    ->first()
+                                                : null;
+                                        $subVencida =
+                                            !$subActiva && !$subCancelada && $vehiculo->planSubscriptions->isNotEmpty();
                                     @endphp
 
-                                    @if ($subActiva)
+                                    @if ($vehiculo->estado == 2 && $subCancelada)
+                                        <button wire:click="abrirModalSuscripcion({{ $vehiculo->id }})"
+                                            title="Suscripción cancelada — vehículo suspendido"
+                                            class="inline-flex flex-col items-center gap-0.5 group">
+                                            <span
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-full
+                                                bg-orange-100 dark:bg-orange-900/40
+                                                group-hover:ring-2 group-hover:ring-orange-400 transition">
+                                                <svg class="w-4 h-4 text-orange-600 dark:text-orange-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M18.364 5.636a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728M12 8v4m0 4h.01" />
+                                                </svg>
+                                            </span>
+                                            <span
+                                                class="text-xs font-medium text-orange-600 dark:text-orange-400">Cancelada</span>
+                                        </button>
+                                    @elseif ($subActiva)
                                         @php
                                             $dias = (int) \Carbon\Carbon::now()
                                                 ->startOfDay()
@@ -739,34 +777,53 @@
                                                         @endcan
 
                                                         @role('admin')
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="suspendVehiculo({{ $vehiculo->id }})"
-                                                                    class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-rose-700"
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 64 64">
-                                                                        <g stroke-linecap="round" stroke-width="2"
+                                                            @if ($vehiculo->estado == 2)
+                                                                <li>
+                                                                    <a href="javascript: void(0)"
+                                                                        wire:click.prevent="activarVehiculo({{ $vehiculo->id }})"
+                                                                        class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                        role="menuitem" tabindex="-1">
+                                                                        <svg class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-emerald-600"
                                                                             fill="none" stroke="currentColor"
-                                                                            stroke-linejoin="round" class="nc-icon-wrapper">
-                                                                            <line x1="32" y1="3"
-                                                                                x2="32" y2="12"></line>
-                                                                            <line x1="61" y1="32"
-                                                                                x2="52" y2="32"></line>
-                                                                            <line x1="32" y1="61"
-                                                                                x2="32" y2="52"></line>
-                                                                            <line x1="3" y1="32"
-                                                                                x2="12" y2="32"></line>
-                                                                            <polyline points="20 16 32 32 44 32">
-                                                                            </polyline>
-                                                                            <circle cx="32" cy="32" r="29">
-                                                                            </circle>
-                                                                        </g>
-                                                                    </svg>
-                                                                    Suspender
-                                                                </a>
-                                                            </li>
+                                                                            viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                        </svg>
+                                                                        Activar
+                                                                    </a>
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <a href="javascript: void(0)"
+                                                                        wire:click.prevent="suspendVehiculo({{ $vehiculo->id }})"
+                                                                        class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                        role="menuitem" tabindex="-1">
+                                                                        <svg class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-rose-700"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 64 64">
+                                                                            <g stroke-linecap="round" stroke-width="2"
+                                                                                fill="none" stroke="currentColor"
+                                                                                stroke-linejoin="round"
+                                                                                class="nc-icon-wrapper">
+                                                                                <line x1="32" y1="3"
+                                                                                    x2="32" y2="12"></line>
+                                                                                <line x1="61" y1="32"
+                                                                                    x2="52" y2="32"></line>
+                                                                                <line x1="32" y1="61"
+                                                                                    x2="32" y2="52"></line>
+                                                                                <line x1="3" y1="32"
+                                                                                    x2="12" y2="32"></line>
+                                                                                <polyline points="20 16 32 32 44 32">
+                                                                                </polyline>
+                                                                                <circle cx="32" cy="32" r="29">
+                                                                                </circle>
+                                                                            </g>
+                                                                        </svg>
+                                                                        Suspender
+                                                                    </a>
+                                                                </li>
+                                                            @endif
 
                                                             <li>
                                                                 <a href="javascript: void(0)"

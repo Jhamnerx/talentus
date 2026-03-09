@@ -418,7 +418,8 @@
 
                                     // Datos de suscripción del vehículo (laravelcm/subscriptions)
                                     $subscription = $detalle->vehiculo?->planSubscriptions->first();
-                                    $subActiva = $subscription && $subscription->active();
+                                    $subCancelada = $subscription && $subscription->canceled_at !== null;
+                                    $subActiva = $subscription && !$subCancelada && $subscription->active();
                                     $subEndsAt = $subscription?->ends_at;
                                     // Plan: prioridad suscripción > detalle
                                     $subPlan = $subscription?->plan;
@@ -451,7 +452,11 @@
                                     }
 
                                     // Determinar colores y estado según días restantes
-                                    if ($diasRestantes < 0) {
+                                    if ($subCancelada) {
+                                        $bgColor = 'bg-gray-50 dark:bg-gray-900/20';
+                                        $textColor = 'text-gray-500 dark:text-gray-400';
+                                        $estadoTexto = 'CANCELADA';
+                                    } elseif ($diasRestantes < 0) {
                                         $bgColor = 'bg-red-50 dark:bg-red-900/10';
                                         $textColor = 'text-red-700 dark:text-red-400';
                                         $estadoTexto = 'VENCIDO';
@@ -645,6 +650,17 @@
                                     <!-- Suscripción (laravelcm/subscriptions) -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($subscription && $subEndsAt): ?>
+                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($subCancelada): ?>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold">
+                                                        🚫 Cancelada
+                                                    </span>
+                                                </div>
+                                                <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                                    <?php echo e(\Carbon\Carbon::parse($subEndsAt)->format('d/m/Y')); ?>
+
+                                                </div>
+                                            <?php else: ?>
                                             <div
                                                 class="text-xs <?php echo e($subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'); ?>">
                                                 <?php echo e($subActiva ? '✅' : '❌'); ?>
@@ -652,6 +668,7 @@
                                                 <?php echo e(\Carbon\Carbon::parse($subEndsAt)->format('d/m/Y')); ?>
 
                                             </div>
+                                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                         <?php elseif($detalle->vehiculo): ?>
                                             
                                             <a href="<?php echo e(route('admin.cobros.edit', $detalle->cobro)); ?>"

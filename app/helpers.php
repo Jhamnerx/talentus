@@ -1,5 +1,20 @@
 <?php
 
+// Polyfill: get_magic_quotes_runtime() y get_magic_quotes_gpc() eliminadas en PHP 8
+// necesarias para setasign/fpdf 1.8.x
+if (! function_exists('get_magic_quotes_runtime')) {
+    function get_magic_quotes_runtime(): bool
+    {
+        return false;
+    }
+}
+if (! function_exists('get_magic_quotes_gpc')) {
+    function get_magic_quotes_gpc(): bool
+    {
+        return false;
+    }
+}
+
 use App\Models\TipoCambio;
 use App\Services\FactilizaService;
 use Illuminate\Support\Facades\Cache;

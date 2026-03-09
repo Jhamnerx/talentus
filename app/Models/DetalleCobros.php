@@ -27,7 +27,6 @@ class DetalleCobros extends Model
         'fecha_inicio' => 'date:Y-m-d',
         'fecha_vencimiento' => 'date:Y-m-d',
         'estado' => 'boolean',
-        'estado_detalle' => CobroEstado::class,
     ];
 
 

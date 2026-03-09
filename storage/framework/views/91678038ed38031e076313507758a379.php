@@ -104,6 +104,10 @@
                         <button @click="setPreset('ano')"
                             class="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition">Este
                             año</button>
+                        <button @click="$dispatch('open-modal-reporte-ambos')"
+                            class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-indigo-300 dark:border-indigo-600 text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition">
+                            📊 Reporte Excel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -183,6 +187,31 @@ if (isset($__slots)) unset($__slots);
         </div>
 
     </div>
+
+    
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('admin.reportes.ventas');
+
+$key = null;
+$__componentSlots = [];
+
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-4171999395-3', $key);
+
+$__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__componentSlots);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>

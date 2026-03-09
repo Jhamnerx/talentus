@@ -3,7 +3,9 @@
 namespace App\Livewire\Admin\Vehiculos;
 
 use Livewire\Component;
+use App\Models\Actas;
 use App\Models\Vehiculos;
+use App\Models\DetalleCobros;
 use Livewire\Attributes\On;
 
 class Suspend extends Component
@@ -43,7 +45,25 @@ class Suspend extends Component
         $this->vehiculo->setAttribute('sim_card_id', NULL);
         $this->vehiculo->setAttribute('estado', 2);
         $this->vehiculo->save();
-        // return redirect()->route('admin.vehiculos.index');
+
+        // Cancelar suscripción del paquete laravelcm/laravel-subscriptions
+        $subscription = $this->vehiculo->planSubscription('gps-tracking');
+        $subscription?->cancel(immediately: true);
+
+        // Marcar DetalleCobros activos como inactivo (estado = false)
+        DetalleCobros::where('vehiculo_id', $this->vehiculo->id)
+            ->where('estado', true)
+            ->update(['estado' => false]);
+
+        // Anular la última acta activa del vehículo
+        $ultimaActa = Actas::where('vehiculos_id', $this->vehiculo->id)
+            ->where('estado', 1)
+            ->latest()
+            ->first();
+        if ($ultimaActa) {
+            $ultimaActa->estado = 0;
+            $ultimaActa->save();
+        }
 
         $this->afterSuspend($this->vehiculo->placa);
     }
@@ -58,6 +78,8 @@ class Suspend extends Component
 
     public function afterSuspend($placa)
     {
+        $this->modalSuspend = false;
+        $this->remove = false;
 
         $this->dispatch(
             'notify-toast',
@@ -66,7 +88,6 @@ class Suspend extends Component
             mensaje: 'se suspendio el vehiculo: ' . $placa,
         );
 
-        $this->remove = false;
         $this->dispatch('update-table');
     }
 

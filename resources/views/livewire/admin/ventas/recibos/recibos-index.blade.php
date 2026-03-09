@@ -54,7 +54,7 @@
             @can('reportes-recibos')
                 <div class="relative inline-flex">
 
-                    <x-form.button wire:click="OpenModalReporte" spinner="OpenModalReporte" label="Descagar Reporte"
+                    <x-form.button wire:click="OpenModalReporte" spinner="OpenModalReporte" label="Descargar Reporte"
                         positive md icon="arrow-down-tray" />
 
                 </div>

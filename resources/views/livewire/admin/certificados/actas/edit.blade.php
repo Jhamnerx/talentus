@@ -115,6 +115,21 @@
 
             </div>
         </div>
+
+        @if (!empty($advertencias))
+            <div class="col-span-12 mt-3">
+                <div
+                    class="bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-700 rounded-lg p-3">
+                    <p class="text-sm font-semibold text-amber-700 dark:text-amber-400 mb-1">⚠️ El vehículo tiene datos
+                        incompletos para el PDF del acta:</p>
+                    <ul class="text-xs text-amber-600 dark:text-amber-500 list-disc ml-4 space-y-0.5">
+                        @foreach ($advertencias as $adv)
+                            <li>{{ $adv }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
     </div>
 
     <x-slot name="footer">
