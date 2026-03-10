@@ -9,12 +9,12 @@ class FinanzasController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:finanzas-caja-chica', ['only' => ['cajaChica']]);
-        $this->middleware('permission:finanzas-movimientos', ['only' => ['movimientos']]);
-        $this->middleware('permission:finanzas-transacciones', ['only' => ['transacciones']]);
-        $this->middleware('permission:finanzas-cuentas-cobrar', ['only' => ['cuentasCobrar']]);
-        $this->middleware('permission:finanzas-cuentas-pagar', ['only' => ['cuentasPagar']]);
-        $this->middleware('permission:finanzas-balance', ['only' => ['balance']]);
+        // $this->middleware('permission:finanzas-caja-chica', ['only' => ['cajaChica']]);
+        // $this->middleware('permission:finanzas-movimientos', ['only' => ['movimientos']]);
+        // $this->middleware('permission:finanzas-transacciones', ['only' => ['transacciones']]);
+        // $this->middleware('permission:finanzas-cuentas-cobrar', ['only' => ['cuentasCobrar']]);
+        // $this->middleware('permission:finanzas-cuentas-pagar', ['only' => ['cuentasPagar']]);
+        // $this->middleware('permission:finanzas-balance', ['only' => ['balance']]);
     }
 
     public function cajaChica()
