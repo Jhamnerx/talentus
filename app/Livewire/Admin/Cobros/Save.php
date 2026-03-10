@@ -96,14 +96,15 @@ class Save extends Component
     }
 
     /**
-     * Aplica descuento de IGV si el tipo de comprobante es RECIBO.
-     * Los precios en planes incluyen IGV 18%; los recibos no lo llevan.
-     * Ejemplo: S/. 35.00 (con IGV) → S/. 29.66 (sin IGV)
+     * Aplica IGV 18% si el tipo de comprobante es FACTURA/BOLETA.
+     * Los precios en planes son la base SIN IGV.
+     * Ejemplo: S/. 30.00 (base) → S/. 35.40 (con IGV 18%) para Factura
+     *          S/. 30.00 (base) → S/. 30.00 para Recibo
      */
     protected function calcularMontoEfectivo(float $montoBase): float
     {
-        if ($this->tipo_pago === 'RECIBO' && $montoBase > 0) {
-            return round($montoBase / 1.18, 2);
+        if ($this->tipo_pago !== 'RECIBO' && $montoBase > 0) {
+            return round($montoBase * 1.18, 2);
         }
         return $montoBase;
     }

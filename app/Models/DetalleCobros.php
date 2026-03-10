@@ -186,15 +186,15 @@ class DetalleCobros extends Model
             return (float) $this->attributes['monto_unidad'];
         }
 
-        // Fallback: calcular desde plan y aplicar RECIBO si corresponde
+        // Fallback: precio base del plan (sin IGV). Sumar IGV si es Factura/Boleta.
         $monto = $this->monto_calculado;
 
         if (
             $monto > 0
             && $this->cobro
-            && $this->cobro->tipo_pago === 'RECIBO'
+            && $this->cobro->tipo_pago !== 'RECIBO'
         ) {
-            return round($monto / 1.18, 2);
+            return round($monto * 1.18, 2);
         }
 
         return $monto;
