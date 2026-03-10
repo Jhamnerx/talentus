@@ -18,10 +18,10 @@
             </div>
 
             <!-- Add payment button -->
-            @can('crear-payments')
-                <x-form.button wire:click="openModalCreate" primary label="Agregar Pago" icon="plus"
-                    spinner="openModalCreate" />
-            @endcan
+
+            <x-form.button wire:click="openModalCreate" primary label="Agregar Pago" icon="plus"
+                spinner="openModalCreate" />
+
         </div>
     </div>
 
@@ -62,9 +62,9 @@
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Export button -->
-            @can('exportar-payments')
-                <x-form.button flat label="Exportar" wire:click="openExportModal" icon="arrow-down-tray" />
-            @endcan
+
+            <x-form.button flat label="Exportar" wire:click="openExportModal" icon="arrow-down-tray" />
+
 
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 4 }">
@@ -252,18 +252,17 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex justify-center items-center gap-1">
-                                    @can('editar-payments')
-                                        <button wire:click="editPayment({{ $payment->id }})"
-                                            class="btn btn-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-violet-500">
-                                            Editar
-                                        </button>
-                                    @endcan
-                                    @can('eliminar-payments')
-                                        <button wire:click="deletePayment({{ $payment->id }})"
-                                            class="btn btn-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-red-500">
-                                            Eliminar
-                                        </button>
-                                    @endcan
+
+                                    <button wire:click="editPayment({{ $payment->id }})"
+                                        class="btn btn-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-violet-500">
+                                        Editar
+                                    </button>
+
+                                    <button wire:click="deletePayment({{ $payment->id }})"
+                                        class="btn btn-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-red-500">
+                                        Eliminar
+                                    </button>
+
                                 </div>
                             </td>
                         </tr>

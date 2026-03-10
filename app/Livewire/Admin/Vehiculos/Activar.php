@@ -30,7 +30,7 @@ class Activar extends Component
     public function openModal(Vehiculos $vehiculo): void
     {
         $this->vehiculo = $vehiculo;
-        $this->tieneDetalleCobro = DetalleCobros::where('vehiculos_id', $vehiculo->id)->exists();
+        $this->tieneDetalleCobro = DetalleCobros::where('vehiculo_id', $vehiculo->id)->exists();
 
         // Pre-cargar última línea conocida
         $this->numero = $vehiculo->old_numero;
