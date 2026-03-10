@@ -23,16 +23,16 @@
                 </button>
             </form>
 
-            @can('crear-caja-chica')
-                <button wire:click='create'
-                    class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 cursor-pointer hover:dark:bg-gray-200">
-                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                        <path
-                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                    </svg>
-                    <span class="ml-2">Nueva Caja</span>
-                </button>
-            @endcan
+
+            <button wire:click='create'
+                class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 cursor-pointer hover:dark:bg-gray-200">
+                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                    <path
+                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                </svg>
+                <span class="ml-2">Nueva Caja</span>
+            </button>
+
         </div>
     </div>
 
@@ -221,7 +221,8 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex items-center justify-center gap-2">
                                     {{-- Botón PDF A4 --}}
-                                    <a href="{{ route('finanzas.caja-chica.reporte-a4', $caja->id) }}" target="_blank"
+                                    <a href="{{ route('finanzas.caja-chica.reporte-a4', $caja->id) }}"
+                                        target="_blank"
                                         class="btn btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
                                         title="Reporte PDF A4">
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -244,25 +245,25 @@
                                 </div>
 
                                 {{-- Botones de Acción según Estado --}}
-                                @can('editar-caja-chica')
-                                    @if ($caja->estado)
-                                        <x-form.button xs primary icon="pencil" wire:click="edit({{ $caja->id }})"
-                                            title="Editar caja" />
 
-                                        <x-form.button xs warning wire:click="closeCash({{ $caja->id }})"
-                                            title="Cerrar caja">
-                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </x-form.button>
-                                    @endif
-                                @endcan
-                                @can('eliminar-caja-chica')
-                                    <x-form.button xs negative icon="trash"
-                                        wire:click="confirmDelete({{ $caja->id }})" title="Eliminar caja" />
-                                @endcan
+                                @if ($caja->estado)
+                                    <x-form.button xs primary icon="pencil" wire:click="edit({{ $caja->id }})"
+                                        title="Editar caja" />
+
+                                    <x-form.button xs warning wire:click="closeCash({{ $caja->id }})"
+                                        title="Cerrar caja">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </x-form.button>
+                                @endif
+
+
+                                <x-form.button xs negative icon="trash"
+                                    wire:click="confirmDelete({{ $caja->id }})" title="Eliminar caja" />
+
         </div>
         </td>
         </tr>

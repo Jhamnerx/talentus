@@ -18,11 +18,9 @@
                     icon="magnifying-glass" />
             </div>
             <!-- Create button -->
-            @can('crear-plan')
-                <x-form.button primary wire:click="openModalCreate" icon="plus">
-                    Crear Plan
-                </x-form.button>
-            @endcan
+            <x-form.button primary wire:click="openModalCreate" icon="plus">
+                Crear Plan
+            </x-form.button>
         </div>
 
     </div>
@@ -123,14 +121,14 @@
                             <!-- Actions -->
                             <td class="px-4 py-3">
                                 <div class="flex items-center justify-center gap-2">
-                                    @can('editar-plan')
-                                        <x-form.button xs primary icon="pencil"
-                                            wire:click="openModalEdit({{ $plan->id }})" />
-                                    @endcan
-                                    @can('eliminar-plan')
-                                        <x-form.button xs negative icon="trash"
-                                            wire:click="openModalDelete({{ $plan->id }})" />
-                                    @endcan
+
+                                    <x-form.button xs primary icon="pencil"
+                                        wire:click="openModalEdit({{ $plan->id }})" />
+
+
+                                    <x-form.button xs negative icon="trash"
+                                        wire:click="openModalDelete({{ $plan->id }})" />
+
                                 </div>
                             </td>
                         </tr>
@@ -141,12 +139,11 @@
                                     No se encontraron planes que coincidan con "{{ $search }}"
                                 @else
                                     No hay planes registrados.
-                                    @can('crear-plan')
-                                        <button wire:click="openModalCreate"
-                                            class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                                            Crear el primer plan
-                                        </button>
-                                    @endcan
+
+                                    <button wire:click="openModalCreate"
+                                        class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                        Crear el primer plan
+                                    </button>
                                 @endif
                             </td>
                         </tr>
