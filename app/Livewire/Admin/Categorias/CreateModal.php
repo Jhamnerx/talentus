@@ -19,8 +19,9 @@ class CreateModal extends Component
 
     public function render()
     {
-        $equipoGpsOcupado   = Categoria::where('es_equipo_gps', true)->first();
-        $monitoreoOcupado   = Categoria::where('es_servicio_monitoreo', true)->first();
+        $empresaId = session('empresa');
+        $equipoGpsOcupado   = Categoria::where('es_equipo_gps', true)->where('empresa_id', $empresaId)->first();
+        $monitoreoOcupado   = Categoria::where('es_servicio_monitoreo', true)->where('empresa_id', $empresaId)->first();
 
         return view('livewire.admin.categorias.create-modal', compact('equipoGpsOcupado', 'monitoreoOcupado'));
     }

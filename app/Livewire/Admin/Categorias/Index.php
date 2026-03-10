@@ -18,6 +18,7 @@ class Index extends Component
     public function render()
     {
         $categorias = Categoria::query()
+            ->where('empresa_id', session('empresa'))
             ->when($this->search, function ($query) {
                 $query->where('descripcion', 'like', '%' . $this->search . '%')
                     ->orWhere('nombre', 'like', '%' . $this->search . '%');
