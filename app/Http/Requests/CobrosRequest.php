@@ -30,10 +30,12 @@ class CobrosRequest extends FormRequest
             "divisa" => 'required',
             "nota" => 'nullable',
             "tipo_pago" => 'required|in:FACTURA,RECIBO',
+            "descuento_global" => 'nullable|numeric|min:0',
 
             'items' => 'array|between:1,100',
             'items.*.plan_id' => 'required|exists:plans,id',
             'items.*.monto' => 'required|decimal:0,4',
+            'items.*.descuento' => 'nullable|numeric|min:0',
             'items.*.placa' => 'required',
             'items.*.periodo' => 'required|in:MENSUAL,BIMENSUAL,TRIMESTRAL,SEMESTRAL,ANUAL',
             'items.*.fecha_inicio' => 'required|date',

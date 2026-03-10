@@ -37,6 +37,11 @@
                     placeholder="Ingresar nota (opcional)" />
             </div>
 
+            <div class="col-span-12 sm:col-span-4">
+                <x-form.input type="number" wire:model.live="descuento_global" label="Descuento Global (por vehículo)"
+                    min="0" step="0.01" hint="Se resta del monto final de todos los vehículos" />
+            </div>
+
 
             <div class="col-span-12 sm:col-span-12 mt-4 lg:flex lg:items-center lg:justify-between ">
                 <div class="flex-1 min-w-0 grid grid-cols-12 gap-2">
@@ -97,6 +102,12 @@
                     <div class="flex-auto xl:w-24 text-center">
                         <p class="leading-none">
                             <span
+                                class="block uppercase tracking-wide text-sm font-bold text-gray-800 dark:text-gray-200">DESC.</span>
+                        </p>
+                    </div>
+                    <div class="flex-auto xl:w-24 text-center">
+                        <p class="leading-none">
+                            <span
                                 class="block uppercase tracking-wide text-sm font-bold text-gray-800 dark:text-gray-200">MONTO</span>
                         </p>
                     </div>
@@ -142,7 +153,8 @@
 
                                 <div class="flex-none w-16 text-center">
                                     <label class="inline-flex flex-col items-center gap-1 cursor-pointer">
-                                        <input type="checkbox" wire:model.live="items.{{ $placa }}.estado"
+                                        <input type="checkbox" @checked(($vehiculo['estado'] ?? 0) == 1)
+                                            wire:click="$set('items.{{ $placa }}.estado', {{ ($vehiculo['estado'] ?? 0) == 1 ? 0 : 1 }})"
                                             class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer" />
                                         <span
                                             class="text-xs {{ isset($vehiculo['estado']) && $vehiculo['estado'] == 0 ? 'text-red-500 font-semibold' : 'text-green-600 font-semibold' }}">
@@ -158,21 +170,21 @@
                                 </div>
 
                                 <div class="flex-auto xl:w-32 text-center">
-                                    <x-form.select wire:model.live="items.{{ $placa }}.plan_id" :options="$planes
-                                        ->map(
-                                            fn($p) => [
-                                                'id' => $p->id,
-                                                'name' =>
-                                                    $p->name .
-                                                    ' - ' .
-                                                    ($p->currency ?? 'PEN') .
-                                                    ' ' .
-                                                    number_format($p->price, 2),
-                                            ],
-                                        )
-                                        ->values()"
-                                        option-label="name" option-value="id" placeholder="Seleccionar..."
-                                        :clearable="false" />
+                                    <x-form.select wire:model.live="items.{{ $placa }}.plan_id"
+                                        :options="$planes
+                                            ->map(
+                                                fn($p) => [
+                                                    'id' => $p->id,
+                                                    'name' =>
+                                                        $p->name .
+                                                        ' - ' .
+                                                        ($p->currency ?? 'PEN') .
+                                                        ' ' .
+                                                        number_format($p->price, 2),
+                                                ],
+                                            )
+                                            ->values()" option-label="name" option-value="id"
+                                        placeholder="Seleccionar..." :clearable="false" />
                                 </div>
 
                                 <div class="flex-auto xl:w-28 text-center">
@@ -188,8 +200,13 @@
                                 </div>
 
                                 <div class="flex-auto xl:w-24 text-center">
+                                    <x-form.input type="number"
+                                        wire:model.live="items.{{ $placa }}.descuento" min="0"
+                                        step="0.01" placeholder="0.00" />
+                                </div>
+                                <div class="flex-auto xl:w-24 text-center">
                                     <div
-                                        class="px-2 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-800 dark:text-gray-200 font-semibold text-sm">
+                                        class="px-2 py-2 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 rounded text-emerald-800 dark:text-emerald-200 font-bold text-sm">
                                         {{ $divisa }} {{ number_format($vehiculo['monto'] ?? 0, 2) }}
                                     </div>
                                 </div>
