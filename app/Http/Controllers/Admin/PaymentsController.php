@@ -7,11 +7,7 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class PaymentsController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('permission:ver-payments', ['only' => ['index']]);
-        $this->middleware('permission:ver-payment-methods', ['only' => ['metodosPago']]);
-    }
+    function __construct() {}
 
     public function index()
     {
