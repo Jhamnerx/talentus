@@ -8,10 +8,7 @@ use App\Http\Controllers\Controller;
 
 class TicketsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('permission:ver-ticket', ['only' => ['index']]);
-    }
+    public function __construct() {}
 
     public function index()
     {
