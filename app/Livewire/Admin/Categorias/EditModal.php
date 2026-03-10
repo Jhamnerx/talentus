@@ -21,10 +21,13 @@ class EditModal extends Component
 
     public function render()
     {
+        $empresaId = session('empresa');
         $equipoGpsOcupado  = Categoria::where('es_equipo_gps', true)
+            ->where('empresa_id', $empresaId)
             ->when($this->categoria, fn($q) => $q->where('id', '!=', $this->categoria->id))
             ->first();
         $monitoreoOcupado  = Categoria::where('es_servicio_monitoreo', true)
+            ->where('empresa_id', $empresaId)
             ->when($this->categoria, fn($q) => $q->where('id', '!=', $this->categoria->id))
             ->first();
 

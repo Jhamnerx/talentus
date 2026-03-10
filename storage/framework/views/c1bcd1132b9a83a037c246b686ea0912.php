@@ -170,27 +170,27 @@
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('cambiar.estado-categoria')): ?>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex justify-center">
-                                        <?php if (isset($component)) { $__componentOriginal592735d30e1926fbb04ff9e089d1fccf = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal592735d30e1926fbb04ff9e089d1fccf = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.toggle','data' => ['wire:model.live' => 'estado.'.e($categoria->id).'','size' => 'md']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('toggle'); ?>
+                                        <?php if (isset($component)) { $__componentOriginal12ee426d66882c66c79ce07deee9e49f = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal12ee426d66882c66c79ce07deee9e49f = $attributes; } ?>
+<?php $component = WireUi\Components\Switcher\Toggle::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.toggle'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php $attributes = $attributes->except(\WireUi\Components\Switcher\Toggle::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'estado.'.e($categoria->id).'','size' => 'md']); ?>
+<?php $component->withAttributes(['id' => 'toggle-'.e($categoria->id).'','name' => 'toggle-'.e($categoria->id).'','md' => true,'checked' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute((bool) $categoria->estado),'x-on:change' => '$wire.toggleStatus('.e($categoria->id).')']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginal592735d30e1926fbb04ff9e089d1fccf)): ?>
-<?php $attributes = $__attributesOriginal592735d30e1926fbb04ff9e089d1fccf; ?>
-<?php unset($__attributesOriginal592735d30e1926fbb04ff9e089d1fccf); ?>
+<?php if (isset($__attributesOriginal12ee426d66882c66c79ce07deee9e49f)): ?>
+<?php $attributes = $__attributesOriginal12ee426d66882c66c79ce07deee9e49f; ?>
+<?php unset($__attributesOriginal12ee426d66882c66c79ce07deee9e49f); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginal592735d30e1926fbb04ff9e089d1fccf)): ?>
-<?php $component = $__componentOriginal592735d30e1926fbb04ff9e089d1fccf; ?>
-<?php unset($__componentOriginal592735d30e1926fbb04ff9e089d1fccf); ?>
+<?php if (isset($__componentOriginal12ee426d66882c66c79ce07deee9e49f)): ?>
+<?php $component = $__componentOriginal12ee426d66882c66c79ce07deee9e49f; ?>
+<?php unset($__componentOriginal12ee426d66882c66c79ce07deee9e49f); ?>
 <?php endif; ?>
                                     </div>
                                 </td>
