@@ -16,6 +16,7 @@
             <x-search-form
                 placeholder="{{ $tipo ? ($tipo === 'producto' ? 'Buscar productos' : 'Buscar servicios') : 'Buscar productos' }}" />
             <!-- Add customer button -->
+
             @can('crear-producto')
                 <button wire:click.prevent="openModalCreate"
                     class="btn cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white">
