@@ -14,7 +14,7 @@ class AsignLinea extends Component
 {
     use WireUiActions;
 
-    public $modalAsign = true;
+    public $modalAsign = false;
     public $sim_card_id, $lineas_id, $motivo;
 
     public ?SimCard $sim_card = null;
