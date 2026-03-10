@@ -15,7 +15,7 @@
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.productos.index', ['tipo' => $tipo]);
+[$__name, $__params] = $__split('admin.items.index', ['tipo' => $tipo]);
 
 $key = 'productos-index-' . $tipo;
 $__componentSlots = [];
@@ -38,7 +38,7 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.productos.create-modal', []);
+[$__name, $__params] = $__split('admin.items.create-modal', []);
 
 $key = 'create-producto-modal-' . $tipo;
 $__componentSlots = [];
@@ -60,7 +60,7 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.productos.edit-modal', []);
+[$__name, $__params] = $__split('admin.items.edit-modal', []);
 
 $key = 'edit-producto-modal-' . $tipo;
 $__componentSlots = [];
@@ -82,7 +82,7 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.productos.delete-modal', []);
+[$__name, $__params] = $__split('admin.items.delete-modal', []);
 
 $key = 'delete-producto-modal-' . $tipo;
 $__componentSlots = [];

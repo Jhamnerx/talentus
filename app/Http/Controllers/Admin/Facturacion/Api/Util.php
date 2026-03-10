@@ -432,13 +432,8 @@ class Util extends Controller
             'strict_variables' => true,
         ];
 
-        $report = new HtmlReport('', $twigOptions);
-        $resolver = new DefaultTemplateResolver();
-        $report->setTemplate($resolver->getTemplate($invoice->clase));
-
         $path = base_path('resources/views/templates/comprobantes');
 
-        // $report = new HtmlReport('', $twigOptions); usa esta linea si deseas usar la plantilla por defecto
         $report = new HtmlReport($path, $twigOptions);
         $report->setTemplate('note.html.twig');
 

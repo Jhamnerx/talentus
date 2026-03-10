@@ -73,13 +73,8 @@ class Create extends Component
             $this->tipo_cambio = 3.80;
         }
 
-        // Inicializar pagos_detalle con un pago por defecto
-        $this->pagos_detalle = collect([[
-            'metodo_pago_id' => '009',
-            'payment_destination_id' => '',
-            'referencia' => '',
-            'monto' => 0.00,
-        ]]);
+        // Inicializar pagos_detalle vacío (opcional al crear)
+        $this->pagos_detalle = collect([]);
 
         $this->selected = collect([
             'producto_id'     => null,

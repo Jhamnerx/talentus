@@ -111,12 +111,8 @@ class Edit extends Component
                 ];
             });
         } else {
-            $this->pagos_detalle = collect([[
-                'metodo_pago_id' => '009',
-                'payment_destination_id' => '',
-                'referencia' => '',
-                'monto' => 0.00,
-            ]]);
+            // Sin pagos previos — opcional, se puede registrar después
+            $this->pagos_detalle = collect([]);
         }
     }
 

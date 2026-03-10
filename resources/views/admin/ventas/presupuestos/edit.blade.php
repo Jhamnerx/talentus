@@ -3,7 +3,7 @@
     @livewire('admin.ventas.presupuestos.edit', ['presupuesto' => $presupuesto])
 
     @livewire('admin.clientes.save')
-    @livewire('admin.productos.create-modal')
-    @livewire('admin.productos.modal-add-producto')
+    @livewire('admin.items.create-modal')
+    @livewire('admin.items.modal-add-producto')
 
 </x-admin-layout>

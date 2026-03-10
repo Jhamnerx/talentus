@@ -462,8 +462,11 @@
 
                             {{-- PAGOS MÚLTIPLES (solo para CONTADO) --}}
                             @if ($forma_pago === 'CONTADO')
-                                <div class="col-span-12 border-b border-cyan-600 dark:border-cyan-400 mt-4">
+                                <div
+                                    class="col-span-12 border-b border-cyan-600 dark:border-cyan-400 mt-4 flex items-center justify-between">
                                     <h4 class="font-semibold text-gray-800 dark:text-gray-200">PAGOS</h4>
+                                    <span class="text-xs text-gray-400 italic">Opcional — puede registrarlo
+                                        después</span>
                                 </div>
 
                                 <div class="col-span-12 mt-2">
@@ -523,8 +526,8 @@
                                             @empty
                                                 <tr>
                                                     <td colspan="5"
-                                                        class="px-2 py-4 text-center text-gray-500 dark:text-gray-400">
-                                                        No hay pagos registrados. Haga clic en "+ Agregar pago"
+                                                        class="px-2 py-4 text-center text-gray-400 dark:text-gray-500 italic text-xs">
+                                                        Sin pagos — la venta quedará como pendiente de pago.
                                                     </td>
                                                 </tr>
                                             @endforelse
@@ -790,7 +793,7 @@
         </div>
 
     </div>
-    <livewire:admin.productos.modal-add-producto :deduce_anticipos="$deduce_anticipos" :comprobante_slug="$comprobante_slug" :divisa="$divisa"
+    <livewire:admin.items.modal-add-producto :deduce_anticipos="$deduce_anticipos" :comprobante_slug="$comprobante_slug" :divisa="$divisa"
         :tipo_comprobante_id="$tipo_comprobante_id" key="producto-add-" />
 
     {{-- ── Modal selección de IMEI para equipos GPS ──────────────────────── --}}

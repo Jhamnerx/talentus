@@ -151,8 +151,10 @@
                     <div class="grid grid-cols-12 gap-4 w-full px-4 py-2 mt-5 text-gray-800 dark:text-gray-200">
 
                         @if ($tipo_venta === 'CONTADO')
-                            <div class="col-span-12 border-b border-cyan-600 dark:border-cyan-400">
+                            <div
+                                class="col-span-12 border-b border-cyan-600 dark:border-cyan-400 flex items-center justify-between">
                                 <h4 class="font-semibold text-gray-800 dark:text-gray-200">PAGOS</h4>
+                                <span class="text-xs text-gray-400 italic">Opcional — puede registrarlo después</span>
                             </div>
 
                             <div class="col-span-12 mt-2">
@@ -210,8 +212,8 @@
                                         @empty
                                             <tr>
                                                 <td colspan="5"
-                                                    class="px-2 py-4 text-center text-gray-500 dark:text-gray-400">
-                                                    No hay pagos registrados. Haga clic en "+ Agregar pago"
+                                                    class="px-2 py-4 text-center text-gray-400 dark:text-gray-500 italic text-xs">
+                                                    Sin pagos — el recibo quedará como pendiente de pago.
                                                 </td>
                                             </tr>
                                         @endforelse

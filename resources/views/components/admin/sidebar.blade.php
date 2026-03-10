@@ -370,8 +370,8 @@
 
 
                     <!-- Finanzas -->
-                    @canany(['ver-caja-chica', 'ver-movimientos', 'ver-transacciones', 'ver-cuentas-cobrar', 'ver-cuentas-pagar', 'ver-pagos', 'ver-balance'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                    {{-- TODO: implementar permisos de finanzas --}}
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
@@ -399,128 +399,111 @@
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                                 <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
-                                    @can('ver-caja-chica')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.caja-chica.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('finanzas.caja-chica.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Caja chica
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.caja-chica.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('finanzas.caja-chica.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Caja chica
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    @can('ver-movimientos')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.movimientos.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('finanzas.movimientos.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Movimientos
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.movimientos.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('finanzas.movimientos.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Movimientos
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    @can('ver-transacciones')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.transacciones.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('finanzas.transacciones.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transacciones
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.transacciones.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('finanzas.transacciones.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transacciones
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    @can('ver-cuentas-cobrar')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.cuentas-cobrar.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('finanzas.cuentas-cobrar.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por cobrar
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.cuentas-cobrar.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('finanzas.cuentas-cobrar.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por cobrar
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    @can('ver-cuentas-pagar')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.cuentas-pagar.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('finanzas.cuentas-pagar.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por pagar
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.cuentas-pagar.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('finanzas.cuentas-pagar.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por pagar
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    @can('ver-pagos')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.payments.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('admin.payments.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pagos
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.payments.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.payments.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pagos
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    @can('ver-balance')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.balance.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('finanzas.balance.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Balance
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.balance.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('finanzas.balance.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Balance
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    @can('admin.cobros.index')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('admin.cobros.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
-                                                </span>
-                                            </a>
-                                        </li>
-                                        
-                                        {{-- Notificaciones de Cobro con Badge --}}
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.notificaciones')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('admin.cobros.notificaciones') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 flex items-center gap-2">
-                                                    🔔 Notificaciones
-                                                    @php
-                                                        $pendientesCount = \App\Models\NotificacionCobro::pendientes()->count();
-                                                    @endphp
-                                                    @if($pendientesCount > 0)
-                                                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                                                            {{ $pendientesCount }}
-                                                        </span>
-                                                    @endif
-                                                </span>
-                                            </a>
-                                        </li>
-                                        
-                                        {{-- Planes de Servicio --}}
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('admin.planes.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.cobros.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    {{-- Notificaciones de Cobro con Badge --}}
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.notificaciones')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.cobros.notificaciones') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 flex items-center gap-2">
+                                                🔔 Notificaciones
+                                                @php
+                                                    $pendientesCount = \App\Models\NotificacionCobro::pendientes()->count();
+                                                @endphp
+                                                @if($pendientesCount > 0)
+                                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                                                        {{ $pendientesCount }}
+                                                    </span>
+                                                @endif
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    {{-- Planes de Servicio --}}
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.planes.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
+                                            </span>
+                                        </a>
+                                    </li>
 
                                 </ul>
 
                             </div>
                         </li>
-                    @endcanany
 
 
                     <!-- Proveedores -->
