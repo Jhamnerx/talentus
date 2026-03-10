@@ -1,4 +1,4 @@
-<x-form.modal.card title="REGISTRAR VEHICULO" blur wire:model.live="modalSaveV" align="center" persistent>
+<x-form.modal.card title="REGISTRAR VEHICULO" blur wire:model.live="modalSaveV" align="center">
 
     <div class="grid grid-cols-12 gap-6">
 
