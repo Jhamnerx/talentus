@@ -6,7 +6,6 @@ use App\Models\Categoria;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
-use Illuminate\Support\Facades\Auth;
 
 class Index extends Component
 {
@@ -15,7 +14,6 @@ class Index extends Component
     public $search = '';
     public $estadoFilter = '';
     public $perPage = 10;
-    public $estado = [];
 
     public function render()
     {
@@ -29,13 +27,6 @@ class Index extends Component
             })
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);
-
-        // Inicializar estados solo si están vacíos
-        if (empty($this->estado)) {
-            foreach ($categorias as $categoria) {
-                $this->estado[$categoria->id] = (bool) $categoria->estado;
-            }
-        }
 
         return view('livewire.admin.categorias.index', compact('categorias'));
     }
@@ -75,14 +66,11 @@ class Index extends Component
     }
 
     // ============ TOGGLE STATUS ============
-    public function updatedEstado($value, $categoriaId)
+    public function toggleStatus(int $id): void
     {
-        if (Auth::user()->can('cambiar.estado-categoria')) {
-            $categoria = Categoria::find($categoriaId);
-            if ($categoria) {
-                $categoria->estado = $value;
-                $categoria->save();
-            }
-        }
+        $this->authorize('cambiar.estado-categoria');
+        $categoria = Categoria::findOrFail($id);
+        $categoria->estado = ! $categoria->estado;
+        $categoria->save();
     }
 }

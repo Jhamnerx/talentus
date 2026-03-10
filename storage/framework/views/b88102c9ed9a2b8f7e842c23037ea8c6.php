@@ -363,8 +363,8 @@
 
 
                     <!-- Finanzas -->
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['ver-caja-chica', 'ver-movimientos', 'ver-transacciones', 'ver-cuentas-cobrar', 'ver-cuentas-pagar', 'ver-pagos', 'ver-balance'])): ?>
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>"
+                    
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>"
                             x-data="{ open: <?php echo e(in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones']) ? 1 : 0); ?> }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition <?php if(!in_array(Request::segment(1), [''])): ?> <?php echo e('hover:text-gray-900 dark:hover:text-white'); ?> <?php endif; ?>"
@@ -392,129 +392,112 @@
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                                 <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-caja-chica')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.caja-chica.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('finanzas.caja-chica.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Caja chica
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.caja-chica.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('finanzas.caja-chica.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Caja chica
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-movimientos')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.movimientos.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('finanzas.movimientos.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Movimientos
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.movimientos.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('finanzas.movimientos.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Movimientos
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-transacciones')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.transacciones.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('finanzas.transacciones.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transacciones
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.transacciones.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('finanzas.transacciones.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transacciones
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-cuentas-cobrar')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.cuentas-cobrar.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('finanzas.cuentas-cobrar.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por cobrar
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.cuentas-cobrar.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('finanzas.cuentas-cobrar.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por cobrar
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-cuentas-pagar')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.cuentas-pagar.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('finanzas.cuentas-pagar.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por pagar
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.cuentas-pagar.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('finanzas.cuentas-pagar.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cuentas por pagar
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-pagos')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.payments.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('admin.payments.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pagos
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.payments.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('admin.payments.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pagos
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-balance')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.balance.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('finanzas.balance.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Balance
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('finanzas.balance.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('finanzas.balance.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Balance
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('admin.cobros.index')): ?>
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('admin.cobros.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
-                                                </span>
-                                            </a>
-                                        </li>
-                                        
-                                        
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.cobros.notificaciones')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('admin.cobros.notificaciones')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 flex items-center gap-2">
-                                                    🔔 Notificaciones
-                                                    <?php
-                                                        $pendientesCount = \App\Models\NotificacionCobro::pendientes()->count();
-                                                    ?>
-                                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($pendientesCount > 0): ?>
-                                                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                                                            <?php echo e($pendientesCount); ?>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('admin.cobros.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
+                                            </span>
+                                        </a>
+                                    </li>
 
-                                                        </span>
-                                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        
-                                        
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.planes.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                                href="<?php echo e(route('admin.planes.index')); ?>">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
+                                    
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.cobros.notificaciones')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('admin.cobros.notificaciones')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 flex items-center gap-2">
+                                                🔔 Notificaciones
+                                                <?php
+                                                    $pendientesCount = \App\Models\NotificacionCobro::pendientes()->count();
+                                                ?>
+                                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($pendientesCount > 0): ?>
+                                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                                                        <?php echo e($pendientesCount); ?>
+
+                                                    </span>
+                                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.planes.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                                            href="<?php echo e(route('admin.planes.index')); ?>">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
+                                            </span>
+                                        </a>
+                                    </li>
 
                                 </ul>
 
                             </div>
                         </li>
-                    <?php endif; ?>
 
 
                     <!-- Proveedores -->
