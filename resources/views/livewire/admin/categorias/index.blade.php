@@ -129,7 +129,8 @@
                             @can('cambiar.estado-categoria')
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex justify-center">
-                                        <x-toggle wire:model.live="estado.{{ $categoria->id }}" size="md" />
+                                        <x-form.toggle id="toggle-{{ $categoria->id }}" name="toggle-{{ $categoria->id }}"
+                                            md :checked="(bool) $categoria->estado" x-on:change="$wire.toggleStatus({{ $categoria->id }})" />
                                     </div>
                                 </td>
                             @endcan

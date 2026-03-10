@@ -6,9 +6,12 @@ use Livewire\Component;
 use App\Models\Categoria;
 use Livewire\Attributes\On;
 use App\Http\Requests\CategoriaRequest;
+use WireUi\Traits\WireUiActions;
 
 class CreateModal extends Component
 {
+    use WireUiActions;
+
     public $modalCreate = false;
     public $nombre, $descripcion;
     public bool $es_equipo_gps = false;
