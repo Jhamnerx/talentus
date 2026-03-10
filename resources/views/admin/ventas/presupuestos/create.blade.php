@@ -3,6 +3,6 @@
     @livewire('admin.ventas.presupuestos.create')
 
     @livewire('admin.clientes.save')
-    @livewire('admin.productos.modal-add-producto')
+    @livewire('admin.items.modal-add-producto')
 
 </x-admin-layout>

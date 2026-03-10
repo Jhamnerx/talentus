@@ -69,7 +69,7 @@
 
     <!-- Table -->
     <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-200 dark:border-gray-700/60">
-        <div class="overflow-x-auto min-h-screen">
+        <div class="overflow-x-auto">
             <table class="table-auto w-full dark:text-gray-300 divide-y divide-gray-200 dark:divide-gray-700/60">
                 <!-- Table header -->
                 <thead

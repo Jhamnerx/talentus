@@ -3,6 +3,6 @@
     @livewire('admin.ventas.recibos.edit', ['recibo' => $recibo])
 
     @livewire('admin.clientes.save')
-    @livewire('admin.productos.create-modal')
+    @livewire('admin.items.create-modal')
 
 </x-admin-layout>

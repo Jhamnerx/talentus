@@ -1,1 +1,0 @@
-orden-<?php echo e($orden->id); ?><?php /**PATH C:\laragon2\www\talentus\storage\framework\views/ab4762d2605973b79ae4acfae6541a45.blade.php ENDPATH**/ ?>

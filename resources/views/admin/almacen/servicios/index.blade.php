@@ -1,9 +1,9 @@
 <x-admin-layout>
 
-    @livewire('admin.productos.index', ['tipo' => $tipo], key('productos-index-' . $tipo))
+    @livewire('admin.items.index', ['tipo' => $tipo], key('productos-index-' . $tipo))
 
-    @livewire('admin.productos.create-modal')
-    @livewire('admin.productos.edit-modal')
-    @livewire('admin.productos.delete-modal')
+    @livewire('admin.items.create-modal')
+    @livewire('admin.items.edit-modal')
+    @livewire('admin.items.delete-modal')
 
 </x-admin-layout>

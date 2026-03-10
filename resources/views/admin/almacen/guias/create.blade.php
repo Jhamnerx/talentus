@@ -35,6 +35,6 @@
     @livewire('admin.guias-remision.create')
 
     @livewire('admin.sim-card.save')
-    @livewire('admin.productos.create-modal')
+    @livewire('admin.items.create-modal')
 
 </x-admin-layout>

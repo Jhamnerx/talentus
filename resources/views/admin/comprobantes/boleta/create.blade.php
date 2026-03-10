@@ -5,7 +5,7 @@
         'notificacion_ids' => $notificacion_ids,
     ])
 
-    @livewire('admin.productos.create-modal')
+    @livewire('admin.items.create-modal')
     @livewire('admin.clientes.save')
 
 </x-admin-layout>

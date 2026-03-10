@@ -1,4 +1,4 @@
-﻿<div>
+<div>
     {{-- Modal usando solo Alpine.js sin WireUI para evitar conflictos --}}
     <div x-data="{ open: @entangle('modalDelete').live }" x-show="open" x-cloak class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
 

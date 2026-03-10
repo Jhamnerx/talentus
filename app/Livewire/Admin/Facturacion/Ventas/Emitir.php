@@ -171,15 +171,8 @@ class Emitir extends Component
         $this->items = collect();
         $this->detalle_cuotas = collect();
 
-        // Inicializar con un pago vacío
-        $this->pagos_detalle = collect([
-            [
-                'metodo_pago_id' => '009',
-                'payment_destination_id' => '',
-                'referencia' => '',
-                'monto' => 0.00,
-            ]
-        ]);
+        // Inicializar sin pagos — opcional, se puede registrar después
+        $this->pagos_detalle = collect([]);
 
         //  CONSULTAR TIPO CAMBIO
         $factiliza = new FactilizaService();
