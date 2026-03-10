@@ -71,7 +71,7 @@ class Index extends Component
     #[On('update-table')]
     public function updateTable(): void
     {
-        $this->resetPage();
+        // re-render automático al disparar el evento
     }
 
     // ============ TOGGLE STATUS ============

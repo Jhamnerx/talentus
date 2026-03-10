@@ -68,14 +68,16 @@ class EditModal extends Component
     public function generateCodeProduct($categoria_id)
     {
         if ($categoria_id != $this->producto->categoria_id) {
-            $lastProduct = Productos::where('categoria_id', $categoria_id)->latest('id')->withTrashed()->first();
-            $lastCode = $lastProduct ? $lastProduct->codigo : 'PROD-' . $categoria_id . '000';
-            $lastNumber = intval(substr($lastCode, strlen('PROD-' . $categoria_id)));
-            $newNumber = $lastNumber + 1;
-            $newCode = 'PROD-' . $categoria_id . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
-            $this->codigo = $newCode;
-        } else {
+            $prefix    = 'PROD-' . $categoria_id;
+            $prefixLen = strlen($prefix);
 
+            $maxNumber = Productos::where('categoria_id', $categoria_id)
+                ->withTrashed()
+                ->selectRaw('MAX(CAST(SUBSTRING(codigo, ?) AS UNSIGNED)) as max_num', [$prefixLen + 1])
+                ->value('max_num') ?? 0;
+
+            $this->codigo = $prefix . str_pad($maxNumber + 1, 4, '0', STR_PAD_LEFT);
+        } else {
             $this->codigo = $this->producto->codigo;
         }
     }
@@ -129,6 +131,7 @@ class EditModal extends Component
             }
 
             $this->afterUpdate();
+            $this->resetPropiedad();
         } catch (\Throwable $th) {
             $this->dispatch(
                 'notify-toast',
@@ -137,6 +140,11 @@ class EditModal extends Component
                 mensaje: $th->getMessage(),
             );
         }
+    }
+
+    public function resetPropiedad()
+    {
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper', 'es_servicio_cobro', 'es_dispositivo');
     }
 
     public function saveImage(Productos $producto): bool
@@ -193,7 +201,6 @@ class EditModal extends Component
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();
-        $this->resetProps();
         $this->reset('file');
         $this->dispatch('update-table');
     }
@@ -201,10 +208,7 @@ class EditModal extends Component
     {
         $this->modalEdit = false;
     }
-    public function resetProps()
-    {
-        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper', 'es_servicio_cobro', 'es_dispositivo');
-    }
+
     public function updatedPrecioUnitario($value)
     {
         $this->calcularValorUnitario();

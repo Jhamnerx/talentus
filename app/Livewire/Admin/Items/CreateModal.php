@@ -75,15 +75,15 @@ class CreateModal extends Component
     // Generar el código del producto
     public function generateCodeProduct($categoria_id)
     {
-        $lastProduct = Productos::where('categoria_id', $categoria_id)->latest('id')->withTrashed()->first();
-        $lastCode = $lastProduct ? $lastProduct->codigo : 'PROD-' . $categoria_id . '000';
+        $prefix    = 'PROD-' . $categoria_id;
+        $prefixLen = strlen($prefix);
 
-        $lastNumber = intval(substr($lastCode, strlen('PROD-' . $categoria_id)));
+        $maxNumber = Productos::where('categoria_id', $categoria_id)
+            ->withTrashed()
+            ->selectRaw('MAX(CAST(SUBSTRING(codigo, ?) AS UNSIGNED)) as max_num', [$prefixLen + 1])
+            ->value('max_num') ?? 0;
 
-        $newNumber = $lastNumber + 1;
-
-        $newCode = 'PROD-' . $categoria_id . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
-        $this->codigo = $newCode;
+        $this->codigo = $prefix . str_pad($maxNumber + 1, 4, '0', STR_PAD_LEFT);
     }
 
     public function save()
@@ -100,6 +100,7 @@ class CreateModal extends Component
             }
 
             $this->afterSave();
+            $this->resetProps();
         } catch (\Throwable $th) {
             $this->dispatch(
                 'notify-toast',
@@ -108,6 +109,12 @@ class CreateModal extends Component
                 mensaje: $th->getMessage(),
             );
         }
+    }
+
+
+    public function resetPropiedad()
+    {
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper', 'es_servicio_cobro', 'es_dispositivo');
     }
 
     public function saveImage(Productos $producto): bool
