@@ -65,7 +65,7 @@
                             <td class="px-4 py-3">
                                 @if ($plan->producto)
                                     <span class="text-gray-700 dark:text-gray-300">
-                                        {{ $plan->producto->nombre }}
+                                        {{ $plan->producto->descripcion }}
                                     </span>
                                 @else
                                     <span class="text-gray-400 dark:text-gray-500 text-xs">Sin producto</span>
