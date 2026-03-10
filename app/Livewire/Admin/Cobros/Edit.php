@@ -22,6 +22,7 @@ class Edit extends Component
     public $producto_id;
     public $divisa = 'PEN';
     public $tipo_pago = 'FACTURA';
+    public ?float $descuento_global = 0;
     public Collection $planes;
 
     // Valores por defecto para nuevos vehículos
@@ -39,6 +40,7 @@ class Edit extends Component
         $this->tipo_pago = $cobro->tipo_pago ?? 'FACTURA';
         $this->nota = $cobro->nota;
         $this->producto_id = $cobro->producto_id;
+        $this->descuento_global = (float) ($cobro->descuento_global ?? 0);
 
         // Valores por defecto para nuevos vehículos
         $this->default_fecha_inicio = Carbon::now()->format('Y-m-d');
@@ -92,11 +94,18 @@ class Edit extends Component
                 $fechaVenc   = $this->calcularFechaVencimiento($fechaInicio, $periodo);
             }
 
+            $plan = $detalle->plan_id ? Plan::find($detalle->plan_id) : null;
+            $montoBase = $plan
+                ? $this->calcularMontoItem($plan, $periodo)
+                : (float) ($detalle->monto_unidad ?? $detalle->monto_efectivo ?? 0);
+
             $this->items[$detalle->vehiculo->placa] = [
                 'vehiculo_id'       => $detalle->vehiculo_id,
                 'placa'             => $detalle->vehiculo->placa,
                 'plan_id'           => $detalle->plan_id,
+                'monto_base'        => $montoBase,
                 'monto'             => $detalle->monto_efectivo,
+                'descuento'         => (float) ($detalle->descuento ?? 0),
                 'periodo'           => $periodo,
                 'fecha_inicio'      => $fechaInicio,
                 'fecha_vencimiento' => $fechaVenc,
@@ -184,14 +193,25 @@ class Edit extends Component
     }
 
     /**
+     * Aplica descuentos (por ítem y global) al monto base.
+     */
+    protected function calcularMontoFinal(float $montoBase, float $descuentoItem = 0): float
+    {
+        return max(0, round($montoBase - $descuentoItem - (float) ($this->descuento_global ?? 0), 2));
+    }
+
+    /**
      * Recalcular todos los montos al cambiar divisa o tipo de comprobante.
      */
     protected function recalcularMontos(): void
     {
         foreach ($this->items as $placa => $item) {
             $plan = isset($item['plan_id']) ? Plan::find($item['plan_id']) : null;
+            $montoBase     = $this->calcularMontoItem($plan, $item['periodo'] ?? 'MENSUAL');
+            $descuentoItem = (float) ($item['descuento'] ?? 0);
             $this->items->put($placa, array_merge($item, [
-                'monto' => $this->calcularMontoItem($plan, $item['periodo'] ?? 'MENSUAL'),
+                'monto_base' => $montoBase,
+                'monto'      => $this->calcularMontoFinal($montoBase, $descuentoItem),
             ]));
         }
     }
@@ -202,6 +222,11 @@ class Edit extends Component
     }
 
     public function updatedTipoPago(): void
+    {
+        $this->recalcularMontos();
+    }
+
+    public function updatedDescuentoGlobal(): void
     {
         $this->recalcularMontos();
     }
@@ -305,13 +330,24 @@ class Edit extends Component
             $placa = $parts[0];
             $campo = $parts[1];
 
-            if (in_array($campo, ['plan_id', 'periodo']) && $this->items->has($placa)) {
-                $item    = $this->items->get($placa);
-                $planId  = $item['plan_id'] ?? null;
-                $periodo = $item['periodo'] ?? 'MENSUAL';
-                $plan    = $planId ? Plan::find($planId) : null;
+            if (in_array($campo, ['plan_id', 'periodo', 'descuento']) && $this->items->has($placa)) {
+                $item          = $this->items->get($placa);
+                $planId        = $item['plan_id'] ?? null;
+                $periodo       = $item['periodo'] ?? 'MENSUAL';
+                $plan          = $planId ? Plan::find($planId) : null;
+                $descuentoItem = (float) ($item['descuento'] ?? 0);
 
-                $updates = ['monto' => $this->calcularMontoItem($plan, $periodo)];
+                // Reusar monto_base si solo cambió el descuento (evita recalcular el plan)
+                if ($campo === 'descuento' && isset($item['monto_base'])) {
+                    $montoBase = (float) $item['monto_base'];
+                } else {
+                    $montoBase = $this->calcularMontoItem($plan, $periodo);
+                }
+
+                $updates = [
+                    'monto_base' => $montoBase,
+                    'monto'      => $this->calcularMontoFinal($montoBase, $descuentoItem),
+                ];
 
                 // Al cambiar el periodo, recalcular también la fecha de vencimiento
                 if ($campo === 'periodo') {
@@ -367,18 +403,21 @@ class Edit extends Component
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
-            $plan  = Plan::find($this->default_plan_id);
-            $monto = $this->calcularMontoItem($plan, $this->default_periodo);
+            $plan      = Plan::find($this->default_plan_id);
+            $montoBase = $this->calcularMontoItem($plan, $this->default_periodo);
+            $monto     = $this->calcularMontoFinal($montoBase);
 
             $this->items[$vehiculo->placa] = [
-                'vehiculo_id' => $vehiculo->id,
-                'placa' => $vehiculo->placa,
-                'plan_id' => $this->default_plan_id,
-                'monto' => $monto,
-                'periodo' => $this->default_periodo,
-                'fecha_inicio' => $this->default_fecha_inicio,
+                'vehiculo_id'       => $vehiculo->id,
+                'placa'             => $vehiculo->placa,
+                'plan_id'           => $this->default_plan_id,
+                'monto_base'        => $montoBase,
+                'monto'             => $monto,
+                'descuento'         => 0,
+                'periodo'           => $this->default_periodo,
+                'fecha_inicio'      => $this->default_fecha_inicio,
                 'fecha_vencimiento' => $this->calcularFechaVencimiento($this->default_fecha_inicio, $this->default_periodo),
-                'estado' => 1,
+                'estado'            => 1,
             ];
 
             // Forzar la actualización de la colección
@@ -425,12 +464,13 @@ class Edit extends Component
             }
 
             $this->cobro->update([
-                'clientes_id' => $datos["clientes_id"],
-                'comentario' => $datos["comentario"],
-                'divisa' => $datos["divisa"],
-                'nota' => $datos["nota"],
-                'tipo_pago' => $datos["tipo_pago"],
-                'producto_id' => $productoServicio->id,
+                'clientes_id'      => $datos["clientes_id"],
+                'comentario'       => $datos["comentario"],
+                'divisa'           => $datos["divisa"],
+                'nota'             => $datos["nota"],
+                'tipo_pago'        => $datos["tipo_pago"],
+                'producto_id'      => $productoServicio->id,
+                'descuento_global' => $datos["descuento_global"] ?? 0,
             ]);
 
             $this->cobro->detalle()->delete();

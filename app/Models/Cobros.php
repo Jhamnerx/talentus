@@ -151,6 +151,7 @@ class Cobros extends Model
             // Remover campos que no son de la tabla
             unset($cobroItem['placa']);
             unset($cobroItem['monto']);
+            unset($cobroItem['monto_base']);
 
             $cobro->detalle()->create($cobroItem);
         }
