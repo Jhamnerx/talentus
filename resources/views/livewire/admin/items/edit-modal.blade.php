@@ -67,10 +67,12 @@
                     icon="currency-dollar" precision="4" wire:model.live.blur="precio_unitario" />
             </div>
 
-            <div class="col-span-12">
-                <x-form.checkbox id="es_dispositivo" name="es_dispositivo" md left-label="¿Es un Dispositivo?"
-                    wire:model.live="es_dispositivo" />
-            </div>
+            @if ($tipo !== 'servicio')
+                <div class="col-span-12">
+                    <x-form.checkbox id="es_dispositivo" name="es_dispositivo" md left-label="¿Es un Dispositivo?"
+                        wire:model.live="es_dispositivo" />
+                </div>
+            @endif
 
             @if ($tipo === 'servicio')
                 <div class="col-span-12">

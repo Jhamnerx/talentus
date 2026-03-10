@@ -1,4 +1,4 @@
-<x-form.modal.card title="🔗 ASIGNAR LÍNEA A SIM CARD (Primera vez)" width="2xl" blur wire:model.live="modalAsign">
+<x-form.modal.card title="ASIGNAR LÍNEA A SIM CARD (Primera vez)" width="2xl" blur wire:model.live="modalAsign">
 
     <!-- Advertencia informativa -->
     <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
@@ -33,7 +33,8 @@
             @if ($sim_card ?? false)
                 <div
                     class="mt-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-indigo-200 dark:border-indigo-700">
-                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold mb-1">SIM Card seleccionado:
+                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold mb-1">SIM Card
+                        seleccionado:
                     </p>
                     <p class="text-sm font-bold text-indigo-900 dark:text-indigo-100">{{ $sim_card->sim_card }}</p>
                     <p class="text-xs text-indigo-700 dark:text-indigo-300">{{ $sim_card->operador }}</p>
