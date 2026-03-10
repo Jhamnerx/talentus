@@ -28,3 +28,4 @@ storage/talentus-scheduler.log
 composer.lock
 storage/fonts
 storage/framework/views/
+storage/framework/cache/
