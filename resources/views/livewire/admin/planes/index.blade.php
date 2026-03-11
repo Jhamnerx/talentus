@@ -74,7 +74,7 @@
                             <!-- Price -->
                             <td class="px-4 py-3 text-center">
                                 <div class="font-semibold text-gray-800 dark:text-gray-100">
-                                    {{ $plan->currency }} {{ number_format($plan->price, 2) }}
+                                    {{ $plan->currency }} {{ number_format($plan->price, 4) }}
                                 </div>
                                 @if ($plan->signup_fee > 0)
                                     <div class="text-xs text-gray-500 dark:text-gray-400">
