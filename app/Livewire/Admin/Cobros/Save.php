@@ -98,19 +98,19 @@ class Save extends Component
     /**
      * Aplica IGV 18% si el tipo de comprobante es FACTURA/BOLETA.
      * Los precios en planes son la base SIN IGV.
-     * Ejemplo: S/. 30.00 (base) → S/. 35.40 (con IGV 18%) para Factura
-     *          S/. 30.00 (base) → S/. 30.00 para Recibo
+     * No redondea aquí para preservar precisión en cálculos intermedios.
      */
     protected function calcularMontoEfectivo(float $montoBase): float
     {
         if ($this->tipo_pago !== 'RECIBO' && $montoBase > 0) {
-            return round($montoBase * 1.18, 2);
+            return $montoBase * 1.18;
         }
         return $montoBase;
     }
 
     /**
      * Pipeline completo: precio del plan → conversión de divisa → multiplicador de período → IGV.
+     * NO se redondea aquí para preservar precisión de 4 decimales; el redondeo ocurre en calcularMontoFinal.
      */
     protected function calcularMontoItem(?Plan $plan, string $periodo): float
     {
@@ -137,7 +137,7 @@ class Save extends Component
      */
     protected function calcularMontoFinal(float $montoBase, float $descuentoItem = 0): float
     {
-        return max(0, round($montoBase - $descuentoItem - (float) ($this->descuento_global ?? 0), 2));
+        return max(0, round($montoBase - $descuentoItem - (float) ($this->descuento_global ?? 0), 4));
     }
 
     /**

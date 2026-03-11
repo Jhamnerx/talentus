@@ -99,13 +99,14 @@ class Edit extends Component
                 ? $this->calcularMontoItem($plan, $periodo)
                 : (float) ($detalle->monto_unidad ?? $detalle->monto_efectivo ?? 0);
 
+            $descuentoItem = (float) ($detalle->descuento ?? 0);
             $this->items[$detalle->vehiculo->placa] = [
                 'vehiculo_id'       => $detalle->vehiculo_id,
                 'placa'             => $detalle->vehiculo->placa,
                 'plan_id'           => $detalle->plan_id,
                 'monto_base'        => $montoBase,
-                'monto'             => $detalle->monto_efectivo,
-                'descuento'         => (float) ($detalle->descuento ?? 0),
+                'monto'             => $this->calcularMontoFinal($montoBase, $descuentoItem),
+                'descuento'         => $descuentoItem,
                 'periodo'           => $periodo,
                 'fecha_inicio'      => $fechaInicio,
                 'fecha_vencimiento' => $fechaVenc,
@@ -147,11 +148,11 @@ class Edit extends Component
         }
 
         if ($planCurrency === 'PEN' && $this->divisa === 'USD') {
-            return round($precio / $tc, 2);
+            return round($precio / $tc, 4);
         }
 
         if ($planCurrency === 'USD' && $this->divisa === 'PEN') {
-            return round($precio * $tc, 2);
+            return round($precio * $tc, 4);
         }
 
         return $precio;
@@ -160,19 +161,19 @@ class Edit extends Component
     /**
      * Aplica IGV 18% si el tipo de comprobante es FACTURA/BOLETA.
      * Los precios en planes son la base SIN IGV.
-     * Ejemplo: S/. 30.00 (base) → S/. 35.40 (con IGV 18%) para Factura
-     *          S/. 30.00 (base) → S/. 30.00 para Recibo
+     * No redondea aquí para preservar precisión en cálculos intermedios.
      */
     protected function calcularMontoEfectivo(float $montoBase): float
     {
         if ($this->tipo_pago !== 'RECIBO' && $montoBase > 0) {
-            return round($montoBase * 1.18, 2);
+            return $montoBase * 1.18;
         }
         return $montoBase;
     }
 
     /**
      * Pipeline completo: precio del plan → conversión de divisa → multiplicador de período → IGV.
+     * NO se redondea aquí para preservar precisión de 4 decimales; el redondeo ocurre en calcularMontoFinal.
      */
     protected function calcularMontoItem(?Plan $plan, string $periodo): float
     {
@@ -198,7 +199,7 @@ class Edit extends Component
      */
     protected function calcularMontoFinal(float $montoBase, float $descuentoItem = 0): float
     {
-        return max(0, round($montoBase - $descuentoItem - (float) ($this->descuento_global ?? 0), 2));
+        return max(0, round($montoBase - $descuentoItem - (float) ($this->descuento_global ?? 0), 4));
     }
 
     /**

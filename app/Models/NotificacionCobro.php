@@ -53,7 +53,7 @@ class NotificacionCobro extends Model
         'fecha_vencimiento' => 'date',
         'fecha_facturacion' => 'datetime',
         'fecha_pago' => 'datetime',
-        'monto' => 'decimal:2',
+        'monto' => 'decimal:4',
     ];
 
     protected static $recordEvents = ['created', 'updated', 'deleted'];
