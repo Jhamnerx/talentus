@@ -122,7 +122,7 @@ class Cobros extends Model
 
     public function producto()
     {
-        return $this->belongsTo(Productos::class, 'producto_id');
+        return $this->belongsTo(Productos::class, 'producto_id')->withTrashed();
     }
 
     public static function createItems(Cobros $cobro, $cobroItems, $type = 'create')

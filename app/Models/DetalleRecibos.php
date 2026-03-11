@@ -24,6 +24,6 @@ class DetalleRecibos extends Model
 
     public function producto(): BelongsTo
     {
-        return $this->belongsTo(Productos::class, 'producto_id');
+        return $this->belongsTo(Productos::class, 'producto_id')->withTrashed();
     }
 }
