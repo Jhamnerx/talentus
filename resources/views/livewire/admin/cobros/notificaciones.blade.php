@@ -263,7 +263,7 @@
                             <!-- Monto -->
                             <td class="px-4 py-3 whitespace-nowrap text-right">
                                 <span class="font-semibold text-gray-900 dark:text-gray-100">
-                                    {{ $notificacion->moneda }} {{ number_format($notificacion->monto, 2) }}
+                                    {{ $notificacion->moneda }} {{ number_format($notificacion->monto, 4) }}
                                 </span>
                             </td>
 

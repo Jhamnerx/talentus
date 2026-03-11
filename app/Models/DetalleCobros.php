@@ -6,13 +6,14 @@ use App\Enums\CobroEstado;
 use App\Observers\DetalleCobroObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Carbon\Carbon;
 
 #[ObservedBy(DetalleCobroObserver::class)]
 class DetalleCobros extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'detalles_cobros';

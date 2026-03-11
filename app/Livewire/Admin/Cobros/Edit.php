@@ -475,9 +475,7 @@ class Edit extends Component
                 'descuento_global' => $datos["descuento_global"] ?? 0,
             ]);
 
-            $this->cobro->detalle()->delete();
-
-            Cobros::createItems($this->cobro, $datos["items"], 'update');
+            Cobros::syncItems($this->cobro, $datos["items"]);
 
             session()->flash('cobro-actualizado', 'Se actualizó con éxito el cobro');
             return redirect()->route('admin.cobros.index')->with('update', 'Se actualizó con éxito');
