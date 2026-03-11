@@ -83,17 +83,17 @@ class NotificacionCobro extends Model
 
     public function detalleCobro(): BelongsTo
     {
-        return $this->belongsTo(DetalleCobros::class, 'detalle_cobro_id');
+        return $this->belongsTo(DetalleCobros::class, 'detalle_cobro_id')->withTrashed();
     }
 
     public function cobro(): BelongsTo
     {
-        return $this->belongsTo(Cobros::class, 'cobro_id');
+        return $this->belongsTo(Cobros::class, 'cobro_id')->withTrashed();
     }
 
     public function cliente(): BelongsTo
     {
-        return $this->belongsTo(Clientes::class, 'cliente_id');
+        return $this->belongsTo(Clientes::class, 'cliente_id')->withTrashed();
     }
 
     public function vehiculo(): BelongsTo
@@ -108,7 +108,7 @@ class NotificacionCobro extends Model
 
     public function recibo(): BelongsTo
     {
-        return $this->belongsTo(Recibos::class, 'recibo_id');
+        return $this->belongsTo(Recibos::class, 'recibo_id')->withTrashed();
     }
 
     // ========== SCOPES ==========

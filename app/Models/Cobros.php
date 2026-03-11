@@ -125,6 +125,46 @@ class Cobros extends Model
         return $this->belongsTo(Productos::class, 'producto_id')->withTrashed();
     }
 
+    /**
+     * Sincroniza los detalles del cobro preservando los IDs existentes:
+     * - Actualiza los existentes (por vehiculo_id) para preservar notificaciones y pagos asociados.
+     * - Crea los nuevos que no existían.
+     * - Hace soft-delete de los que ya no están en el listado (el ON DELETE CASCADE de DB no se dispara).
+     */
+    public static function syncItems(Cobros $cobro, $cobroItems): void
+    {
+        $vehiculoIdsNuevos = collect($cobroItems)->pluck('vehiculo_id')->filter()->values();
+
+        // Soft-delete los detalles que ya no están en el nuevo listado
+        // (preserva las notificaciones/pagos vinculados al ID del detalle)
+        $cobro->detalle()
+            ->whereNotIn('vehiculo_id', $vehiculoIdsNuevos)
+            ->each(fn($d) => $d->delete());
+
+        foreach ($cobroItems as $cobroItem) {
+            $cobroItem['cobros_id'] = $cobro->id;
+
+            if (isset($cobroItem['plan_id'])) {
+                $plan = \App\Models\Plan::find($cobroItem['plan_id']);
+                if ($plan) {
+                    $cobroItem['plan'] = null;
+                }
+            }
+
+            if (isset($cobroItem['monto']) && $cobroItem['monto'] > 0) {
+                $cobroItem['monto_unidad'] = $cobroItem['monto'];
+            }
+
+            unset($cobroItem['placa'], $cobroItem['monto'], $cobroItem['monto_base']);
+
+            // Actualizar si ya existe, crear si no
+            $cobro->detalle()->updateOrCreate(
+                ['vehiculo_id' => $cobroItem['vehiculo_id']],
+                $cobroItem
+            );
+        }
+    }
+
     public static function createItems(Cobros $cobro, $cobroItems, $type = 'create')
     {
 
