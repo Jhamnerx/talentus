@@ -180,7 +180,7 @@
                                                         ' - ' .
                                                         ($p->currency ?? 'PEN') .
                                                         ' ' .
-                                                        number_format($p->price, 2),
+                                                        number_format($p->price, 4),
                                                 ],
                                             )
                                             ->values()" option-label="name" option-value="id"
@@ -207,7 +207,7 @@
                                 <div class="flex-auto xl:w-24 text-center">
                                     <div
                                         class="px-2 py-2 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 rounded text-emerald-800 dark:text-emerald-200 font-bold text-sm">
-                                        {{ $divisa }} {{ number_format($vehiculo['monto'] ?? 0, 2) }}
+                                        {{ $divisa }} {{ number_format($vehiculo['monto'] ?? 0, 4) }}
                                     </div>
                                 </div>
 

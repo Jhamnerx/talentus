@@ -23,8 +23,10 @@
             <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
                 <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">💰 Precios</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <x-form.currency label="Precio Mensual *" wire:model.live="price" placeholder="0.00" />
-                    <x-form.currency label="Cuota de Registro" wire:model.live="signup_fee" placeholder="0.00" />
+                    <x-form.currency label="Precio Mensual *" wire:model.live="price" placeholder="0.00"
+                        precision="4" />
+                    <x-form.currency label="Cuota de Registro" wire:model.live="signup_fee" placeholder="0.00"
+                        precision="4" />
                     <x-form.select label="Moneda *" wire:model.live="currency">
                         @foreach ($currencies as $curr)
                             <x-select.option label="{{ $curr }}" value="{{ $curr }}" />
