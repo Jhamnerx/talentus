@@ -67,7 +67,7 @@ class Plan extends BasePlan
      */
     public function producto(): BelongsTo
     {
-        return $this->belongsTo(Productos::class, 'producto_id');
+        return $this->belongsTo(Productos::class, 'producto_id')->withTrashed();
     }
 
     /**

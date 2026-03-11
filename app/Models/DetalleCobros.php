@@ -33,7 +33,7 @@ class DetalleCobros extends Model
 
     public function vehiculo()
     {
-        return $this->belongsTo(\App\Models\Vehiculos::class);
+        return $this->belongsTo(\App\Models\Vehiculos::class)->withTrashed();
     }
 
     public function cobro()

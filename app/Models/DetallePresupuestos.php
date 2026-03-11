@@ -27,6 +27,6 @@ class DetallePresupuestos extends Model
 
     public function info_producto()
     {
-        return $this->belongsTo(Productos::class, 'producto_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Productos::class, 'producto_id')->withTrashed();
     }
 }
