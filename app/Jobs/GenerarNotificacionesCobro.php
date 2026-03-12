@@ -61,6 +61,8 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'vehiculo.planSubscriptions',
         ])
             ->where('estado', 1)
+            // Excluir detalles cuyo cobro padre ha sido eliminado (soft delete)
+            ->whereHas('cobro', fn($q) => $q->whereNull('deleted_at'))
             ->whereHas('vehiculo.planSubscriptions', function ($sub) use ($fechaLimite) {
                 $sub->whereNull('canceled_at')
                     ->where('ends_at', '<=', $fechaLimite->endOfDay());
