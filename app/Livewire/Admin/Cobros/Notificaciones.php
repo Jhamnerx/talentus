@@ -42,7 +42,7 @@ class Notificaciones extends Component
     public string $estado = '';
     public $filtroVencimiento = null;
     public $clienteId = null;
-    public string $perPage = '10';
+    public string $perPage = '25';
 
     // Estado del modal de pago
     public bool $modalPago = false;
