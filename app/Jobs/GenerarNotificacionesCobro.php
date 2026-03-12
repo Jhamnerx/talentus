@@ -129,6 +129,9 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'cliente_id'        => $cliente->id,
             'vehiculo_id'       => $detalle->vehiculo_id,
             'fecha_vencimiento' => $fechaVencimiento,
+            // Snapshot de las fechas del período al momento de generar la notificación
+            'fecha_inicio'      => $detalle->fecha_inicio,
+            'fecha_fin'         => $detalle->fecha_vencimiento,
             // monto_efectivo descuenta IGV cuando el cobro es tipo RECIBO
             'monto'             => $detalle->monto_efectivo ?: 0,
             'moneda'            => $cobro->moneda ?? $cobro->divisa ?? 'PEN',

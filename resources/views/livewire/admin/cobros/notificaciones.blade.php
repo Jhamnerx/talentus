@@ -200,8 +200,13 @@
                                 @change="$el.checked ? $wire.seleccionarIds(pageIds) : $wire.deseleccionarIds(pageIds)"
                                 title="Seleccionar todos en esta página">
                         </th>
+                        <th class="px-4 py-3 whitespace-nowrap text-left">Estado</th>
+                        <th class="px-4 py-3 whitespace-nowrap text-left">Vencimiento</th>
+                        <th class="px-4 py-3 whitespace-nowrap text-left">Cliente</th>
+
                         <th class="px-4 py-3 whitespace-nowrap text-left">Vehículo</th>
                         <th class="px-4 py-3 whitespace-nowrap text-left">Descripción</th>
+                        <th class="px-4 py-3 whitespace-nowrap text-left">Tipo</th>
                         <th class="px-4 py-3 whitespace-nowrap text-right">Monto</th>
                         <th class="px-4 py-3 whitespace-nowrap text-left">Documento</th>
                         <th class="px-4 py-3 whitespace-nowrap text-center">Acciones</th>
@@ -287,8 +292,30 @@
                                 <div class="text-sm text-gray-700 dark:text-gray-300 max-w-xs truncate">
                                     {{ $notificacion->descripcion }}
                                 </div>
+                                @if ($notificacion->fecha_inicio || $notificacion->fecha_fin)
+                                    <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                        {{ $notificacion->fecha_inicio?->format('d/m/Y') ?? '—' }}
+                                        →
+                                        {{ $notificacion->fecha_fin?->format('d/m/Y') ?? '—' }}
+                                    </div>
+                                @endif
                             </td>
-
+                            <!-- Tipo de Pago -->
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                @php $tipoPago = $notificacion->cobro?->tipo_pago; @endphp
+                                @if ($tipoPago === 'FACTURA')
+                                    <span
+                                        class="px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 rounded-full">Factura</span>
+                                @elseif($tipoPago === 'BOLETA')
+                                    <span
+                                        class="px-2 py-1 text-xs font-medium bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300 rounded-full">Boleta</span>
+                                @elseif($tipoPago === 'RECIBO')
+                                    <span
+                                        class="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 rounded-full">Recibo</span>
+                                @else
+                                    <span class="text-xs text-gray-400">{{ $tipoPago ?? '—' }}</span>
+                                @endif
+                            </td>
                             <!-- Monto -->
                             <td class="px-4 py-3 whitespace-nowrap text-right">
                                 <span class="font-semibold text-gray-900 dark:text-gray-100">
