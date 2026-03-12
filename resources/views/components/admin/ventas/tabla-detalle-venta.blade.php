@@ -55,7 +55,7 @@
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <x-form.currency placeholder="100.00" wire:model.live="selected.precio" />
+                    <x-form.currency placeholder="100.00" wire:model.live="selected.precio" precision="4" />
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

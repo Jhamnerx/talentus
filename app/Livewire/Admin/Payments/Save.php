@@ -75,6 +75,19 @@ class Save extends Component
         // Si es bancario, el usuario debe seleccionar la cuenta manualmente
     }
 
+    public function updatedMonto($value): void
+    {
+        $cleaned = str_replace(',', '', (string) $value);
+        if ($value !== null && $value !== '' && !is_numeric($cleaned)) {
+            $this->addError('monto', 'El monto ingresado no es un valor numérico válido');
+        } else {
+            $this->resetErrorBag('monto');
+            if ($cleaned !== '') {
+                $this->monto = $cleaned;
+            }
+        }
+    }
+
     public function updatedTipoPago($tipo_pago)
     {
         $this->reset('paymentable_type', 'paymentable_id', 'divisaDoc', 'monto');

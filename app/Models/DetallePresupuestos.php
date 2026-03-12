@@ -16,6 +16,7 @@ class DetallePresupuestos extends Model
 
     protected $casts = [
         'cantidad' => 'float',
+        'plan_features' => 'array',
     ];
 
     //Relacion uno a muchos inversa

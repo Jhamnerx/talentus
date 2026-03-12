@@ -75,10 +75,68 @@ class PaymentsObserver
 
         // Crear CashDocument automáticamente si corresponde (como FactuPRO)
         $this->processCashDocument($payment);
+
+        // Promover notificaciones FACTURADO → PAGADO si el documento queda saldado
+        $this->checkAndMarkNotificacionPagada($payment);
     }
     public function saving(Payments $payment)
     {
         //dd($payment);
+    }
+
+    /**
+     * Cuando un pago completa el total de un Recibo/Venta vinculado a una
+     * NotificacionCobro en estado FACTURADO, la promueve a PAGADO y avanza
+     * el período del DetalleCobro.
+     */
+    protected function checkAndMarkNotificacionPagada(Payments $payment): void
+    {
+        try {
+            if (!$payment->paymentable_type || !$payment->paymentable_id) {
+                return;
+            }
+
+            $documento = $payment->paymentable;
+            if (!$documento) {
+                return;
+            }
+
+            // Verificar si el documento ya quedó marcado PAID (puede haberlo hecho el llamador)
+            $recargado = $documento->fresh();
+            if (!$recargado || $recargado->pago_estado !== 'PAID') {
+                // Calcular suma de todos los pagos del documento
+                $totalPagos = Payments::where('paymentable_type', $payment->paymentable_type)
+                    ->where('paymentable_id', $payment->paymentable_id)
+                    ->sum('monto');
+
+                if (round((float) $totalPagos, 2) < round((float) $documento->total, 2)) {
+                    return; // Documento no está saldado aún
+                }
+
+                // Marcar documento como PAID
+                $documento->pago_estado = 'PAID';
+                $documento->saveQuietly();
+            }
+
+            // Buscar NotificacionCobro FACTURADA vinculada a este documento
+            $campo = ($payment->paymentable_type === \App\Models\Recibos::class)
+                ? 'recibo_id'
+                : 'venta_id';
+
+            $notificaciones = \App\Models\NotificacionCobro::withoutGlobalScopes()
+                ->where($campo, $payment->paymentable_id)
+                ->where('estado', 'FACTURADO')
+                ->get();
+
+            foreach ($notificaciones as $notif) {
+                $notif->marcarComoPagado();
+            }
+        } catch (\Exception $e) {
+            Log::error('Error al verificar NotificacionCobro en PaymentsObserver', [
+                'payment_id' => $payment->id,
+                'error'      => $e->getMessage(),
+            ]);
+        }
     }
 
     public function updated(Payments $payment)

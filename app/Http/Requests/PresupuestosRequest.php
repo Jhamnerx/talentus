@@ -80,6 +80,8 @@ class PresupuestosRequest extends FormRequest
             'items.*.total' => 'required',
             'items.*.codigo_afectacion' => 'required',
             'items.*.afecto_icbper' => 'required',
+            'items.*.plan_id' => 'nullable|integer',
+            'items.*.plan_features' => 'nullable|array',
 
             'features' => 'required',
             'terminos' => 'nullable',
@@ -90,7 +92,7 @@ class PresupuestosRequest extends FormRequest
 
             $rules['serie_correlativo'] = [
                 'required',
-                Rule::unique('presupuestos', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('presupuestos', 'serie_correlativo')->where(fn($query) => $query->where('empresa_id', session('empresa')))
                     ->ignore($presupuesto->id),
 
             ];

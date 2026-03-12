@@ -502,18 +502,9 @@ class Edit extends Component
 
     public function eliminarPago($index)
     {
-        if ($this->pagos_detalle->count() > 1) {
-            $this->pagos_detalle->forget($index);
-            $this->pagos_detalle = $this->pagos_detalle->values();
-            $this->recalcularMontosPagos();
-        } else {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'warning',
-                title: 'MÍNIMO UN PAGO',
-                mensaje: 'Debe existir al menos un método de pago',
-            );
-        }
+        $this->pagos_detalle->forget($index);
+        $this->pagos_detalle = $this->pagos_detalle->values();
+        $this->recalcularMontosPagos();
     }
 
     public function recalcularMontosPagos()

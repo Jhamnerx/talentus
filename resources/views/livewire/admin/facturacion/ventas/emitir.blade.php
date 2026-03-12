@@ -793,8 +793,8 @@
         </div>
 
     </div>
-    <livewire:admin.items.modal-add-producto :deduce_anticipos="$deduce_anticipos" :comprobante_slug="$comprobante_slug" :divisa="$divisa"
-        :tipo_comprobante_id="$tipo_comprobante_id" key="producto-add-" />
+    <livewire:admin.items.modal-add-producto :deduce_anticipos="$deduce_anticipos" :comprobante_slug="$comprobante_slug" :divisa="$divisa" :tipo_comprobante_id="$tipo_comprobante_id"
+        key="producto-add-" />
 
     {{-- ── Modal selección de IMEI para equipos GPS ──────────────────────── --}}
     @if ($showImeiModal)

@@ -79,6 +79,7 @@
                                             <td class="px-3 py-2 text-right font-medium text-emerald-600">
                                                 {{ $this->simbolo }} {{ number_format($pago->monto, 2) }}
                                             </td>
+
                                             <td class="px-3 py-2 text-center">
                                                 <button wire:click="eliminarPago({{ $pago->id }})"
                                                     wire:confirm="¿Estás seguro de eliminar este pago?"
@@ -113,6 +114,7 @@
                                 pagos</h4>
                             <div class="space-y-3">
                                 @foreach ($nuevos_pagos as $i => $fila)
+                                    {{ $nuevos_pagos[$i]['monto'] }}
                                     <div
                                         class="rounded-sm border border-emerald-200 dark:border-emerald-800 bg-emerald-50/40 dark:bg-emerald-900/10 p-3">
                                         <div class="grid grid-cols-12 gap-3 items-end">
@@ -152,6 +154,7 @@
                                                     class="form-input text-sm w-full dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600" />
                                             </div>
                                             {{-- Monto --}}
+
                                             <div class="col-span-8 sm:col-span-1">
                                                 <label
                                                     class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
@@ -165,7 +168,9 @@
                                                         let clean = txt.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
                                                         let val = $event.target.value;
                                                         let start = $event.target.selectionStart;
-                                                        $event.target.value = val.slice(0, start) + clean + val.slice($event.target.selectionEnd);
+                                                        let combined = val.slice(0, start) + clean + val.slice($event.target.selectionEnd);
+                                                        combined = combined.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+                                                        $event.target.value = combined;
                                                         $event.target.dispatchEvent(new Event('input'));
                                                     " />
                                             </div>

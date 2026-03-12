@@ -81,7 +81,10 @@
 
         <!-- Monto -->
         <div class="col-span-12 md:col-span-8">
-            <x-form.currency label="Monto" wire:model.defer="monto" thousands="," decimal="." />
+            <x-form.currency label="Monto" wire:model.live="monto" thousands="," decimal="." />
+            @error('monto')
+                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Información de Saldo (si hay documento seleccionado) -->
