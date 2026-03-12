@@ -38,6 +38,8 @@ class NotificacionCobro extends Model
         'cliente_id',
         'vehiculo_id',
         'fecha_vencimiento',
+        'fecha_inicio',
+        'fecha_fin',
         'monto',
         'moneda',
         'descripcion',
@@ -51,6 +53,8 @@ class NotificacionCobro extends Model
 
     protected $casts = [
         'fecha_vencimiento' => 'date',
+        'fecha_inicio'      => 'date',
+        'fecha_fin'         => 'date',
         'fecha_facturacion' => 'datetime',
         'fecha_pago' => 'datetime',
         'monto' => 'decimal:4',
