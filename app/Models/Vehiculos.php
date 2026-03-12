@@ -223,10 +223,7 @@ class Vehiculos extends Model
                         continue;
                     }
 
-                    // Cambiar estado y crear nuevo registro
-                    $modeloDispositivo->estado = Dispositivos::VENDIDO;
-                    $modeloDispositivo->save();
-
+                    // Crear nuevo registro
                     VehiculoDispositivos::create([
                         'vehiculo_id' => $this->id,
                         'imei' => $dispositivo['imei'],

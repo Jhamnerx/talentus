@@ -15,6 +15,7 @@ use App\Models\NotificacionCobro;
 use App\Models\PaymentMethodType;
 use App\Helpers\PaymentDestinationHelper;
 use App\Http\Controllers\Admin\PaymentsController;
+use App\Jobs\GenerarNotificacionesCobro;
 use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
 use WireUi\Traits\WireUiActions;
@@ -68,6 +69,13 @@ class Notificaciones extends Component
     public string $pago_mode     = 'create';
     public $pago_existing_id      = null;
     public array $pago_existing_list = [];
+
+    // Modal generar notificaciones
+    public bool $modalGenerarNotif = false;
+    public int $generarDias = 7;
+
+    // Selección múltiple para facturación en lote
+    public array $notificacionesSeleccionadas = [];
 
     // Catalogos cargados en mount()
     public array $paymentsMethods = [];
@@ -174,6 +182,19 @@ class Notificaciones extends Component
         }
     }
 
+    public function updatedPagoMonto($value): void
+    {
+        $cleaned = str_replace(',', '', (string) $value);
+        if ($value !== null && $value !== '' && !is_numeric($cleaned)) {
+            $this->addError('pago_monto', 'El monto ingresado no es un valor numérico válido');
+        } else {
+            $this->resetErrorBag('pago_monto');
+            if ($cleaned !== '') {
+                $this->pago_monto = $cleaned;
+            }
+        }
+    }
+
     public function updatedPagoTipoPago(string $tipo): void
     {
         $this->reset('pago_paymentable_id');
@@ -196,16 +217,6 @@ class Notificaciones extends Component
             }
             $this->pago_divisa = $doc->divisa;
 
-            if ($doc->forma_pago === 'CONTADO') {
-                $this->dispatch(
-                    'notify-toast',
-                    icon: 'error',
-                    title: 'VENTA AL CONTADO',
-                    mensaje: 'Esta venta ya tiene pago al contado.'
-                );
-                $this->pago_paymentable_id = null;
-                return;
-            }
             if ($doc->pago_estado === Ventas::PAID) {
                 $this->dispatch(
                     'notify-toast',
@@ -225,16 +236,6 @@ class Notificaciones extends Component
             }
             $this->pago_divisa = $doc->divisa;
 
-            if ($doc->tipo_venta === 'CONTADO') {
-                $this->dispatch(
-                    'notify-toast',
-                    icon: 'error',
-                    title: 'RECIBO AL CONTADO',
-                    mensaje: 'Este recibo ya tiene pago al contado.'
-                );
-                $this->pago_paymentable_id = null;
-                return;
-            }
             if ($doc->pago_estado === Recibos::PAID) {
                 $this->dispatch(
                     'notify-toast',
@@ -293,8 +294,18 @@ class Notificaciones extends Component
             }
 
             // Modo CREAR
+            // Limpiar separadores de miles y validar formato antes de procesar
+            if (is_string($this->pago_monto)) {
+                $cleaned = str_replace(',', '', $this->pago_monto);
+                if ($cleaned !== '' && !is_numeric($cleaned)) {
+                    $this->addError('pago_monto', 'El monto ingresado no es un valor numérico válido');
+                    return;
+                }
+                $this->pago_monto = $cleaned;
+            }
+
             $this->validate([
-                'pago_payment_method_id' => 'required|integer',
+                'pago_payment_method_id' => 'required',
                 'pago_monto'             => 'required|numeric|min:0.01',
                 'pago_fecha'             => 'required|date',
             ], [
@@ -539,6 +550,131 @@ class Notificaciones extends Component
         ]);
     }
 
+    // Selección individual con validación de cliente al momento de seleccionar
+    public function toggleSeleccion(int $id, int $clienteId): void
+    {
+        // Si ya está seleccionado, deseleccionar
+        if (in_array($id, $this->notificacionesSeleccionadas)) {
+            $this->notificacionesSeleccionadas = array_values(
+                array_filter($this->notificacionesSeleccionadas, fn($v) => (int) $v !== $id)
+            );
+            return;
+        }
+
+        // Verificar que no mezcle clientes distintos
+        if (!empty($this->notificacionesSeleccionadas)) {
+            $clienteExistente = NotificacionCobro::withoutGlobalScopes()
+                ->whereIn('id', $this->notificacionesSeleccionadas)
+                ->value('cliente_id');
+
+            if ((int) $clienteExistente !== $clienteId) {
+                $this->notification()->error(
+                    title: 'Cliente diferente',
+                    description: 'Solo puedes seleccionar notificaciones del mismo cliente.',
+                );
+                return;
+            }
+        }
+
+        $this->notificacionesSeleccionadas[] = $id;
+    }
+
+    // Selección múltiple de página (select-all) con validación de cliente
+    public function seleccionarIds(array $ids): void
+    {
+        $nuevas = NotificacionCobro::withoutGlobalScopes()
+            ->whereIn('id', array_map('intval', $ids))
+            ->where('estado', 'PENDIENTE')
+            ->get(['id', 'cliente_id']);
+
+        $clienteIdActual = null;
+        if (!empty($this->notificacionesSeleccionadas)) {
+            $clienteIdActual = NotificacionCobro::withoutGlobalScopes()
+                ->whereIn('id', $this->notificacionesSeleccionadas)
+                ->value('cliente_id');
+        }
+
+        $idsValidos = [];
+        foreach ($nuevas as $notif) {
+            if ($clienteIdActual === null) {
+                $clienteIdActual = $notif->cliente_id;
+            }
+            if ((int) $notif->cliente_id !== (int) $clienteIdActual) {
+                $this->notification()->error(
+                    title: 'Clientes distintos en la página',
+                    description: 'La selección múltiple solo funciona cuando todas las notificaciones PENDIENTE de la página son del mismo cliente.',
+                );
+                return;
+            }
+            $idsValidos[] = $notif->id;
+        }
+
+        $this->notificacionesSeleccionadas = array_values(array_unique(
+            array_merge($this->notificacionesSeleccionadas, $idsValidos)
+        ));
+    }
+
+    // Selección múltiple: quita IDs del array de seleccionadas
+    public function deseleccionarIds(array $ids): void
+    {
+        $ids = array_map('intval', $ids);
+        $this->notificacionesSeleccionadas = array_values(
+            array_filter($this->notificacionesSeleccionadas, fn($v) => !in_array((int) $v, $ids))
+        );
+    }
+
+    // Limpia toda la selección
+    public function deseleccionarTodos(): void
+    {
+        $this->notificacionesSeleccionadas = [];
+    }
+
+    // Facturar las notificaciones seleccionadas (múltiple)
+    public function redirectToFacturarSeleccionadas(): mixed
+    {
+        if (empty($this->notificacionesSeleccionadas)) {
+            $this->notification()->error('Selecciona al menos una notificación.');
+            return null;
+        }
+
+        $notificaciones = NotificacionCobro::with(['cobro.clientes'])
+            ->whereIn('id', $this->notificacionesSeleccionadas)
+            ->where('estado', 'PENDIENTE')
+            ->get();
+
+        if ($notificaciones->isEmpty()) {
+            $this->notification()->error('No hay notificaciones PENDIENTE en la selección.');
+            return null;
+        }
+
+        $firstNotif = $notificaciones->first();
+        $cobro      = $firstNotif->cobro;
+        $cliente    = $cobro->clientes;
+
+        session([
+            'cobro_forma_pago'    => 'CONTADO',
+            'cobro_redirect_back' => route('admin.cobros.notificaciones'),
+        ]);
+
+        $notificacionIds = json_encode($notificaciones->pluck('id')->toArray());
+
+        if ($cobro->tipo_pago === 'RECIBO') {
+            return redirect()->route('admin.ventas.recibos.create', [
+                'notificacion_ids' => $notificacionIds,
+            ]);
+        }
+
+        if (($cliente->tipo_documento_id ?? null) == 6) {
+            return redirect()->route('admin.factura.create', [
+                'notificacion_ids' => $notificacionIds,
+            ]);
+        }
+
+        return redirect()->route('admin.boleta.create', [
+            'notificacion_ids' => $notificacionIds,
+        ]);
+    }
+
     // Cancelar
     public function cancelar(int $notificacionId): void
     {
@@ -573,5 +709,38 @@ class Notificaciones extends Component
     {
         $this->reset(['search', 'estado', 'filtroVencimiento', 'clienteId']);
         $this->resetPage();
+    }
+
+    public function abrirModalGenerarNotificaciones(): void
+    {
+        $this->generarDias = 7;
+        $this->modalGenerarNotif = true;
+    }
+
+    public function ejecutarGenerarNotificaciones(): void
+    {
+        $this->validate(
+            ['generarDias' => 'required|integer|min:1|max:15'],
+            [
+                'generarDias.required' => 'Ingrese los días de anticipación.',
+                'generarDias.min'      => 'El mínimo es 1 día.',
+                'generarDias.max'      => 'El máximo permitido es 15 días.',
+            ]
+        );
+
+        try {
+            GenerarNotificacionesCobro::dispatchSync($this->generarDias);
+            $this->modalGenerarNotif = false;
+            $this->notification()->success(
+                title: 'Notificaciones generadas',
+                description: "Se procesaron los cobros con {$this->generarDias} días de anticipación."
+            );
+            $this->dispatch('render');
+        } catch (\Throwable $e) {
+            $this->notification()->error(
+                title: 'Error al generar',
+                description: $e->getMessage()
+            );
+        }
     }
 }

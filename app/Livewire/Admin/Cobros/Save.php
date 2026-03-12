@@ -307,6 +307,8 @@ class Save extends Component
                 'fecha_vencimiento' => $this->calcularFechaVencimiento($this->default_fecha_inicio, $this->default_periodo),
                 'estado'            => 1,
             ];
+            // Forzar la actualización de la colección
+            $this->items = $this->items->collect();
         }
     }
 
@@ -330,6 +332,11 @@ class Save extends Component
      */
     public function updatedItems($value, $key)
     {
+        // Limpiar entradas fantasma sin vehiculo_id generadas por wire:model.live
+        // cuando el datepicker dispara un evento de cambio al morphing de Alpine
+        // sobre un item ya eliminado (mismo patrón que Emitir->updatedItems)
+        $this->items = $this->items->filter(fn($item) => !empty($item['vehiculo_id'] ?? null))->collect();
+
         $parts = explode('.', $key);
         if (count($parts) === 2) {
             $placa = $parts[0];
@@ -367,7 +374,9 @@ class Save extends Component
 
     public function eliminarVehiculo($key)
     {
-        unset($this->items[$key]);
-        $this->items;
+        if ($this->items->has($key)) {
+            $this->items->forget($key);
+            $this->items = $this->items->collect();
+        }
     }
 }

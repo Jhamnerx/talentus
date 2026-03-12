@@ -158,6 +158,62 @@
 
                 </div>
 
+                {{-- SELECTOR DE PLAN (visible solo si el producto tiene planes asociados) --}}
+                @if ($planesDisponibles->isNotEmpty())
+                    <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
+                        <label class="dark:text-gray-300 font-medium text-blue-600 dark:text-blue-400">
+                            Plan de servicio:
+                        </label>
+                    </div>
+
+                    <div class="col-span-12 md:col-start-5 md:col-end-11">
+                        <x-form.select wire:model.live="plan_id" placeholder="Sin plan (opcional)" :options="$planesDisponibles
+                            ->map(
+                                fn($p) => [
+                                    'id' => $p->id,
+                                    'label' =>
+                                        (is_array($p->name) ? $p->name['es'] ?? reset($p->name) : $p->name) .
+                                        ' — ' .
+                                        number_format((float) $p->price, 2) .
+                                        ' ' .
+                                        ($p->currency ?? 'PEN'),
+                                ],
+                            )
+                            ->toArray()"
+                            option-label="label" option-value="id" />
+                    </div>
+
+                    {{-- LISTA DE FEATURES DEL PLAN SELECCIONADO --}}
+                    @if (!empty($planFeatures))
+                        <div class="col-span-12 md:col-start-5 md:col-end-11">
+                            <div
+                                class="bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700 p-3">
+                                <p
+                                    class="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 uppercase tracking-wide">
+                                    Características incluidas
+                                </p>
+                                <ul class="space-y-1">
+                                    @foreach ($planFeatures as $feat)
+                                        <li class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                            <svg class="w-3.5 h-3.5 text-blue-500 shrink-0" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span class="font-medium">{{ $feat['nombre'] }}</span>
+                                            @if (!empty($feat['valor']))
+                                                <span class="text-gray-500 dark:text-gray-400">—
+                                                    {{ $feat['valor'] }}</span>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                @endif
+
                 <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
 
                     <label for="valor_unitario" class="dark:text-gray-300">Valor Unitario:</label>

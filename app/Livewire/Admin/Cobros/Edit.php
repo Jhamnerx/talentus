@@ -327,6 +327,11 @@ class Edit extends Component
      */
     public function updatedItems($value, $key)
     {
+        // Limpiar entradas fantasma sin vehiculo_id generadas por wire:model.live
+        // cuando el datepicker dispara un evento de cambio al morphing de Alpine
+        // sobre un item ya eliminado (mismo patrón que Emitir->updatedItems)
+        $this->items = $this->items->filter(fn($item) => !empty($item['vehiculo_id'] ?? null))->collect();
+
         $parts = explode('.', $key);
         if (count($parts) === 2) {
             $placa = $parts[0];

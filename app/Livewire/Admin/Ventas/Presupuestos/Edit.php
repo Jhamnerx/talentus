@@ -296,6 +296,8 @@ class Edit extends Component
                 'total' => $selected["total"],
                 'codigo_afectacion' => $selected["codigo_afectacion"],
                 'afecto_icbper' => $selected["afecto_icbper"],
+                'plan_id' => $selected["plan_id"] ?? null,
+                'plan_features' => !empty($selected["plan_features"]) ? $selected["plan_features"] : null,
             ]);
 
             //ENVIAR EVENTO PARA REINICIAR PRODUCTO SELECCIONADO EN MODAL

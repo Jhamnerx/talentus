@@ -165,7 +165,7 @@
 
                                 <div class="flex-auto px-1 xl:w-24 text-center">
                                     <p class="text-gray-800 dark:text-gray-200 xs:text-base font-semibold">
-                                        {{ $vehiculo['placa'] }}
+                                        {{ $placa }}
                                     </p>
                                 </div>
 

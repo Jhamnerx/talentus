@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Items;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\Plan;
 use App\Models\Ventas;
 use App\Models\Empresa;
 use Livewire\Component;
@@ -21,6 +22,12 @@ class ModalAddProducto extends Component
 
     #[Reactive]
     public $divisa;
+
+    // Selector de plan (para presupuestos/cotizaciones)
+    public $plan_id = null;
+    public Collection $planesDisponibles;
+    public array $planFeatures = [];
+    public float $productoPrecioOriginal = 0.0;
 
     public $product_selected_id;
     public Collection $selected;
@@ -41,6 +48,7 @@ class ModalAddProducto extends Component
     {
 
         $this->plantilla = plantilla::first();
+        $this->planesDisponibles = collect();
 
         $this->selected = collect([
             'producto_id' => "",
@@ -124,6 +132,70 @@ class ModalAddProducto extends Component
         $this->selected->put('es_dispositivo', (bool) $producto->es_dispositivo);
         $this->selected->put('modelo_id', $producto->modelo_id);
         $this->selected->put('categoria_es_gps', (bool) ($producto->categoria?->es_equipo_gps ?? false));
+        // Guardar precio original del producto para poder restaurarlo si se deselecciona el plan
+        $this->productoPrecioOriginal = round(floatval($producto->valor_unitario), 4);
+        // Campos de plan
+        $this->selected->put('plan_id', null);
+        $this->selected->put('plan_features', []);
+
+        // Cargar planes asociados a este producto
+        $this->plan_id = null;
+        $this->planFeatures = [];
+        $this->planesDisponibles = Plan::where('producto_id', $id)
+            ->where('is_active', true)
+            ->with('features')
+            ->get();
+
+        $this->calcularMontosProducto();
+    }
+
+    public function updatedPlanId($planId): void
+    {
+        $this->planFeatures = [];
+        $this->selected->put('plan_id', $planId ? (int) $planId : null);
+
+        if (!$planId) {
+            $this->selected->put('plan_features', []);
+            // Restaurar precio y descripción originales del producto
+            $this->selected->put('valor_unitario', $this->productoPrecioOriginal);
+            $this->selected->put('precio_unitario', round(floatval($this->calcularPrecioUnitario($this->productoPrecioOriginal)), 4));
+            $this->selected->put('descripcion', $this->selected['producto']);
+            $this->calcularMontosProducto();
+            return;
+        }
+
+        $plan = $this->planesDisponibles->firstWhere('id', (int) $planId);
+        if (!$plan) {
+            return;
+        }
+
+        $features = $plan->features->map(function ($f) {
+            $nombre = is_array($f->name) ? ($f->name['es'] ?? reset($f->name)) : $f->name;
+            $valor  = $f->value;
+            $esBool = $valor === true || $valor === 'true' || $valor === 1 || $valor === '1';
+            return [
+                'nombre' => $nombre,
+                'valor'  => $valor,
+                'linea'  => $esBool ? "- {$nombre}" : "- {$nombre}: {$valor}",
+            ];
+        })->values()->toArray();
+
+        $this->planFeatures = $features;
+        $this->selected->put('plan_features', $features);
+
+        // Usar el precio del plan en lugar del precio del producto
+        $precioplan = round(floatval($plan->price), 4);
+        $this->selected->put('valor_unitario', $precioplan);
+        $this->selected->put('precio_unitario', round(floatval($this->calcularPrecioUnitario($precioplan)), 4));
+
+        // Concatenar features a la descripción del detalle
+        $lineas = array_column($features, 'linea');
+        $descripcionConFeatures = $this->selected['producto'];
+        if (!empty($lineas)) {
+            $descripcionConFeatures .= "\n" . implode("\n", $lineas);
+        }
+        $this->selected->put('descripcion', $descripcionConFeatures);
+
         $this->calcularMontosProducto();
     }
 
@@ -245,6 +317,9 @@ class ModalAddProducto extends Component
             'afecto_icbper' => false
         ]);
 
+        $this->plan_id = null;
+        $this->planFeatures = [];
+        $this->planesDisponibles = collect();
         $this->reset('product_selected_id', 'anticipo');
     }
 

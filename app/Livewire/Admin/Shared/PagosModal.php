@@ -185,6 +185,13 @@ class PagosModal extends Component
                     continue;
                 }
 
+                // Validar que el monto sea numérico (rechaza formatos como 53.43.450)
+                $montoLimpio = str_replace(',', '', (string) $pago['monto']);
+                if (!is_numeric($montoLimpio)) {
+                    throw new \Exception('La fila #' . ($i + 1) . ' tiene un monto con formato inválido: "' . $pago['monto'] . '". Use formato decimal válido (ej: 1500.00)');
+                }
+                $this->nuevos_pagos[$i]['monto'] = $montoLimpio;
+
                 if (empty($pago['metodo_pago_id'])) {
                     throw new \Exception('La fila #' . ($i + 1) . ' no tiene método de pago seleccionado.');
                 }

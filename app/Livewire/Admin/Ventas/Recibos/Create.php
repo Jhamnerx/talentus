@@ -569,47 +569,27 @@ class Create extends Component
 
         // AUTO-UPDATE desde flujo de notificaciones
         if (!empty($this->notificacion_ids_array)) {
+            $reciboPagado = $recibo->fresh()->pago_estado === 'PAID';
+
             $notificaciones = NotificacionCobro::with(['detalleCobro', 'cobro'])
                 ->whereIn('id', $this->notificacion_ids_array)->get();
 
-            // Renovar período de cada detalle individualmente (si auto_renovar)
-            // El DetalleCobroObserver sincronizará la suscripción automáticamente
-            foreach ($notificaciones as $notif) {
-                $det   = $notif->detalleCobro;
-                $cobro = $notif->cobro;
-
-                if ($det && $cobro) {
-                    $nuevoInicio = $notif->fecha_vencimiento->copy();
-                    // Usar periodo del DetalleCobro (fuente correcta) con NoOverflow
-                    // para que 30-ene + 1 mes = 28-feb (no 02-mar)
-                    $periodoDetalle = strtoupper($det->periodo ?? 'MENSUAL');
-                    $nuevoFin = match ($periodoDetalle) {
-                        'BIMENSUAL'  => $nuevoInicio->copy()->addMonthsNoOverflow(2),
-                        'TRIMESTRAL' => $nuevoInicio->copy()->addMonthsNoOverflow(3),
-                        'SEMESTRAL'  => $nuevoInicio->copy()->addMonthsNoOverflow(6),
-                        'ANUAL'      => $nuevoInicio->copy()->addYearNoOverflow(),
-                        default      => $nuevoInicio->copy()->addMonthNoOverflow(),
-                    };
-                    // Actualiza fecha_inicio y fecha_vencimiento;
-                    // el observer sincroniza la suscripción del vehículo
-                    $det->update([
-                        'fecha_inicio'      => $nuevoInicio,
-                        'fecha_vencimiento' => $nuevoFin,
-                    ]);
+            if ($reciboPagado) {
+                // Pagado: avanzar período y marcar como PAGADO
+                foreach ($notificaciones as $notif) {
+                    $notif->recibo_id         = $recibo->id;
+                    $notif->fecha_facturacion = now();
+                    $notif->saveQuietly();
+                    $notif->marcarComoPagado();
                 }
+            } else {
+                // Solo facturado sin pagar: vincular documento, no avanzar período
+                NotificacionCobro::whereIn('id', $this->notificacion_ids_array)->update([
+                    'estado'            => 'FACTURADO',
+                    'recibo_id'         => $recibo->id,
+                    'fecha_facturacion' => now(),
+                ]);
             }
-
-            // Actualizar estado de NotificacionCobro
-            $estadoNotif = $this->tipo_venta === 'CONTADO' ? 'PAGADO' : 'FACTURADO';
-            $notifData = [
-                'estado'            => $estadoNotif,
-                'recibo_id'         => $recibo->id,
-                'fecha_facturacion' => now(),
-            ];
-            if ($this->tipo_venta === 'CONTADO') {
-                $notifData['fecha_pago'] = now();
-            }
-            NotificacionCobro::whereIn('id', $this->notificacion_ids_array)->update($notifData);
         }
 
         session()->flash('recibo-registrado', 'El Recibo se registró con éxito');

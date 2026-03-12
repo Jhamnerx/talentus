@@ -10,6 +10,16 @@
                     Cobros próximos a facturar generados automáticamente
                 </p>
             </div>
+            <div>
+                <button wire:click="abrirModalGenerarNotificaciones"
+                    class="btn bg-indigo-600 hover:bg-indigo-700 cursor-pointer text-white flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Generar notificaciones
+                </button>
+            </div>
 
         </div>
 
@@ -171,15 +181,25 @@
     </div>
 
     <!-- Tabla de notificaciones -->
+    @php
+        $pendienteIdsEnPagina = $notificaciones->where('estado', 'PENDIENTE')->pluck('id')->toArray();
+    @endphp
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
         <div class="overflow-x-auto min-h-screen">
             <table class="table-auto w-full dark:text-gray-300">
                 <thead
                     class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-b border-gray-200 dark:border-gray-700/60">
                     <tr>
-                        <th class="px-4 py-3 whitespace-nowrap text-left">Estado</th>
-                        <th class="px-4 py-3 whitespace-nowrap text-left">Vencimiento</th>
-                        <th class="px-4 py-3 whitespace-nowrap text-left">Cliente</th>
+                        <th class="px-4 py-3 whitespace-nowrap" x-data="{ pageIds: @js($pendienteIdsEnPagina) }">
+                            <input type="checkbox"
+                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 cursor-pointer"
+                                :checked="pageIds.length > 0 && pageIds.every(id => $wire.notificacionesSeleccionadas.map(Number)
+                                    .includes(id))"
+                                :indeterminate.prop="pageIds.some(id => $wire.notificacionesSeleccionadas.map(Number).includes(id)) && !
+                                    pageIds.every(id => $wire.notificacionesSeleccionadas.map(Number).includes(id))"
+                                @change="$el.checked ? $wire.seleccionarIds(pageIds) : $wire.deseleccionarIds(pageIds)"
+                                title="Seleccionar todos en esta página">
+                        </th>
                         <th class="px-4 py-3 whitespace-nowrap text-left">Vehículo</th>
                         <th class="px-4 py-3 whitespace-nowrap text-left">Descripción</th>
                         <th class="px-4 py-3 whitespace-nowrap text-right">Monto</th>
@@ -190,7 +210,16 @@
                 <tbody class="text-sm divide-y divide-gray-200 dark:divide-gray-700/60">
                     @forelse ($notificaciones as $notificacion)
                         <tr wire:key="notif-{{ $notificacion->id }}"
-                            class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                            class="hover:bg-gray-50 dark:hover:bg-gray-700/30 {{ in_array($notificacion->id, $notificacionesSeleccionadas) ? 'bg-indigo-50 dark:bg-indigo-900/20' : '' }}">
+                            <!-- Checkbox selección -->
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                @if ($notificacion->estado === 'PENDIENTE')
+                                    <input type="checkbox"
+                                        class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 cursor-pointer"
+                                        wire:click="toggleSeleccion({{ $notificacion->id }}, {{ $notificacion->cliente_id }})"
+                                        :checked="$wire.notificacionesSeleccionadas.map(Number).includes({{ $notificacion->id }})">
+                                @endif
+                            </td>
                             <!-- Estado -->
                             <td class="px-4 py-3 whitespace-nowrap">
                                 @if ($notificacion->estado === 'PENDIENTE')
@@ -365,7 +394,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="9" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                                 <svg class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -387,6 +416,64 @@
             </div>
         @endif
     </div>
+    {{ json_encode($notificacionesSeleccionadas) }}
+    {{-- Barra flotante de acción múltiple --}}
+    @if (!empty($notificacionesSeleccionadas))
+        <div
+            class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-2xl shadow-2xl">
+            <span class="text-sm font-medium">
+                {{ count($notificacionesSeleccionadas) }} seleccionada(s)
+            </span>
+            <button wire:click="redirectToFacturarSeleccionadas" wire:loading.attr="disabled"
+                wire:target="redirectToFacturarSeleccionadas"
+                class="flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold rounded-lg bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span wire:loading.remove wire:target="redirectToFacturarSeleccionadas">Facturar seleccionadas</span>
+                <span wire:loading wire:target="redirectToFacturarSeleccionadas">Procesando...</span>
+            </button>
+            <button wire:click="deseleccionarTodos"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-700 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 transition">
+                Cancelar
+            </button>
+        </div>
+    @endif
+
+    {{-- Modal: Generar Notificaciones de Cobro --}}
+    <x-form.modal.card title="GENERAR NOTIFICACIONES DE COBRO" wire:model.live="modalGenerarNotif" max-width="sm"
+        blur>
+        <div class="px-4 py-4">
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                Genera notificaciones para los cobros que vencen en los próximos <strong>N días</strong>.
+                Máximo permitido: <strong>15 días</strong>.
+            </p>
+            <x-form.input wire:model.defer="generarDias" label="Días de anticipación" type="number" min="1"
+                max="15" placeholder="7" />
+            @error('generarDias')
+                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+                <x-form.button flat label="Cancelar" wire:click="$set('modalGenerarNotif', false)" />
+                <x-form.button primary label="Ejecutar" wire:click="ejecutarGenerarNotificaciones"
+                    wire:loading.attr="disabled" wire:target="ejecutarGenerarNotificaciones">
+                    <x-slot name="prepend">
+                        <svg wire:loading wire:target="ejecutarGenerarNotificaciones"
+                            class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                        </svg>
+                    </x-slot>
+                </x-form.button>
+            </div>
+        </x-slot>
+    </x-form.modal.card>
 
     {{-- Modal: Registrar Pago Directo (mismo patron que payment.blade.php) --}}
     <x-form.modal.card title="REGISTRAR PAGO" wire:model.live="modalPago" max-width="2xl" blur>
@@ -494,8 +581,11 @@
 
                     {{-- Monto --}}
                     <div class="col-span-6 sm:col-span-3">
-                        <x-form.currency label="Monto" wire:model.defer="pago_monto" thousands=","
-                            decimal="." />
+                        <x-form.currency label="Monto" wire:model.blur="pago_monto" thousands="," decimal="."
+                            precision="4" />
+                        @error('pago_monto')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Fecha --}}
