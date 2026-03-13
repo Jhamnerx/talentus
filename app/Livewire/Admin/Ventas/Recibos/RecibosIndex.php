@@ -27,15 +27,17 @@ class RecibosIndex extends Component
     {
 
 
-        $recibos = Recibos::whereHas('clientes', function ($query) {
-            $query->where('razon_social', 'like', '%' . $this->search . '%');
-        })->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-            ->orWhere('serie', 'like', '%' . $this->search . '%')
-            ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
-            ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
-            ->orWhere('divisa', 'like', '%' . $this->search . '%')
-            ->orWhere('total', 'like', '%' . $this->search . '%')
+        $recibos = Recibos::where(function ($query) {
+            $query->whereHas('clientes', function ($q) {
+                $q->where('razon_social', 'like', '%' . $this->search . '%');
+            })->orWhere('numero', 'like', '%' . $this->search . '%')
+                ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
+                ->orWhere('serie', 'like', '%' . $this->search . '%')
+                ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
+                ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
+                ->orWhere('divisa', 'like', '%' . $this->search . '%')
+                ->orWhere('total', 'like', '%' . $this->search . '%');
+        })
             ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
             ->with('clientes')
             ->withSum('payments', 'monto')
@@ -58,21 +60,23 @@ class RecibosIndex extends Component
 
         if ($estado != null) {
 
-            $recibos = Recibos::whereHas('clientes', function ($query) {
-                $query->where('razon_social', 'like', '%' . $this->search . '%');
-            })->orWhere('numero', 'like', '%' . $this->search . '%')
-                ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-                ->orWhere('serie', 'like', '%' . $this->search . '%')
-                ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
-                ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
-                ->orWhere('divisa', 'like', '%' . $this->search . '%')
-                ->orWhere('total', 'like', '%' . $this->search . '%')
+            $recibos = Recibos::where(function ($query) {
+                $query->whereHas('clientes', function ($q) {
+                    $q->where('razon_social', 'like', '%' . $this->search . '%');
+                })->orWhere('numero', 'like', '%' . $this->search . '%')
+                    ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
+                    ->orWhere('serie', 'like', '%' . $this->search . '%')
+                    ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
+                    ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
+                    ->orWhere('divisa', 'like', '%' . $this->search . '%')
+                    ->orWhere('total', 'like', '%' . $this->search . '%');
+            })
                 ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
                 ->estado($this->status)
                 ->with('clientes')
                 ->withSum('payments', 'monto')
                 ->orderBy('id', 'desc')
-                ->paginate(15);;
+                ->paginate(15);
         }
 
 

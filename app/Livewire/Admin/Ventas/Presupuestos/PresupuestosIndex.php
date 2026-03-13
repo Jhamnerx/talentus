@@ -30,11 +30,13 @@ class PresupuestosIndex extends Component
     public function render()
     {
 
-        $presupuestos = Presupuestos::whereHas('clientes', function ($query) {
-            $query->where('razon_social', 'like', '%' . $this->search . '%');
-        })->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
+        $presupuestos = Presupuestos::where(function ($query) {
+            $query->whereHas('clientes', function ($q) {
+                $q->where('razon_social', 'like', '%' . $this->search . '%');
+            })->orWhere('numero', 'like', '%' . $this->search . '%')
+                ->orWhere('fecha', 'like', '%' . $this->search . '%')
+                ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%');
+        })
             ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
             ->orderBy('created_at', 'DESC')
             ->paginate(15);
@@ -55,12 +57,13 @@ class PresupuestosIndex extends Component
 
         if ($estado != "null") {
 
-            $presupuestos = Presupuestos::whereHas('clientes', function ($query) {
-                $query->where('razon_social', 'like', '%' . $this->search . '%');
+            $presupuestos = Presupuestos::where(function ($query) {
+                $query->whereHas('clientes', function ($q) {
+                    $q->where('razon_social', 'like', '%' . $this->search . '%');
+                })->orWhere('numero', 'like', '%' . $this->search . '%')
+                    ->orWhere('fecha', 'like', '%' . $this->search . '%')
+                    ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%');
             })
-                ->orWhere('numero', 'like', '%' . $this->search . '%')
-                ->orWhere('fecha', 'like', '%' . $this->search . '%')
-                ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
                 ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
                 ->estado($this->estado)
                 ->orderBy('created_at', 'DESC')
