@@ -29,17 +29,19 @@ class Index extends Component
 
     public function render()
     {
-        $ventas = Ventas::whereHas('cliente', function ($cliente) {
-            $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%')
-                ->orWhere('numero_documento', 'LIKE', '%' . $this->search . '%');
-        })->orWhereHas('ventaDetalles', function ($detalle) {
-            $detalle->where('codigo', 'LIKE', '%' . $this->search . '%')
-                ->orWhere('descripcion', 'LIKE', '%' . $this->search . '%');
+        $ventas = Ventas::where(function ($query) {
+            $query->whereHas('cliente', function ($cliente) {
+                $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%')
+                    ->orWhere('numero_documento', 'LIKE', '%' . $this->search . '%');
+            })->orWhereHas('ventaDetalles', function ($detalle) {
+                $detalle->where('codigo', 'LIKE', '%' . $this->search . '%')
+                    ->orWhere('descripcion', 'LIKE', '%' . $this->search . '%');
+            })
+                ->orWhere('serie', 'LIKE', '%' . $this->search . '%')
+                ->orWhere('correlativo', 'LIKE', '%' . $this->search . '%')
+                ->orWhere('serie_correlativo', 'LIKE', '%' . $this->search . '%')
+                ->orwhereDate('fecha_emision', $this->validateDate($this->search) ? Carbon::createFromFormat('d-m-Y', $this->search)->format('Y-m-d') : '');
         })
-            ->orWhere('serie', 'LIKE', '%' . $this->search . '%')
-            ->orWhere('correlativo', 'LIKE', '%' . $this->search . '%')
-            ->orWhere('serie_correlativo', 'LIKE', '%' . $this->search . '%')
-            ->orwhereDate('fecha_emision', $this->validateDate($this->search) ? Carbon::createFromFormat('d-m-Y', $this->search)->format('Y-m-d') : '')
             ->when($this->cliente_id, fn($q) => $q->where('cliente_id', $this->cliente_id))
             ->orderby('id', 'desc')
             ->with('cliente')
