@@ -2,24 +2,17 @@
 
 namespace App\Livewire\Admin\Ventas\Presupuestos;
 
-use Carbon\Carbon;
-use App\Models\Series;
-use App\Models\Ventas;
-use Livewire\Component;
+use App\Http\Requests\PresupuestosRequest;
 use App\Models\Clientes;
 use App\Models\plantilla;
-use App\Models\Productos;
-use App\Models\MetodoPago;
-use Livewire\Attributes\On;
 use App\Models\Presupuestos;
-use Illuminate\Validation\Rule;
-use App\Models\TipoComprobantes;
-use Illuminate\Support\Collection;
-use App\Http\Requests\VentasRequest;
-use App\Http\Requests\PresupuestosRequest;
+use App\Models\Productos;
+use App\Models\Series;
 use App\Services\FactilizaService;
-use App\Http\Controllers\Admin\PresupuestoController;
-use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 
 class Create extends Component
