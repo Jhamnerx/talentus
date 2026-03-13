@@ -506,7 +506,4 @@
 
     </div>
 
-    {{-- Modal de gestión de pagos --}}
-    <livewire:admin.shared.pagos-modal />
-
 </div>

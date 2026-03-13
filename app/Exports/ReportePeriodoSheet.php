@@ -92,9 +92,9 @@ class ReportePeriodoSheet implements FromView, WithTitle, ShouldAutoSize
         }
 
         $suffix = match ($this->contexto) {
-            'ventas'  => ['VENDEDOR', 'ESTADO SUNAT', 'OBSERVACION', 'N° COMUNICACION BAJA', 'MOTIVO BAJA'],
+            'ventas'  => ['VENDEDOR', 'ESTADO SUNAT', 'OBSERVACION', 'N° COMUNICACION BAJA', 'MOTIVO BAJA', 'N° NOTA CRÉDITO', 'SUSTENTO NC', 'ESTADO NC', 'ESTADO SUNAT NC'],
             'recibos' => [],
-            default   => ['OBSERVACION', 'N° COMUNICACION BAJA', 'MOTIVO BAJA'],
+            default   => ['OBSERVACION', 'N° COMUNICACION BAJA', 'MOTIVO BAJA', 'N° NOTA CRÉDITO', 'SUSTENTO NC', 'ESTADO NC', 'ESTADO SUNAT NC'],
         };
 
         return array_merge($prefix, $paymentCols, $suffix);
