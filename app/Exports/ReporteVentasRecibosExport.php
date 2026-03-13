@@ -67,7 +67,8 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
         if (in_array($this->contexto, ['ventas', 'ambos'])) {
             Ventas::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
-                ->with(['cliente', 'user', 'payments.paymentMethod', 'payments.destination', 'notaCredito', 'envioResumen'])
+                ->where('estado', '!=', 'BORRADOR')
+                ->with(['cliente', 'user', 'payments.paymentMethod', 'payments.destination', 'notaCredito.sustento', 'envioResumen'])
                 ->when(
                     $this->tipo_comprobante_id,
                     fn($q) => $q->where('tipo_comprobante_id', $this->tipo_comprobante_id)
@@ -92,6 +93,21 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                             ? preg_replace('/^\d+-/', '', $v->envioResumen->nombre_xml)
                             : '';
                         $motivoBaja = $v->envioResumen->fe_mensaje_sunat ?? '';
+                    }
+
+                    // Datos de nota de crédito (solo si tiene NC)
+                    $ncSerie        = '';
+                    $ncEstado       = '';
+                    $ncSustento     = '';
+                    $ncMensajeSunat = '';
+                    if ($hasNC && $v->notaCredito) {
+                        $nc             = $v->notaCredito;
+                        $ncSerie        = $nc->serie_correlativo ?? '';
+                        $ncEstado       = $nc->estado_texto ?? '';
+                        $ncSustento     = $nc->sustento_texto
+                            ?? $nc->sustento?->descripcion
+                            ?? '';
+                        $ncMensajeSunat = $nc->fe_mensaje_sunat ?? '';
                     }
 
                     // Aplicar filtro de estado solo a registros activos (no anuladas/NC)
@@ -139,6 +155,10 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                             $observacion,
                             $numBaja,
                             $motivoBaja,
+                            $ncSerie,
+                            $ncSustento,
+                            $ncEstado,
+                            $ncMensajeSunat,
                         ];
                         $row += array_merge([
                             $fecha->format('d/m/Y'),
@@ -152,7 +172,7 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                             $diasRetraso > 0 ? $diasRetraso : '',
                         ]);
                     } else { // ambos
-                        $row['_suffix'] = [$observacion, $numBaja, $motivoBaja];
+                        $row['_suffix'] = [$observacion, $numBaja, $motivoBaja, $ncSerie, $ncSustento, $ncEstado, $ncMensajeSunat];
                         $row += array_merge([
                             'VENTA',
                             $fecha->format('d/m/Y'),
@@ -174,6 +194,7 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
         if (in_array($this->contexto, ['recibos', 'ambos'])) {
             Recibos::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->where('estado', '!=', 'BORRADOR')
                 ->with(['clientes', 'payments.paymentMethod', 'payments.destination'])
                 ->when(
                     $this->estado && $this->estado !== 'Todos',
@@ -274,6 +295,7 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
             // Ventas activas (excluye anuladas y con nota de crédito)
             Ventas::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->where('estado', '!=', 'BORRADOR')
                 ->whereNull('id_baja')
                 ->whereDoesntHave('notaCredito')
                 ->with(['cliente', 'payments.paymentMethod', 'payments.destination'])
@@ -336,6 +358,7 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
             // Totales de ventas anuladas (id_baja IS NOT NULL)
             $ventasAnuladas = Ventas::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->where('estado', '!=', 'BORRADOR')
                 ->whereNotNull('id_baja')
                 ->when($this->tipo_comprobante_id, fn($q) => $q->where('tipo_comprobante_id', $this->tipo_comprobante_id))
                 ->when($this->cliente_id, fn($q) => $q->where('cliente_id', $this->cliente_id))
@@ -351,6 +374,7 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
             // Totales de ventas con nota de crédito
             $ventasConNc = Ventas::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->where('estado', '!=', 'BORRADOR')
                 ->whereNull('id_baja')
                 ->whereHas('notaCredito')
                 ->when($this->tipo_comprobante_id, fn($q) => $q->where('tipo_comprobante_id', $this->tipo_comprobante_id))
@@ -368,6 +392,7 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
         if (in_array($this->contexto, ['recibos', 'ambos'])) {
             Recibos::query()
                 ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+                ->where('estado', '!=', 'BORRADOR')
                 ->with(['clientes', 'payments.paymentMethod', 'payments.destination'])
                 ->when($this->cliente_id, fn($q) => $q->where('clientes_id', $this->cliente_id))
                 ->get()
