@@ -62,7 +62,7 @@
                         {{-- NÚMERO --}}
                         <div class="col-span-12 md:col-span-6">
                             <x-form.number id="correlativo" name="numero" wire:model.live="numero"
-                                label="Número Recibo:" />
+                                label="Número Recibo:" readonly />
                             @error('serie_numero')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
