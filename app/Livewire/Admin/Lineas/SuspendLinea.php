@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\Lineas;
 use App\Models\CambiosLineas;
 use Livewire\Component;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
 use WireUi\Traits\WireUiActions;

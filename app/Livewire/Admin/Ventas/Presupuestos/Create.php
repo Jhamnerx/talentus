@@ -10,7 +10,7 @@ use App\Models\Productos;
 use App\Models\Series;
 use App\Services\FactilizaService;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
