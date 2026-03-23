@@ -122,7 +122,25 @@ class GenerarNotificacionesCobro implements ShouldQueue
             return;
         }
 
+        // fecha_vencimiento = cuando expira el período actual (cuándo vence el servicio)
         $fechaVencimiento = Carbon::parse($subscription->ends_at);
+
+        // Calcular el siguiente período: comienza donde termina el actual
+        // y se extiende según el período contratado en el DetalleCobro.
+        // fecha_fin > fecha_vencimiento identifica esta notificación como RENOVACIÓN
+        // en NotificacionCobro::marcarComoPagado(), lo que activa el avance de fechas.
+        $periodo = strtoupper($detalle->periodo ?? 'MENSUAL');
+        $nextStart = $fechaVencimiento->copy();
+        $nextEnd = match ($periodo) {
+            'DIARIO'     => $nextStart->copy()->addDay(),
+            'SEMANAL'    => $nextStart->copy()->addWeek(),
+            'QUINCENAL'  => $nextStart->copy()->addDays(15),
+            'BIMENSUAL'  => $nextStart->copy()->addMonthsNoOverflow(2),
+            'TRIMESTRAL' => $nextStart->copy()->addMonthsNoOverflow(3),
+            'SEMESTRAL'  => $nextStart->copy()->addMonthsNoOverflow(6),
+            'ANUAL'      => $nextStart->copy()->addYearNoOverflow(),
+            default      => $nextStart->copy()->addMonthNoOverflow(), // MENSUAL
+        };
 
         NotificacionCobro::create([
             'empresa_id'        => $cliente->empresa_id,
@@ -130,10 +148,13 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'cobro_id'          => $cobro->id,
             'cliente_id'        => $cliente->id,
             'vehiculo_id'       => $detalle->vehiculo_id,
-            'fecha_vencimiento' => $fechaVencimiento,
-            // Snapshot de las fechas del período al momento de generar la notificación
-            'fecha_inicio'      => $detalle->fecha_inicio,
-            'fecha_fin'         => $detalle->fecha_vencimiento,
+            // fecha_vencimiento = fin del nuevo período (cuando expira el servicio renovado).
+            // Al ser igual a fecha_fin, marcarComoPagado() usa fecha_inicio >= det.fecha_vencimiento
+            // para identificar esta notificación como RENOVACIÓN y avanzar el período.
+            'fecha_vencimiento' => $nextEnd,
+            // Período siguiente que se activa al pagar esta notificación
+            'fecha_inicio'      => $nextStart,
+            'fecha_fin'         => $nextEnd,
             // monto_efectivo descuenta IGV cuando el cobro es tipo RECIBO
             'monto'             => $detalle->monto_efectivo ?: 0,
             'moneda'            => $cobro->moneda ?? $cobro->divisa ?? 'PEN',
@@ -145,7 +166,9 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'detalle_cobro_id'  => $detalle->id,
             'cliente'           => $cliente->razon_social,
             'vehiculo'          => $detalle->vehiculo?->placa,
-            'fecha_vencimiento' => $fechaVencimiento->format('Y-m-d'),
+            'fecha_vencimiento' => $nextEnd->format('Y-m-d'),
+            'fecha_inicio'      => $nextStart->format('Y-m-d'),
+            'fecha_fin'         => $nextEnd->format('Y-m-d'),
             'subscription_id'   => $subscription?->id,
             'monto_efectivo'    => $detalle->monto_efectivo,
             'tipo_pago'         => $cobro->tipo_pago,
@@ -158,10 +181,11 @@ class GenerarNotificacionesCobro implements ShouldQueue
     protected function generarDescripcion(DetalleCobros $detalle, $cobro): string
     {
         $placa = $detalle->vehiculo?->placa ?? 'Sin vehículo';
-        $servicio = $cobro->producto?->nombre ?? $cobro->comentario ?? 'Servicio';
-        $periodo = strtolower($cobro->periodo ?? 'mensual');
+        $servicio = ($cobro->producto?->descripcion ?? null) ?: '-';
+        $planNombre = $detalle->planModel()->first()?->name ?? '-';
+        $periodo = strtolower($detalle->periodo ?? 'mensual');
 
-        return "Cobro {$periodo} - {$servicio} - Vehículo: {$placa}";
+        return "Cobro {$periodo} - {$servicio} - {$planNombre} - Vehículo: {$placa}";
     }
 
     /**

@@ -443,7 +443,6 @@
             </div>
         @endif
     </div>
-    {{ json_encode($notificacionesSeleccionadas) }}
     {{-- Barra flotante de acción múltiple --}}
     @if (!empty($notificacionesSeleccionadas))
         <div

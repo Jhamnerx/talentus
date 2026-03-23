@@ -503,8 +503,9 @@
                             label="Guardar Seleccionados ({{ count($dispositivosSeleccionados) }})" />
                     </div>
                 </div>
-                {{ json_encode($dispositivosSeleccionados) }}
-                {{ $modeloSeleccionado }}
+                @if (app()->environment('local'))
+                    {{ json_encode($dispositivosSeleccionados) }}
+                @endif
                 @if (count($dispositivosSeleccionados) > 0)
                     <div class="mt-3 flex items-center gap-2">
                         <span class="flex h-2 w-2">
