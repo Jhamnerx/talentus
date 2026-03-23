@@ -10,6 +10,7 @@ use App\Models\Empresa;
 use Livewire\Component;
 use App\Models\plantilla;
 use App\Models\Productos;
+use App\Models\ModelosDispositivo;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
@@ -28,6 +29,9 @@ class ModalAddProducto extends Component
     public Collection $planesDisponibles;
     public array $planFeatures = [];
     public float $productoPrecioOriginal = 0.0;
+
+    // Características del modelo de dispositivo
+    public array $dispositivoCaracteristicas = [];
 
     public $product_selected_id;
     public Collection $selected;
@@ -145,6 +149,24 @@ class ModalAddProducto extends Component
             ->where('is_active', true)
             ->with('features')
             ->get();
+
+        // Cargar características del modelo si es dispositivo
+        $this->dispositivoCaracteristicas = [];
+        if ($producto->es_dispositivo && $producto->modelo_id) {
+            $modelo = ModelosDispositivo::find($producto->modelo_id);
+
+            if ($modelo && $modelo->caracteristicas) {
+                $lineas = collect($modelo->caracteristicas)
+                    ->map(fn($item) => is_array($item) && isset($item['text']) ? $item['text'] : null)
+                    ->filter()
+                    ->values()
+                    ->toArray();
+
+                if (!empty($lineas)) {
+                    $this->selected->put('descripcion', $producto->descripcion . "\n" . implode("\n", $lineas));
+                }
+            }
+        }
 
         $this->calcularMontosProducto();
     }
@@ -320,6 +342,7 @@ class ModalAddProducto extends Component
         $this->plan_id = null;
         $this->planFeatures = [];
         $this->planesDisponibles = collect();
+        $this->dispositivoCaracteristicas = [];
         $this->reset('product_selected_id', 'anticipo');
     }
 

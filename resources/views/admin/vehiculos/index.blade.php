@@ -15,6 +15,7 @@
     @livewire('admin.lineas.save', [], key('lineas-save'))
     @livewire('admin.dispositivos.save', [], key('dispositivos-save'))
     @livewire('admin.clientes.save', [], key('clientes-save'))
+    @livewire('admin.vehiculos.modal-ver-suscripcion', [], key('modal-ver-suscripcion'))
 
     <script>
         document.addEventListener('livewire:init', function() {

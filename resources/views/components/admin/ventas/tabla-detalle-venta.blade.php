@@ -84,7 +84,9 @@
                 </p>
             </tr>
             {{-- filas de ítems ya añadidos --}}
+            @if (app()->environment('local'))
             {{ json_encode($items) }}
+            @endif
             @if ($items->count() > 0)
             @foreach ($items->all() as $clave => $item)
             <tr wire:key="item-{{ $clave }}" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">

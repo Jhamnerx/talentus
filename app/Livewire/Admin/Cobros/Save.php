@@ -8,6 +8,7 @@ use App\Models\Cobros;
 use Livewire\Component;
 use App\Models\Vehiculos;
 use App\Models\Productos;
+use App\Models\NotificacionCobro;
 use Illuminate\Support\Collection;
 use App\Http\Requests\CobrosRequest;
 
@@ -22,6 +23,7 @@ class Save extends Component
     public $tipo_pago = 'FACTURA';
     public ?float $descuento_global = 0;
     public Collection $planes;
+    public bool $cobrar_ahora = false;
 
     // Valores por defecto para cada vehículo que se agregue
     public $default_periodo = 'MENSUAL';
@@ -85,11 +87,11 @@ class Save extends Component
         }
 
         if ($planCurrency === 'PEN' && $this->divisa === 'USD') {
-            return round($precio / $tc, 2);
+            return round($precio / $tc, 4);
         }
 
         if ($planCurrency === 'USD' && $this->divisa === 'PEN') {
-            return round($precio * $tc, 2);
+            return round($precio * $tc, 4);
         }
 
         return $precio;
@@ -228,6 +230,74 @@ class Save extends Component
 
             Cobros::createItems($cobro, $datos["items"], 'create');
 
+            // Siempre crear NotificacionCobro para todos los vehículos del cobro recién creado.
+            // El job diario (08:00) solo actúa 7 días antes del vencimiento, por lo que
+            // sin esta lógica la notificación del período actual nunca se generaría al registrar.
+            $cobro->load(['clientes', 'detalle.vehiculo']);
+            $notificacionIds = [];
+
+            foreach ($cobro->detalle as $detalle) {
+                if (!$detalle->vehiculo) {
+                    continue;
+                }
+
+                $placa = $detalle->vehiculo->placa ?? 'Sin placa';
+                $servicio = ($productoServicio->descripcion ?? null) ?: '-';
+                $plan = $detalle->planModel()->first();
+                $planNombre = $plan?->name ?? '-';
+                $descripcion = 'Cobro ' . strtolower($detalle->periodo ?? 'mensual')
+                    . ' - ' . $servicio
+                    . ' - ' . $planNombre
+                    . ' - Vehículo: ' . $placa;
+
+                $notif = NotificacionCobro::create([
+                    'empresa_id'        => session('empresa'),
+                    'detalle_cobro_id'  => $detalle->id,
+                    'cobro_id'          => $cobro->id,
+                    'cliente_id'        => $cobro->clientes_id,
+                    'vehiculo_id'       => $detalle->vehiculo_id,
+                    'fecha_vencimiento' => $detalle->fecha_vencimiento,
+                    'fecha_inicio'      => $detalle->fecha_inicio,
+                    'fecha_fin'         => $detalle->fecha_vencimiento,
+                    'monto'             => $detalle->monto_efectivo ?? 0,
+                    'moneda'            => $cobro->divisa ?? 'PEN',
+                    'descripcion'       => $descripcion,
+                    'estado'            => 'PENDIENTE',
+                ]);
+
+                $notificacionIds[] = $notif->id;
+            }
+
+            // cobrar_ahora: redirigir al formulario de emisión de comprobante
+            if ($this->cobrar_ahora && !empty($notificacionIds)) {
+                session([
+                    'cobro_forma_pago'    => 'CONTADO',
+                    'cobro_redirect_back' => route('admin.cobros.notificaciones'),
+                ]);
+
+                $notificacionIdsJson = json_encode($notificacionIds);
+                $cliente = $cobro->clientes;
+
+                if ($cobro->tipo_pago === 'RECIBO') {
+                    return $this->redirect(
+                        route('admin.ventas.recibos.create', ['notificacion_ids' => $notificacionIdsJson]),
+                        navigate: true
+                    );
+                }
+
+                if (($cliente->tipo_documento_id ?? null) == 6) {
+                    return $this->redirect(
+                        route('admin.factura.create', ['notificacion_ids' => $notificacionIdsJson]),
+                        navigate: true
+                    );
+                }
+
+                return $this->redirect(
+                    route('admin.boleta.create', ['notificacion_ids' => $notificacionIdsJson]),
+                    navigate: true
+                );
+            }
+
             session()->flash('cobro-registrado', 'Se registró con éxito el cobro');
             $this->redirectRoute('admin.cobros.index');
         } catch (\Throwable $th) {
@@ -268,22 +338,6 @@ class Save extends Component
                 mensaje: 'El vehículo ' . $vehiculo->placa . ' ya está agregado',
             );
         } else {
-            // Validar que el vehículo no tenga ya un detalle de cobro activo
-            $yaRegistrado = \App\Models\DetalleCobros::where('vehiculo_id', $vehiculo->id)
-                ->where('estado', 1)
-                ->whereHas('cobro', fn($q) => $q->whereNull('deleted_at'))
-                ->exists();
-
-            if ($yaRegistrado) {
-                $this->dispatch(
-                    'notify-toast',
-                    icon: 'warning',
-                    title: 'VEHÍCULO YA REGISTRADO',
-                    mensaje: 'El vehículo ' . $vehiculo->placa . ' ya tiene un cobro recurrente activo. No se permiten duplicados.',
-                );
-                return;
-            }
-
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',

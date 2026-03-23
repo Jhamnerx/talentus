@@ -265,9 +265,17 @@
 
             <div class="grid sm:grid-cols-2 gap-2 content-end">
 
-                <div class="text-right col-span-2 ">
+                <div class="flex items-center justify-end col-span-2 gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" wire:model.live="cobrar_ahora"
+                            class="w-4 h-4 rounded text-emerald-600 border-gray-300 dark:border-gray-600 focus:ring-emerald-500" />
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Cobrar vehículos nuevos (emitir comprobante al guardar)
+                        </span>
+                    </label>
 
-                    <x-form.button wire:click.prevent="save" spinner="save" label="GUARDAR" emerald md />
+                    <x-form.button wire:click.prevent="save" spinner="save"
+                        label="{{ $cobrar_ahora ? 'GUARDAR Y FACTURAR' : 'GUARDAR' }}" emerald md />
                 </div>
             </div>
         </div>
