@@ -325,7 +325,7 @@
 
 
                     <!-- Tickets -->
-                    @can('ver-ticket')
+
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['tickets'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['tickets']) ? 1 : 0 }} }">
 
@@ -366,7 +366,7 @@
                                 </ul>
                             </div>
                         </li>
-                    @endcan
+
 
 
                     <!-- Finanzas -->

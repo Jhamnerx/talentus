@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Vehiculos\Reportes;
 
+use App\Exports\EstadoTransmisionExport;
 use App\Models\Vehiculos;
 use App\Models\Reportes;
 use App\Services\GpsWoxService;
@@ -197,6 +198,35 @@ class EstadoTransmision extends Component
         } catch (\Exception $e) {
             $this->notification()->error('Error al guardar: ' . $e->getMessage());
         }
+    }
+
+    public function exportarXLS()
+    {
+        if (!$this->estadoData) {
+            $this->notification()->error('No hay datos para exportar. Haga clic en Actualizar primero.');
+            return;
+        }
+
+        $rows = [];
+        foreach ($this->getCategoriasFiltradas() as $categoria) {
+            foreach ($categoria['items'] as $device) {
+                $rows[] = [
+                    $categoria['title'],
+                    $categoria['key'],
+                    $device['plate_number'],
+                    $device['name'],
+                    $device['imei'],
+                    $device['sim_number'],
+                    $device['last_connection'],
+                    number_format($device['hours_offline'], 1),
+                    number_format($device['days_offline'], 1),
+                ];
+            }
+        }
+
+        $filename = 'estado-transmision-' . now()->format('Y-m-d_H-i') . '.xlsx';
+
+        return (new EstadoTransmisionExport($rows))->download($filename);
     }
 
     public function getBadgeColor($key)

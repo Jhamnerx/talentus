@@ -17,7 +17,6 @@ class TicketsController extends Controller
 
     public function show(Ticket $ticket)
     {
-        $this->authorize('view', $ticket);
 
         $ticket->load([
             'customer',
@@ -25,6 +24,7 @@ class TicketsController extends Controller
             'team',
             'assignedTo',
             'category',
+            'vehiculo',
             'messages.author',
             'attachments.uploadedBy',
             'events.actor'

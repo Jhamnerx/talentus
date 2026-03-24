@@ -7,6 +7,7 @@
 
     @push('modals')
         @livewire('admin.tickets.delete', key('delete-ticket'))
+        @livewire('admin.tickets.quick-view', key('quickview-ticket'))
     @endpush
 
 </x-admin-layout>

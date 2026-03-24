@@ -3,8 +3,6 @@
 namespace App\Livewire\Admin\Tickets;
 
 use App\Models\Ticket;
-use App\Models\Clientes;
-use App\Models\Team;
 use App\Models\User;
 use App\Models\TicketCategory;
 use App\Enums\TicketStatus;
@@ -23,8 +21,8 @@ class Create extends Component
     public $priority = 'medium';
     public $customer_id = '';
     public $category_id = '';
-    public $team_id = '';
     public $assigned_to = '';
+    public $vehiculo_id = '';
 
     protected $listeners = ['open-modal-create-ticket' => 'openModal'];
 
@@ -36,8 +34,8 @@ class Create extends Component
             'priority' => 'required|in:' . implode(',', array_column(TicketPriority::cases(), 'value')),
             'customer_id' => 'required|exists:clientes,id',
             'category_id' => 'nullable|exists:ticket_categories,id',
-            'team_id' => 'nullable|exists:teams,id',
             'assigned_to' => 'nullable|exists:users,id',
+            'vehiculo_id' => 'nullable|exists:vehiculos,id',
         ];
     }
 
@@ -50,29 +48,29 @@ class Create extends Component
 
     public function render()
     {
-        $customers = Clientes::active(1)->orderBy('razon_social')->get();
         $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
-        $teams = Team::active()->orderBy('name')->get();
         $users = User::whereHas('roles', fn($q) => $q->whereIn('name', ['admin', 'agente']))
             ->orderBy('name')->get();
 
-        return view('livewire.admin.tickets.create', compact('customers', 'categories', 'teams', 'users'));
+        return view('livewire.admin.tickets.create', compact('categories', 'users'));
     }
 
     public function openModal()
     {
         $this->resetValidation();
-        $this->reset(['subject', 'description', 'priority', 'customer_id', 'category_id', 'team_id', 'assigned_to']);
+        $this->reset(['subject', 'description', 'priority', 'customer_id', 'category_id', 'vehiculo_id']);
+        $this->assigned_to = Auth::user()->id;
         $this->showModal = true;
     }
 
     public function save()
     {
-        $this->authorize('create', Ticket::class);
-
         $data = $this->validate();
         $data['status'] = TicketStatus::NEW->value;
         $data['created_by'] = Auth::user()->id;
+        if (empty($data['assigned_to'])) {
+            $data['assigned_to'] = Auth::user()->id;
+        }
 
         $ticket = Ticket::create($data);
 
