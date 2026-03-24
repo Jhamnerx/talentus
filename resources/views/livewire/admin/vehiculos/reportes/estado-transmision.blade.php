@@ -149,7 +149,7 @@
                             </div>
 
                             <!-- Tabla de dispositivos -->
-                            <div class="overflow-x-auto min-h-screen"> x-show="open"
+                            <div class="overflow-x-auto" x-show="open"
                                 x-transition:enter="transition ease-out duration-200"
                                 x-transition:enter-start="opacity-0 -translate-y-1"
                                 x-transition:enter-end="opacity-100 translate-y-0"
@@ -255,8 +255,19 @@
             <div class="flex justify-between w-full">
                 <x-form.button flat label="Cerrar" wire:click="closeModal" />
                 @if ($estadoData && !$creandoReporte)
-                    <div class="text-xs text-slate-500 dark:text-slate-400">
-                        Última actualización: {{ now()->format('d/m/Y H:i:s') }}
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-slate-500 dark:text-slate-400">
+                            Última actualización: {{ now()->format('d/m/Y H:i:s') }}
+                        </span>
+                        <x-form.button xs secondary label="Exportar XLS" wire:click="exportarXLS"
+                            spinner="exportarXLS">
+                            <x-slot name="prepend">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                            </x-slot>
+                        </x-form.button>
                     </div>
                 @endif
             </div>

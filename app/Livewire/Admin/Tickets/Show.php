@@ -7,7 +7,6 @@ use App\Models\TicketMessage;
 use App\Models\TicketAttachment;
 use App\Models\TicketEvent;
 use App\Models\User;
-use App\Models\Team;
 use App\Enums\TicketStatus;
 use App\Enums\TicketPriority;
 use App\Enums\TicketEventType;
@@ -33,7 +32,6 @@ class Show extends Component
     public $newStatus = '';
     public $newPriority = '';
     public $newAssignedTo = '';
-    public $newTeamId = '';
 
     public function mount(Ticket $ticket)
     {
@@ -44,7 +42,6 @@ class Show extends Component
         $this->newStatus = $ticket->status->value;
         $this->newPriority = $ticket->priority->value;
         $this->newAssignedTo = $ticket->assigned_to;
-        $this->newTeamId = $ticket->team_id;
 
         $this->refreshTicket();
     }
@@ -57,8 +54,9 @@ class Show extends Component
             'team',
             'assignedTo',
             'createdBy',
+            'vehiculo',
             'events.actor',
-            'messages.sender',
+            'messages.author',
             'attachments'
         ]);
     }
@@ -73,8 +71,8 @@ class Show extends Component
 
         TicketMessage::create([
             'ticket_id' => $this->ticket->id,
-            'sender_id' => Auth::user()->id,
-            'message' => $this->newMessage,
+            'author_id' => Auth::user()->id,
+            'body' => $this->newMessage,
             'is_internal' => $this->isInternal,
         ]);
 
@@ -193,7 +191,9 @@ class Show extends Component
 
         $this->authorize('assign', $this->ticket);
 
-        $oldAssigned = $this->ticket->assigned_to;
+        $oldUser = $this->ticket->assigned_to ? User::find($this->ticket->assigned_to) : null;
+        $newUser = $this->newAssignedTo ? User::find($this->newAssignedTo) : null;
+
         $this->ticket->update(['assigned_to' => $this->newAssignedTo ?: null]);
 
         TicketEvent::create([
@@ -201,40 +201,15 @@ class Show extends Component
             'type' => TicketEventType::ASSIGNED_CHANGED->value,
             'actor_id' => Auth::user()->id,
             'payload' => [
-                'before' => $oldAssigned,
-                'after' => $this->newAssignedTo,
+                'before'      => $oldUser?->id,
+                'before_name' => $oldUser?->name ?? 'Sin asignar',
+                'after'       => $newUser?->id,
+                'after_name'  => $newUser?->name ?? 'Sin asignar',
             ],
         ]);
 
-        $this->reset('newAssignedTo');
         $this->refreshTicket();
         $this->notification()->success('Ticket reasignado');
-    }
-
-    public function assignTeam()
-    {
-        $this->validate([
-            'newTeamId' => 'nullable|exists:teams,id',
-        ]);
-
-        $this->authorize('assign', $this->ticket);
-
-        $oldTeam = $this->ticket->team_id;
-        $this->ticket->update(['team_id' => $this->newTeamId ?: null]);
-
-        TicketEvent::create([
-            'ticket_id' => $this->ticket->id,
-            'type' => TicketEventType::TEAM_CHANGED->value,
-            'actor_id' => Auth::user()->id,
-            'payload' => [
-                'before' => $oldTeam,
-                'after' => $this->newTeamId,
-            ],
-        ]);
-
-        $this->reset('newTeamId');
-        $this->refreshTicket();
-        $this->notification()->success('Equipo actualizado');
     }
 
     public function getTimelineItemsProperty()
@@ -266,8 +241,9 @@ class Show extends Component
             'created' => 'creó el ticket',
             'status_changed' => 'cambió el estado de ' . ($beforeStatus ?? 'N/A') . ' a ' . ($afterStatus ?? 'N/A'),
             'priority_changed' => 'cambió la prioridad de ' . (isset($event->payload['before']) ? TicketPriority::tryFrom($event->payload['before'])?->label() : 'N/A') . ' a ' . (isset($event->payload['after']) ? TicketPriority::tryFrom($event->payload['after'])?->label() : 'N/A'),
-            'assigned_changed' => 'reasignó el ticket',
+            'assigned_changed' => 'reasignó el ticket a ' . ($event->payload['after_name'] ?? 'Sin asignar'),
             'team_changed' => 'cambió el equipo',
+
             'message_added' => 'agregó un mensaje',
             'internal_note' => 'agregó una nota interna',
             'attachment_added' => 'adjuntó un archivo: ' . ($event->payload['file_name'] ?? ''),
@@ -283,12 +259,10 @@ class Show extends Component
     {
         $users = User::whereHas('roles', fn($q) => $q->whereIn('name', ['admin', 'agente']))
             ->orderBy('name')->get();
-        $teams = Team::active()->orderBy('name')->get();
 
         return view('livewire.admin.tickets.show', [
             'timelineItems' => $this->timelineItems,
             'users' => $users,
-            'teams' => $teams,
         ]);
     }
 }

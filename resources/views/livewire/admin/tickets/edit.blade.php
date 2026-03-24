@@ -11,11 +11,9 @@
             </div>
 
             <div>
-                <x-form.select label="Cliente" placeholder="Seleccione un cliente" wire:model="customer_id">
-                    @foreach ($customers as $customer)
-                        <x-select.option label="{{ $customer->razon_social }}" value="{{ $customer->id }}" />
-                    @endforeach
-                </x-form.select>
+                <x-form.select label="Cliente" placeholder="Seleccione un cliente" autocomplete="off"
+                    wire:model="customer_id" option-description="numero_documento" :async-data="route('api.clientes.index')"
+                    option-label="razon_social" option-value="id" />
             </div>
 
             <div>
@@ -34,6 +32,12 @@
                     <x-select.option label="Alta" value="high" />
                     <x-select.option label="Urgente" value="urgent" />
                 </x-form.select>
+            </div>
+
+            <div class="md:col-span-2">
+                <x-form.select label="Vehículo asociado (opcional)" placeholder="Buscar por placa..." autocomplete="off"
+                    wire:model="vehiculo_id" :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id"
+                    option-description="option_description" />
             </div>
         </div>
 

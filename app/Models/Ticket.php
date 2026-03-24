@@ -77,6 +77,11 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
+    public function vehiculo(): BelongsTo
+    {
+        return $this->belongsTo(Vehiculos::class, 'vehiculo_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
+    }
+
     public function messages(): HasMany
     {
         return $this->hasMany(TicketMessage::class, 'ticket_id');

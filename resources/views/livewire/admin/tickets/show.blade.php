@@ -1,121 +1,263 @@
-<div class="space-y-6">
-    <!-- Header con acciones rápidas -->
-    <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $ticket->code }}</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Creado {{ $ticket->created_at->diffForHumans() }}
-                </p>
+<div class="space-y-0">
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- HEADER BANNER -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div
+        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden mb-6 shadow-sm">
+        <!-- Barra de color según prioridad -->
+        <div
+            class="h-1.5 w-full
+            @if ($ticket->priority->value === 'urgent') bg-red-500
+            @elseif($ticket->priority->value === 'high') bg-orange-400
+            @elseif($ticket->priority->value === 'medium') bg-yellow-400
+            @else bg-green-400 @endif">
+        </div>
+
+        <div class="px-6 py-5 flex flex-wrap items-start justify-between gap-4">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <span
+                        class="text-xs font-mono font-semibold text-gray-400 dark:text-gray-500 tracking-widest uppercase">{{ $ticket->code }}</span>
+                    <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $ticket->status->statusColor() }}">
+                        {{ $ticket->status->label() }}
+                    </span>
+                    <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $ticket->priority->statusColor() }}">
+                        {{ $ticket->priority->label() }}
+                    </span>
+                    @if ($ticket->category)
+                        <span
+                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a2 2 0 012-2z" />
+                            </svg>
+                            {{ $ticket->category->name }}
+                        </span>
+                    @endif
+                </div>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100 mt-2 leading-tight">{{ $ticket->subject }}
+                </h1>
+                <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        {{ $ticket->customer->razon_social }}
+                    </span>
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Creado {{ $ticket->created_at->diffForHumans() }}
+                    </span>
+                    @if ($ticket->assignedTo)
+                        <span class="flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            </svg>
+                            Asignado a <strong
+                                class="text-gray-700 dark:text-gray-300">{{ $ticket->assignedTo->name }}</strong>
+                        </span>
+                    @endif
+                </div>
             </div>
-            <div class="flex flex-wrap gap-2">
-                <x-form.badge :label="$ticket->status->label()" :class="$ticket->status->statusColor()" />
-                <x-form.badge :label="$ticket->priority->label()" :class="$ticket->priority->statusColor()" />
-            </div>
+            <a href="{{ route('admin.tickets.index') }}"
+                class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Volver
+            </a>
         </div>
     </div>
 
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- CUERPO: TIMELINE + SIDEBAR -->
+    <!-- ══════════════════════════════════════════════════════ -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Columna Principal: Timeline -->
-        <div class="lg:col-span-2 space-y-6">
-            <!-- Información del Ticket -->
-            <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ $ticket->subject }}</h3>
-                <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{{ $ticket->description }}</p>
 
-                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <span class="text-gray-500 dark:text-gray-400">Cliente:</span>
-                            <span class="ml-2 font-medium text-gray-900 dark:text-gray-100">
-                                {{ $ticket->customer->razon_social }}
-                            </span>
-                        </div>
-                        <div>
-                            <span class="text-gray-500 dark:text-gray-400">Categoría:</span>
-                            <span class="ml-2 font-medium text-gray-900 dark:text-gray-100">
-                                {{ $ticket->category->name ?? 'Sin categoría' }}
-                            </span>
-                        </div>
-                    </div>
+        <!-- ─── COLUMNA PRINCIPAL ─── -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- Descripción -->
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                        Descripción</h3>
+                </div>
+                <div class="px-6 py-5">
+                    <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+                        {{ $ticket->description }}</p>
                 </div>
             </div>
 
             <!-- Timeline -->
-            <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Timeline</h3>
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Timeline
+                    </h3>
+                    <span class="ml-auto text-xs text-gray-400">{{ count($timelineItems) }} actividades</span>
+                </div>
 
-                <div class="space-y-6">
-                    @foreach ($timelineItems as $item)
-                        @if ($item['type'] === 'event')
-                            @php $event = $item['data']; @endphp
-                            <div class="flex gap-4">
-                                <div class="shrink-0">
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                                        <x-form.icon name="information-circle"
-                                            class="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm text-gray-900 dark:text-gray-100">
-                                        <span class="font-medium">{{ $event->actor->name ?? 'Sistema' }}</span>
-                                        {{ $this->formatEventDescription($event) }}
-                                    </p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                        {{ $event->created_at->diffForHumans() }}
-                                    </p>
-                                </div>
-                            </div>
-                        @else
-                            @php $message = $item['data']; @endphp
-                            <div class="flex gap-4">
-                                <div class="shrink-0">
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                                        <x-form.icon name="chat" class="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <span class="font-medium text-sm text-gray-900 dark:text-gray-100">
-                                                {{ $message->sender->name }}
-                                            </span>
-                                            @if ($message->is_internal)
-                                                <x-form.badge label="Interno" warning />
-                                            @endif
+                <div class="px-6 py-5">
+                    @if (count($timelineItems) === 0)
+                        <p class="text-center text-sm text-gray-400 py-6">Sin actividad registrada.</p>
+                    @else
+                        <ol class="relative">
+                            @foreach ($timelineItems as $i => $item)
+                                @php
+                                    $isLast = $loop->last;
+                                @endphp
+
+                                @if ($item['type'] === 'event')
+                                    @php
+                                        $event = $item['data'];
+                                        $evType = $event->type->value;
+                                    @endphp
+
+                                    @php
+                                        $iconBg = match ($evType) {
+                                            'created'
+                                                => 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400',
+                                            'status_changed'
+                                                => 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400',
+                                            'priority_changed'
+                                                => 'bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400',
+                                            'assigned_changed'
+                                                => 'bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400',
+                                            'closed' => 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400',
+                                            'resolved'
+                                                => 'bg-teal-100 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400',
+                                            'reopened'
+                                                => 'bg-sky-100 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400',
+                                            'attachment_added'
+                                                => 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400',
+                                            default => 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400',
+                                        };
+                                    @endphp
+
+                                    <li class="flex gap-4 {{ $isLast ? '' : 'pb-6' }} relative">
+                                        @if (!$isLast)
+                                            <span
+                                                class="absolute left-5 top-10 bottom-0 w-px bg-gray-200 dark:bg-gray-700"></span>
+                                        @endif
+                                        <div
+                                            class="shrink-0 w-10 h-10 rounded-full {{ $iconBg }} flex items-center justify-center ring-4 ring-white dark:ring-gray-800">
+                                            @php $icon = $event->type->icon(); @endphp
+                                            <x-form.icon :name="$icon" class="w-4 h-4" />
                                         </div>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-                                            {{ $message->message }}
-                                        </p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                            {{ $message->created_at->format('d/m/Y H:i') }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
+                                        <div class="flex-1 min-w-0 pt-1.5">
+                                            <p class="text-sm text-gray-800 dark:text-gray-200">
+                                                <span
+                                                    class="font-semibold">{{ $event->actor->name ?? 'Sistema' }}</span>
+                                                <span class="text-gray-600 dark:text-gray-400">
+                                                    {{ $this->formatEventDescription($event) }}</span>
+                                            </p>
+                                            <time class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 block">
+                                                {{ $event->created_at->format('d/m/Y H:i') }} ·
+                                                {{ $event->created_at->diffForHumans() }}
+                                            </time>
+                                        </div>
+                                    </li>
+                                @else
+                                    @php $message = $item['data']; @endphp
+                                    <li class="flex gap-4 {{ $isLast ? '' : 'pb-6' }} relative">
+                                        @if (!$isLast)
+                                            <span
+                                                class="absolute left-5 top-10 bottom-0 w-px bg-gray-200 dark:bg-gray-700"></span>
+                                        @endif
+                                        <div
+                                            class="shrink-0 w-10 h-10 rounded-full
+                                        {{ $message->is_internal ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400' }}
+                                        flex items-center justify-center ring-4 ring-white dark:ring-gray-800">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4z" />
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div
+                                                class="{{ $message->is_internal ? 'bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40' : 'bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700' }} rounded-xl p-4">
+                                                <div class="flex items-center justify-between mb-2 gap-2">
+                                                    <span
+                                                        class="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                                                        {{ $message->author->name ?? 'Usuario' }}
+                                                    </span>
+                                                    @if ($message->is_internal)
+                                                        <span
+                                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                            </svg>
+                                                            Nota interna
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <p
+                                                    class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+                                                    {{ $message->body }}</p>
+                                                <time
+                                                    class="text-xs text-gray-400 dark:text-gray-500 mt-2 block">{{ $message->created_at->format('d/m/Y H:i') }}</time>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ol>
+                    @endif
                 </div>
             </div>
 
             <!-- Adjuntos -->
             @if ($ticket->attachments->isNotEmpty())
-                <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Archivos Adjuntos</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div
+                    class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                        </svg>
+                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                            Archivos adjuntos</h3>
+                        <span class="ml-auto text-xs text-gray-400">{{ $ticket->attachments->count() }}</span>
+                    </div>
+                    <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         @foreach ($ticket->attachments as $attachment)
                             <div
-                                class="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-                                <x-form.icon name="document" class="w-8 h-8 text-gray-400" />
+                                class="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors">
+                                <div
+                                    class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                                        {{ $attachment->file_name }}
-                                    </p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        {{ number_format($attachment->file_size / 1024, 2) }} KB
-                                    </p>
+                                        {{ $attachment->file_name }}</p>
+                                    <p class="text-xs text-gray-400">
+                                        {{ number_format($attachment->file_size / 1024, 1) }} KB</p>
                                 </div>
                             </div>
                         @endforeach
@@ -123,128 +265,245 @@
                 </div>
             @endif
 
-            <!-- Formulario de nuevo mensaje -->
+            <!-- Nuevo Comentario / Nota Interna -->
             @can('addMessage', $ticket)
-                <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Agregar Comentario</h3>
-                    <x-form.textarea wire:model="newMessage" placeholder="Escribe un comentario..." rows="4" />
-                    <div class="flex items-center justify-between mt-4">
-                        <x-form.checkbox wire:model="isInternal" label="Nota interna" />
-                        <x-form.button primary label="Agregar Comentario" wire:click="addMessage" spinner="addMessage" />
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden"
+                    x-data="{ tab: 'comment' }">
+                    <!-- Tabs -->
+                    <div class="flex border-b border-gray-200 dark:border-gray-700">
+                        <button @click="tab = 'comment'"
+                            :class="tab === 'comment' ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400' :
+                                'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
+                            class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4z" />
+                            </svg>
+                            Comentario
+                        </button>
+                        <button @click="tab = 'note'"
+                            :class="tab === 'note' ? 'border-b-2 border-amber-500 text-amber-600 dark:text-amber-400' :
+                                'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
+                            class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            Nota interna
+                        </button>
+                    </div>
+
+                    <div class="p-5">
+                        <template x-if="tab === 'comment'">
+                            <p class="text-xs text-gray-400 mb-3">Visible para el cliente y el equipo.</p>
+                        </template>
+                        <template x-if="tab === 'note'">
+                            <p class="text-xs text-amber-500 mb-3 flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                Solo visible para el equipo interno.
+                            </p>
+                        </template>
+
+                        <textarea wire:model="newMessage" rows="4" placeholder="Escribe tu mensaje aquí..."
+                            class="w-full rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2
+                                focus:ring-indigo-400 dark:focus:ring-indigo-600 resize-none transition-colors"></textarea>
+
+                        <div class="flex items-center justify-between mt-3">
+                            <div class="flex items-center gap-2 text-xs text-gray-400">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                {{ Auth::user()->name }}
+                            </div>
+                            <button wire:click="$set('isInternal', tab === 'note')"
+                                x-on:click="$wire.set('isInternal', tab === 'note'); $wire.call('addMessage')"
+                                wire:loading.attr="disabled"
+                                :class="tab === 'note' ?
+                                    'bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500' :
+                                    'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400'"
+                                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50">
+                                <svg wire:loading wire:target="addMessage" class="w-4 h-4 animate-spin" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                </svg>
+                                <span x-text="tab === 'note' ? 'Guardar nota' : 'Enviar comentario'"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             @endcan
 
-            <!-- Subir archivos -->
+            <!-- Subir Archivos -->
             @can('addAttachment', $ticket)
-                <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Adjuntar Archivos</h3>
-                    <input type="file" wire:model="attachments" multiple
-                        class="block w-full text-sm text-gray-500
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-lg file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-primary-50 file:text-primary-700
-                        hover:file:bg-primary-100
-                        dark:file:bg-primary-900 dark:file:text-primary-300">
-                    @if (count($attachments) > 0)
-                        <x-form.button primary label="Subir Archivos" wire:click="uploadAttachments"
-                            spinner="uploadAttachments" class="mt-4" />
-                    @endif
+                <div
+                    class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Adjuntar
+                            archivos</h3>
+                    </div>
+                    <div class="px-6 py-5">
+                        <label
+                            class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-600 hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors">
+                            <svg class="w-8 h-8 text-gray-300 dark:text-gray-600 mb-2" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <span class="text-sm text-gray-400">Haz clic o arrastra archivos aquí</span>
+                            <span class="text-xs text-gray-300 mt-0.5">Máx. 10 MB por archivo</span>
+                            <input type="file" wire:model="attachments" multiple class="hidden">
+                        </label>
+                        @if (count($attachments) > 0)
+                            <div class="mt-3 flex items-center justify-between">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">{{ count($attachments) }}
+                                    archivo(s) seleccionado(s)</span>
+                                <x-form.button primary label="Subir archivos" wire:click="uploadAttachments"
+                                    spinner="uploadAttachments" />
+                            </div>
+                        @endif
+                    </div>
                 </div>
             @endcan
+
         </div>
 
-        <!-- Columna Lateral: Acciones -->
-        <div class="space-y-6">
+        <!-- ─── SIDEBAR ─── -->
+        <div class="space-y-4">
+
+            <!-- Detalles del ticket -->
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                        Detalles</h3>
+                </div>
+                <dl class="divide-y divide-gray-100 dark:divide-gray-700">
+                    <div class="px-5 py-3 flex items-start justify-between gap-2">
+                        <dt class="text-xs text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Asignado a</dt>
+                        <dd class="text-xs font-medium text-gray-800 dark:text-gray-200 text-right">
+                            @if ($ticket->assignedTo)
+                                <span class="inline-flex items-center gap-1.5">
+                                    <span
+                                        class="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">{{ substr($ticket->assignedTo->name, 0, 1) }}</span>
+                                    {{ $ticket->assignedTo->name }}
+                                </span>
+                            @else
+                                <span class="text-gray-400">Sin asignar</span>
+                            @endif
+                        </dd>
+                    </div>
+                    <div class="px-5 py-3 flex items-start justify-between gap-2">
+                        <dt class="text-xs text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Creado por</dt>
+                        <dd class="text-xs font-medium text-gray-800 dark:text-gray-200 text-right">
+                            <span class="inline-flex items-center gap-1.5">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 flex items-center justify-center text-xs font-bold">{{ substr($ticket->createdBy->name ?? '?', 0, 1) }}</span>
+                                {{ $ticket->createdBy->name ?? 'N/A' }}
+                            </span>
+                        </dd>
+                    </div>
+                    <div class="px-5 py-3 flex items-start justify-between gap-2">
+                        <dt class="text-xs text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Creado</dt>
+                        <dd class="text-xs font-medium text-gray-800 dark:text-gray-200 text-right">
+                            {{ $ticket->created_at->format('d/m/Y H:i') }}</dd>
+                    </div>
+                    <div class="px-5 py-3 flex items-start justify-between gap-2">
+                        <dt class="text-xs text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Última actividad
+                        </dt>
+                        <dd class="text-xs font-medium text-gray-800 dark:text-gray-200 text-right">
+                            {{ $ticket->last_activity_at?->diffForHumans() ?? 'N/A' }}</dd>
+                    </div>
+                    @if ($ticket->resolved_at)
+                        <div class="px-5 py-3 flex items-start justify-between gap-2">
+                            <dt class="text-xs text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Resuelto</dt>
+                            <dd class="text-xs font-medium text-teal-600 dark:text-teal-400 text-right">
+                                {{ $ticket->resolved_at->format('d/m/Y H:i') }}</dd>
+                        </div>
+                    @endif
+                    @if ($ticket->vehiculo)
+                        <div class="px-5 py-3 flex items-start justify-between gap-2">
+                            <dt class="text-xs text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Vehículo</dt>
+                            <dd class="text-xs font-medium text-gray-800 dark:text-gray-200 text-right">
+                                <span class="font-mono font-bold">{{ $ticket->vehiculo->placa }}</span>
+                                @if ($ticket->vehiculo->marca)
+                                    <span class="text-gray-400 block">{{ $ticket->vehiculo->marca }}
+                                        {{ $ticket->vehiculo->modelo }}</span>
+                                @endif
+                            </dd>
+                        </div>
+                    @endif
+                </dl>
+            </div>
+
             <!-- Cambiar Estado -->
             @can('changeStatus', $ticket)
-                <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Cambiar Estado</h3>
-                    <x-form.select wire:model="newStatus" placeholder="Seleccionar estado">
-                        @foreach (App\Enums\TicketStatus::cases() as $status)
-                            <x-select.option :label="$status->label()" :value="$status->value" />
-                        @endforeach
-                    </x-form.select>
-                    <x-form.button primary label="Actualizar" wire:click="changeStatus" spinner="changeStatus"
-                        class="w-full mt-3" />
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Estado
+                        </h3>
+                    </div>
+                    <div class="px-5 py-4 space-y-3">
+                        <x-form.select wire:model="newStatus" placeholder="Seleccionar estado">
+                            @foreach (App\Enums\TicketStatus::cases() as $status)
+                                <x-select.option :label="$status->label()" :value="$status->value" />
+                            @endforeach
+                        </x-form.select>
+                        <x-form.button primary label="Actualizar estado" wire:click="changeStatus" spinner="changeStatus"
+                            class="w-full" />
+                    </div>
                 </div>
             @endcan
 
             <!-- Cambiar Prioridad -->
             @can('update', $ticket)
-                <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Cambiar Prioridad</h3>
-                    <x-form.select wire:model="newPriority" placeholder="Seleccionar prioridad">
-                        @foreach (App\Enums\TicketPriority::cases() as $priority)
-                            <x-select.option :label="$priority->label()" :value="$priority->value" />
-                        @endforeach
-                    </x-form.select>
-                    <x-form.button primary label="Actualizar" wire:click="changePriority" spinner="changePriority"
-                        class="w-full mt-3" />
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            Prioridad</h3>
+                    </div>
+                    <div class="px-5 py-4 space-y-3">
+                        <x-form.select wire:model="newPriority" placeholder="Seleccionar prioridad">
+                            @foreach (App\Enums\TicketPriority::cases() as $priority)
+                                <x-select.option :label="$priority->label()" :value="$priority->value" />
+                            @endforeach
+                        </x-form.select>
+                        <x-form.button primary label="Actualizar prioridad" wire:click="changePriority"
+                            spinner="changePriority" class="w-full" />
+                    </div>
                 </div>
             @endcan
 
             <!-- Asignar Usuario -->
             @can('assign', $ticket)
-                <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Asignar a</h3>
-                    <x-form.select wire:model="newAssignedTo" placeholder="Seleccionar usuario">
-                        <x-select.option label="Sin asignar" value="" />
-                        @foreach ($users as $user)
-                            <x-select.option :label="$user->name" :value="$user->id" />
-                        @endforeach
-                    </x-form.select>
-                    <x-form.button primary label="Asignar" wire:click="assignTicket" spinner="assignTicket"
-                        class="w-full mt-3" />
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                            Asignar a</h3>
+                    </div>
+                    <div class="px-5 py-4 space-y-3">
+                        <x-form.select wire:model="newAssignedTo" placeholder="Seleccionar agente">
+                            <x-select.option label="Sin asignar" value="" />
+                            @foreach ($users as $user)
+                                <x-select.option :label="$user->name" :value="$user->id" />
+                            @endforeach
+                        </x-form.select>
+                        <x-form.button primary label="Asignar" wire:click="assignTicket" spinner="assignTicket"
+                            class="w-full" />
+                    </div>
                 </div>
             @endcan
 
-            <!-- Asignar Equipo -->
-            @can('assign', $ticket)
-                <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Asignar Equipo</h3>
-                    <x-form.select wire:model="newTeamId" placeholder="Seleccionar equipo">
-                        <x-select.option label="Sin equipo" value="" />
-                        @foreach ($teams as $team)
-                            <x-select.option :label="$team->name" :value="$team->id" />
-                        @endforeach
-                    </x-form.select>
-                    <x-form.button primary label="Asignar" wire:click="assignTeam" spinner="assignTeam"
-                        class="w-full mt-3" />
-                </div>
-            @endcan
-
-            <!-- Información Adicional -->
-            <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-6">
-                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Información</h3>
-                <dl class="space-y-3 text-sm">
-                    <div>
-                        <dt class="text-gray-500 dark:text-gray-400">Asignado a:</dt>
-                        <dd class="text-gray-900 dark:text-gray-100 font-medium mt-1">
-                            {{ $ticket->assignedTo->name ?? 'No asignado' }}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt class="text-gray-500 dark:text-gray-400">Equipo:</dt>
-                        <dd class="text-gray-900 dark:text-gray-100 font-medium mt-1">
-                            {{ $ticket->team->name ?? 'Sin equipo' }}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt class="text-gray-500 dark:text-gray-400">Creado por:</dt>
-                        <dd class="text-gray-900 dark:text-gray-100 font-medium mt-1">
-                            {{ $ticket->createdBy->name }}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt class="text-gray-500 dark:text-gray-400">Última actividad:</dt>
-                        <dd class="text-gray-900 dark:text-gray-100 font-medium mt-1">
-                            {{ $ticket->last_activity_at?->diffForHumans() ?? 'N/A' }}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
         </div>
     </div>
 </div>
