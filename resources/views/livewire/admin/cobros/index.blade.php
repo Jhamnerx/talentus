@@ -363,7 +363,7 @@
                             </tr>
                         </thead>
 
-                        <tbody class="text-sm">
+                        <tbody class="text-sm" x-data="{ openRows: {} }">
                             @php
                                 $currentCliente = null;
                                 $currentCobroId = null;
@@ -413,7 +413,11 @@
                                     }
 
                                     // Determinar colores y estado según días restantes
-                                    if ($subCancelada) {
+                                    if ($detalle->estado == 0) {
+                                        $bgColor = 'bg-gray-50 dark:bg-gray-900/20';
+                                        $textColor = 'text-gray-400 dark:text-gray-500';
+                                        $estadoTexto = 'INACTIVO';
+                                    } elseif ($subCancelada) {
                                         $bgColor = 'bg-gray-50 dark:bg-gray-900/20';
                                         $textColor = 'text-gray-500 dark:text-gray-400';
                                         $estadoTexto = 'CANCELADA';
@@ -673,7 +677,121 @@
                                                     <span class="sr-only">Estado</span>
                                                 </label>
                                             </div>
+
+                                            {{-- Toggle subpanel notificaciones --}}
+                                            @php $cntNotif = $detalle->notificaciones->count(); @endphp
+                                            <button
+                                                @click="openRows['{{ $detalle->id }}'] = !(openRows['{{ $detalle->id }}'] ?? false)"
+                                                :class="(openRows['{{ $detalle->id }}'] ?? false) ? 'text-indigo-500' :
+                                                'text-gray-400 hover:text-indigo-400'"
+                                                class="relative transition"
+                                                title="Notificaciones de cobro ({{ $cntNotif }})">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                </svg>
+                                                @if ($cntNotif > 0)
+                                                    <span
+                                                        class="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-indigo-500 text-white text-3xs font-bold leading-none">
+                                                        {{ $cntNotif > 9 ? '9+' : $cntNotif }}
+                                                    </span>
+                                                @endif
+                                            </button>
                                         </div>
+                                    </td>
+                                </tr>
+
+                                {{-- Sub-fila: Notificaciones de cobro --}}
+                                <tr x-show="openRows['{{ $detalle->id }}'] ?? false" x-cloak style="display:none;"
+                                    class="border-b border-indigo-100 dark:border-indigo-900/40">
+                                    <td colspan="7" class="px-5 py-3 bg-indigo-50/50 dark:bg-indigo-900/10">
+                                        @if ($detalle->notificaciones->isEmpty())
+                                            <p class="text-xs text-gray-400 italic">Sin notificaciones de cobro
+                                                registradas.</p>
+                                        @else
+                                            <div class="flex flex-wrap gap-2">
+                                                @foreach ($detalle->notificaciones->sortByDesc('fecha_vencimiento') as $notif)
+                                                    @php
+                                                        $notifDoc = $notif->venta ?? $notif->recibo;
+                                                        $notifPagos = $notifDoc?->payments ?? collect();
+                                                        $notifDocLabel = $notif->venta
+                                                            ? $notif->venta->serie_correlativo ?? '—'
+                                                            : $notif->recibo?->serie_numero ?? '—';
+                                                        $notifColor = match ($notif->estado) {
+                                                            'PAGADO' => 'border-emerald-200 dark:border-emerald-800',
+                                                            'FACTURADO' => 'border-blue-200 dark:border-blue-800',
+                                                            'CANCELADO' => 'border-gray-200 dark:border-gray-600',
+                                                            default => 'border-amber-200 dark:border-amber-800',
+                                                        };
+                                                        $notifBadge = match ($notif->estado) {
+                                                            'PAGADO'
+                                                                => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300',
+                                                            'FACTURADO'
+                                                                => 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
+                                                            'CANCELADO'
+                                                                => 'bg-gray-200 text-gray-500 dark:bg-gray-600 dark:text-gray-400',
+                                                            default
+                                                                => 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300',
+                                                        };
+                                                    @endphp
+                                                    <div
+                                                        class="border {{ $notifColor }} rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-xs space-y-1.5 min-w-52 max-w-xs shadow-xs">
+                                                        <div class="flex items-center justify-between gap-2">
+                                                            <span
+                                                                class="font-semibold text-gray-700 dark:text-gray-200">
+                                                                {{ \Carbon\Carbon::parse($notif->fecha_vencimiento)->format('d/m/Y') }}
+                                                            </span>
+                                                            <span
+                                                                class="px-1.5 py-0.5 rounded-full text-[10px] font-bold {{ $notifBadge }}">
+                                                                {{ $notif->estado }}
+                                                            </span>
+                                                        </div>
+                                                        @if ($notif->descripcion)
+                                                            <div class="text-gray-500 dark:text-gray-400 truncate"
+                                                                title="{{ $notif->descripcion }}">
+                                                                {{ Str::limit($notif->descripcion, 45) }}
+                                                            </div>
+                                                        @endif
+                                                        <div class="font-semibold text-gray-700 dark:text-gray-300">
+                                                            {{ $notif->moneda === 'USD' ? 'USD' : 'S/.' }}
+                                                            {{ number_format($notif->monto, 2) }}
+                                                        </div>
+                                                        @if ($notifDoc)
+                                                            <div
+                                                                class="flex items-center gap-1 text-blue-600 dark:text-blue-400">
+                                                                <svg class="w-3 h-3 shrink-0" fill="none"
+                                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                </svg>
+                                                                <span class="font-medium">{{ $notifDocLabel }}</span>
+                                                            </div>
+                                                        @endif
+                                                        @foreach ($notifPagos as $pago)
+                                                            <div
+                                                                class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                                                                <svg class="w-3 h-3 shrink-0" fill="none"
+                                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                </svg>
+                                                                <span>{{ $pago->paymentMethod?->description ?? '—' }}
+                                                                    · {{ $pago->divisa }}
+                                                                    {{ number_format($pago->monto, 2) }}</span>
+                                                                <span class="text-gray-400 dark:text-gray-500">
+                                                                    ·
+                                                                    {{ \Carbon\Carbon::parse($pago->fecha)->format('d/m/Y') }}
+                                                                </span>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

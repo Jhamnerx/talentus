@@ -127,16 +127,7 @@ class RecibosIndex extends Component
 
     public function toogleEstado(Recibos $recibo)
     {
-        if ($recibo->estado == 'COMPLETADO') {
-            $recibo->update([
-                'estado' => 'BORRADOR',
-            ]);
-        } else {
-            $recibo->update([
-                'estado' => 'COMPLETADO',
-            ]);
-        }
-        $this->render();
+        $this->dispatch('confirmar-estado-recibo', reciboId: $recibo->id);
     }
 
     public function OpenModalReporte()

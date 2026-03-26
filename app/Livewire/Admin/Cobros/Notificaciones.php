@@ -74,6 +74,9 @@ class Notificaciones extends Component
     public bool $modalGenerarNotif = false;
     public int $generarDias = 7;
 
+    // Ocultar/mostrar notificaciones pagadas
+    public bool $mostrarPagadas = false;
+
     // Selección múltiple para facturación en lote
     public array $notificacionesSeleccionadas = [];
 
@@ -123,6 +126,10 @@ class Notificaciones extends Component
             ->when($this->filtroVencimiento === 'hoy',     fn($q) => $q->whereDate('fecha_vencimiento', now()))
             ->when($this->filtroVencimiento === '7dias',   fn($q) => $q->porVencer(7))
             ->when($this->filtroVencimiento === '15dias',  fn($q) => $q->porVencer(15))
+            ->when(
+                !$this->mostrarPagadas && !in_array($this->estado, ['PAGADO', 'CANCELADO']),
+                fn($q) => $q->whereNotIn('estado', ['PAGADO', 'CANCELADO'])
+            )
             ->orderBy('fecha_vencimiento', 'asc')
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);
@@ -134,8 +141,11 @@ class Notificaciones extends Component
             'monto_pendiente_pen' => NotificacionCobro::pendientes()->where('moneda', 'PEN')->sum('monto'),
             'monto_pendiente_usd' => NotificacionCobro::pendientes()->where('moneda', 'USD')->sum('monto'),
         ];
+        $countOcultas = !$this->mostrarPagadas
+            ? NotificacionCobro::whereIn('estado', ['PAGADO', 'CANCELADO'])->count()
+            : 0;
         $paymentMethods = PaymentMethodType::whereActive(true)->get();
-        return view('livewire.admin.cobros.notificaciones', compact('notificaciones', 'stats', 'paymentMethods'));
+        return view('livewire.admin.cobros.notificaciones', compact('notificaciones', 'stats', 'paymentMethods', 'countOcultas'));
     }
 
     // Modal de pago - apertura
@@ -707,7 +717,7 @@ class Notificaciones extends Component
 
     public function clearFilters(): void
     {
-        $this->reset(['search', 'estado', 'filtroVencimiento', 'clienteId']);
+        $this->reset(['search', 'estado', 'filtroVencimiento', 'clienteId', 'mostrarPagadas']);
         $this->resetPage();
     }
 
