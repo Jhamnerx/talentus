@@ -24,7 +24,6 @@ class Delete extends Component
     public function openModal($ticketId)
     {
         $ticket = Ticket::findOrFail($ticketId);
-        $this->authorize('delete', $ticket);
 
         $this->ticketId = $ticket->id;
         $this->ticketCode = $ticket->code;
@@ -34,7 +33,6 @@ class Delete extends Component
     public function delete()
     {
         $ticket = Ticket::findOrFail($this->ticketId);
-        $this->authorize('delete', $ticket);
 
         $ticket->delete();
 
