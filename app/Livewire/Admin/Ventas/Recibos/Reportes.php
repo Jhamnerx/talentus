@@ -16,7 +16,6 @@ class Reportes extends Component
     public $fecha_fin;
     public $estado;
 
-
     public $total_soles = 0;
     public $total_dolares = 0;
 
@@ -28,8 +27,6 @@ class Reportes extends Component
         'fecha_inicio' => 'required',
         'fecha_fin' => 'required',
         "estado" => 'required',
-
-
     ];
 
     protected $messages = [

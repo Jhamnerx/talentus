@@ -5,5 +5,6 @@
     @livewire('admin.reportes.ventas')
     @livewire('admin.ventas.recibos.send')
     @livewire('admin.ventas.recibos.eliminar-recibo')
+    @livewire('admin.ventas.recibos.confirmar-estado-recibo')
     @livewire('admin.shared.pagos-modal')
 </x-admin-layout>

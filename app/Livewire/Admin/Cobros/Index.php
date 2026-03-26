@@ -34,7 +34,14 @@ class Index extends Component
 
         // Obtener detalles con sus relaciones
         $detalles = DetalleCobros::query()
-            ->with(['vehiculo.cliente', 'vehiculo.planSubscriptions.plan', 'cobro.clientes.contactos', 'plan'])
+            ->with([
+                'vehiculo.cliente',
+                'vehiculo.planSubscriptions.plan',
+                'cobro.clientes.contactos',
+                'plan',
+                'notificaciones.venta.payments.paymentMethod',
+                'notificaciones.recibo.payments.paymentMethod',
+            ])
             // Excluir detalles de cobros eliminados
             ->whereHas('cobro', function ($query) {
                 $query->whereNull('deleted_at');

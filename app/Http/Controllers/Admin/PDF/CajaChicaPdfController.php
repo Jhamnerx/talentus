@@ -260,7 +260,6 @@ class CajaChicaPdfController extends Controller
      */
     public function reportA4(Cash $caja)
     {
-        $this->authorize('ver-caja-chica');
 
         $data = $this->setDataToReport($caja->id, 0);
 
@@ -276,8 +275,6 @@ class CajaChicaPdfController extends Controller
      */
     public function reportExcel(Cash $caja)
     {
-        $this->authorize('ver-caja-chica');
-
         return Excel::download(
             new CashExport($caja),
             "Reporte_Caja_General_{$caja->fecha_apertura}.xlsx"

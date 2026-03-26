@@ -77,9 +77,6 @@ class Index extends Component
     // ============ TOGGLE STATUS ============
     public function toggleStatus(int $id): void
     {
-
-        $this->authorize('cambiar.estado-producto');
-
         $producto = Productos::findOrFail($id);
         $producto->estado = ! $producto->estado;
         $producto->save();

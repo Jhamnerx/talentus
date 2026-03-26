@@ -149,6 +149,11 @@ class Vehiculos extends Model
         return $this->belongsTo(DetalleCobros::class, 'vehiculo_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
+    public function detallesCobros()
+    {
+        return $this->hasMany(DetalleCobros::class, 'vehiculo_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
     public function dispositivos()
     {
         // Relación 1:N con todos los dispositivos instalados (histórico)

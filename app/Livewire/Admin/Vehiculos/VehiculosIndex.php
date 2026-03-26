@@ -36,7 +36,7 @@ class VehiculosIndex extends Component
         $hasta = $this->to;
 
         $vehiculos = Vehiculos::query()
-            ->with(['planSubscriptions'])
+            ->with(['planSubscriptions', 'detallesCobros.cobro'])
             ->when($this->clientes_id, function ($query) {
                 $query->where('clientes_id', $this->clientes_id);
             })

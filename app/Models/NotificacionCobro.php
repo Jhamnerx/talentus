@@ -216,4 +216,18 @@ class NotificacionCobro extends Model
         }
         $this->save();
     }
+
+    /**
+     * Revierte la facturación: quita el venta_id/recibo_id y vuelve a PENDIENTE.
+     * Se llama cuando se anula la venta o se emite una nota de crédito/débito sobre ella.
+     */
+    public function resetFacturacion(): void
+    {
+        $this->update([
+            'venta_id'          => null,
+            'recibo_id'         => null,
+            'estado'            => 'PENDIENTE',
+            'fecha_facturacion' => null,
+        ]);
+    }
 }

@@ -9,6 +9,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\EnvioResumen;
 use App\Models\Dispositivos;
+use App\Models\NotificacionCobro;
 use App\Models\TipoComprobantes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -166,6 +167,13 @@ class AnularComprobante extends Component
             Dispositivos::whereIn('id', $dispositivosIds)
                 ->update(['estado' => Dispositivos::STOCK]);
         }
+
+        // Revertir NotificacionesCobro vinculadas a esta venta
+        NotificacionCobro::where('venta_id', $this->invoice->id)
+            ->each(fn($n) => $n->resetFacturacion());
+
+        // Soft-delete de los pagos asociados a la venta anulada
+        $this->invoice->payments()->delete();
 
         //CREAR DETALLE DE ENVIO DE RESUMEN
         $resumen->envioResumenDetalles()->create([

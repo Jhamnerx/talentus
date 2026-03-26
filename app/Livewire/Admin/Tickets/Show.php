@@ -35,7 +35,6 @@ class Show extends Component
 
     public function mount(Ticket $ticket)
     {
-        $this->authorize('view', $ticket);
         $this->ticket = $ticket;
 
         // Inicializar valores actuales
@@ -67,8 +66,6 @@ class Show extends Component
             'newMessage' => 'required|string|max:5000',
         ]);
 
-        $this->authorize('addMessage', $this->ticket);
-
         TicketMessage::create([
             'ticket_id' => $this->ticket->id,
             'author_id' => Auth::user()->id,
@@ -95,8 +92,6 @@ class Show extends Component
         $this->validate([
             'attachments.*' => 'required|file|max:10240', // 10MB
         ]);
-
-        $this->authorize('addAttachment', $this->ticket);
 
         foreach ($this->attachments as $file) {
             $path = $file->store('tickets/' . $this->ticket->id, 'local');
@@ -131,8 +126,6 @@ class Show extends Component
             'newStatus' => 'required|in:' . implode(',', array_column(TicketStatus::cases(), 'value')),
         ]);
 
-        $this->authorize('changeStatus', $this->ticket);
-
         $oldStatus = $this->ticket->status->value;
         $this->ticket->update(['status' => $this->newStatus]);
 
@@ -163,8 +156,6 @@ class Show extends Component
             'newPriority' => 'required|in:' . implode(',', array_column(TicketPriority::cases(), 'value')),
         ]);
 
-        $this->authorize('update', $this->ticket);
-
         $oldPriority = $this->ticket->priority->value;
         $this->ticket->update(['priority' => $this->newPriority]);
 
@@ -188,8 +179,6 @@ class Show extends Component
         $this->validate([
             'newAssignedTo' => 'nullable|exists:users,id',
         ]);
-
-        $this->authorize('assign', $this->ticket);
 
         $oldUser = $this->ticket->assigned_to ? User::find($this->ticket->assigned_to) : null;
         $newUser = $this->newAssignedTo ? User::find($this->newAssignedTo) : null;
