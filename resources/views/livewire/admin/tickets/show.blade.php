@@ -447,62 +447,62 @@
             </div>
 
             <!-- Cambiar Estado -->
-            @can('changeStatus', $ticket)
-                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
-                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Estado
-                        </h3>
-                    </div>
-                    <div class="px-5 py-4 space-y-3">
-                        <x-form.select wire:model="newStatus" placeholder="Seleccionar estado">
-                            @foreach (App\Enums\TicketStatus::cases() as $status)
-                                <x-select.option :label="$status->label()" :value="$status->value" />
-                            @endforeach
-                        </x-form.select>
-                        <x-form.button primary label="Actualizar estado" wire:click="changeStatus" spinner="changeStatus"
-                            class="w-full" />
-                    </div>
+
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
+                <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Estado
+                    </h3>
                 </div>
-            @endcan
+                <div class="px-5 py-4 space-y-3">
+                    <x-form.select wire:model="newStatus" placeholder="Seleccionar estado">
+                        @foreach (App\Enums\TicketStatus::cases() as $status)
+                            <x-select.option :label="$status->label()" :value="$status->value" />
+                        @endforeach
+                    </x-form.select>
+                    <x-form.button primary label="Actualizar estado" wire:click="changeStatus" spinner="changeStatus"
+                        class="w-full" />
+                </div>
+            </div>
+
 
             <!-- Cambiar Prioridad -->
-            @can('update', $ticket)
-                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
-                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-                            Prioridad</h3>
-                    </div>
-                    <div class="px-5 py-4 space-y-3">
-                        <x-form.select wire:model="newPriority" placeholder="Seleccionar prioridad">
-                            @foreach (App\Enums\TicketPriority::cases() as $priority)
-                                <x-select.option :label="$priority->label()" :value="$priority->value" />
-                            @endforeach
-                        </x-form.select>
-                        <x-form.button primary label="Actualizar prioridad" wire:click="changePriority"
-                            spinner="changePriority" class="w-full" />
-                    </div>
+
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
+                <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                        Prioridad</h3>
                 </div>
-            @endcan
+                <div class="px-5 py-4 space-y-3">
+                    <x-form.select wire:model="newPriority" placeholder="Seleccionar prioridad">
+                        @foreach (App\Enums\TicketPriority::cases() as $priority)
+                            <x-select.option :label="$priority->label()" :value="$priority->value" />
+                        @endforeach
+                    </x-form.select>
+                    <x-form.button primary label="Actualizar prioridad" wire:click="changePriority"
+                        spinner="changePriority" class="w-full" />
+                </div>
+            </div>
+
 
             <!-- Asignar Usuario -->
-            @can('assign', $ticket)
-                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
-                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-                            Asignar a</h3>
-                    </div>
-                    <div class="px-5 py-4 space-y-3">
-                        <x-form.select wire:model="newAssignedTo" placeholder="Seleccionar agente">
-                            <x-select.option label="Sin asignar" value="" />
-                            @foreach ($users as $user)
-                                <x-select.option :label="$user->name" :value="$user->id" />
-                            @endforeach
-                        </x-form.select>
-                        <x-form.button primary label="Asignar" wire:click="assignTicket" spinner="assignTicket"
-                            class="w-full" />
-                    </div>
+
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
+                <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
+                        Asignar a</h3>
                 </div>
-            @endcan
+                <div class="px-5 py-4 space-y-3">
+                    <x-form.select wire:model="newAssignedTo" placeholder="Seleccionar agente">
+                        <x-select.option label="Sin asignar" value="" />
+                        @foreach ($users as $user)
+                            <x-select.option :label="$user->name" :value="$user->id" />
+                        @endforeach
+                    </x-form.select>
+                    <x-form.button primary label="Asignar" wire:click="assignTicket" spinner="assignTicket"
+                        class="w-full" />
+                </div>
+            </div>
+
 
         </div>
     </div>

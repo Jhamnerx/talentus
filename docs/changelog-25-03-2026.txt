@@ -1,0 +1,45 @@
+📋 ACTUALIZACIONES DEL SISTEMA — 25/03/2026
+===========================================
+
+✅ 1. Reversión automática de cobros al anular documentos
+
+Se implementó una nueva regla de negocio: cuando se anula o deshace un documento de facturación, las notificaciones de cobro vinculadas se revierten automáticamente a estado PENDIENTE, borrando el vínculo con el documento anulado para que puedan ser refacturadas correctamente.
+
+Esto ocurre en tres situaciones:
+
+- Al anular una factura/boleta — la notificación de cobro asociada vuelve a PENDIENTE y sus pagos registrados se eliminan.
+- Al emitir una Nota de Crédito o Débito sobre una venta — la notificación de cobro vinculada a esa venta vuelve a PENDIENTE.
+- Al eliminar un Recibo — la notificación de cobro vinculada vuelve a PENDIENTE y sus pagos se eliminan.
+
+---
+
+✅ 2. Aviso previo al eliminar un Recibo
+
+Antes de confirmar la eliminación de un recibo, el sistema ahora muestra:
+
+- Un aviso si existe un cobro vinculado que será revertido a PENDIENTE.
+- La lista de pagos que serán eliminados (método de pago, monto y fecha), para que el usuario sea consciente de lo que se perderá.
+
+---
+
+✅ 3. Notificaciones de cobro — ocultar pagadas/canceladas por defecto
+
+En la vista de Notificaciones de Cobro, las notificaciones en estado PAGADO o CANCELADO ya no aparecen por defecto. Se puede activar su visualización con el botón toggle, que también indica cuántas notificaciones están ocultas.
+
+---
+
+✅ 4. Cambio de estado de Recibo con confirmación
+
+El botón que cambia el estado de un recibo (Borrador/Completado) ahora solicita confirmación antes de aplicar el cambio.
+
+---
+
+✅ 5. Cobros vinculados visibles en la lista de Vehículos
+
+En el listado de vehículos, la columna de suscripción ahora también muestra los cobros asociados al vehículo como mini-etiquetas con el período (ej. "2026-03"). Haciendo clic en cada etiqueta se accede directamente al cobro.
+
+---
+
+✅ 6. Detalle de notificaciones de cobro en el listado de Cobros
+
+Cada cobro en el listado ahora tiene un ícono de campana que muestra cuántas notificaciones tiene. Al hacer clic se despliega el detalle de cada notificación: estado, fecha de vencimiento, documento emitido y pagos registrados.
