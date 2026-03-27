@@ -266,115 +266,114 @@
             @endif
 
             <!-- Nuevo Comentario / Nota Interna -->
-            @can('addMessage', $ticket)
-                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden"
-                    x-data="{ tab: 'comment' }">
-                    <!-- Tabs -->
-                    <div class="flex border-b border-gray-200 dark:border-gray-700">
-                        <button @click="tab = 'comment'"
-                            :class="tab === 'comment' ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400' :
-                                'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4z" />
-                            </svg>
-                            Comentario
-                        </button>
-                        <button @click="tab = 'note'"
-                            :class="tab === 'note' ? 'border-b-2 border-amber-500 text-amber-600 dark:text-amber-400' :
-                                'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden"
+                x-data="{ tab: 'comment' }">
+                <!-- Tabs -->
+                <div class="flex border-b border-gray-200 dark:border-gray-700">
+                    <button @click="tab = 'comment'"
+                        :class="tab === 'comment' ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400' :
+                            'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
+                        class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4z" />
+                        </svg>
+                        Comentario
+                    </button>
+                    <button @click="tab = 'note'"
+                        :class="tab === 'note' ? 'border-b-2 border-amber-500 text-amber-600 dark:text-amber-400' :
+                            'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'"
+                        class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        Nota interna
+                    </button>
+                </div>
+
+                <div class="p-5">
+                    <template x-if="tab === 'comment'">
+                        <p class="text-xs text-gray-400 mb-3">Visible para el cliente y el equipo.</p>
+                    </template>
+                    <template x-if="tab === 'note'">
+                        <p class="text-xs text-amber-500 mb-3 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
-                            Nota interna
-                        </button>
-                    </div>
+                            Solo visible para el equipo interno.
+                        </p>
+                    </template>
 
-                    <div class="p-5">
-                        <template x-if="tab === 'comment'">
-                            <p class="text-xs text-gray-400 mb-3">Visible para el cliente y el equipo.</p>
-                        </template>
-                        <template x-if="tab === 'note'">
-                            <p class="text-xs text-amber-500 mb-3 flex items-center gap-1">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                                Solo visible para el equipo interno.
-                            </p>
-                        </template>
-
-                        <textarea wire:model="newMessage" rows="4" placeholder="Escribe tu mensaje aquí..."
-                            class="w-full rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2
+                    <textarea wire:model="newMessage" rows="4" placeholder="Escribe tu mensaje aquí..."
+                        class="w-full rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2
                                 focus:ring-indigo-400 dark:focus:ring-indigo-600 resize-none transition-colors"></textarea>
 
-                        <div class="flex items-center justify-between mt-3">
-                            <div class="flex items-center gap-2 text-xs text-gray-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                {{ Auth::user()->name }}
-                            </div>
-                            <button wire:click="$set('isInternal', tab === 'note')"
-                                x-on:click="$wire.set('isInternal', tab === 'note'); $wire.call('addMessage')"
-                                wire:loading.attr="disabled"
-                                :class="tab === 'note' ?
-                                    'bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500' :
-                                    'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400'"
-                                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50">
-                                <svg wire:loading wire:target="addMessage" class="w-4 h-4 animate-spin" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                                </svg>
-                                <span x-text="tab === 'note' ? 'Guardar nota' : 'Enviar comentario'"></span>
-                            </button>
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            {{ Auth::user()->name }}
                         </div>
+                        <button wire:click="$set('isInternal', tab === 'note')"
+                            x-on:click="$wire.set('isInternal', tab === 'note'); $wire.call('addMessage')"
+                            wire:loading.attr="disabled"
+                            :class="tab === 'note' ?
+                                'bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500' :
+                                'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400'"
+                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50">
+                            <svg wire:loading wire:target="addMessage" class="w-4 h-4 animate-spin" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            <span x-text="tab === 'note' ? 'Guardar nota' : 'Enviar comentario'"></span>
+                        </button>
                     </div>
                 </div>
-            @endcan
+            </div>
+
 
             <!-- Subir Archivos -->
-            @can('addAttachment', $ticket)
-                <div
-                    class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Adjuntar
+                        archivos</h3>
+                </div>
+                <div class="px-6 py-5">
+                    <label
+                        class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-600 hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors">
+                        <svg class="w-8 h-8 text-gray-300 dark:text-gray-600 mb-2" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Adjuntar
-                            archivos</h3>
-                    </div>
-                    <div class="px-6 py-5">
-                        <label
-                            class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-600 hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors">
-                            <svg class="w-8 h-8 text-gray-300 dark:text-gray-600 mb-2" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                            <span class="text-sm text-gray-400">Haz clic o arrastra archivos aquí</span>
-                            <span class="text-xs text-gray-300 mt-0.5">Máx. 10 MB por archivo</span>
-                            <input type="file" wire:model="attachments" multiple class="hidden">
-                        </label>
-                        @if (count($attachments) > 0)
-                            <div class="mt-3 flex items-center justify-between">
-                                <span class="text-sm text-gray-600 dark:text-gray-400">{{ count($attachments) }}
-                                    archivo(s) seleccionado(s)</span>
-                                <x-form.button primary label="Subir archivos" wire:click="uploadAttachments"
-                                    spinner="uploadAttachments" />
-                            </div>
-                        @endif
-                    </div>
+                        <span class="text-sm text-gray-400">Haz clic o arrastra archivos aquí</span>
+                        <span class="text-xs text-gray-300 mt-0.5">Máx. 10 MB por archivo</span>
+                        <input type="file" wire:model="attachments" multiple class="hidden">
+                    </label>
+                    @if (count($attachments) > 0)
+                        <div class="mt-3 flex items-center justify-between">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">{{ count($attachments) }}
+                                archivo(s) seleccionado(s)</span>
+                            <x-form.button primary label="Subir archivos" wire:click="uploadAttachments"
+                                spinner="uploadAttachments" />
+                        </div>
+                    @endif
                 </div>
-            @endcan
+            </div>
 
         </div>
 
