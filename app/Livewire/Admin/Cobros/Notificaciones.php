@@ -80,6 +80,16 @@ class Notificaciones extends Component
     // Selección múltiple para facturación en lote
     public array $notificacionesSeleccionadas = [];
 
+    // Períodos a avanzar al registrar el pago (para pago multi-período)
+    public int $pago_periodos = 1;
+    // Indica si la notificación es de renovación (para mostrar el selector de períodos)
+    public bool $pago_es_renovacion = false;
+
+    // Mini-modal pre-facturar: captura períodos antes de redirigir al formulario de documento
+    public bool $modalConfirmarFacturar = false;
+    public ?int $facturar_notificacion_id = null;
+    public int $facturar_periodos = 1;
+
     // Catalogos cargados en mount()
     public array $paymentsMethods = [];
     public $bankAccounts = [];
@@ -168,6 +178,11 @@ class Notificaciones extends Component
 
         $this->checkAvailableDestinations();
         $this->loadExistingPayments($cobro->clientes);
+
+        // Determinar si es notificación de renovación mediante el campo tipo (explícito y fiable).
+        // Antes se inferenia por comparación de fechas, pero ahora el campo 'tipo' es la fuente de verdad.
+        $this->pago_es_renovacion = $notificacion->tipo === 'RENOVACION';
+        $this->pago_periodos = 1;
 
         $this->modalPago = true;
     }
@@ -292,7 +307,7 @@ class Notificaciones extends Component
                     $notificacion->recibo_id = $payment->paymentable_id;
                 }
 
-                $notificacion->marcarComoPagado();
+                $notificacion->marcarComoPagado($this->pago_periodos);
 
                 $this->notification()->success(
                     title: 'Pago Asociado',
@@ -368,7 +383,7 @@ class Notificaciones extends Component
                 }
             }
 
-            $notificacion->marcarComoPagado();
+            $notificacion->marcarComoPagado($this->pago_periodos);
 
             $this->notification()->success(
                 title: 'Pago Registrado',
@@ -412,6 +427,8 @@ class Notificaciones extends Component
         $this->pago_payment_method_id = $this->paymentsMethods[0]['id'] ?? 1;
         $this->pago_divisa            = 'PEN';
         $this->pago_mode              = 'create';
+        $this->pago_periodos          = 1;
+        $this->pago_es_renovacion     = false;
     }
 
     private function cargarDocumentos(Cobros $cobro): void
@@ -522,13 +539,22 @@ class Notificaciones extends Component
         }
     }
 
-    // Facturar (Emitir documento)
-    public function redirectToFacturar(int $notificacionId): mixed
+    // Facturar (Emitir documento) - Paso 1: abrir mini-modal para confirmar períodos
+    public function redirectToFacturar(int $notificacionId): void
     {
-        $notificacion = NotificacionCobro::with(['cobro.clientes'])->find($notificacionId);
+        $this->facturar_notificacion_id = $notificacionId;
+        $this->facturar_periodos = 1;
+        $this->modalConfirmarFacturar = true;
+    }
+
+    // Facturar - Paso 2: guardar en sesión y redirigir al formulario del documento
+    public function confirmarFacturar(): mixed
+    {
+        $notificacion = NotificacionCobro::with(['cobro.clientes'])->find($this->facturar_notificacion_id);
 
         if (!$notificacion) {
             $this->notification()->error('Notificacion no encontrada');
+            $this->modalConfirmarFacturar = false;
             return null;
         }
 
@@ -536,12 +562,14 @@ class Notificaciones extends Component
         $cliente = $cobro->clientes;
 
         session([
-            'cobro_forma_pago'      => 'CONTADO',
-            'cobro_redirect_back'   => route('admin.cobros.notificaciones'),
-            'notificacion_cobro_id' => $notificacionId,
+            'cobro_forma_pago'        => 'CONTADO',
+            'cobro_redirect_back'     => route('admin.cobros.notificaciones'),
+            'notificacion_cobro_id'   => $this->facturar_notificacion_id,
+            'notificacion_periodos'   => max(1, (int) $this->facturar_periodos),
         ]);
 
-        $notificacionIds = json_encode([$notificacionId]);
+        $notificacionIds = json_encode([$this->facturar_notificacion_id]);
+        $this->modalConfirmarFacturar = false;
 
         if ($cobro->tipo_pago === 'RECIBO') {
             return redirect()->route('admin.ventas.recibos.create', [

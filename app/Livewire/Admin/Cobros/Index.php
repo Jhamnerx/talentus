@@ -39,6 +39,7 @@ class Index extends Component
                 'vehiculo.planSubscriptions.plan',
                 'cobro.clientes.contactos',
                 'plan',
+                'subscription.plan',
                 'notificaciones.venta.payments.paymentMethod',
                 'notificaciones.recibo.payments.paymentMethod',
             ])
@@ -180,8 +181,24 @@ class Index extends Component
 
     public function cambiarEstado(DetalleCobros $detalleCobros)
     {
-        $detalleCobros->estado = !$detalleCobros->estado;
+        $nuevoEstado = !$detalleCobros->estado;
+
+        $detalleCobros->estado = $nuevoEstado;
         $detalleCobros->save();
+
+        // Gestionar la suscripción asociada al detalle
+        $subscription = $detalleCobros->subscription
+            ?? $detalleCobros->vehiculo?->planSubscription('gps-tracking');
+
+        if ($subscription) {
+            if (!$nuevoEstado) {
+                // Desactivar → cancelar suscripción (mantiene ends_at para referencia)
+                $subscription->cancel();
+            } else {
+                // Activar → reactivar suscripción
+                $subscription->forceFill(['canceled_at' => null])->save();
+            }
+        }
     }
 
     public function createInvoice(Cobros $cobro): void

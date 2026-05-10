@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Clientes;
+use App\Models\Cobros;
+use App\Models\DetalleCobros;
+use App\Models\Empresa;
+use App\Models\Recibos;
+use App\Models\Vehiculos;
+use App\Models\Ventas;
+use App\Scopes\EmpresaScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
-use App\Scopes\EmpresaScope;
-use App\Models\Empresa;
-use App\Models\DetalleCobros;
-use App\Models\Cobros;
-use App\Models\Clientes;
-use App\Models\Vehiculos;
-use App\Models\Ventas;
-use App\Models\Recibos;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Notificaciones de Cobro
@@ -44,6 +45,7 @@ class NotificacionCobro extends Model
         'moneda',
         'descripcion',
         'estado', // PENDIENTE, FACTURADO, PAGADO, CANCELADO
+        'tipo',   // INICIAL (al crear cobro) | RENOVACION (generada por job para el siguiente período)
         'venta_id',
         'recibo_id',
         'fecha_facturacion',
@@ -56,8 +58,9 @@ class NotificacionCobro extends Model
         'fecha_inicio'      => 'date',
         'fecha_fin'         => 'date',
         'fecha_facturacion' => 'datetime',
-        'fecha_pago' => 'datetime',
-        'monto' => 'decimal:4',
+        'fecha_pago'        => 'datetime',
+        'monto'             => 'decimal:4',
+        'tipo'              => 'string',
     ];
 
     protected static $recordEvents = ['created', 'updated', 'deleted'];
@@ -183,7 +186,7 @@ class NotificacionCobro extends Model
      * - Notif INICIAL (Save/Edit): fecha_inicio = 23/03 < det.fecha_vencimiento = 23/04 → no avanza.
      * - Notif RENOVACIÓN (job):    fecha_inicio = 23/04 = det.fecha_vencimiento = 23/04 → avanza.
      */
-    public function marcarComoPagado(): void
+    public function marcarComoPagado(int $periodos = 1): void
     {
         $this->estado    = 'PAGADO';
         $this->fecha_pago = now();
@@ -191,14 +194,27 @@ class NotificacionCobro extends Model
 
         $det = $this->detalleCobro;
 
-        // Solo avanzar si la notificación cubre un período futuro (renovación)
-        if (
-            $det && $this->fecha_inicio && $det->fecha_vencimiento
-            && $this->fecha_inicio->gte($det->fecha_vencimiento)
-        ) {
+        // Solo avanzar el período si la notificación es de RENOVACION.
+        // Las notificaciones INICIALES (al crear el cobro) ya tienen las fechas configuradas.
+        if ($det && $this->tipo === 'RENOVACION') {
+            $nuevaFechaFin = Carbon::parse($this->fecha_fin);
+
+            if ($periodos > 1) {
+                $periodo = strtoupper($det->periodo ?? 'MENSUAL');
+                for ($i = 1; $i < $periodos; $i++) {
+                    $nuevaFechaFin = match ($periodo) {
+                        'BIMESTRAL'  => $nuevaFechaFin->addMonths(2),
+                        'TRIMESTRAL' => $nuevaFechaFin->addMonths(3),
+                        'SEMESTRAL'  => $nuevaFechaFin->addMonths(6),
+                        'ANUAL'      => $nuevaFechaFin->addYear(),
+                        default      => $nuevaFechaFin->addMonth(), // MENSUAL y cualquier otro
+                    };
+                }
+            }
+
             $det->update([
                 'fecha_inicio'      => $this->fecha_inicio,
-                'fecha_vencimiento' => $this->fecha_fin,
+                'fecha_vencimiento' => $nuevaFechaFin,
             ]);
             // DetalleCobroObserver::updated() detecta wasChanged(['fecha_inicio','fecha_vencimiento'])
             // y llama sincronizarSuscripcion() → actualiza subscription.ends_at

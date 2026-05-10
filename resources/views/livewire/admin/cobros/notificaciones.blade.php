@@ -646,6 +646,15 @@
                         @enderror
                     </div>
 
+                    {{-- Períodos a pagar: siempre visible para que el usuario pueda indicar cuántos
+                         períodos cubre el pago (ej: cliente pagó 2 meses). marcarComoPagado() solo
+                         avanza el período si la notificación es de renovación; de lo contrario ignora
+                         el valor internamente, por lo que es seguro mostrarlo siempre. --}}
+                    <div class="col-span-6 sm:col-span-3">
+                        <x-form.input type="number" label="Períodos a pagar" wire:model.live="pago_periodos"
+                            min="1" max="24" hint="2 = avanza 2 períodos, etc." />
+                    </div>
+
                     {{-- Fecha --}}
                     <div class="col-span-12 sm:col-span-6">
                         <x-form.datetime.picker label="Fecha" wire:model.defer="pago_fecha" without-time
@@ -674,6 +683,28 @@
                 <x-form.button flat label="Cerrar" wire:click="cerrarModalPago" />
                 <x-form.button primary label="Guardar" wire:click="confirmarPago" wire:loading.attr="disabled"
                     wire:target="confirmarPago" />
+            </div>
+        </x-slot>
+
+    </x-form.modal.card>
+
+    {{-- Mini-modal: confirmar períodos antes de redirigir al formulario de documento --}}
+    <x-form.modal.card title="EMITIR DOCUMENTO" wire:model.live="modalConfirmarFacturar" max-width="sm" blur>
+
+        <div class="p-4 space-y-4">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                ¿Cuántos períodos cubre este pago? El sistema avanzará la fecha de vencimiento
+                del servicio según los períodos indicados.
+            </p>
+            <x-form.input type="number" label="Períodos a facturar" wire:model.live="facturar_periodos"
+                min="1" max="24" hint="1 = un período normal, 2 = dos períodos, etc." />
+        </div>
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+                <x-form.button flat label="Cancelar" wire:click="$set('modalConfirmarFacturar', false)" />
+                <x-form.button primary label="Continuar y Emitir" wire:click="confirmarFacturar"
+                    wire:loading.attr="disabled" wire:target="confirmarFacturar" />
             </div>
         </x-slot>
 

@@ -377,8 +377,13 @@
                                     $currentCliente = $clienteNombre;
                                     $currentCobroId = $detalle->cobros_id;
 
-                                    // Datos de suscripción del vehículo (laravelcm/subscriptions)
-                                    $subscription = $detalle->vehiculo?->planSubscriptions->first();
+                                    // Datos de suscripción: usar la suscripción propia del detalle (subscription_id).
+                                    // Fallback a planSubscriptions->first() para registros legacy sin subscription_id.
+                                    $subscription =
+                                        $detalle->subscription ??
+                                        $detalle->vehiculo?->planSubscriptions
+                                            ->sortByDesc('created_at')
+                                            ->firstWhere('subscriber_id', $detalle->vehiculo_id);
                                     $subCancelada = $subscription && $subscription->canceled_at !== null;
                                     $subActiva = $subscription && !$subCancelada && $subscription->active();
                                     $subEndsAt = $subscription?->ends_at;

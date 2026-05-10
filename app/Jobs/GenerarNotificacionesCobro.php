@@ -58,14 +58,25 @@ class GenerarNotificacionesCobro implements ShouldQueue
         $detallesProximos = DetalleCobros::with([
             'cobro',
             'cobro.clientes',
-            'vehiculo.planSubscriptions',
+            'subscription',
         ])
             ->where('estado', 1)
             // Excluir detalles cuyo cobro padre ha sido eliminado (soft delete)
             ->whereHas('cobro', fn($q) => $q->whereNull('deleted_at'))
-            ->whereHas('vehiculo.planSubscriptions', function ($sub) use ($fechaLimite) {
-                $sub->whereNull('canceled_at')
-                    ->where('ends_at', '<=', $fechaLimite->endOfDay());
+            // Vence dentro del límite: usar la suscripción propia del detalle si existe,
+            // fallback a planSubscriptions del vehículo para registros legacy (subscription_id = NULL)
+            ->where(function ($q) use ($fechaLimite) {
+                $q->whereHas('subscription', function ($sub) use ($fechaLimite) {
+                    $sub->whereNull('canceled_at')
+                        ->where('ends_at', '<=', $fechaLimite->endOfDay());
+                })
+                    ->orWhere(function ($q2) use ($fechaLimite) {
+                        $q2->whereNull('subscription_id')
+                            ->whereHas('vehiculo.planSubscriptions', function ($sub) use ($fechaLimite) {
+                                $sub->whereNull('canceled_at')
+                                    ->where('ends_at', '<=', $fechaLimite->endOfDay());
+                            });
+                    });
             })
             // No generar si ya existe una notificación pendiente o facturada
             ->whereDoesntHave('notificaciones', function ($query) {
@@ -107,8 +118,10 @@ class GenerarNotificacionesCobro implements ShouldQueue
         // Calcular descripción
         $descripcion = $this->generarDescripcion($detalle, $cobro);
 
-        // Tomar ends_at de la suscripción activa del vehículo (fuente única de verdad)
-        $subscription = $detalle->vehiculo
+        // Usar la suscripción propia del detalle (subscription_id).
+        // Fallback para registros legacy (subscription_id = NULL): primera suscripción activa del vehículo.
+        $subscription = $detalle->subscription
+            ?? $detalle->vehiculo
             ?->planSubscriptions
             ->whereNull('canceled_at')
             ->sortBy('ends_at')
@@ -148,18 +161,14 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'cobro_id'          => $cobro->id,
             'cliente_id'        => $cliente->id,
             'vehiculo_id'       => $detalle->vehiculo_id,
-            // fecha_vencimiento = fin del nuevo período (cuando expira el servicio renovado).
-            // Al ser igual a fecha_fin, marcarComoPagado() usa fecha_inicio >= det.fecha_vencimiento
-            // para identificar esta notificación como RENOVACIÓN y avanzar el período.
             'fecha_vencimiento' => $nextEnd,
-            // Período siguiente que se activa al pagar esta notificación
             'fecha_inicio'      => $nextStart,
             'fecha_fin'         => $nextEnd,
-            // monto_efectivo descuenta IGV cuando el cobro es tipo RECIBO
             'monto'             => $detalle->monto_efectivo ?: 0,
             'moneda'            => $cobro->moneda ?? $cobro->divisa ?? 'PEN',
             'descripcion'       => $descripcion,
             'estado'            => 'PENDIENTE',
+            'tipo'              => 'RENOVACION',
         ]);
 
         Log::info('Notificación de cobro creada', [

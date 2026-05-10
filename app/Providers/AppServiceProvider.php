@@ -23,7 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            \App\Services\WhatsFleep\WhatsappService::class,
+            \App\Services\WhatsFleep\Impl\WhatsappServiceImpl::class
+        );
     }
 
     /**

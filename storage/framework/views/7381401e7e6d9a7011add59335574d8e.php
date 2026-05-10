@@ -1,1 +1,0 @@
-search.options.<?php echo e($name); ?><?php /**PATH C:\laragon2\www\talentus\storage\framework\views/87700e7f4ec3d2750174d1cc8c8e360b.blade.php ENDPATH**/ ?>

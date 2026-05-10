@@ -263,6 +263,7 @@ class Save extends Component
                     'moneda'            => $cobro->divisa ?? 'PEN',
                     'descripcion'       => $descripcion,
                     'estado'            => 'PENDIENTE',
+                    'tipo'              => 'INICIAL',
                 ]);
 
                 $notificacionIds[] = $notif->id;

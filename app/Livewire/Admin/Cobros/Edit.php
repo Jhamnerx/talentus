@@ -510,6 +510,7 @@ class Edit extends Component
                     'moneda'            => $this->cobro->divisa ?? 'PEN',
                     'descripcion'       => $descripcion,
                     'estado'            => 'PENDIENTE',
+                    'tipo'              => 'INICIAL',
                 ]);
 
                 $notificacionIds[] = $notif->id;

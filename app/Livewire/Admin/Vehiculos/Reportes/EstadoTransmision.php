@@ -18,7 +18,7 @@ class EstadoTransmision extends Component
 
     public $openModalEstadoTransmision = false;
     public $loading = false;
-    public $estadoData = null;
+    public bool $hasData = false;
     public $selectedCategory = 'all'; // all, ok, warning, critical, emergency, never_connected
     public $searchPlaca = '';
 
@@ -38,7 +38,22 @@ class EstadoTransmision extends Component
 
     public function render()
     {
-        return view('livewire.admin.vehiculos.reportes.estado-transmision');
+        return view('livewire.admin.vehiculos.reportes.estado-transmision', [
+            'estadoData' => $this->getEstadoData(),
+        ]);
+    }
+
+    private function getCacheKey(): string
+    {
+        return 'estado_transmision_' . session()->getId();
+    }
+
+    private function getEstadoData(): ?array
+    {
+        if (!$this->hasData) {
+            return null;
+        }
+        return cache()->get($this->getCacheKey());
     }
 
     #[On('abrirEstadoTransmision')]
@@ -52,7 +67,9 @@ class EstadoTransmision extends Component
     public function closeModal()
     {
         $this->openModalEstadoTransmision = false;
-        $this->reset('estadoData', 'selectedCategory', 'searchPlaca', 'creandoReporte', 'dispositivoSeleccionado', 'detalle');
+        cache()->forget($this->getCacheKey());
+        $this->hasData = false;
+        $this->reset('selectedCategory', 'searchPlaca', 'creandoReporte', 'dispositivoSeleccionado', 'detalle');
         $this->resetErrorBag();
     }
 
@@ -65,7 +82,8 @@ class EstadoTransmision extends Component
             $response = $service->getDevicesTransmissionStatus(false);
 
             if ($response['status'] === 1) {
-                $this->estadoData = $response;
+                cache()->put($this->getCacheKey(), $response, now()->addHours(2));
+                $this->hasData = true;
                 $this->notification()->success('Estado actualizado correctamente');
             } else {
                 $this->notification()->error($response['message'] ?? 'Error al consultar estado');
@@ -80,11 +98,12 @@ class EstadoTransmision extends Component
 
     public function getCategoriasFiltradas()
     {
-        if (!$this->estadoData) {
+        $estadoData = $this->getEstadoData();
+        if (!$estadoData) {
             return collect([]);
         }
 
-        $categorias = collect($this->estadoData['categories']);
+        $categorias = collect($estadoData['categories']);
 
         // Filtrar por categoría seleccionada
         if ($this->selectedCategory !== 'all') {
@@ -202,7 +221,7 @@ class EstadoTransmision extends Component
 
     public function exportarXLS()
     {
-        if (!$this->estadoData) {
+        if (!$this->hasData) {
             $this->notification()->error('No hay datos para exportar. Haga clic en Actualizar primero.');
             return;
         }

@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
-use App\Enums\CobroEstado;
 use App\Observers\DetalleCobroObserver;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Carbon\Carbon;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 #[ObservedBy(DetalleCobroObserver::class)]
 class DetalleCobros extends Model
 {
     use HasFactory, SoftDeletes;
-
+    use LogsActivity;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'detalles_cobros';
 
@@ -22,6 +23,7 @@ class DetalleCobros extends Model
         'cobros_id' => 'integer',
         'vehiculos_id' => 'integer',
         'plan_id' => 'integer',
+        'subscription_id' => 'integer',
         'fecha' => 'date:Y-m-d',
         'fecha_facturado' => 'date:Y-m-d',
         'fecha_facturacion' => 'date:Y-m-d',
@@ -31,6 +33,13 @@ class DetalleCobros extends Model
     ];
 
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
 
     public function vehiculo()
     {
@@ -55,6 +64,16 @@ class DetalleCobros extends Model
     public function plan()
     {
         return $this->belongsTo(\App\Models\Plan::class);
+    }
+
+    /**
+     * Suscripción propia de este detalle (slug único 'detalle-{id}').
+     * Los registros migrados desde el sistema anterior apuntan a la suscripción
+     * 'gps-tracking' compartida que tenía el vehículo.
+     */
+    public function subscription()
+    {
+        return $this->belongsTo(\Laravelcm\Subscriptions\Models\Subscription::class, 'subscription_id');
     }
 
     /**

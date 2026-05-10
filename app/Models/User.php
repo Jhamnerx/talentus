@@ -174,4 +174,41 @@ class User extends Authenticatable
     {
         return $this->fcm_token;
     }
+
+    // ─── WhatsApp (WhatsFleep) ───────────────────────────────────────────────
+
+    public function waDevices()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Device::class);
+    }
+
+    public function waTags()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\WaTag::class);
+    }
+
+    public function waContacts()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Contact::class);
+    }
+
+    public function waCampaigns()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Campaign::class);
+    }
+
+    public function waBlasts()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Blast::class);
+    }
+
+    public function waMessageHistories()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\MessageHistory::class);
+    }
+
+    public function waAutoreplies()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Autoreply::class);
+    }
 }

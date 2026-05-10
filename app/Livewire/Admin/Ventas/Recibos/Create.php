@@ -45,6 +45,7 @@ class Create extends Component
     public $cobro_id;
     public $empresa_id;
     public $notificacion_ids_array = [];
+    public int $notificacion_periodos = 1;
     public $cobro_redirect_back = null;
 
     // Modal selección de IMEI para equipos GPS
@@ -118,6 +119,10 @@ class Create extends Component
             }
 
             $this->notificacion_ids_array = is_array($ids) ? $ids : [$ids];
+
+            // Períodos a avanzar al facturar (cliente pagó N períodos de una sola vez)
+            $this->notificacion_periodos = max(1, (int) session('notificacion_periodos', 1));
+            session()->forget('notificacion_periodos');
 
             $this->procesarItemsDesdeNotificaciones($this->notificacion_ids_array);
         }
@@ -193,6 +198,9 @@ class Create extends Component
         $servicioCobro = Productos::getServicioCobro();
         $servicioDescripcion = $servicioCobro?->descripcion ?? '';
 
+        // Períodos a facturar: 1 = 1 ítem, 2 = 2 ítems, etc.
+        $periodos = max(1, $this->notificacion_periodos);
+
         foreach ($notificaciones as $notificacion) {
             $detalle  = $notificacion->detalleCobro;
             $cobro    = $notificacion->cobro;
@@ -201,10 +209,10 @@ class Create extends Component
 
             $montoTotal = (float) $notificacion->monto;
 
-            // Construir descripción con periodo (igual que Emitir.php)
-            $periodo = $detalle?->periodo ?? $cobro->periodo ?? 'MENSUAL';
-            $periodoTexto = match (strtoupper((string) $periodo)) {
-                'BIMENSUAL'  => '2 meses',
+            // Construir descripción base con periodo (igual que Emitir.php)
+            $periodo = strtoupper($detalle?->periodo ?? $cobro->periodo ?? 'MENSUAL');
+            $periodoTexto = match ($periodo) {
+                'BIMESTRAL', 'BIMENSUAL' => '2 meses',
                 'TRIMESTRAL' => '3 meses',
                 'SEMESTRAL'  => '6 meses',
                 'ANUAL'      => '12 meses',
@@ -213,18 +221,35 @@ class Create extends Component
 
             $planNombre  = $detalle?->planModel?->name ?? $producto?->descripcion ?? 'Servicio GPS';
             $placa       = $vehiculo?->placa ?? 'S/P';
-            $fechaInicio = $detalle?->fecha_inicio?->format('d/m/Y') ?? '';
-            $fechaVence  = $notificacion->fecha_vencimiento?->format('d/m/Y') ?? '';
-            $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$fechaInicio} - fin {$fechaVence}");
 
-            $this->items->push([
-                'producto_id' => $cobro->producto_id,
-                'producto'    => $producto->descripcion,
-                'descripcion' => $descripcion,
-                'cantidad'    => 1,
-                'precio'      => $montoTotal,
-                'total'       => $montoTotal,
-            ]);
+            // Fecha base: la notificación cubre desde fecha_inicio hasta fecha_vencimiento (período 1).
+            $periodoStart = Carbon::parse($notificacion->fecha_inicio ?? $detalle?->fecha_inicio);
+            $periodoEnd   = Carbon::parse($notificacion->fecha_vencimiento);
+
+            for ($p = 0; $p < $periodos; $p++) {
+                if ($p > 0) {
+                    // Periodos adicionales: calcular desde el fin del período anterior
+                    $periodoStart = $periodoEnd->copy();
+                    $periodoEnd = match ($periodo) {
+                        'BIMESTRAL', 'BIMENSUAL' => $periodoStart->copy()->addMonthsNoOverflow(2),
+                        'TRIMESTRAL' => $periodoStart->copy()->addMonthsNoOverflow(3),
+                        'SEMESTRAL'  => $periodoStart->copy()->addMonthsNoOverflow(6),
+                        'ANUAL'      => $periodoStart->copy()->addYearNoOverflow(),
+                        default      => $periodoStart->copy()->addMonthNoOverflow(),
+                    };
+                }
+
+                $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$periodoStart->format('d/m/Y')} - fin {$periodoEnd->format('d/m/Y')}");
+
+                $this->items->push([
+                    'producto_id' => $cobro->producto_id,
+                    'producto'    => $producto->descripcion,
+                    'descripcion' => $descripcion,
+                    'cantidad'    => 1,
+                    'precio'      => $montoTotal,
+                    'total'       => $montoTotal,
+                ]);
+            }
         }
 
         $this->reCalTotal();
@@ -580,7 +605,7 @@ class Create extends Component
                     $notif->recibo_id         = $recibo->id;
                     $notif->fecha_facturacion = now();
                     $notif->saveQuietly();
-                    $notif->marcarComoPagado();
+                    $notif->marcarComoPagado($this->notificacion_periodos);
                 }
             } else {
                 // Solo facturado sin pagar: vincular documento, no avanzar período

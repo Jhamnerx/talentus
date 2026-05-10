@@ -1,1 +1,0 @@
-search.options.{{ $name }}
