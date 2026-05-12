@@ -17,6 +17,11 @@ class Index extends Component
     public $to = '';
     public $estado_filter = '';
 
+    public function mount(): void
+    {
+        $this->authorize('ver-finanzas-caja');
+    }
+
     #[On('render')]
     public function render()
     {

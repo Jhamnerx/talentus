@@ -12,25 +12,25 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum', 'verified'])->prefix('whatsapp')->name('admin.whats-fleep.')->group(function () {
 
     // Dispositivos
-    Route::get('dispositivos', [DeviceController::class, 'index'])->name('devices');
-    Route::get('dispositivos/scan/{body}', [DeviceController::class, 'scan'])->name('devices.scan');
-    Route::post('dispositivos/session', [DeviceController::class, 'setSelectedDeviceSession'])->name('devices.set-session');
+    Route::get('dispositivos', [DeviceController::class, 'index'])->name('devices')->middleware('can:ver-dispositivos-wa');
+    Route::get('dispositivos/scan/{body}', [DeviceController::class, 'scan'])->name('devices.scan')->middleware('can:gestionar-dispositivos-wa');
+    Route::post('dispositivos/session', [DeviceController::class, 'setSelectedDeviceSession'])->name('devices.set-session')->middleware('can:ver-dispositivos-wa');
 
     // Auto-respuestas
-    Route::get('auto-reply', [AutoreplyController::class, 'index'])->name('autoreply');
+    Route::get('auto-reply', [AutoreplyController::class, 'index'])->name('autoreply')->middleware('can:gestionar-autoreplies-wa');
 
     // Contactos
-    Route::get('contactos', [ContactController::class, 'index'])->name('contacts');
-    Route::get('contactos/grupos', [ContactController::class, 'groups'])->name('contacts.groups');
+    Route::get('contactos', [ContactController::class, 'index'])->name('contacts')->middleware('can:ver-contactos-wa');
+    Route::get('contactos/grupos', [ContactController::class, 'groups'])->name('contacts.groups')->middleware('can:ver-contactos-wa');
 
     // Campañas
-    Route::get('campanias', [CampaignController::class, 'index'])->name('campaigns');
-    Route::get('campanias/crear', [CampaignController::class, 'create'])->name('campaign.create');
+    Route::get('campanias', [CampaignController::class, 'index'])->name('campaigns')->middleware('can:ver-campanias-wa');
+    Route::get('campanias/crear', [CampaignController::class, 'create'])->name('campaign.create')->middleware('can:gestionar-campanias-wa');
 
     // Mensajes
-    Route::get('mensajes/prueba', [MessageController::class, 'index'])->name('messages.test');
-    Route::get('mensajes/historial', [MessageHistoryController::class, 'index'])->name('messages.history');
+    Route::get('mensajes/prueba', [MessageController::class, 'index'])->name('messages.test')->middleware('can:enviar-mensajes-wa');
+    Route::get('mensajes/historial', [MessageHistoryController::class, 'index'])->name('messages.history')->middleware('can:ver-historial-wa');
 
     // API Docs
-    Route::get('api-docs', [ApiDocController::class, 'index'])->name('api-docs');
+    Route::get('api-docs', [ApiDocController::class, 'index'])->name('api-docs')->middleware('can:gestionar-dispositivos-wa');
 });

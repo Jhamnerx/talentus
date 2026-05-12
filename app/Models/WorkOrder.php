@@ -40,6 +40,13 @@ class WorkOrder extends Model
         'tipo_data' => 'array',
         'metadata' => 'array',
         'bloqueado' => 'boolean',
+        'wa_message_id' => 'string',
+        'wa_group_id' => 'string',
+        'ubicacion_lat' => 'float',
+        'ubicacion_lng' => 'float',
+        'tecnico_lat' => 'float',
+        'tecnico_lng' => 'float',
+        'tecnico_last_seen' => 'datetime',
     ];
 
     // Global Scope - Multi-empresa

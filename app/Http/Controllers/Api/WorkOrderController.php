@@ -62,6 +62,27 @@ class WorkOrderController extends Controller
         ]);
     }
 
+    /**
+     * PATCH /api/work-orders/{workOrder}
+     * Actualiza campos editables desde la app móvil (imei_gps, imei_sim, etc.)
+     */
+    public function update(Request $request, WorkOrder $workOrder)
+    {
+        abort_if($workOrder->bloqueado, 422, 'La orden está bloqueada y no puede modificarse.');
+
+        $data = $request->validate([
+            'imei_gps'    => ['sometimes', 'nullable', 'string', 'max:20'],
+            'imei_sim'    => ['sometimes', 'nullable', 'string', 'max:22'],
+            'observaciones' => ['sometimes', 'nullable', 'string', 'max:2000'],
+            'contacto'    => ['sometimes', 'nullable', 'string', 'max:200'],
+            'sector'      => ['sometimes', 'nullable', 'string', 'max:200'],
+        ]);
+
+        $workOrder->update($data);
+
+        return response()->json(['success' => true, 'data' => $workOrder->fresh()]);
+    }
+
     public function iniciar(WorkOrder $workOrder)
     {
         try {

@@ -100,8 +100,8 @@ export async function saveMessageHistory(data) {
     try {
         const query = `
             INSERT INTO message_histories 
-            (device_id, user_id, number, type, message, payload, status, send_by, note) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (device_id, user_id, number, type, message, payload, status, send_by, note, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
         `;
         const params = [
             data.device_id,

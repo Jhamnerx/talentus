@@ -17,6 +17,11 @@ class Index extends Component
 
     protected $queryString = ['search'];
 
+    public function mount(): void
+    {
+        $this->authorize('ver-dispositivos-wa');
+    }
+
     public function updatingSearch(): void
     {
         $this->resetPage();

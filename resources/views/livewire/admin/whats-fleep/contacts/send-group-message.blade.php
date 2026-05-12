@@ -2,20 +2,24 @@
     <x-form.modal.card title="Enviar mensaje al grupo: {{ $groupName }}" blur wire:model.live="showModal"
         align="center">
         <div class="space-y-4">
-            <x-native-select wire:model="messageType" label="Tipo de mensaje">
-                <option value="text">Texto</option>
-                <option value="image">Imagen</option>
-                <option value="video">Video</option>
-                <option value="audio">Audio</option>
-                <option value="document">Documento</option>
-            </x-native-select>
+            <x-form.select wire:model.live="messageType" label="Tipo de mensaje">
+                <x-select.option value="text" label="Texto" />
+                <x-select.option value="image" label="Imagen" />
+                <x-select.option value="video" label="Video" />
+                <x-select.option value="audio" label="Audio" />
+                <x-select.option value="document" label="Documento" />
+            </x-form.select>
 
             @if ($messageType === 'text')
                 <x-form.textarea wire:model="message" label="Mensaje" rows="4" />
-            @else
+            @elseif(in_array($messageType, ['image', 'video', 'audio', 'document']))
                 <x-form.input wire:model="mediaUrl" label="URL del archivo" placeholder="https://..." />
                 @if (in_array($messageType, ['image', 'video', 'document']))
                     <x-form.input wire:model="caption" label="Caption (opcional)" />
+                @endif
+                @if ($messageType === 'document')
+                    <x-form.input wire:model="filename" label="Nombre del archivo (opcional)"
+                        placeholder="Ej: contrato.pdf" />
                 @endif
             @endif
         </div>

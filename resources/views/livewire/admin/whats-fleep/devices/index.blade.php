@@ -1,51 +1,51 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
 
     <!-- Page header -->
-    <div class="sm:flex sm:justify-between sm:items-center mb-8">
+    <div class="sm:flex sm:justify-between sm:items-center mb-5">
         <div class="mb-4 sm:mb-0">
             <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Dispositivos WhatsApp</h1>
         </div>
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-            <x-form.input wire:model.live.debounce="search" placeholder="Buscar dispositivo..." icon="magnifying-glass"
-                class="w-60" />
-            <button wire:click="openCreateModal"
-                class="btn cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white">
-                <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                    <path
-                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                </svg>
-                <span class="hidden xs:block ml-2">Nuevo dispositivo</span>
-            </button>
+            <x-form.button wire:click="openCreateModal" primary icon="plus" label="Nuevo dispositivo" />
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-5">
+        <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-4">
+            <div class="flex items-center gap-3">
+                <div class="w-full sm:w-64">
+                    <x-form.input wire:model.live.debounce="search" placeholder="Buscar dispositivo..."
+                        icon="magnifying-glass" />
+                </div>
+            </div>
         </div>
     </div>
 
     @if ($devices->isEmpty())
-        <div
-            class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700 py-16 text-center">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl py-16 text-center">
             <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3" />
             </svg>
-            <p class="text-slate-500 dark:text-gray-400 mb-4">Aún no tienes dispositivos registrados.</p>
-            <button wire:click="openCreateModal"
-                class="btn bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer">
-                Agregar primer dispositivo
-            </button>
+            <p class="text-gray-500 dark:text-gray-400 mb-4">A&uacute;n no tienes dispositivos registrados.</p>
+            <x-form.button wire:click="openCreateModal" primary label="Agregar primer dispositivo" />
         </div>
     @else
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700">
-            <header class="px-5 py-4 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between">
-                <h2 class="font-semibold text-slate-800 dark:text-gray-100">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl relative">
+            <header
+                class="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
+                <h2 class="font-semibold text-gray-800 dark:text-gray-100">
                     Cuentas de WhatsApp
                     <span
-                        class="ml-2 text-xs font-normal px-2 py-0.5 bg-slate-100 dark:bg-gray-700 text-slate-500 dark:text-gray-400 rounded-full">{{ $totalDevices }}</span>
+                        class="ml-2 text-xs font-normal px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full">{{ $totalDevices }}</span>
                 </h2>
             </header>
             <div class="overflow-x-auto">
-                <table class="table-auto w-full">
+                <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-400 dark:text-gray-500 bg-slate-50 dark:bg-gray-900/20 border-b border-slate-200 dark:border-gray-700">
+                        class="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-gray-100 dark:border-gray-700/60">
                         <tr>
                             <th class="px-4 py-3 text-left">Número</th>
                             <th class="px-4 py-3 text-left">URL Webhook</th>
@@ -55,10 +55,10 @@
                             <th class="px-4 py-3 text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
+                    <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
                         @foreach ($devices as $device)
                             <tr wire:key="device-{{ $device->id }}"
-                                class="hover:bg-slate-50 dark:hover:bg-gray-700/30 transition">
+                                class="hover:bg-gray-50 dark:hover:bg-gray-900/20 transition">
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-3">
                                         <div
@@ -70,27 +70,27 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <div class="font-semibold text-slate-800 dark:text-gray-100">
+                                            <div class="font-semibold text-gray-800 dark:text-gray-100">
                                                 {{ $device->body }}</div>
-                                            <div class="text-xs text-slate-400">
+                                            <div class="text-xs text-gray-400 dark:text-gray-500">
                                                 {{ $device->updated_at->diffForHumans() }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span class="text-xs text-slate-500 dark:text-gray-400 font-mono">
-                                        {{ $device->webhook ? Str::limit($device->webhook, 30) : '—' }}
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                                        {{ $device->webhook ? Str::limit($device->webhook, 30) : '' }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-2">
                                         <span
-                                            class="text-xs font-mono text-slate-600 dark:text-gray-300 bg-slate-100 dark:bg-gray-700 px-2 py-1 rounded">
+                                            class="text-xs font-mono text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                                             {{ Str::limit($device->api_key, 20) }}
                                         </span>
                                         <button
                                             onclick="navigator.clipboard.writeText('{{ $device->api_key }}').then(() => $wire.apiKeyCopied())"
-                                            class="text-slate-400 hover:text-slate-600 dark:hover:text-gray-200 transition cursor-pointer"
+                                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition cursor-pointer"
                                             title="Copiar clave API">
                                             <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                                                 <path
@@ -103,7 +103,7 @@
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     <span
-                                        class="text-slate-600 dark:text-gray-300">{{ $device->message_histories_count ?? 0 }}</span>
+                                        class="text-gray-600 dark:text-gray-300">{{ $device->message_histories_count ?? 0 }}</span>
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     <span @class([
@@ -148,7 +148,7 @@
                                         </a>
                                         {{-- Editar --}}
                                         <button wire:click="openEditModal({{ $device->id }})" title="Editar"
-                                            class="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:text-gray-200 dark:hover:bg-gray-700 transition cursor-pointer">
+                                            class="p-1.5 rounded text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-200 dark:hover:bg-gray-700 transition cursor-pointer">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -171,11 +171,12 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="mt-6">
-            {{ $devices->links() }}
+            @if ($devices->hasPages())
+                <div class="px-5 py-4 border-t border-gray-100 dark:border-gray-700/60">
+                    {{ $devices->links() }}
+                </div>
+            @endif
         </div>
     @endif
-
 
 </div>

@@ -1995,6 +1995,143 @@
             </div>
 
 
+            {{-- ORDENES DE TRABAJO --}}
+            <div class="flex flex-col space-y-1">
+                <p wire:click="checkCategory('work_order')"
+                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                    Órdenes de Trabajo
+                </p>
+                @foreach ([
+        'ver-work_order' => 'Ver módulo',
+        'crear-work_order' => 'Crear OT',
+        'editar-work_order' => 'Editar OT',
+        'acciones-work_order' => 'Iniciar/Finalizar/Cerrar',
+        'cancelar-work_order' => 'Cancelar OT',
+        'descargar-work_order' => 'Descargar PDF',
+        'exportar-work_order' => 'Exportar Excel',
+        'admin-work_order' => 'Admin (config técnicos, WA)',
+        'tipos-work_order' => 'Gestionar tipos de OT',
+    ] as $perm => $label)
+                    <div class="flex">
+                        <div class="relative flex items-start" variant="indigo">
+                            <div class="flex items-center h-5">
+                                <input name="permission[]" wire:model.live="permission"
+                                    value="{{ $perm }}" id="{{ $perm }}" variant="indigo"
+                                    type="checkbox"
+                                    class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ $perm }}" class="font-medium text-gray-600 cursor-pointer">
+                                    {{ $label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- TICKETS --}}
+            <div class="flex flex-col space-y-1">
+                <p wire:click="checkCategory('ticket')"
+                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                    Tickets / Soporte
+                </p>
+                @foreach ([
+        'ver-ticket' => 'Ver tickets',
+        'crear-ticket' => 'Crear ticket',
+        'editar-ticket' => 'Editar ticket',
+        'asignar-ticket' => 'Asignar a agente',
+        'cambiar.estado-ticket' => 'Cambiar estado/prioridad',
+        'eliminar-ticket' => 'Eliminar ticket',
+    ] as $perm => $label)
+                    <div class="flex">
+                        <div class="relative flex items-start" variant="indigo">
+                            <div class="flex items-center h-5">
+                                <input name="permission[]" wire:model.live="permission"
+                                    value="{{ $perm }}" id="{{ $perm }}" variant="indigo"
+                                    type="checkbox"
+                                    class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ $perm }}" class="font-medium text-gray-600 cursor-pointer">
+                                    {{ $label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- WHATSAPP --}}
+            <div class="flex flex-col space-y-1">
+                <p wire:click="checkCategory('wa')"
+                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                    WhatsApp
+                </p>
+                @foreach ([
+        'ver-dispositivos-wa' => 'Ver dispositivos',
+        'gestionar-dispositivos-wa' => 'Gestionar dispositivos',
+        'ver-contactos-wa' => 'Ver contactos/grupos',
+        'gestionar-contactos-wa' => 'Gestionar contactos',
+        'ver-campanias-wa' => 'Ver campañas',
+        'gestionar-campanias-wa' => 'Gestionar campañas',
+        'enviar-mensajes-wa' => 'Enviar mensaje de prueba',
+        'ver-historial-wa' => 'Ver historial',
+        'gestionar-autoreplies-wa' => 'Gestionar auto-respuestas',
+    ] as $perm => $label)
+                    <div class="flex">
+                        <div class="relative flex items-start" variant="indigo">
+                            <div class="flex items-center h-5">
+                                <input name="permission[]" wire:model.live="permission"
+                                    value="{{ $perm }}" id="{{ $perm }}" variant="indigo"
+                                    type="checkbox"
+                                    class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ $perm }}" class="font-medium text-gray-600 cursor-pointer">
+                                    {{ $label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- FINANZAS --}}
+            <div class="flex flex-col space-y-1">
+                <p wire:click="checkCategory('finanzas')"
+                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                    Finanzas
+                </p>
+                @foreach ([
+        'ver-finanzas-caja' => 'Ver caja chica',
+        'gestionar-finanzas-caja' => 'Gestionar caja chica',
+        'ver-finanzas-movimientos' => 'Ver movimientos',
+        'ver-finanzas-transacciones' => 'Ver transacciones',
+        'ver-finanzas-cuentas-cobrar' => 'Ver cuentas por cobrar',
+        'gestionar-finanzas-cuentas-cobrar' => 'Registrar pagos CxC',
+        'ver-finanzas-cuentas-pagar' => 'Ver cuentas por pagar',
+        'ver-finanzas-balance' => 'Ver balance',
+    ] as $perm => $label)
+                    <div class="flex">
+                        <div class="relative flex items-start" variant="indigo">
+                            <div class="flex items-center h-5">
+                                <input name="permission[]" wire:model.live="permission"
+                                    value="{{ $perm }}" id="{{ $perm }}" variant="indigo"
+                                    type="checkbox"
+                                    class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ $perm }}" class="font-medium text-gray-600 cursor-pointer">
+                                    {{ $label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+
         </div>
     </div>
 

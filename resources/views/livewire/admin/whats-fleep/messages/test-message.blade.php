@@ -1,25 +1,32 @@
-<div>
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
+
+    <!-- Page header -->
+    <div class="sm:flex sm:justify-between sm:items-center mb-5">
+        <div class="mb-4 sm:mb-0">
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Mensaje de Prueba</h1>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {{-- Form --}}
         <div class="space-y-4">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Enviar Mensaje de Prueba</h2>
 
-            <x-native-select wire:model="sender" label="Dispositivo de envío *">
+            <x-form.select wire:model="sender" label="Dispositivo de envío *">
                 @foreach ($devices as $device)
-                    <option value="{{ $device->body }}">{{ $device->body }}</option>
+                    <x-select.option value="{{ $device->body }}" label="{{ $device->body }}" />
                 @endforeach
-            </x-native-select>
+            </x-form.select>
 
             <x-form.input wire:model="number" label="Número(s) *" placeholder="51999999999 (usa | para múltiples)" />
 
-            <x-native-select wire:model.live="type" label="Tipo de mensaje">
-                <option value="text">Texto</option>
-                <option value="image">Imagen</option>
-                <option value="video">Video</option>
-                <option value="audio">Audio</option>
-                <option value="document">Documento</option>
-                <option value="button">Botones</option>
-            </x-native-select>
+            <x-form.select wire:model.live="type" label="Tipo de mensaje">
+                <x-select.option value="text" label="Texto" />
+                <x-select.option value="image" label="Imagen" />
+                <x-select.option value="video" label="Video" />
+                <x-select.option value="audio" label="Audio" />
+                <x-select.option value="document" label="Documento" />
+            </x-form.select>
 
             @if ($type === 'text')
                 <x-form.textarea wire:model="message" label="Mensaje *" rows="5" />
@@ -32,26 +39,6 @@
                     <x-form.input wire:model="filename" label="Nombre del archivo (opcional)"
                         placeholder="Ej: contrato.pdf" />
                 @endif
-            @elseif($type === 'button')
-                <x-form.textarea wire:model="buttonText" label="Texto del mensaje *" rows="3" />
-                <x-form.input wire:model="buttonFooter" label="Footer (opcional)" />
-                <div class="space-y-2">
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Botones (máx. 3)</label>
-                    @foreach ($buttons as $i => $btn)
-                        <div class="flex gap-2">
-                            <x-form.input wire:model="buttons.{{ $i }}.text" placeholder="Texto del botón"
-                                class="flex-1" />
-                            @if (count($buttons) > 1)
-                                <x-form.button wire:click="removeButton({{ $i }})" icon="x-mark"
-                                    size="xs" flat negative />
-                            @endif
-                        </div>
-                    @endforeach
-                    @if (count($buttons) < 3)
-                        <x-form.button wire:click="addButton" icon="plus" flat label="Agregar botón"
-                            size="xs" />
-                    @endif
-                </div>
             @endif
 
             <x-form.button wire:click="send" spinner="send" :disabled="$sending" positive icon="paper-airplane"

@@ -19,6 +19,12 @@
             <x-form.select label="Rol (*):" wire:model.live="roles_id" placeholder="Selecciona" :options="$roles"
                 option-label="name" option-value="id" :searchable="false" multiselect class="mb-2" />
         </div>
+        @if ($esTecnico)
+            <div class="col-span-12 md:col-span-6">
+                <x-form.select label="Ciudad:" wire:model="ciudad_id" placeholder="Seleccionar ciudad"
+                    option-label="nombre" option-value="id" :options="$ciudades" :clearable="true" class="mb-2" />
+            </div>
+        @endif
         <div class="col-span-12 md:col-span-6">
             <x-form.select label="Documento:" autocomplete='off' name="document_id" wire:model.live="document_id"
                 id="document_id" :async-data="route('api.tipo.comprobantes.index')" option-label="descripcion" option-value="codigo" class="mb-2" />

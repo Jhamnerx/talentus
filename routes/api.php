@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WorkOrderController;
 use App\Http\Controllers\Api\ConsultasApiController;
 use App\Http\Controllers\Api\ContactoApiController;
+use App\Http\Controllers\Api\MobileAuthController;
+use App\Http\Controllers\Api\WorkOrderTrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,28 @@ use App\Http\Controllers\Api\ContactoApiController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+/*
+|--------------------------------------------------------------------------
+| Autenticación Móvil (Técnicos)
+|--------------------------------------------------------------------------
+| Endpoints de autenticación para la app móvil de técnicos.
+| El login devuelve un Bearer token Sanctum de larga duración.
+| No requieren autenticación previa.
+*/
+
+Route::prefix('auth')->name('api.auth.')->group(function () {
+    // POST /api/auth/login
+    Route::post('login', [MobileAuthController::class, 'login'])->name('login');
+});
+
+Route::prefix('auth')->name('api.auth.')->middleware('auth:sanctum')->group(function () {
+    // POST /api/auth/logout
+    Route::post('logout', [MobileAuthController::class, 'logout'])->name('logout');
+
+    // GET /api/auth/me
+    Route::get('me', [MobileAuthController::class, 'me'])->name('me');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +95,10 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
     // GET /api/work-orders/{workOrder}
     // Ver detalle completo de una orden con todas sus relaciones cargadas
     Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');
+
+    // PATCH /api/work-orders/{workOrder}
+    // Actualizar campos editables desde la app móvil (imei_gps, imei_sim, contacto, etc.)
+    Route::patch('/{workOrder}', [WorkOrderController::class, 'update'])->name('update');
 
     /*
     |--------------------------------------------------------------------------
@@ -206,6 +234,22 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
     // DELETE /api/work-orders/accesorios/{accessory}
     // Eliminar accesorio (solo si orden no está bloqueada)
     Route::delete('/accesorios/{accessory}', [WorkOrderController::class, 'eliminarAccesorio'])->name('accesorios.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tracking GPS del Técnico
+    |--------------------------------------------------------------------------
+    */
+
+    // POST /api/work-orders/{workOrder}/tracking
+    // El técnico envía su posición GPS cada ~1 minuto
+    // Body: { "lat": numeric, "lng": numeric, "accuracy": numeric, "speed": numeric }
+    Route::post('/{workOrder}/tracking', [WorkOrderTrackingController::class, 'update'])->name('tracking');
+
+    // PATCH /api/work-orders/{workOrder}/ubicacion
+    // El administrador establece la ubicación del servicio
+    // Body: { "lat": numeric, "lng": numeric, "direccion": "string" }
+    Route::patch('/{workOrder}/ubicacion', [WorkOrderTrackingController::class, 'setUbicacion'])->name('ubicacion');
 });
 
 /*

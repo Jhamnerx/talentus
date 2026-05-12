@@ -318,7 +318,7 @@
 
 
                     <!-- Tickets -->
-
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-ticket')): ?>
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['tickets'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>"
                             x-data="{ open: <?php echo e(in_array(Request::segment(1), ['tickets']) ? 1 : 0); ?> }">
 
@@ -359,12 +359,13 @@
                                 </ul>
                             </div>
                         </li>
-
+                    <?php endif; ?>
 
 
                     <!-- Finanzas -->
 
                     <!-- WhatsApp -->
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['ver-dispositivos-wa', 'ver-contactos-wa', 'ver-campanias-wa', 'enviar-mensajes-wa', 'ver-historial-wa', 'gestionar-autoreplies-wa'])): ?>
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r <?php if(in_array(Request::segment(1), ['whatsapp'])): ?> <?php echo e('from-emerald-500/12 dark:from-emerald-500/24 to-emerald-500/4'); ?> <?php endif; ?>"
                         x-data="{ open: <?php echo e(in_array(Request::segment(1), ['whatsapp']) ? 1 : 0); ?> }">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition hover:text-gray-900 dark:hover:text-white"
@@ -443,6 +444,8 @@
                             </ul>
                         </div>
                     </li>
+                    <?php endif; ?>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['ver-finanzas-caja', 'ver-finanzas-movimientos', 'ver-finanzas-transacciones', 'ver-finanzas-cuentas-cobrar', 'ver-finanzas-cuentas-pagar', 'ver-finanzas-balance', 'admin.cobros.index', 'admin.payments.index'])): ?>
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>"
                             x-data="{ open: <?php echo e(in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones']) ? 1 : 0); ?> }">
 
@@ -577,7 +580,7 @@
 
                             </div>
                         </li>
-
+                    <?php endif; ?>
 
                     <!-- Proveedores -->
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-proveedor')): ?>
@@ -1042,6 +1045,7 @@
                     <?php endif; ?>
 
                     <!-- Órdenes de Trabajo -->
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-work_order')): ?>
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['work-orders'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>">
                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate <?php if(Route::is('admin.work-orders.index', 'admin.work-orders.show', 'admin.work-orders.checklist')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
                             href="<?php echo e(route('admin.work-orders.index')); ?>">
@@ -1056,6 +1060,7 @@
                             </div>
                         </a>
                     </li>
+                    <?php endif; ?>
 
                     <!-- administracion -->
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['admin.solicitudes.index', 'admin.reportes.index', 'admin.usuarios.index',

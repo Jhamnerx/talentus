@@ -3,14 +3,19 @@
 namespace App\Livewire\Admin\WorkOrders;
 
 use Carbon\Carbon;
+use App\Models\Plan;
 use App\Models\User;
+use App\Models\Ciudades;
+use App\Models\Contactos;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use App\Models\Vehiculos;
 use App\Models\WorkOrder;
 use Livewire\Attributes\On;
 use App\Models\WorkOrderType;
 use App\Enums\WorkOrderStatus;
 use App\Models\Mantenimiento;
+use App\Services\WorkOrderNotificationService;
 use Illuminate\Support\Facades\Auth;
 use WireUi\Traits\WireUiActions;
 
@@ -25,16 +30,48 @@ class CreateModal extends Component
     public $mantenimiento_id = null;
     public bool $tipoRequiereMantenimiento = false;
 
+    // Nuevos campos de integración WA
+    public ?int $ciudad_filter = null;   // filtro visual, no se guarda
+    public string $sector = '';
+    public string $sector_especifico = ''; // cuando sector === 'OTROS'
+    public ?int $plan_id = null;         // se resuelve al guardar → columna plan (string)
+    public ?int $contacto_id = null;     // se resuelve al guardar → columna contacto (string)
+    public array $accesorios = [];       // ['buzzer', 'corte_motor']
+    public array $contactos = [];        // se puebla cuando cambia vehiculo_id
+
+    // Flags del tipo de orden (controlan visibilidad de campos)
+    public bool $tipoMuestraSector = true;
+    public bool $tipoMuestraPlan = true;
+    public bool $tipoMuestraAccesorios = true;
+
+    // Flags de requisitos del tipo
+    public bool $tipoRequiereAccesorios = false;
+
+    // Costo estimado según tipo + técnico seleccionados
+    public ?float $costoEstimado = null;
+    public bool $costoPersonalizado = false;
+
+    // Ubicación del servicio
+    public ?float $ubicacion_lat = null;
+    public ?float $ubicacion_lng = null;
+    public string $ubicacion_direccion = '';
+
     protected function rules()
     {
         return [
-            'work_order_type_id' => 'required|exists:work_order_types,id',
-            'vehiculo_id' => 'required|exists:vehiculos,id',
-            'cliente_id' => 'required|exists:clientes,id',
-            'tecnico_id' => 'required|exists:users,id',
-            'fecha_programada' => 'required|date|after_or_equal:today',
+            'work_order_type_id'  => 'required|exists:work_order_types,id',
+            'vehiculo_id'         => 'required|exists:vehiculos,id',
+            'cliente_id'          => 'required|exists:clientes,id',
+            'tecnico_id'          => 'required|exists:users,id',
+            'fecha_programada'    => 'required|date|after_or_equal:today',
             'observaciones_inicial' => 'nullable|string|max:1000',
-            'mantenimiento_id' => 'nullable|exists:mantenimientos,id',
+            'mantenimiento_id'    => 'nullable|exists:mantenimientos,id',
+            'sector'              => 'nullable|string|max:100',
+            'sector_especifico'   => 'nullable|string|max:200',
+            'plan_id'             => 'nullable|exists:plans,id',
+            'contacto_id'         => 'nullable|exists:contactos,id',
+            'accesorios'          => ($this->tipoRequiereAccesorios ? 'required|array|min:1' : 'nullable|array'),
+            'accesorios.*'        => 'in:buzzer,corte_motor,apertura_puertas,telemetria,combustible,temperatura,horas_motor,rpm,acelerometro,camara',
         ];
     }
 
@@ -45,8 +82,10 @@ class CreateModal extends Component
             'vehiculo_id.required' => 'Debe seleccionar un vehículo',
             'cliente_id.required' => 'Debe seleccionar un cliente',
             'tecnico_id.required' => 'Debe asignar un técnico',
-            'fecha_programada.required' => 'La fecha programada es requerida',
+            'fecha_programada.required'     => 'La fecha programada es requerida',
             'fecha_programada.after_or_equal' => 'La fecha no puede ser anterior a hoy',
+            'accesorios.required'       => 'Seleccione al menos un accesorio para este tipo de orden',
+            'accesorios.min'            => 'Seleccione al menos un accesorio',
         ];
     }
 
@@ -58,7 +97,14 @@ class CreateModal extends Component
     public function render()
     {
         $tipos = WorkOrderType::active()->get();
-        $tecnicos = User::role('tecnico')->where('is_active', true)->get();
+
+        $tecnicosQuery = User::role('tecnico')->where('is_active', true);
+        if ($this->ciudad_filter) {
+            $tecnicosQuery->where('ciudad_id', $this->ciudad_filter);
+        }
+        $tecnicos = $tecnicosQuery->get();
+
+        $ciudades = Ciudades::where('is_active', true)->orderBy('nombre')->get();
 
         $mantenimientosPendientes = collect();
         if ($this->tipoRequiereMantenimiento && $this->vehiculo_id) {
@@ -67,12 +113,27 @@ class CreateModal extends Component
                 ->orderBy('fecha_hora_mantenimiento')
                 ->get()
                 ->map(fn($m) => [
-                    'id' => $m->id,
-                    'label' => $m->numero . ' — ' . $m->fecha_hora_mantenimiento->format('d/m/Y') . ($m->detalle_trabajo ? ' | ' . \Str::limit($m->detalle_trabajo, 40) : ''),
+                    'id'    => $m->id,
+                    'label' => $m->numero . ' — ' . $m->fecha_hora_mantenimiento->format('d/m/Y') . ($m->detalle_trabajo ? ' | ' . Str::limit($m->detalle_trabajo, 40) : ''),
                 ]);
         }
 
-        return view('livewire.admin.work-orders.create-modal', compact('tipos', 'tecnicos', 'mantenimientosPendientes'));
+        // Planes del sistema (nombre en español)
+        $planes = Plan::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn($p) => [
+                'id'   => $p->id,
+                'name' => is_array($p->name) ? ($p->name['es'] ?? ($p->name['en'] ?? 'Sin nombre')) : $p->name,
+            ]);
+
+        $sectores = WorkOrderNotificationService::ZONAS;
+        $accesoriosDisponibles = WorkOrderNotificationService::ACCESORIOS;
+
+        return view(
+            'livewire.admin.work-orders.create-modal',
+            compact('tipos', 'tecnicos', 'ciudades', 'mantenimientosPendientes', 'sectores', 'accesoriosDisponibles', 'planes')
+        );
     }
 
     #[On('open-create-modal')]
@@ -94,24 +155,95 @@ class CreateModal extends Component
         if ($vehiculo && $vehiculo->cliente) {
             $this->cliente_id = $vehiculo->cliente->id;
             $this->cliente_nombre = $vehiculo->cliente->razon_social;
+
+            $this->contactos = Contactos::where('clientes_id', $this->cliente_id)
+                ->whereNull('deleted_at')
+                ->orderBy('nombre')
+                ->get()
+                ->map(fn($c) => [
+                    'id'    => $c->id,
+                    'label' => trim(implode(' — ', array_filter([
+                        $c->nombre,
+                        ($c->cargo && $c->cargo !== 'NINGUNO') ? $c->cargo : null,
+                        $c->telefono ? 'Tel: ' . $c->telefono : null,
+                    ]))),
+                ])
+                ->all();
+        } else {
+            $this->cliente_id = null;
+            $this->cliente_nombre = null;
+            $this->contactos = [];
         }
-        // Reiniciar mantenimiento al cambiar vehículo
+        // Reiniciar mantenimiento y contacto al cambiar vehículo
         $this->mantenimiento_id = null;
+        $this->contacto_id = null;
     }
 
     public function updatedWorkOrderTypeId($value)
     {
         if (!$value) {
             $this->tipoRequiereMantenimiento = false;
+            $this->tipoMuestraSector = true;
+            $this->tipoMuestraPlan = true;
+            $this->tipoMuestraAccesorios = true;
             $this->mantenimiento_id = null;
+            $this->costoEstimado = null;
+            $this->costoPersonalizado = false;
             return;
         }
 
         $tipo = WorkOrderType::find($value);
         $this->tipoRequiereMantenimiento = $tipo?->es_mantenimiento_programado ?? false;
+        $this->tipoMuestraSector = $tipo?->muestra_sector ?? true;
+        $this->tipoMuestraPlan = $tipo?->muestra_plan ?? true;
+        $this->tipoMuestraAccesorios = $tipo?->muestra_accesorios_instalar ?? true;
+
+        $this->tipoRequiereAccesorios = $tipo?->requiere_accesorios ?? false;
+
+        $this->recalcularCosto();
 
         if (!$this->tipoRequiereMantenimiento) {
             $this->mantenimiento_id = null;
+        }
+        if (!$this->tipoMuestraSector) {
+            $this->sector = '';
+            $this->sector_especifico = '';
+        }
+        if (!$this->tipoMuestraPlan) {
+            $this->plan_id = null;
+        }
+        if (!$this->tipoMuestraAccesorios) {
+            $this->accesorios = [];
+        }
+    }
+
+    public function updatedTecnicoId($value): void
+    {
+        $this->recalcularCosto();
+    }
+
+    protected function recalcularCosto(): void
+    {
+        $this->costoEstimado = null;
+        $this->costoPersonalizado = false;
+
+        if (!$this->work_order_type_id) {
+            return;
+        }
+
+        $tipo = WorkOrderType::find($this->work_order_type_id);
+        if (!$tipo) {
+            return;
+        }
+
+        $costoEspecifico = $this->tecnico_id ? $tipo->costoParaTecnico((int) $this->tecnico_id) : null;
+
+        if ($costoEspecifico !== null) {
+            $this->costoEstimado = $costoEspecifico;
+            $this->costoPersonalizado = true;
+        } else {
+            $this->costoEstimado = (float) $tipo->costo_base;
+            $this->costoPersonalizado = false;
         }
     }
 
@@ -121,14 +253,61 @@ class CreateModal extends Component
 
         try {
             $data['empresa_id'] = Auth::user()->empresa_id;
-            $data['estado'] = WorkOrderStatus::PENDIENTE;
+            $data['estado']     = WorkOrderStatus::PENDIENTE;
 
             // Eliminar mantenimiento_id si el tipo no lo requiere
             if (!$this->tipoRequiereMantenimiento) {
                 unset($data['mantenimiento_id']);
             }
 
+            // Sector: si es "OTROS" usar la descripción específica
+            if ($this->sector === 'OTROS' && $this->sector_especifico) {
+                $data['sector'] = 'OTROS: ' . strtoupper(trim($this->sector_especifico));
+            }
+
+            // Resolver plan desde ID → nombre (string)
+            if ($this->plan_id) {
+                $planModel = Plan::find($this->plan_id);
+                if ($planModel) {
+                    $data['plan'] = is_array($planModel->name)
+                        ? ($planModel->name['es'] ?? ($planModel->name['en'] ?? ''))
+                        : $planModel->name;
+                }
+            }
+            unset($data['plan_id']);
+
+            // Resolver contacto desde ID → string formateado
+            if ($this->contacto_id) {
+                $c = Contactos::withoutGlobalScope(\App\Scopes\EmpresaScope::class)->find($this->contacto_id);
+                if ($c) {
+                    $data['contacto'] = trim(implode(' — ', array_filter([
+                        $c->nombre,
+                        $c->cargo ?: null,
+                        $c->telefono ? 'Tel: ' . $c->telefono : null,
+                    ])));
+                }
+            }
+            unset($data['contacto_id']);
+
+            // Guardar accesorios en metadata
+            $metadata = [];
+            if (!empty($this->accesorios)) {
+                $metadata['accesorios'] = $this->accesorios;
+            }
+            $data['metadata'] = !empty($metadata) ? $metadata : null;
+
+            // Ubicación del servicio
+            $data['ubicacion_lat']       = $this->ubicacion_lat ?: null;
+            $data['ubicacion_lng']       = $this->ubicacion_lng ?: null;
+            $data['ubicacion_direccion'] = $this->ubicacion_direccion ?: null;
+
+            // Eliminar campos que no son columnas de work_orders
+            unset($data['ciudad_filter'], $data['sector_especifico'], $data['accesorios']);
+
             $workOrder = WorkOrder::create($data);
+
+            // Enviar notificación WA al grupo del técnico (no bloquea si falla)
+            app(WorkOrderNotificationService::class)->enviarAlGrupo($workOrder);
 
             $this->notification()->success('ÉXITO', "Orden " . str_pad($workOrder->id, 5, '0', STR_PAD_LEFT) . " creada correctamente");
 
@@ -141,15 +320,45 @@ class CreateModal extends Component
 
     public function resetProps()
     {
-        $this->work_order_type_id = null;
-        $this->vehiculo_id = null;
-        $this->cliente_id = null;
-        $this->cliente_nombre = null;
-        $this->tecnico_id = null;
-        $this->fecha_programada = Carbon::now()->format('Y-m-d H:i');
+        $this->work_order_type_id  = null;
+        $this->vehiculo_id         = null;
+        $this->cliente_id          = null;
+        $this->cliente_nombre      = null;
+        $this->tecnico_id          = null;
+        $this->fecha_programada    = Carbon::now()->format('Y-m-d H:i');
         $this->observaciones_inicial = null;
-        $this->mantenimiento_id = null;
+        $this->mantenimiento_id    = null;
         $this->tipoRequiereMantenimiento = false;
+        $this->ciudad_filter       = null;
+        $this->sector              = '';
+        $this->sector_especifico   = '';
+        $this->plan_id             = null;
+        $this->contacto_id         = null;
+        $this->accesorios          = [];
+        $this->contactos           = [];
+        $this->tipoMuestraSector   = true;
+        $this->tipoMuestraPlan     = true;
+        $this->tipoMuestraAccesorios = true;
+        $this->tipoRequiereAccesorios = false;
+        $this->ubicacion_lat       = null;
+        $this->ubicacion_lng       = null;
+        $this->ubicacion_direccion = '';
+        $this->costoEstimado       = null;
+        $this->costoPersonalizado  = false;
+    }
+
+    public function setUbicacion(float $lat, float $lng, string $direccion = ''): void
+    {
+        $this->ubicacion_lat       = $lat;
+        $this->ubicacion_lng       = $lng;
+        $this->ubicacion_direccion = $direccion;
+    }
+
+    public function limpiarUbicacion(): void
+    {
+        $this->ubicacion_lat       = null;
+        $this->ubicacion_lng       = null;
+        $this->ubicacion_direccion = '';
     }
 
     public function addVehiculo($placa)

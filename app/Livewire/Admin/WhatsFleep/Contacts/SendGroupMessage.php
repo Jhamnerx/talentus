@@ -20,6 +20,7 @@ class SendGroupMessage extends Component
     public string  $messageType    = 'text';
     public string  $mediaUrl       = '';
     public string  $caption        = '';
+    public string  $filename       = '';
     public bool    $sending        = false;
 
     protected $rules = [
@@ -30,7 +31,7 @@ class SendGroupMessage extends Component
     #[On('open-send-group-message-modal')]
     public function openModal(string $groupId, string $groupName): void
     {
-        $this->reset(['message', 'mediaUrl', 'caption', 'messageType']);
+        $this->reset(['message', 'mediaUrl', 'caption', 'filename', 'messageType']);
         $this->groupId   = $groupId;
         $this->groupName = $groupName;
 
@@ -65,10 +66,13 @@ class SendGroupMessage extends Component
                 $data['message'] = $this->message;
                 $endpoint        = '/api/send-group-message';
             } else {
-                $data['url']      = $this->mediaUrl;
-                $data['caption']  = $this->caption;
-                $data['type']     = $this->messageType;
-                $endpoint         = '/api/send-group-media';
+                $data['url']     = $this->mediaUrl;
+                $data['caption'] = $this->caption;
+                $data['type']    = $this->messageType;
+                if ($this->messageType === 'document' && $this->filename) {
+                    $data['filename'] = $this->filename;
+                }
+                $endpoint = '/api/send-group-media';
             }
 
             $response = Http::timeout(30)->post(config('whatsapp.node_server_url') . $endpoint, $data);

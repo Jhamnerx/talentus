@@ -23,12 +23,7 @@ class CreateCampaign extends Component
     public string $message_type   = 'text';
     public string $message        = '';
     public string $caption        = '';
-    public string $footer         = '';
     public string $image_url      = '';
-    public array  $buttons        = [''];
-    public string $list_title     = '';
-    public string $list_button_text = 'Ver opciones';
-    public array  $list_sections  = [['title' => 'Sección 1', 'rows' => ['']]];
     public int    $delay          = 10;
     public string $schedule_type  = 'immediate';
     public string $schedule_time  = '';
@@ -39,7 +34,7 @@ class CreateCampaign extends Component
             'name'          => 'required|string|max:255',
             'device_id'     => 'required|exists:devices,id',
             'tag_id'        => 'required|exists:tags,id',
-            'message_type'  => 'required|in:text,image,video,audio,document,button,template,list',
+            'message_type'  => 'required|in:text,image,video,audio,document',
             'delay'         => 'required|integer|min:1|max:60',
             'schedule_type' => 'required|in:immediate,scheduled',
         ];
@@ -53,14 +48,6 @@ class CreateCampaign extends Component
             case 'audio':
             case 'document':
                 $rules['image_url'] = 'required|url';
-                break;
-            case 'button':
-                $rules['message'] = 'required|string';
-                $rules['buttons'] = 'required|array|min:1|max:3';
-                break;
-            case 'list':
-                $rules['message']          = 'required|string';
-                $rules['list_button_text'] = 'required|string';
                 break;
         }
 
@@ -138,16 +125,11 @@ class CreateCampaign extends Component
     private function buildMessageData(): array
     {
         return [
-            'sender'      => $this->sender,
-            'type'        => $this->message_type,
-            'message'     => $this->message,
-            'url'         => $this->image_url,
-            'caption'     => $this->caption,
-            'footer'      => $this->footer,
-            'buttons'     => $this->buttons,
-            'title'       => $this->list_title,
-            'buttonText'  => $this->list_button_text,
-            'sections'    => $this->list_sections,
+            'sender'  => $this->sender,
+            'type'    => $this->message_type,
+            'message' => $this->message,
+            'url'     => $this->image_url,
+            'caption' => $this->caption,
         ];
     }
 

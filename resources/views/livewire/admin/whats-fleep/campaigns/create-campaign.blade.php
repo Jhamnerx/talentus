@@ -34,12 +34,12 @@
     @if ($currentStep === 1)
         <div class="space-y-4 max-w-lg mx-auto">
             <x-form.input wire:model="name" label="Nombre de la campaña *" placeholder="Ej: Promo Diciembre 2025" />
-            <x-native-select wire:model.live="device_id" label="Dispositivo de envío *">
-                <option value="">Selecciona un dispositivo</option>
+            <x-form.select wire:model.live="device_id" label="Dispositivo de envío *"
+                placeholder="Selecciona un dispositivo">
                 @foreach ($devices as $device)
-                    <option value="{{ $device->id }}">{{ $device->body }}</option>
+                    <x-select.option value="{{ $device->id }}" label="{{ $device->body }}" />
                 @endforeach
-            </x-native-select>
+            </x-form.select>
             @if ($sender)
                 <p class="text-xs text-gray-500">Sender: <span
                         class="font-mono text-gray-700 dark:text-gray-300">{{ $sender }}</span></p>
@@ -50,53 +50,28 @@
     {{-- Step 2 --}}
     @if ($currentStep === 2)
         <div class="space-y-4 max-w-2xl mx-auto">
-            <x-native-select wire:model="tag_id" label="Lista de contactos (Phonebook) *">
-                <option value="">Selecciona una lista</option>
+            <x-form.select wire:model="tag_id" label="Lista de contactos (Phonebook) *"
+                placeholder="Selecciona una lista">
                 @foreach ($phonebooks as $pb)
-                    <option value="{{ $pb->id }}">{{ $pb->name }} ({{ $pb->contacts_count }} contactos)
-                    </option>
+                    <x-select.option value="{{ $pb->id }}"
+                        label="{{ $pb->name }} ({{ $pb->contacts_count }} contactos)" />
                 @endforeach
-            </x-native-select>
-            <x-native-select wire:model.live="message_type" label="Tipo de mensaje">
-                <option value="text">Texto</option>
-                <option value="image">Imagen</option>
-                <option value="video">Video</option>
-                <option value="audio">Audio</option>
-                <option value="document">Documento</option>
-                <option value="button">Botones</option>
-                <option value="template">Template (Lista)</option>
-            </x-native-select>
+            </x-form.select>
+            <x-form.select wire:model.live="message_type" label="Tipo de mensaje">
+                <x-select.option value="text" label="Texto" />
+                <x-select.option value="image" label="Imagen" />
+                <x-select.option value="video" label="Video" />
+                <x-select.option value="audio" label="Audio" />
+                <x-select.option value="document" label="Documento" />
+            </x-form.select>
 
-            @if (in_array($message_type, ['text', 'button', 'template']))
+            @if ($message_type === 'text')
                 <x-form.textarea wire:model="message" label="Mensaje *" rows="4" />
-            @endif
-            @if (in_array($message_type, ['image', 'video', 'audio', 'document']))
+            @elseif (in_array($message_type, ['image', 'video', 'audio', 'document']))
                 <x-form.input wire:model="image_url" label="URL del archivo *" placeholder="https://..." />
                 @if ($message_type !== 'audio')
                     <x-form.input wire:model="caption" label="Caption (opcional)" />
                 @endif
-            @endif
-            @if ($message_type === 'button')
-                <div class="space-y-2">
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Botones (máx. 3)</label>
-                    @foreach ($buttons as $i => $btn)
-                        <div class="flex gap-2">
-                            <x-form.input wire:model="buttons.{{ $i }}" placeholder="Texto del botón"
-                                class="flex-1" />
-                            @if (count($buttons) > 1)
-                                <x-form.button wire:click="removeButton({{ $i }})" icon="x-mark"
-                                    size="xs" flat negative />
-                            @endif
-                        </div>
-                    @endforeach
-                    @if (count($buttons) < 3)
-                        <x-form.button wire:click="addButton" icon="plus" flat label="Agregar botón"
-                            size="xs" />
-                    @endif
-                </div>
-            @endif
-            @if ($footer || $message_type === 'button')
-                <x-form.input wire:model="footer" label="Footer (opcional)" />
             @endif
         </div>
     @endif
@@ -109,10 +84,10 @@
                     (segundos)</label>
                 <x-form.input wire:model="delay" type="number" min="1" max="60" />
             </div>
-            <x-native-select wire:model.live="schedule_type" label="Tipo de envío">
-                <option value="immediate">Inmediato</option>
-                <option value="scheduled">Programado</option>
-            </x-native-select>
+            <x-form.select wire:model.live="schedule_type" label="Tipo de envío">
+                <x-select.option value="immediate" label="Inmediato" />
+                <x-select.option value="scheduled" label="Programado" />
+            </x-form.select>
             @if ($schedule_type === 'scheduled')
                 <x-form.input wire:model="schedule_time" type="datetime-local" label="Fecha y hora de envío" />
             @endif

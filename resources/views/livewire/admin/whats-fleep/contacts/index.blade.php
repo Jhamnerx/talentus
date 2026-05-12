@@ -1,121 +1,193 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
 
     <!-- Page header -->
-    <div class="sm:flex sm:justify-between sm:items-center mb-8">
-        <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Contactos WhatsApp</h1>
-        </div>
-        <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-            <button wire:click="openCreateTagModal"
-                class="btn cursor-pointer bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 text-slate-600 dark:text-gray-300">
-                <svg class="w-4 h-4 shrink-0 fill-current opacity-50" viewBox="0 0 16 16">
-                    <path d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM9 10H7V8H5V6h2V4h2v2h2v2H9v2z"/>
-                </svg>
-                <span class="hidden xs:block ml-2">Nueva lista</span>
-            </button>
-            <button wire:click="openImportModal"
-                class="btn cursor-pointer bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 text-slate-600 dark:text-gray-300">
-                <svg class="w-4 h-4 shrink-0 fill-current opacity-50" viewBox="0 0 16 16">
-                    <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12l-4-4h3V4h2v4h3l-4 4z"/>
-                </svg>
-                <span class="hidden xs:block ml-2">Importar</span>
-            </button>
-            <button wire:click="openCreateModal"
-                class="btn cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white">
-                <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                </svg>
-                <span class="hidden xs:block ml-2">Nuevo contacto</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Filters -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
-        <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-            <x-form.input wire:model.live.debounce="search" placeholder="Buscar nombre o nÃºmero..." icon="magnifying-glass" class="w-64" />
-            <x-native-select wire:model.live="selectedTag" class="btn">
-                <option value="">Todas las listas</option>
-                @foreach ($tags as $tag)
-                    <option value="{{ $tag->id }}">{{ $tag->name }} ({{ $tag->contacts_count }})</option>
-                @endforeach
-            </x-native-select>
+        <div class="mb-4 sm:mb-0">
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Contactos</h1>
+        </div>
+        <div class="flex flex-wrap justify-start sm:justify-end gap-2 mt-3 sm:mt-0">
+            <!-- Search -->
+            <div class="w-full sm:w-52 relative">
+                <input wire:model.live.debounce.300ms="search" type="text"
+                    class="form-input w-full pl-9 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 focus:border-violet-300 dark:focus:border-violet-500 rounded-lg text-sm"
+                    placeholder="Buscar contacto..." />
+                <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                    <svg class="w-4 h-4 fill-current text-gray-400 dark:text-gray-500 ml-3" viewBox="0 0 16 16">
+                        <path
+                            d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
+                        <path
+                            d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
+                    </svg>
+                </div>
+            </div>
+            <x-form.button wire:click="openImportModal" purple icon="arrow-up-tray" label="Importar CSV" />
+            <x-form.button wire:click="openSyncContactsModal" sky icon="arrow-path" label="Sincronizar" />
+            <x-form.button wire:click="openCreateModal" primary icon="plus" label="Agregar Contacto" />
         </div>
     </div>
 
-    <!-- Table -->
-    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700">
-        <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800 dark:text-gray-100">Total Contactos
-                <span class="text-slate-400 dark:text-gray-400 font-medium">{{ $totalContacts }}</span>
-            </h2>
-        </header>
-        <div>
-            <div class="overflow-x-auto">
-                <table class="table-auto w-full">
-                    <thead class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-900/20 border-t border-b border-slate-200 dark:border-gray-700">
-                        <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">NOMBRE</div></th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">NÃšMERO</div></th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">LISTA</div></th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-left">CREADO</div></th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap"><div class="font-semibold text-right">ACCIONES</div></th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
-                        @forelse($contacts as $contact)
-                            <tr wire:key="contact-{{ $contact->id }}">
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800 dark:text-gray-100">{{ $contact->name }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-mono text-slate-600 dark:text-gray-300">{{ $contact->number }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    @if ($contact->tag)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                                            {{ $contact->tag->name }}
-                                        </span>
-                                    @else
-                                        <span class="text-slate-400 dark:text-gray-500 text-xs">&mdash;</span>
-                                    @endif
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-slate-500 dark:text-gray-400 text-xs">{{ $contact->created_at->format('d/m/Y') }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="flex items-center justify-end space-x-2">
-                                        <button wire:click="openEditModal({{ $contact->id }})"
-                                            class="text-slate-400 hover:text-slate-500 dark:text-gray-400 dark:hover:text-gray-300 cursor-pointer">
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                            </svg>
-                                        </button>
-                                        <button wire:click="openDeleteModal({{ $contact->id }})"
-                                            class="text-rose-500 hover:text-rose-600 cursor-pointer">
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path d="M13 15h2v6h-2zM17 15h2v6h-2zM20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-2 first:pl-5 last:pr-5 py-10 text-center">
-                                    <div class="text-slate-500 dark:text-gray-400">No hay contactos registrados</div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+    <!-- Stats cards -->
+    <div class="grid grid-cols-12 gap-6 mb-5">
+
+        <!-- Total Contacts -->
+        <div
+            class="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+            <div class="px-5 py-5">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400">Total Contactos</h2>
+                    <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalContacts }}</div>
             </div>
         </div>
+
+        <!-- Groups / Tags -->
+        <div
+            class="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+            <div class="px-5 py-5">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400">Grupos/Etiquetas</h2>
+                    <div class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $tags->count() }}</div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    <button wire:click="openCreateTagModal" class="text-violet-500 hover:text-violet-600">+ Crear
+                        grupo</button>
+                </p>
+            </div>
+        </div>
+
+        <!-- Filter by Group -->
+        <div class="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
+            <div class="px-5 py-5">
+                <x-form.select wire:model.live="selectedTag" label="Filtrar por Grupo" placeholder="Todos los grupos">
+                    @foreach ($tags as $tag)
+                        <x-select.option value="{{ $tag->id }}"
+                            label="{{ $tag->name }} ({{ $tag->contacts_count }})" />
+                    @endforeach
+                </x-form.select>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Pagination -->
-    <div class="mt-8">
-        {{ $contacts->links() }}
+    <!-- Contacts Table -->
+    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl relative">
+        <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">
+                Todos los Contactos
+                <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $contacts->total() }}</span>
+            </h2>
+        </header>
+
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead
+                    class="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-gray-100 dark:border-gray-700/60">
+                    <tr>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Nombre</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Número</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Grupo</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Fecha</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-center">Acciones</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
+                    @forelse ($contacts as $contact)
+                        <tr wire:key="contact-{{ $contact->id }}" class="hover:bg-gray-50 dark:hover:bg-gray-900/20">
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-medium text-gray-800 dark:text-gray-100">
+                                    {{ $contact->name ?: '-' }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-mono text-gray-600 dark:text-gray-300">{{ $contact->number }}</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                @if ($contact->tag)
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-violet-100 text-violet-800 dark:bg-violet-500/20 dark:text-violet-400">
+                                        {{ $contact->tag->name }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-400">Sin grupo</span>
+                                @endif
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-gray-500 text-xs">{{ $contact->created_at->diffForHumans() }}</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="flex items-center justify-center gap-2">
+                                    <button wire:click="openEditModal({{ $contact->id }})"
+                                        class="text-gray-400 hover:text-violet-500 dark:hover:text-violet-400">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </button>
+                                    <button wire:click="openDeleteModal({{ $contact->id }})"
+                                        class="text-gray-400 hover:text-red-500 dark:hover:text-red-400">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-2 first:pl-5 last:pr-5 py-8 text-center">
+                                <div class="flex flex-col items-center justify-center">
+                                    <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="currentColor"
+                                        viewBox="0 0 20 20">
+                                        <path
+                                            d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                                    </svg>
+                                    <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">No hay
+                                        contactos</p>
+                                    <p class="text-gray-400 dark:text-gray-500 text-sm mb-4">Comienza agregando
+                                        contactos o importándolos</p>
+                                    <div class="flex gap-2">
+                                        <x-form.button wire:click="openCreateModal" sm primary icon="plus"
+                                            label="Agregar Contacto" />
+                                        <x-form.button wire:click="openImportModal" sm purple icon="arrow-up-tray"
+                                            label="Importar CSV" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if ($contacts->hasPages())
+            <div class="px-5 py-4 border-t border-gray-100 dark:border-gray-700/60">
+                {{ $contacts->links() }}
+            </div>
+        @endif
     </div>
 
     @livewire('admin.whats-fleep.contacts.create')
@@ -123,4 +195,5 @@
     @livewire('admin.whats-fleep.contacts.delete')
     @livewire('admin.whats-fleep.contacts.import-csv')
     @livewire('admin.whats-fleep.contacts.create-tag')
+    @livewire('admin.whats-fleep.contacts.sync-contacts')
 </div>

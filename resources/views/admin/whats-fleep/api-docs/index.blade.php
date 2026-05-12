@@ -65,7 +65,7 @@
 
                         @if (!empty($endpoint['example']))
                             <h4 class="text-xs font-semibold text-gray-500 uppercase mt-4 mb-2">Ejemplo</h4>
-                            <pre class="bg-gray-800 text-green-400 text-xs rounded-lg p-4 overflow-auto">{{ json_encode($endpoint['example'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                            <pre class="bg-gray-800 text-green-400 text-xs rounded-lg p-4 overflow-auto">{{ $endpoint['example'] }}</pre>
                         @endif
                     </div>
                 </div>

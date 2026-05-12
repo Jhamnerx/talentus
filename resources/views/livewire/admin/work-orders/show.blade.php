@@ -110,6 +110,39 @@
                 </p>
             </div>
         @endif
+
+        {{-- Ubicación del servicio --}}
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                📍 Ubicación del servicio
+            </h3>
+            @if ($workOrder->ubicacion_lat)
+                <div class="flex items-start gap-2">
+                    <svg class="mt-0.5 h-4 w-4 shrink-0 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-2.007 3.96-5.07 3.96-8.827a8.25 8.25 0 00-16.5 0c0 3.756 2.017 6.82 3.96 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <div>
+                        @if ($workOrder->ubicacion_direccion)
+                            <p class="text-sm text-gray-700 dark:text-gray-300">{{ $workOrder->ubicacion_direccion }}
+                            </p>
+                        @endif
+                        <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-0.5">
+                            {{ number_format($workOrder->ubicacion_lat, 6) }},
+                            {{ number_format($workOrder->ubicacion_lng, 6) }}
+                        </p>
+                        <a href="https://www.google.com/maps?q={{ $workOrder->ubicacion_lat }},{{ $workOrder->ubicacion_lng }}"
+                            target="_blank" rel="noopener noreferrer"
+                            class="text-xs text-blue-500 hover:underline mt-0.5 inline-block">
+                            Ver en Google Maps →
+                        </a>
+                    </div>
+                </div>
+            @else
+                <p class="text-sm text-gray-400 dark:text-gray-500 italic">Sin ubicación asignada</p>
+            @endif
+        </div>
     </div>
 
     {{-- Mantenimiento Vinculado --}}

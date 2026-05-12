@@ -21,11 +21,6 @@ class TestMessage extends Component
     public string $caption   = '';
     public string $filename  = '';
 
-    // Button
-    public string $buttonText   = '';
-    public string $buttonFooter = '';
-    public array  $buttons      = [['id' => 'btn1', 'text' => '']];
-
     // Template/List
     public string $templateTitle      = '';
     public string $templateBody       = '';
@@ -48,19 +43,6 @@ class TestMessage extends Component
         } elseif ($devices->isNotEmpty()) {
             $this->sender = $devices->first()->body;
         }
-    }
-
-    public function addButton(): void
-    {
-        if (count($this->buttons) < 3) {
-            $this->buttons[] = ['id' => 'btn' . (count($this->buttons) + 1), 'text' => ''];
-        }
-    }
-
-    public function removeButton(int $index): void
-    {
-        array_splice($this->buttons, $index, 1);
-        $this->buttons = array_values($this->buttons);
     }
 
     public function addSection(): void
@@ -118,35 +100,27 @@ class TestMessage extends Component
                         'message' => $this->message,
                     ]),
                     'image'    => Http::timeout(15)->post("{$serverUrl}/api/send-image", [
-                        'token'   => $this->sender,
-                        'number'  => $num,
-                        'url'     => $this->mediaUrl,
-                        'caption' => $this->caption,
-                    ]),
-                    'video'    => Http::timeout(15)->post("{$serverUrl}/api/send-video", [
-                        'token'   => $this->sender,
-                        'number'  => $num,
-                        'url'     => $this->mediaUrl,
-                        'caption' => $this->caption,
-                    ]),
-                    'audio'    => Http::timeout(15)->post("{$serverUrl}/api/send-audio", [
-                        'token'  => $this->sender,
-                        'number' => $num,
-                        'url'    => $this->mediaUrl,
-                    ]),
-                    'document' => Http::timeout(15)->post("{$serverUrl}/api/send-document", [
                         'token'    => $this->sender,
                         'number'   => $num,
-                        'url'      => $this->mediaUrl,
+                        'imageUrl' => $this->mediaUrl,
                         'caption'  => $this->caption,
-                        'filename' => $this->filename ?: 'document',
                     ]),
-                    'button'   => Http::timeout(15)->post("{$serverUrl}/api/send-button", [
-                        'token'   => $this->sender,
-                        'number'  => $num,
-                        'message' => $this->buttonText,
-                        'footer'  => $this->buttonFooter,
-                        'buttons' => array_map(fn($b) => ['displayText' => $b['text']], $this->buttons),
+                    'video'    => Http::timeout(15)->post("{$serverUrl}/api/send-video", [
+                        'token'    => $this->sender,
+                        'number'   => $num,
+                        'videoUrl' => $this->mediaUrl,
+                        'caption'  => $this->caption,
+                    ]),
+                    'audio'    => Http::timeout(15)->post("{$serverUrl}/api/send-audio", [
+                        'token'    => $this->sender,
+                        'number'   => $num,
+                        'audioUrl' => $this->mediaUrl,
+                    ]),
+                    'document' => Http::timeout(15)->post("{$serverUrl}/api/send-document", [
+                        'token'       => $this->sender,
+                        'number'      => $num,
+                        'documentUrl' => $this->mediaUrl,
+                        'fileName'    => $this->filename ?: 'document',
                     ]),
                     default    => null,
                 };

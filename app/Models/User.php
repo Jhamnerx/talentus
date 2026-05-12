@@ -42,6 +42,8 @@ class User extends Authenticatable
         'password',
         'series_id',
         'fcm_token',
+        'ciudad_id',
+        'wa_group_id',
     ];
 
     // protected $attributes = [
@@ -176,6 +178,11 @@ class User extends Authenticatable
     }
 
     // ─── WhatsApp (WhatsFleep) ───────────────────────────────────────────────
+
+    public function ciudad()
+    {
+        return $this->belongsTo(\App\Models\Ciudades::class, 'ciudad_id');
+    }
 
     public function waDevices()
     {

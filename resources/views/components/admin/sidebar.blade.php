@@ -325,7 +325,7 @@
 
 
                     <!-- Tickets -->
-
+                    @can('ver-ticket')
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['tickets'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['tickets']) ? 1 : 0 }} }">
 
@@ -366,12 +366,13 @@
                                 </ul>
                             </div>
                         </li>
-
+                    @endcan
 
 
                     <!-- Finanzas -->
 
                     <!-- WhatsApp -->
+                    @canany(['ver-dispositivos-wa', 'ver-contactos-wa', 'ver-campanias-wa', 'enviar-mensajes-wa', 'ver-historial-wa', 'gestionar-autoreplies-wa'])
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(1), ['whatsapp'])) {{ 'from-emerald-500/12 dark:from-emerald-500/24 to-emerald-500/4' }} @endif"
                         x-data="{ open: {{ in_array(Request::segment(1), ['whatsapp']) ? 1 : 0 }} }">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition hover:text-gray-900 dark:hover:text-white"
@@ -450,6 +451,8 @@
                             </ul>
                         </div>
                     </li>
+                    @endcanany
+                    @canany(['ver-finanzas-caja', 'ver-finanzas-movimientos', 'ver-finanzas-transacciones', 'ver-finanzas-cuentas-cobrar', 'ver-finanzas-cuentas-pagar', 'ver-finanzas-balance', 'admin.cobros.index', 'admin.payments.index'])
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones']) ? 1 : 0 }} }">
 
@@ -583,7 +586,7 @@
 
                             </div>
                         </li>
-
+                    @endcanany
 
                     <!-- Proveedores -->
                     @can('ver-proveedor')
@@ -1122,6 +1125,7 @@
                     @endcanany
 
                     <!-- Órdenes de Trabajo -->
+                    @can('ver-work_order')
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['work-orders'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif">
                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.work-orders.index', 'admin.work-orders.show', 'admin.work-orders.checklist')) {{ 'text-violet-500!' }} @endif"
                             href="{{ route('admin.work-orders.index') }}">
@@ -1136,6 +1140,7 @@
                             </div>
                         </a>
                     </li>
+                    @endcan
 
                     <!-- administracion -->
                     @canany(['admin.solicitudes.index', 'admin.reportes.index', 'admin.usuarios.index',
