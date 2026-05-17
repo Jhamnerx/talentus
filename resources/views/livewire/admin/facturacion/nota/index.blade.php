@@ -32,7 +32,7 @@
 
                 <!-- Search form -->
 
-                <form class="relative">
+                <form class="relative" @submit.prevent>
                     <label for="action-search" class="sr-only">Search</label>
                     <input name="serie_correlativo" id="action-search" class="form-input pl-9 focus:border-slate-300"
                         type="search" wire:model.live="search" placeholder="Buscar notas credito/debito" />

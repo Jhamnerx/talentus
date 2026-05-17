@@ -11,12 +11,12 @@ class Edit extends Component
     public $modalEdit = false;
     public SimCard $sim_card;
 
-    public $imei, $operador;
+    public $imei, $operador_id;
 
     protected function rules()
     {
         return [
-            'operador' => 'required|alpha:ascii',
+            'operador_id' => 'required|exists:operadores,id',
             "imei"  => "required|distinct|numeric|unique:sim_card,sim_card,{$this->sim_card->id}",
 
         ];
@@ -35,22 +35,23 @@ class Edit extends Component
             'sim_card.unique' => 'El sim card ya existe',
             'sim_card.distinct' => 'ya estas registrando este sim card',
             'sim_card.numeric' => 'El campo no debe contener letras',
-            'operador.required' => 'El operador es requerido',
-            'operador.alpha' => 'El campo no debe contener números',
+            'operador_id.required' => 'El operador es requerido',
+            'operador_id.exists' => 'Selecciona un operador válido',
         ];
     }
 
     public function render()
     {
-        return view('livewire.admin.sim-card.edit');
+        $operadores = \App\Models\Operador::orderBy('name')->get();
+        return view('livewire.admin.sim-card.edit', compact('operadores'));
     }
-    #[On('open-modal-edit')]
+    #[On('sim-card-open-modal-edit')]
     public function openModal(SimCard $sim_card)
     {
         $this->modalEdit = true;
         $this->sim_card = $sim_card;
         $this->imei = $sim_card->sim_card;
-        $this->operador = $sim_card->operador;
+        $this->operador_id = $sim_card->operador_id;
     }
 
     public function save()
@@ -58,8 +59,8 @@ class Edit extends Component
         $this->validate();
         try {
             $this->sim_card->update([
-                'sim_card' => $this->imei,
-                'operador' => $this->operador,
+                'sim_card'    => $this->imei,
+                'operador_id' => $this->operador_id,
             ]);
             $this->afterSave();
         } catch (\Throwable $th) {
@@ -72,11 +73,7 @@ class Edit extends Component
         }
     }
 
-    public function updatedOperador($value)
-    {
-
-        $this->operador = strtoupper($value);
-    }
+    // sin updatedOperador ya que ahora es ID numérico
 
     public function afterSave()
     {

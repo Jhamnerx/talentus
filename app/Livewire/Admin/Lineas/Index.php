@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -16,6 +17,7 @@ class Index extends Component
     public $from = '';
     public $to = '';
     public $operador = null;
+    public $proximaReactivacion = false;
     public $modalOpenImport = false;
 
 
@@ -56,44 +58,70 @@ class Index extends Component
 
     public function render()
     {
-        $desde = $this->from;
-        $hasta = $this->to;
-
-        $lineas = Lineas::whereHas('sim_card', function ($query) {
-
-            $query->where('sim_card', 'LIKE', '%' . $this->search . '%');
-
-            $query->orWhereHas('vehiculos', function ($vehiculo) {
-
-                $vehiculo->where('placa', 'like', '%' . $this->search . '%');
-
-                $vehiculo->orWhereHas('cliente', function ($cliente) {
-                    $cliente->where('razon_social', 'like', '%' . $this->search . '%');
-                });
-            });
-        })->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('operador', 'like', '%' . $this->search . '%')
-
-            ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
-            ->orderBy('id', 'desc')
-            ->paginate(10);
-
+        $search = $this->search;
         $operador = $this->operador;
 
-        if ($operador != null) {
-
-            $lineas = Lineas::Where('operador', $operador)
-                ->Where('numero', 'like', '%' . $this->search . '%')
+        if ($this->proximaReactivacion) {
+            $limite = Carbon::now()->addDays(15);
+            $claroId = \App\Models\Operador::whereRaw('UPPER(name) = ?', ['CLARO'])->value('id');
+            $lineas = Lineas::where('operador_id', $claroId)
+                ->where('baja', false)
+                ->whereNotNull('date_to_suspend')
+                ->where('date_to_suspend', '<=', $limite)
+                ->where('date_to_suspend', '>=', Carbon::now())
+                ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
+                ->orderBy('date_to_suspend')
+                ->paginate(10);
+        } elseif ($operador !== null) {
+            $lineas = Lineas::where('operador_id', $operador)
+                ->where('numero', 'like', '%' . $search . '%')
+                ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
+                ->orderBy('id', 'desc')
+                ->paginate(10);
+        } elseif (!empty($search) && strlen($search) >= 3) {
+            $lineas = Lineas::leftJoin('sim_card as sc', function ($join) {
+                $join->on('sc.lineas_id', '=', 'lineas.id')
+                    ->whereNull('sc.deleted_at');
+            })
+                ->leftJoin('vehiculos as v', function ($join) {
+                    $join->on('v.sim_card_id', '=', 'sc.id')
+                        ->whereNull('v.deleted_at');
+                })
+                ->leftJoin('clientes as c', 'c.id', '=', 'v.clientes_id')
+                ->where(function ($q) use ($search) {
+                    $q->where('lineas.numero', 'like', '%' . $search . '%')
+                        ->orWhere('sc.sim_card', 'like', '%' . $search . '%')
+                        ->orWhere('v.placa', 'like', '%' . $search . '%')
+                        ->orWhere('c.razon_social', 'like', '%' . $search . '%');
+                })
+                ->select('lineas.*')
+                ->distinct()
+                ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
+                ->orderBy('lineas.id', 'desc')
+                ->paginate(10);
+        } else {
+            $lineas = Lineas::with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
+                ->orderBy('id', 'desc')
                 ->paginate(10);
         }
 
 
-        return view('livewire.admin.lineas.index', compact('lineas'));
+        $operadoresList = \App\Models\Operador::orderBy('name')->get();
+
+        return view('livewire.admin.lineas.index', compact('lineas', 'operadoresList'));
     }
 
     public function SetOperador($operador = null)
     {
         $this->operador = $operador;
+        $this->proximaReactivacion = false;
+    }
+
+    public function toggleProximaReactivacion()
+    {
+        $this->proximaReactivacion = ! $this->proximaReactivacion;
+        $this->operador = null;
+        $this->resetPage();
     }
 
     public function updatingSearch()

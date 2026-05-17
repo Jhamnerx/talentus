@@ -2,7 +2,7 @@
     'placeholder' => 'Search…'
 ])
 
-<form class="relative">
+<form class="relative" @submit.prevent>
     <label for="action-search" class="sr-only">Search</label>
     <input id="action-search" class="form-input pl-9 bg-white dark:bg-gray-800" type="search" placeholder="{{ $placeholder }}" wire:model.live="search" />
     <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">

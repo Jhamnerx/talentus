@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Operador;
 use App\Scopes\EmpresaScope;
 use App\Observers\SimCardObserver;
 use Spatie\Activitylog\LogOptions;
@@ -36,6 +37,11 @@ class SimCard extends Model
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
+    }
+
+    public function operador()
+    {
+        return $this->belongsTo(Operador::class, 'operador_id');
     }
 
     //relacion uno a muchos

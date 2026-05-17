@@ -12,12 +12,12 @@ class Edit extends Component
     public $modalEdit = false;
     public Lineas $linea;
 
-    public $numero, $operador;
+    public $numero, $operador_id;
 
     protected function rules()
     {
         return [
-            'operador' => 'required|alpha:ascii',
+            'operador_id' => 'required|exists:operadores,id',
             "numero"  => "required|distinct|numeric|unique:lineas,numero,{$this->linea->id}",
 
         ];
@@ -36,15 +36,16 @@ class Edit extends Component
             'numero.unique' => 'El sim card ya existe',
             'numero.distinct' => 'ya estas registrando este sim card',
             'numero.numeric' => 'El campo no debe contener letras',
-            'operador.required' => 'El operador es requerido',
-            'operador.alpha' => 'El campo no debe contener números',
+            'operador_id.required' => 'El operador es requerido',
+            'operador_id.exists' => 'Selecciona un operador válido',
         ];
     }
 
 
     public function render()
     {
-        return view('livewire.admin.lineas.edit');
+        $operadores = \App\Models\Operador::orderBy('name')->get();
+        return view('livewire.admin.lineas.edit', compact('operadores'));
     }
 
 
@@ -54,7 +55,7 @@ class Edit extends Component
         $this->modalEdit = true;
         $this->linea = $linea;
         $this->numero = $linea->numero;
-        $this->operador = $linea->operador;
+        $this->operador_id = $linea->operador_id;
     }
 
     public function save()
@@ -62,8 +63,8 @@ class Edit extends Component
         $this->validate();
         try {
             $this->linea->update([
-                'numero' => $this->numero,
-                'operador' => $this->operador,
+                'numero'      => $this->numero,
+                'operador_id' => $this->operador_id,
             ]);
             $this->afterSave();
         } catch (\Throwable $th) {
@@ -78,8 +79,7 @@ class Edit extends Component
 
     public function updatedOperador($value)
     {
-
-        $this->operador = strtoupper($value);
+        // sin efecto: operador_id es un entero
     }
 
     public function afterSave()
@@ -103,6 +103,6 @@ class Edit extends Component
     public function resetProps()
     {
         $this->numero = '';
-        $this->operador = '';
+        $this->operador_id = null;
     }
 }

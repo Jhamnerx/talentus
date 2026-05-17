@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Gerencia\Reportes\Modales;
 
 use App\Exports\Gerencia\LineasExport;
 use App\Models\Lineas;
+use App\Models\Operador;
 use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class ReporteLineas extends Component
 {
     public $modalReporte = false;
-    public $operador = "todos";
+    public $operador = 0;
     public $suspencion = false;
 
     protected $listeners = [
@@ -26,7 +27,7 @@ class ReporteLineas extends Component
 
     public function render()
     {
-        $operadores = Lineas::select('operador')->distinct()->get();
+        $operadores = Operador::orderBy('name')->get();
 
         return view('livewire.admin.gerencia.reportes.modales.reporte-lineas', compact('operadores'));
     }
@@ -60,14 +61,14 @@ class ReporteLineas extends Component
             }
 
 
-            if ($this->operador !== "todos") {
+            if ($this->operador) {
 
-                $lineas = Lineas::Operador($this->operador)->with('sim_card')->where('baja', false)->get();
+                $lineas = Lineas::where('operador_id', $this->operador)->with('sim_card')->where('baja', false)->get();
             }
 
-            if ($this->suspencion == true && $this->operador !== "todos") {
+            if ($this->suspencion == true && $this->operador) {
 
-                $lineas = Lineas::Operador($this->operador)->whereNotNull('fecha_suspencion')->where('baja', false)->with('sim_card')->get();
+                $lineas = Lineas::where('operador_id', $this->operador)->whereNotNull('fecha_suspencion')->where('baja', false)->with('sim_card')->get();
             }
 
 
@@ -78,7 +79,7 @@ class ReporteLineas extends Component
                 ->setPaper('Legal', 'landscape')->output();
 
             return response()->streamDownload(
-                fn () => print($pdfContent),
+                fn() => print($pdfContent),
                 "reporte_lineas.pdf"
             );
         } catch (\Throwable $e) {
@@ -108,10 +109,12 @@ class ReporteLineas extends Component
     public function getOperadoresCount()
     {
         $operadores =
-            DB::table("lineas")
-            ->select(DB::raw("COUNT(*) as count_row, operador"))
-            ->groupBy(DB::raw("operador"))
-            ->get();;
+            DB::table('lineas')
+            ->join('operadores', 'lineas.operador_id', '=', 'operadores.id')
+            ->select(DB::raw('COUNT(*) as count_row'), 'operadores.name as operador')
+            ->whereNull('lineas.deleted_at')
+            ->groupBy('operadores.id', 'operadores.name')
+            ->get();
 
         return $operadores;
     }

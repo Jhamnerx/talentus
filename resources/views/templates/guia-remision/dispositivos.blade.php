@@ -45,7 +45,7 @@
                                 @foreach ($guia->sim_cards as $sim_card)
                                     <tr>
                                         <td align="left">{{ $sim_card->sim_card }}</td>
-                                        <td align="left">{{ $sim_card->operador }}</td>
+                                        <td align="left">{{ $sim_card->operador?->name ?? '—' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

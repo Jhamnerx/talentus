@@ -161,7 +161,7 @@
                                                 <td
                                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                                     <span
-                                                        class="font-medium text-slate-700 text-right">{{ $sim_card->operador }}</span>
+                                                        class="font-medium text-slate-700 text-right">{{ $sim_card->operador?->name ?? '—' }}</span>
                                                 </td>
                                                 <td
                                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">

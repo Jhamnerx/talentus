@@ -4,10 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\LineasExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LineasRequest;
-use App\Models\CambiosLineas;
-use App\Models\Lineas;
-use App\Models\SimCard;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -25,6 +21,11 @@ class LineasController extends Controller
     public function index()
     {
         return view('admin.almacen.lineas.index');
+    }
+
+    public function indexCombinado()
+    {
+        return view('admin.almacen.lineas-sim-card.index');
     }
 
 

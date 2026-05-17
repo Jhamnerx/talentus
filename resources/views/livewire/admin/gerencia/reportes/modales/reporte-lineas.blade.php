@@ -24,9 +24,9 @@
                                 </svg>
                             </div>
                             <select wire:model.live="operador" class="form-select w-full pl-9" id="">
-                                <option value="todos">Todos</option>
-                                @foreach ($operadores as $operador)
-                                    <option value="{{ $operador->operador }}">{{ $operador->operador }}</option>
+                                <option value="0">Todos</option>
+                                @foreach ($operadores as $op)
+                                    <option value="{{ $op->id }}">{{ strtoupper($op->name) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -55,18 +55,18 @@
 
                         </label>
                         <div class="flex flex-wrap items-center justify-center -m-1.5 gap-3 mt-2">
-                            {{-- <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <x-form.button wire:click.prevent="exportToPdf" spinner="exportToPdf"
-                                            label="PDF" red icon="arrow-down-tray
-
-
-
-                                    </div> --}}
-
                             <div class="flex flex-wrap pt-2 -space-x-px gap-3">
+                                <x-form.button wire:click.prevent="exportToPdf" spinner="exportToPdf" label="PDF" red
+                                    icon="arrow-down-tray" />
+
+
+
+                            </div>
+
+                            <div class="flex
+                                    flex-wrap pt-2 -space-x-px gap-3">
                                 <x-form.button label="EXCEL" wire:click.prevent="exportToExcel" spinner="exportToExcel"
-                                    emerald
-                                    icon="arrow-down-tray
+                                    emerald icon="arrow-down-tray" />
 
 
                             </div>
@@ -75,38 +75,38 @@
 
                     </div>
                     <div class="col-span-12">
-                                    <div class="mb-1 text-center w-full" wire:loading wire:target="exportToPdf">
+                        <div class="mb-1 text-center w-full" wire:loading wire:target="exportToPdf">
 
-                                        <div class='loader-download'>
-                                            <div class='loader--dot-download'></div>
-                                            <div class='loader--dot-download'></div>
-                                            <div class='loader--dot-download'></div>
-                                            <div class='loader--dot-download'></div>
-                                            <div class='loader--dot-download'></div>
-                                            <div class='loader--dot-download'></div>
-                                            <div class='loader--text-download'></div>
-                                        </div>
-
-                                    </div>
+                            <div class='loader-download'>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--text-download'></div>
                             </div>
-                            <div class="col-span-12">
-                                <div class="mb-1 text-center w-full" wire:loading wire:target="exportToExcel">
 
-                                    <div class='loader-download'>
-                                        <div class='loader--dot-download'></div>
-                                        <div class='loader--dot-download'></div>
-                                        <div class='loader--dot-download'></div>
-                                        <div class='loader--dot-download'></div>
-                                        <div class='loader--dot-download'></div>
-                                        <div class='loader--dot-download'></div>
-                                        <div class='loader--text-download'></div>
-                                    </div>
-
-                                </div>
-                            </div>
                         </div>
-
                     </div>
+                    <div class="col-span-12">
+                        <div class="mb-1 text-center w-full" wire:loading wire:target="exportToExcel">
+
+                            <div class='loader-download'>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--dot-download'></div>
+                                <div class='loader--text-download'></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </form>
 
         <x-slot name="footer">

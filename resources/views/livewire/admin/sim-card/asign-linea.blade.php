@@ -37,7 +37,7 @@
                         seleccionado:
                     </p>
                     <p class="text-sm font-bold text-indigo-900 dark:text-indigo-100">{{ $sim_card->sim_card }}</p>
-                    <p class="text-xs text-indigo-700 dark:text-indigo-300">{{ $sim_card->operador }}</p>
+                    <p class="text-xs text-indigo-700 dark:text-indigo-300">{{ $sim_card->operador?->name ?? '—' }}</p>
                 </div>
             @endif
         </div>
@@ -59,7 +59,7 @@
                     class="mt-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
                     <p class="text-xs text-green-600 dark:text-green-400 font-semibold mb-1">Línea seleccionada:</p>
                     <p class="text-sm font-bold text-green-900 dark:text-green-100">{{ $linea->numero }}</p>
-                    <p class="text-xs text-green-700 dark:text-green-300">{{ $linea->operador }}</p>
+                    <p class="text-xs text-green-700 dark:text-green-300">{{ $linea->operador?->name ?? '—' }}</p>
                 </div>
             @endif
         </div>

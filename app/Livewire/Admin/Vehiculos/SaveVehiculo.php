@@ -207,7 +207,7 @@ class SaveVehiculo extends Component
         if ($numero) {
             $linea = Lineas::where('numero', $numero)->first();
             if (!$linea) return;
-            $this->operador = $linea->operador;
+            $this->operador = $linea->operador?->name;
             $this->sim_card_id = $linea->sim_card ? $linea->sim_card->id : null;
             $this->sim_card = $linea->sim_card ? $linea->sim_card->sim_card : null;
         }

@@ -116,6 +116,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(LineasController::class)->group(function () {
         //lineas
         Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
+        Route::get('lineas-y-sim-card', 'indexCombinado')->name('admin.almacen.lineas-sim-card.index');
     });
 
     Route::controller(GpsController::class)->group(function () {
@@ -283,6 +284,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
     Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
+    Route::get('ajustes/operadores', [AjustesController::class, 'operadores'])->name('admin.ajustes.operadores');
     Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
     Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
     Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');

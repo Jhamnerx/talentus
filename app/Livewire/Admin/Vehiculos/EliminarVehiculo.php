@@ -32,8 +32,11 @@ class EliminarVehiculo extends Component
             $this->vehiculo->setAttribute('old_sim_card', $this->vehiculo->sim_card->sim_card);
         }
 
-        $this->vehiculo->setAttribute('old_imei', $this->vehiculo->dispositivo_imei);
-        $this->vehiculo->setAttribute('dispositivo_imei', NULL);
+        // Marcar todos los dispositivos activos como desinstalados
+        \App\Models\VehiculoDispositivos::where('vehiculo_id', $this->vehiculo->id)
+            ->whereNull('fecha_desinstalacion')
+            ->update(['fecha_desinstalacion' => now(), 'is_principal' => false]);
+
         $this->vehiculo->setAttribute('dispositivos_id', NULL);
         $this->vehiculo->setAttribute('numero', NULL);
         $this->vehiculo->setAttribute('sim_card_id', NULL);

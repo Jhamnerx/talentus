@@ -15,7 +15,7 @@ class Save extends Component
 
     protected $rules = [
 
-        'items.*.operador' => 'required|alpha:ascii',
+        'items.*.operador_id' => 'required|exists:operadores,id',
         "items.*.numero"  => "required|distinct|unique:lineas,numero|numeric",
 
     ];
@@ -25,8 +25,8 @@ class Save extends Component
         'items.*.numero.unique' => 'El sim card ya existe',
         'items.*.numero.distinct' => 'ya estas registrando este sim card',
         'items.*.numero.numeric' => 'El campo no debe contener letras',
-        'items.*.operador.required' => 'El operador es requerido',
-        'items.*.operador.alpha' => 'El campo no debe contener números',
+        'items.*.operador_id.required' => 'El operador es requerido',
+        'items.*.operador_id.exists' => 'Selecciona un operador válido',
     ];
 
 
@@ -47,7 +47,7 @@ class Save extends Component
         $this->items = collect();
         $this->items->push([
             'numero' => '',
-            'operador' => '',
+            'operador_id' => '',
         ]);
     }
 
@@ -64,14 +64,15 @@ class Save extends Component
 
     public function render()
     {
-        return view('livewire.admin.lineas.save');
+        $operadores = \App\Models\Operador::orderBy('name')->get();
+        return view('livewire.admin.lineas.save', compact('operadores'));
     }
 
     public function addItem()
     {
         $this->items->push([
             'numero' => '',
-            'operador' => '',
+            'operador_id' => '',
         ]);
     }
 
@@ -114,10 +115,7 @@ class Save extends Component
 
     public function updatedItems($value)
     {
-        $this->items = $this->items->map(function ($item) {
-            $item['operador'] = strtoupper($item['operador']);
-            return $item;
-        });
+        // sin transformación de texto ya que ahora es ID
     }
 
     public function afterSave()
@@ -144,7 +142,7 @@ class Save extends Component
 
                 [
                     'numero' => $numero,
-                    'operador' => '',
+                    'operador_id' => ''
                 ]
             ]
         );

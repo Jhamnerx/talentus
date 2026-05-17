@@ -336,8 +336,8 @@ class SelectsController extends Controller
         return Lineas::query()
             ->with(['vehiculo' => function ($query) {
                 $query->select('numero', 'id', 'placa');
-            }])
-            ->select('id', 'numero', 'operador')
+            }, 'operador:id,name'])
+            ->select('id', 'numero', 'operador_id')
             ->when(
                 $request->search,
                 fn(Builder $query) => $query
@@ -356,10 +356,10 @@ class SelectsController extends Controller
 
                 if ($linea->vehiculo) {
 
-                    $linea->option_description = $linea->operador . " - " . "<b>" . $linea->vehiculo->placa . "</b>";
+                    $linea->option_description = ($linea->operador?->name ?? '') . " - " . "<b>" . $linea->vehiculo->placa . "</b>";
                 } else {
 
-                    $linea->option_description = $linea->operador . " - " . 'LIBRE';
+                    $linea->option_description = ($linea->operador?->name ?? '') . " - " . 'LIBRE';
                 }
                 //
 
@@ -1250,22 +1250,30 @@ class SelectsController extends Controller
     public function lineasDisponibles(Request $request): Collection
     {
         return Lineas::query()
-            ->select('id', 'numero', 'operador')
-            ->whereNull('deleted_at')
-            ->whereDoesntHave('sim_card') // Sin sim card asignado
+            ->select('lineas.id', 'lineas.numero', 'lineas.operador_id')
+            ->with('operador:id,name')
+            ->whereNull('lineas.deleted_at')
+            ->whereDoesntHave('sim_card')
             ->orderBy('numero')
             ->when(
                 $request->search,
                 fn(Builder $query) => $query
-                    ->where('numero', 'like', "%{$request->search}%")
-                    ->orWhere('operador', 'like', "%{$request->search}%")
+                    ->where('lineas.numero', 'like', "%{$request->search}%")
+                    ->orWhereHas('operador', fn($q) => $q->where('name', 'like', "%{$request->search}%"))
             )
             ->when(
                 $request->exists('selected'),
-                fn(Builder $query) => $query->orWhereIn('id', $request->input('selected', [])),
+                fn(Builder $query) => $query->orWhereIn('lineas.id', $request->input('selected', [])),
                 fn(Builder $query) => $query->limit(30)
             )
-            ->get();
+            ->get()
+            ->map(function ($linea) {
+                return [
+                    'id'       => $linea->id,
+                    'numero'   => $linea->numero,
+                    'operador' => $linea->operador?->name ?? '',
+                ];
+            });
     }
 
     /**
@@ -1275,21 +1283,29 @@ class SelectsController extends Controller
     public function simCardsDisponibles(Request $request): Collection
     {
         return SimCard::query()
-            ->select('id', 'sim_card', 'operador')
-            ->whereNull('deleted_at')
-            ->whereNull('lineas_id') // Sin línea asignada
-            ->orderBy('sim_card')
+            ->select('sim_card.id', 'sim_card.sim_card', 'sim_card.operador_id')
+            ->with('operador:id,name')
+            ->whereNull('sim_card.deleted_at')
+            ->whereNull('sim_card.lineas_id')
+            ->orderBy('sim_card.sim_card')
             ->when(
                 $request->search,
                 fn(Builder $query) => $query
-                    ->where('sim_card', 'like', "%{$request->search}%")
-                    ->orWhere('operador', 'like', "%{$request->search}%")
+                    ->where('sim_card.sim_card', 'like', "%{$request->search}%")
+                    ->orWhereHas('operador', fn($q) => $q->where('name', 'like', "%{$request->search}%"))
             )
             ->when(
                 $request->exists('selected'),
-                fn(Builder $query) => $query->orWhereIn('id', $request->input('selected', [])),
+                fn(Builder $query) => $query->orWhereIn('sim_card.id', $request->input('selected', [])),
                 fn(Builder $query) => $query->limit(30)
             )
-            ->get();
+            ->get()
+            ->map(function ($sim) {
+                return [
+                    'id'       => $sim->id,
+                    'sim_card' => $sim->sim_card,
+                    'operador' => $sim->operador?->name ?? '',
+                ];
+            });
     }
 }

@@ -402,7 +402,7 @@
                                         @if ($vehiculo->sim_card->linea)
                                             <div class="font-medium text-emerald-600">
                                                 #{{ $vehiculo->sim_card->linea->numero }} -
-                                                {{ $vehiculo->sim_card->linea->operador }}
+                                                {{ $vehiculo->sim_card->linea->operador?->name ?? '—' }}
                                             </div>
                                         @else
                                             <div class="font-medium text-red-200">

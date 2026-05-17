@@ -72,7 +72,7 @@
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $sim_card->operador }}</div>
+                                    <div class="text-left">{{ $sim_card->operador?->name ?? '—' }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                     @if (!empty($sim_card->vehiculos))

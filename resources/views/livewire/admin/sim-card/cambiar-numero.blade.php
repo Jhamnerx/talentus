@@ -16,7 +16,7 @@
                     <p class="text-xs text-gray-600 dark:text-gray-400 uppercase font-semibold">SIM Card (Chip físico)
                     </p>
                     <p class="text-lg font-bold text-indigo-900 dark:text-indigo-100">{{ $sim_card->sim_card }}</p>
-                    <p class="text-sm text-gray-700 dark:text-gray-300">{{ $sim_card->operador }}</p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">{{ $sim_card->operador?->name ?? '—' }}</p>
                 </div>
             </div>
 
@@ -66,7 +66,7 @@
                         </svg>
                         <div>
                             <p class="text-sm font-semibold text-green-800 dark:text-green-200">
-                                {{ $nueva_linea->numero }} - {{ $nueva_linea->operador }}
+                                {{ $nueva_linea->numero }} - {{ $nueva_linea->operador?->name ?? '—' }}
                             </p>
                             <p class="text-xs text-green-600 dark:text-green-400">Línea disponible para asignar</p>
                         </div>

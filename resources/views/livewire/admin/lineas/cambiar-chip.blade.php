@@ -15,7 +15,7 @@
                 <div class="flex-1">
                     <p class="text-xs text-gray-600 dark:text-gray-400 uppercase font-semibold">Línea (Número móvil)</p>
                     <p class="text-lg font-bold text-green-900 dark:text-green-100">{{ $linea->numero }}</p>
-                    <p class="text-sm text-gray-700 dark:text-gray-300">{{ $linea->operador }}</p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">{{ $linea->operador?->name ?? '—' }}</p>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
                         </svg>
                         <div>
                             <p class="text-sm font-semibold text-blue-800 dark:text-blue-200">
-                                {{ $nuevo_sim_card->sim_card }} - {{ $nuevo_sim_card->operador }}
+                                {{ $nuevo_sim_card->sim_card }} - {{ $nuevo_sim_card->operador?->name ?? '—' }}
                             </p>
                             <p class="text-xs text-blue-600 dark:text-blue-400">Chip disponible para asignar</p>
                         </div>

@@ -283,7 +283,7 @@
 
                                     <span class="font-medium text-slate-800 hover:underline">Operador: </span>
                                     @if ($vehiculo->sim_card)
-                                        {{ $vehiculo->sim_card->operador }}
+                                        {{ $vehiculo->sim_card->operador?->name ?? '—' }}
                                     @endif
                                 </div>
                             </div>
@@ -328,7 +328,7 @@
 
                                     <span class="font-medium text-slate-800 hover:underline">Operador: </span>
                                     @if ($vehiculo->sim_card)
-                                        {{ $vehiculo->sim_card->operador }}
+                                        {{ $vehiculo->sim_card->operador?->name ?? '—' }}
                                     @endif
                                 </div>
                             </div>

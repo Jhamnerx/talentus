@@ -36,8 +36,6 @@ class Suspend extends Component
         }
 
         if ($this->remove) {
-            $this->vehiculo->setAttribute('old_imei', $this->vehiculo->dispositivo_imei);
-            $this->vehiculo->setAttribute('dispositivo_imei', null);
             $this->vehiculo->setAttribute('dispositivos_id', null);
         }
 

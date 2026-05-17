@@ -22,7 +22,7 @@
             </div>
 
             <!-- Search form -->
-            <form class="relative">
+            <form class="relative" @submit.prevent>
                 <label for="action-search" class="sr-only">Buscar</label>
                 <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar Flota..." />

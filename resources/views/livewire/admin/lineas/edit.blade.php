@@ -34,7 +34,11 @@
                     </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                        <x-form.input placeholder="ingresa operador" wire:model.live.change="operador" />
+                        <x-form.select wire:model.live="operador_id" placeholder="— Seleccionar —">
+                            @foreach ($operadores as $op)
+                                <x-select.option value="{{ $op->id }}" label="{{ strtoupper($op->name) }}" />
+                            @endforeach
+                        </x-form.select>
                     </td>
 
                 </tr>

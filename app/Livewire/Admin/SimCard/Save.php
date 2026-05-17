@@ -15,7 +15,7 @@ class Save extends Component
 
     protected $rules = [
 
-        'items.*.operador' => 'required|alpha:ascii',
+        'items.*.operador_id' => 'required|exists:operadores,id',
         "items.*.sim_card"  => "required|distinct|unique:sim_card,sim_card|numeric",
 
     ];
@@ -26,10 +26,10 @@ class Save extends Component
         'items.*.sim_card.distinct' => 'ya estas registrando este sim card',
         'items.*.sim_card.numeric' => 'El campo no debe contener letras',
         'items.*.operador.required' => 'El operador es requerido',
-        'items.*.operador.alpha' => 'El campo no debe contener números',
+        'items.*.operador.exists' => 'Selecciona un operador válido',
     ];
 
-    #[On(['open-modal-create', 'add-sim-card-modal'])]
+    #[On(['sim-card-open-modal-create', 'add-sim-card-modal'])]
     public function openModal()
     {
         $this->modalCreate = true;
@@ -57,7 +57,7 @@ class Save extends Component
         $this->items = collect();
         $this->items->push([
             'sim_card' => '',
-            'operador' => '',
+            'operador_id' => '',
         ]);
     }
 
@@ -65,7 +65,7 @@ class Save extends Component
     {
         $this->items->push([
             'sim_card' => '',
-            'operador' => '',
+            'operador_id' => '',
         ]);
     }
 
@@ -101,15 +101,13 @@ class Save extends Component
 
     public function updatedItems($value)
     {
-        $this->items = $this->items->map(function ($item) {
-            $item['operador'] = strtoupper($item['operador']);
-            return $item;
-        });
+        // sin transformación de texto ya que ahora es ID
     }
 
     public function render()
     {
-        return view('livewire.admin.sim-card.save');
+        $operadores = \App\Models\Operador::orderBy('name')->get();
+        return view('livewire.admin.sim-card.save', compact('operadores'));
     }
 
     public function updated($attr)

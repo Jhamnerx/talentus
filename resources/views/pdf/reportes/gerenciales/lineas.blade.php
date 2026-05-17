@@ -287,7 +287,7 @@
 
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <div class="text-center">{{ $linea->operador }}</div>
+                            <div class="text-center">{{ $linea->operador?->name ?? '—' }}</div>
 
                         </td>
 

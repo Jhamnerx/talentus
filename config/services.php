@@ -39,4 +39,9 @@ return [
         'api_hash' => env('GPSWOX_API_HASH', ''),
     ],
 
+    'm2m' => [
+        'base_url' => env('M2M_BASE_URL', 'https://m2mcenter.app/apiclient/v1'),
+        'token'    => env('M2M_TOKEN', ''),
+    ],
+
 ];

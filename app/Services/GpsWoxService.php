@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Vehiculos;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
@@ -246,5 +247,72 @@ class GpsWoxService
             'total_active_devices' => $response['total_active_devices'],
             'summary' => $response['summary'],
         ];
+    }
+
+    /**
+     * Importa el sim_number desde la plataforma GPS y actualiza vehiculos.numero en Talentus.
+     * Dirección: Tracking Platform → Talentus.
+     * Búsqueda por placa del vehículo → devuelve sim_number registrado en la plataforma.
+     */
+    public function sincronizarSimVehiculo(Vehiculos $vehiculo): bool
+    {
+        if (blank($vehiculo->placa)) {
+            return false;
+        }
+
+        try {
+            $response = $this->getDeviceByPlate($vehiculo->placa);
+
+            if (($response['status'] ?? 0) !== 1) {
+                Log::channel('daily')->warning('[GpsWox] Vehículo no encontrado en la plataforma', [
+                    'placa' => $vehiculo->placa,
+                    'response' => $response,
+                ]);
+                return false;
+            }
+
+            $simNumber = $response['device']['sim_number'] ?? null;
+
+            if (blank($simNumber)) {
+                return false;
+            }
+
+            if ($vehiculo->numero !== $simNumber) {
+                $vehiculo->numero = $simNumber;
+                $vehiculo->save();
+
+                Log::channel('daily')->info('[GpsWox] SIM importado desde plataforma', [
+                    'placa'      => $vehiculo->placa,
+                    'sim_number' => $simNumber,
+                ]);
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::channel('daily')->error('[GpsWox] Error al importar SIM desde plataforma', [
+                'placa' => $vehiculo->placa,
+                'error' => $e->getMessage(),
+            ]);
+            return false;
+        }
+    }
+
+    /**
+     * Limpia vehiculos.numero en Talentus cuando se desvincula la línea.
+     */
+    public function limpiarSimVehiculo(Vehiculos $vehiculo): bool
+    {
+        if (blank($vehiculo->numero)) {
+            return true;
+        }
+
+        $vehiculo->numero = null;
+        $vehiculo->save();
+
+        Log::channel('daily')->info('[GpsWox] SIM limpiado en Talentus', [
+            'placa' => $vehiculo->placa,
+        ]);
+
+        return true;
     }
 }

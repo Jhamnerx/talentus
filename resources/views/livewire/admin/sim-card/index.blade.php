@@ -11,10 +11,10 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Search form -->
-            <form class="relative">
+            <form class="relative" @submit.prevent>
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
-                    placeholder="Buscar sim card" />
+                <input wire:model.live.debounce.500ms="search" class="form-input pl-9 focus:border-slate-300"
+                    type="search" placeholder="Buscar sim card" />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
@@ -58,106 +58,32 @@
 
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
+        <!-- Left: filtro por operador -->
+        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
+            <ul class="flex flex-wrap -m-1">
+                <li class="m-1">
+                    <button wire:click.prevent="setOperador()"
+                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 0"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                        Todas
+                    </button>
+                </li>
+                @foreach ($operadoresList as $opBtn)
+                    <li class="m-1">
+                        <button wire:click.prevent="setOperador({{ $opBtn->id }})"
+                            :class="clickeado === {{ $opBtn->id }} && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                            @click="clickeado = {{ $opBtn->id }}"
+                            class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                            {{ strtoupper($opBtn->name) }}
+                        </button>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-
-            <!-- Delete button -->
-            <div class="table-items-action hidden">
-                <div class="flex items-center">
-                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
-                            class="table-items-count"></span> items selected</div>
-                    <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Eliminar</button>
-                </div>
-            </div>
-
-            <!-- Dropdown -->
-            <div class="relative float-right" x-data="{ open: false, selected: 4 }">
-                <button wire:ignore
-                    class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-                    aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
-                    :aria-expanded="open">
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
-                            <path
-                                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-                        </svg>
-                        <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
-                    </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
-                        <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
-                    </svg>
-                </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1"
-                    @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                    x-transition:enter="transition ease-out duration-100 transform"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600 dark:text-slate-300" x-ref="options">
-                        <button wire:click="filter(1)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
-                            :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 0 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Hoy</span>
-                        </button>
-                        <button wire:click="filter(7)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
-                            :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 7 días</span>
-                        </button>
-                        <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
-                            :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimo Mes</span>
-                        </button>
-                        <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
-                            :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 12 Meses</span>
-                        </button>
-                        <button wire:click="filter(0)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 dark:hover:bg-slate-700 py-1 px-3 cursor-pointer"
-                            :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Todos</span>
-                        </button>
-
-                    </div>
-                </div>
-            </div>
             <!-- Export button -->
             @can('exportar-sim_card')
                 <div class="relative inline-flex">
@@ -193,6 +119,34 @@
                 </div>
             @endcan
 
+            {{-- Botón sincronización M2M Dataglobal (solo visible si hay operador configurado) --}}
+            @if ($operadorM2M)
+                <div class="relative inline-flex">
+                    <button wire:click="sincronizarM2M" wire:loading.attr="disabled" wire:target="sincronizarM2M"
+                        class="btn bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white border-slate-200 hover:border-slate-300 cursor-pointer">
+                        {{-- Icono normal --}}
+                        <svg wire:loading.remove wire:target="sincronizarM2M" xmlns="http://www.w3.org/2000/svg"
+                            class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        {{-- Spinner de carga --}}
+                        <svg wire:loading wire:target="sincronizarM2M" class="w-5 h-5 shrink-0 animate-spin"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                        </svg>
+                        <span class="hidden xs:block ml-2">
+                            <span wire:loading.remove wire:target="sincronizarM2M">Sync
+                                {{ strtoupper($operadorM2M->name) }}</span>
+                            <span wire:loading wire:target="sincronizarM2M">Sincronizando...</span>
+                        </span>
+                    </button>
+                </div>
+            @endif
+
         </div>
 
     </div>
@@ -204,9 +158,9 @@
             </h2>
 
         </header>
-        <div class="min-h-125">
+        <div>
             <!-- Table -->
-            <div class="overflow-x-auto min-h-screen">
+            <div class="overflow-x-auto">
 
                 <table class="table-auto w-full">
                     <!-- Table header -->
@@ -225,15 +179,9 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">VEHICULO - DISPOSITIVO</div>
                             </th>
-                            @can('eliminar.numero-sim_card')
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">ELIMINAR ASIGNACION</div>
-                                </th>
-                            @endcan
-
                             @can('ver.cambios-sim_card')
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Accioness</div>
+                                    <div class="font-semibold text-left">Acciones</div>
                                 </th>
                             @endcan
 
@@ -244,7 +192,10 @@
                     <tbody class="text-sm divide-y divide-slate-200 dark:divide-slate-700">
 
                         @foreach ($sim_cards as $sim_card)
-                            <tr wire:key="{{ $sim_card->id }}">
+                            <tr wire:key="{{ $sim_card->id }}"
+                                @if ($sim_card->operador?->api_slug) @dblclick.prevent="$dispatch('m2m-abrir-panel', { icc: '{{ $sim_card->sim_card }}' })"
+                                    title="Doble click para gestionar SIM en M2M"
+                                    class="cursor-pointer hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition" @endif>
 
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -281,7 +232,8 @@
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left text-slate-800 dark:text-slate-100">{{ $sim_card->operador }}
+                                    <div class="text-left text-slate-800 dark:text-slate-100">
+                                        {{ $sim_card->operador?->name ?? '—' }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
@@ -326,55 +278,6 @@
                                     @endif
 
                                 </td>
-                                @can('eliminar.numero-sim_card')
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-
-
-                                            @if (!empty($sim_card->linea))
-                                                <div class="flex items-center space-x-2 justify-center">
-                                                    <!-- Start -->
-                                                    <div class="relative" x-data="{ open: false }"
-                                                        @mouseenter="open = true" @mouseleave="open = false">
-                                                        <button aria-haspopup="true" :aria-expanded="open"
-                                                            @focus="open = true" @focusout="open = false" @click.prevent
-                                                            wire:click.prevent="openModalUnAsign({{ $sim_card }})"
-                                                            class="btn border-slate-200 hover:border-slate-300 text-rose-500">
-                                                            <svg class="w-4 h-4 fill-current shrink-0"
-                                                                viewBox="0 0 16 16">
-                                                                <path
-                                                                    d="M5 7h2v6H5V7zm4 0h2v6H9V7zm3-6v2h4v2h-1v10c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1V5H0V3h4V1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1zM6 2v1h4V2H6zm7 3H3v9h10V5z" />
-                                                            </svg>
-
-                                                        </button>
-                                                        <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
-                                                            <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2"
-                                                                x-show="open"
-                                                                x-transition:enter="transition ease-out duration-200 transform"
-                                                                x-transition:enter-start="opacity-0 translate-y-2"
-                                                                x-transition:enter-end="opacity-100 translate-y-0"
-                                                                x-transition:leave="transition ease-out duration-200"
-                                                                x-transition:leave-start="opacity-100"
-                                                                x-transition:leave-end="opacity-0" x-cloak>
-                                                                <div class="text-xs text-slate-200 whitespace-nowrap">
-                                                                    Esta opción te permite desvincular el numero
-                                                                    asociado a este sim card fisico
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End -->
-
-                                                </div>
-                                            @else
-                                                <div class="text-left">-</div>
-                                            @endif
-
-                                        </div>
-                                    </td>
-                                @endcan
-
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
@@ -436,6 +339,23 @@
                                                             </a>
                                                         </li>
                                                     @endif
+                                                    @can('eliminar.numero-sim_card')
+                                                        @if ($sim_card->linea)
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="openModalUnAsign({{ $sim_card }})"
+                                                                    class="text-rose-600 dark:text-rose-400 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg class="w-5 h-5 mr-3 fill-current shrink-0"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M5 7h2v6H5V7zm4 0h2v6H9V7zm3-6v2h4v2h-1v10c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1V5H0V3h4V1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1zM6 2v1h4V2H6zm7 3H3v9h10V5z" />
+                                                                    </svg>
+                                                                    Eliminar asignación
+                                                                </a>
+                                                            </li>
+                                                        @endif
+                                                    @endcan
                                                     @can('ver.cambios-sim_card')
                                                         <li>
                                                             <a href="javascript: void(0)"
@@ -488,4 +408,8 @@
     <div class="mt-8 w-full">
         {{ $sim_cards->links() }}
     </div>
+
+    {{-- M2M Panel: modales de gestión de SIM cards via API M2M Dataglobal --}}
+    @livewire('admin.sim-card.m2m-panel')
+
 </div>
