@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Clientes;
 use App\Models\Cobros;
-use Illuminate\Http\Request;
 
 class CobrosController extends Controller
 {

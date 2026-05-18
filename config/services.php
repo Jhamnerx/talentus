@@ -44,4 +44,8 @@ return [
         'token'    => env('M2M_TOKEN', ''),
     ],
 
+    'tracking' => [
+        'allowed_ip' => env('TRACKING_ALLOWED_IP', ''),   // IP del servidor talentus-pro-tracking
+    ],
+
 ];

@@ -302,3 +302,25 @@ Route::prefix('consultas')->name('api.consultas.')->group(function () {
 // Body: { "name": "...", "email": "...", "phone": "...", "company": "...", "message": "...", "g-recaptcha-response": "..." }
 // Respuesta: { "success": true, "message": "Mensaje enviado correctamente" }
 Route::post('/contacto', [ContactoApiController::class, 'store'])->name('api.contacto.store');
+
+/*
+|--------------------------------------------------------------------------
+| TRACKING SYSTEM API — Integración con talentus-pro-tracking
+|--------------------------------------------------------------------------
+| Recibe registros de mantenimiento/suspensión/reactivación desde
+| el sistema de tracking GPS. Autenticación via X-API-KEY header.
+*/
+
+Route::prefix('tracking')->name('api.tracking.')->group(function () {
+    // POST /api/tracking/device-maintenances/sync
+    // Recibe un lote de registros desde talentus-pro-tracking
+    // Header: X-API-KEY: {TRACKING_API_KEY}
+    Route::post('/device-maintenances/sync', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'sync'])
+        ->name('device-maintenances.sync');
+
+    // GET /api/tracking/device-maintenances
+    // Lista paginada (uso interno)
+    Route::get('/device-maintenances', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'index'])
+        ->name('device-maintenances.index')
+        ->middleware('auth:sanctum');
+});

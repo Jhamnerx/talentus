@@ -28,9 +28,9 @@ class Index extends Component
 
     // Configuración de técnicos WA
     public bool $modalTecnicoConfig = false;
-    public ?int $tecnicoConfigId = null;
-    public string $tecnicoConfigCiudad = '';
-    public string $tecnicoConfigGrupo = '';
+    public $tecnicoConfigId = null;
+    public $tecnicoConfigCiudad = '';
+    public $tecnicoConfigGrupo = '';
 
     // Dispositivo WA seleccionado para enviar notificaciones
     public ?int $selectedWaDeviceId = null;

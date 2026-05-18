@@ -254,6 +254,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('reportes/{reporte}', 'show')->name('admin.vehiculos.reportes.show');
     });
 
+    // Historial de mantenimientos / suspensiones / reactivaciones (desde tracking)
+    Route::get('historial-mantenimientos', \App\Livewire\Admin\Vehiculos\HistorialMantenimientos::class)
+        ->name('admin.vehiculos.historial-mantenimientos.index');
+
 
     // CERTIFICADOS
 

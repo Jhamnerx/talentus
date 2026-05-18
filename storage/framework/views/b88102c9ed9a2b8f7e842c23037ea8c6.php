@@ -848,17 +848,17 @@
 
                     <!-- Vehiculos -->
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['ver-vehiculos-flotas', 'ver-vehiculos-vehiculos', 'ver-vehiculos-reportes',
-                        'ver-mantenimientos-vehiculos'])): ?>
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>"
-                            x-data="{ open: <?php echo e(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes']) ? 1 : 0); ?> }">
+                        'ver-mantenimientos-vehiculos', 'ver-vehiculos-historial-mantenimientos'])): ?>
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>"
+                            x-data="{ open: <?php echo e(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos']) ? 1 : 0); ?> }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition
-                                <?php if(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])): ?> hover:text-gray-900 dark:hover:text-white <?php endif; ?>"
+                                <?php if(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])): ?> hover:text-gray-900 dark:hover:text-white <?php endif; ?>"
                                 href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 <?php if(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])): ?> <?php echo e('text-violet-500'); ?><?php else: ?><?php echo e('text-gray-400 dark:text-gray-500'); ?> <?php endif; ?> icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
+                                        <svg class="shrink-0 h-6 w-6 <?php if(in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])): ?> <?php echo e('text-violet-500'); ?><?php else: ?><?php echo e('text-gray-400 dark:text-gray-500'); ?> <?php endif; ?> icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -935,6 +935,20 @@
                                                 href="<?php echo e(route('admin.vehiculos.reportes.index')); ?>">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Reportes
+                                                </span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('ver-vehiculos-historial-mantenimientos')): ?>
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block
+                                                text-gray-800 dark:text-gray-100
+                                                hover:text-gray-900 dark:hover:text-white
+                                                <?php if(Route::is('admin.vehiculos.historial-mantenimientos.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>
+                                                transition truncate"
+                                                href="<?php echo e(route('admin.vehiculos.historial-mantenimientos.index')); ?>">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Historial Mantenimientos
                                                 </span>
                                             </a>
                                         </li>

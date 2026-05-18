@@ -928,17 +928,17 @@
 
                     <!-- Vehiculos -->
                     @canany(['ver-vehiculos-flotas', 'ver-vehiculos-vehiculos', 'ver-vehiculos-reportes',
-                        'ver-mantenimientos-vehiculos'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes']) ? 1 : 0 }} }">
+                        'ver-mantenimientos-vehiculos', 'ver-vehiculos-historial-mantenimientos'])
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition
-                                @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) hover:text-gray-900 dark:hover:text-white @endif"
+                                @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])) hover:text-gray-900 dark:hover:text-white @endif"
                                 href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -1015,6 +1015,20 @@
                                                 href="{{ route('admin.vehiculos.reportes.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Reportes
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('ver-vehiculos-historial-mantenimientos')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block
+                                                text-gray-800 dark:text-gray-100
+                                                hover:text-gray-900 dark:hover:text-white
+                                                @if (Route::is('admin.vehiculos.historial-mantenimientos.index')) {{ 'text-violet-500!' }} @endif
+                                                transition truncate"
+                                                href="{{ route('admin.vehiculos.historial-mantenimientos.index') }}">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Historial Mantenimientos
                                                 </span>
                                             </a>
                                         </li>
