@@ -30,6 +30,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 
 class SelectsController extends Controller
 {
@@ -1247,7 +1248,7 @@ class SelectsController extends Controller
      * Obtener líneas disponibles (sin asignar a sim card)
      * GET /api/lineas/disponibles?search=...&selected[]=...
      */
-    public function lineasDisponibles(Request $request): Collection
+    public function lineasDisponibles(Request $request): SupportCollection
     {
         return Lineas::query()
             ->select('lineas.id', 'lineas.numero', 'lineas.operador_id')
@@ -1280,7 +1281,7 @@ class SelectsController extends Controller
      * Obtener sim cards disponibles (sin línea asignada)
      * GET /api/simcards/disponibles?search=...&selected[]=...
      */
-    public function simCardsDisponibles(Request $request): Collection
+    public function simCardsDisponibles(Request $request): SupportCollection
     {
         return SimCard::query()
             ->select('sim_card.id', 'sim_card.sim_card', 'sim_card.operador_id')

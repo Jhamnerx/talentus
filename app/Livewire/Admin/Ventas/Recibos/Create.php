@@ -12,6 +12,7 @@ use App\Models\Payments;
 use App\Models\Dispositivos;
 use App\Models\plantilla;
 use App\Models\Productos;
+use App\Models\Presupuestos;
 use App\Models\PaymentMethodType;
 use App\Models\PeriodoCobro;
 use Illuminate\Support\Collection;
@@ -48,6 +49,9 @@ class Create extends Component
     public int $notificacion_periodos = 1;
     public $cobro_redirect_back = null;
 
+    // Presupuesto a convertir
+    public $presupuestos_id = null;
+
     // Modal selección de IMEI para equipos GPS
     public bool $showImeiModal = false;
     public array $pendingGpsItem = [];
@@ -57,7 +61,7 @@ class Create extends Component
 
     public $tipo_cambio = 0.00;
 
-    public function mount($periodo_ids = null)
+    public function mount($periodo_ids = null, $presupuesto_id = null)
     {
         $this->setSerieMount();
 
@@ -126,6 +130,42 @@ class Create extends Component
 
             $this->procesarItemsDesdeNotificaciones($this->notificacion_ids_array);
         }
+
+        if ($presupuesto_id && !$periodo_ids) {
+            $this->procesarDesdePresupuesto((int) $presupuesto_id);
+        }
+    }
+
+    /**
+     * Pre-rellena el formulario con los datos de un presupuesto.
+     */
+    private function procesarDesdePresupuesto(int $presupuestoId): void
+    {
+        $presupuesto = Presupuestos::with(['detalles', 'clientes'])->findOrFail($presupuestoId);
+
+        $this->presupuestos_id = $presupuesto->id;
+        $this->clientes_id     = $presupuesto->clientes_id;
+        $this->cliente         = $presupuesto->clientes;
+        $this->divisa          = $presupuesto->divisa;
+        $this->simbolo         = $presupuesto->divisa === 'USD' ? '$' : 'S/. ';
+        if ((float) $presupuesto->tipo_cambio > 0) {
+            $this->tipo_cambio = (float) $presupuesto->tipo_cambio;
+        }
+
+        foreach ($presupuesto->detalles as $detalle) {
+            $this->items->push([
+                'producto_id'   => $detalle->producto_id,
+                'producto'      => $detalle->descripcion,
+                'descripcion'   => $detalle->descripcion,
+                'descripcion_pdf' => null,
+                'imeis'         => null,
+                'cantidad'      => (float) $detalle->cantidad,
+                'precio'        => (float) $detalle->valor_unitario,
+                'total'         => (float) $detalle->sub_total,
+            ]);
+        }
+
+        $this->reCalTotal();
     }
 
     #[Computed]
@@ -513,6 +553,7 @@ class Create extends Component
 
         $request = new RecibosRequest();
         $data = $this->validate($request->rules(), $request->messages());
+        $data['presupuestos_id'] = $this->presupuestos_id ?: null;
 
         $recibo = Recibos::create($data);
 

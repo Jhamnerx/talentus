@@ -30,13 +30,15 @@ class ComprobantesController extends Controller
     public function emitirFactura($periodo_ids = null)
     {
         $periodo_ids = $periodo_ids ? json_decode($periodo_ids, true) : [];
-        return view('admin.comprobantes.factura.create', compact('periodo_ids'));
+        $presupuesto_id = request()->query('presupuesto_id');
+        return view('admin.comprobantes.factura.create', compact('periodo_ids', 'presupuesto_id'));
     }
 
     public function emitirBoleta($periodo_ids = null)
     {
         $periodo_ids = $periodo_ids ? json_decode($periodo_ids, true) : [];
-        return view('admin.comprobantes.boleta.create', compact('periodo_ids'));
+        $presupuesto_id = request()->query('presupuesto_id');
+        return view('admin.comprobantes.boleta.create', compact('periodo_ids', 'presupuesto_id'));
     }
 
     public function emitirNotaVenta()

@@ -2,6 +2,7 @@
 
     @livewire('admin.ventas.recibos.create', [
         'periodo_ids' => $periodo_ids,
+        'presupuesto_id' => $presupuesto_id ?? null,
     ])
 
     @livewire('admin.clientes.save')

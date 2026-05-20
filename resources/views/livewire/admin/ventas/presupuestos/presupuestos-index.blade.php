@@ -399,55 +399,64 @@
                                                         </li>
                                                     @endcan
 
-                                                    {{-- 
                                                     @can('convertir-cotizaciones')
                                                         @if (!$presupuesto->invoice)
                                                             <li @click="open = false">
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="convertToInvoice({{ $presupuesto->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-green-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                                        </path>
-                                                                    </svg> Convertir a Comprobante
-                                                                </a>
+                                                                @if ($presupuesto->clientes->tipo_documento_id == '6')
+                                                                    <a href="{{ route('admin.factura.create') }}?presupuesto_id={{ $presupuesto->id }}"
+                                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
+                                                                        role="menuitem">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            fill="none" viewBox="0 0 24 24"
+                                                                            stroke="currentColor"
+                                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-green-500">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                                                            </path>
+                                                                        </svg> Convertir a Factura
+                                                                    </a>
+                                                                @else
+                                                                    <a href="{{ route('admin.boleta.create') }}?presupuesto_id={{ $presupuesto->id }}"
+                                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
+                                                                        role="menuitem">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            fill="none" viewBox="0 0 24 24"
+                                                                            stroke="currentColor"
+                                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-green-500">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                                                            </path>
+                                                                        </svg> Convertir a Boleta
+                                                                    </a>
+                                                                @endif
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <a href="javascript: void(0)"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
+                                                                <span
+                                                                    class="text-gray-400 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-500">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5 mr-3 text-gray-300">
+                                                                        class="h-5 w-5 mr-3 text-gray-300 dark:text-gray-600">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                                         </path>
-                                                                    </svg> Convertir a Comprobante
-                                                                </a>
+                                                                    </svg> Comprobante ya creado
+                                                                </span>
                                                             </li>
                                                         @endif
-                                                    @endcan --}}
-                                                    {{-- 
+                                                    @endcan
                                                     @can('convertir-cotizaciones')
                                                         @if (!$presupuesto->recibo)
                                                             <li @click="open = false">
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="convertRecibo({{ $presupuesto->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
+                                                                <a href="{{ route('admin.ventas.recibos.create') }}?presupuesto_id={{ $presupuesto->id }}"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-300"
+                                                                    role="menuitem">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-emerald-500">
+                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-emerald-500">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -457,21 +466,20 @@
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <a class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-30"
-                                                                    role="menuitem" tabindex="-1">
+                                                                <span
+                                                                    class="text-gray-400 group flex items-center px-4 py-2 text-sm font-normal dark:text-gray-500">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-300 ">
+                                                                        class="h-5 w-5 mr-3 text-gray-300 dark:text-gray-600">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                                         </path>
-                                                                    </svg> Convertir a Recibo
-                                                                </a>
+                                                                    </svg> Recibo ya creado
+                                                                </span>
                                                             </li>
                                                         @endif
-                                                    @endcan --}}
+                                                    @endcan
 
                                                     @can('enviar-cotizaciones')
                                                         <li>
