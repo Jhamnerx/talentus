@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin\Ajustes\Roles;
 
-use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Requests\RolesRequest;
+use Illuminate\Support\Facades\Route as LaravelRoute;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Livewire\Component;
@@ -14,7 +14,11 @@ class Save extends Component
 
     public $name;
 
+    public $route_redirect = null;
+
     public $permission = [];
+
+    public array $rutasDisponibles = [];
 
     protected $rules = [
         'name' => 'required|unique:roles',
@@ -38,8 +42,8 @@ class Save extends Component
 
     public function openModal()
     {
-
         $this->openModalSave = true;
+        $this->rutasDisponibles = $this->getAdminRoutes();
     }
 
     public function closeModal()
@@ -60,7 +64,11 @@ class Save extends Component
         $rolRequest = new RolesRequest();
         $values = $this->validate($rolRequest->rules(), $rolRequest->messages());
 
-        $rol = Role::create(['name' => $this->name]);
+        $rol = Role::create([
+            'name'           => $this->name,
+            'guard_name'     => 'web',
+            'route_redirect' => $this->route_redirect ?: null,
+        ]);
         $permissions = Permission::whereIn('name', $this->permission)->get();
         $rol->syncPermissions($permissions);
         return redirect()->route('admin.ajustes.roles')->with('store', 'rol creado satisfactoriamente');
@@ -68,38 +76,21 @@ class Save extends Component
 
     public function checkAll()
     {
-
-        $permisos = Permission::get();
-        foreach ($permisos as $permiso) {
-
-            if (array_search($permiso->name, $this->permission) === false) {
-
-                array_push($this->permission, $permiso->name);
-            }
-        }
+        $this->permission = Permission::pluck('name')->toArray();
     }
+
     public function uncheckAll()
     {
         $this->reset('permission');
     }
 
-    public function checkCategory($categoria)
+    public function checkCategory(string $categoria)
     {
-        $permisos = Permission::get();
-
-        foreach ($permisos as $permiso) {
-            if (strpos($permiso->name, $categoria)) {
-
-                // $valor = array_search($permiso->name, $this->permission);
-
-                if (array_search($permiso->name, $this->permission) === false) {
-                    array_push($this->permission, $permiso->name);
-                }
-            }
-        }
+        $names = Permission::where('name', 'like', "%{$categoria}%")->pluck('name')->toArray();
+        $this->permission = array_values(array_unique(array_merge($this->permission ?? [], $names)));
     }
 
-    public function checkComprobantesPermisos()
+    public function checkComprobantesPermisos(): void
     {
         $perms = [
             'ver-comprobantes',
@@ -117,15 +108,11 @@ class Save extends Component
             'comprobantes-nota-debito-pdf',
             'comprobantes-nota-debito-xml',
         ];
-
-        foreach ($perms  as $perm) {
-            array_push($this->permission, $perm);
-        }
+        $this->permission = array_values(array_unique(array_merge($this->permission ?? [], $perms)));
     }
 
-    public function checkMantenimiento()
+    public function checkMantenimiento(): void
     {
-
         $perms = [
             'ver-mantenimientos-vehiculos',
             'crear-mantenimientos-vehiculos',
@@ -135,9 +122,27 @@ class Save extends Component
             'mark-mantenimientos-vehiculos',
             'exportar-mantenimientos-vehiculos',
         ];
+        $this->permission = array_values(array_unique(array_merge($this->permission ?? [], $perms)));
+    }
 
-        foreach ($perms  as $perm) {
-            array_push($this->permission, $perm);
-        }
+    private function getAdminRoutes(): array
+    {
+        $crudSuffixes = ['create', 'store', 'edit', 'update', 'destroy', 'show', 'delete', 'restore'];
+
+        return collect(LaravelRoute::getRoutes()->getRoutesByName())
+            ->keys()
+            ->filter(function (string $name) use ($crudSuffixes) {
+                if (! str_starts_with($name, 'admin.')) {
+                    return false;
+                }
+                if (str_starts_with($name, 'admin.ajustes.')) {
+                    return false;
+                }
+                $last = substr($name, strrpos($name, '.') + 1);
+                return ! in_array($last, $crudSuffixes, true);
+            })
+            ->sort()
+            ->values()
+            ->toArray();
     }
 }

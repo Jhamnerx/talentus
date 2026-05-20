@@ -32,6 +32,23 @@
                 </p>
             @enderror
         </div>
+
+        {{-- Ruta de redirección al iniciar sesión --}}
+        <div class="relative w-full text-left mt-4">
+            <label for="edit_route_redirect" class="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-1">
+                Ruta al iniciar sesión
+                <span class="text-xs text-gray-400 font-normal ml-1">(opcional)</span>
+            </label>
+            <input id="edit_route_redirect" name="route_redirect" wire:model="route_redirect" list="rutas_list_edit"
+                type="text" autocomplete="off" placeholder="Escribe o selecciona una ruta…"
+                class="font-base block w-full sm:text-sm border-gray-200 rounded-md text-black focus:ring-indigo-400 focus:border-indigo-400">
+            <datalist id="rutas_list_edit">
+                @foreach ($rutasDisponibles as $ruta)
+                    <option value="{{ $ruta }}">{{ $ruta }}</option>
+                @endforeach
+            </datalist>
+            <p class="text-xs text-gray-400 mt-1">Si está vacío redirige a <code>admin.home</code>.</p>
+        </div>
     </div>
 
     <div class="flex justify-between">
@@ -122,8 +139,8 @@
                 <x-admin.settings.permiso-input name='permission[]' model="permission" value='asignar.linea-sim_card'
                     label='asignar linea' />
 
-                <x-admin.settings.permiso-input name='permission[]' model="permission" value='eliminar.numero-sim_card'
-                    label='eliminar numero de sim card' />
+                <x-admin.settings.permiso-input name='permission[]' model="permission"
+                    value='eliminar.numero-sim_card' label='eliminar numero de sim card' />
 
                 <x-admin.settings.permiso-input name='permission[]' model="permission" value='eliminar-sim_card'
                     label='eliminar' />

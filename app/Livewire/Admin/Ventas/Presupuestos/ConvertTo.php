@@ -117,7 +117,7 @@ class ConvertTo extends Component
                 'correlativo' => 'required',
                 'serie_correlativo' => [
                     'required',
-                    Rule::unique('ventas', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                    Rule::unique('ventas', 'serie_correlativo')->where(fn($query) => $query->where('empresa_id', session('empresa'))),
                 ]
             ],
             [
@@ -221,7 +221,7 @@ class ConvertTo extends Component
                 'correlativo' => 'required',
                 'serie_correlativo' => [
                     'required',
-                    Rule::unique('ventas', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                    Rule::unique('ventas', 'serie_correlativo')->where(fn($query) => $query->where('empresa_id', session('empresa'))),
                 ]
             ],
             [
