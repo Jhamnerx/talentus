@@ -147,12 +147,12 @@ Lista las órdenes de trabajo con filtros opcionales.
 
 **Query params:**
 
-| Parámetro    | Tipo    | Descripción                                          |
-| ------------ | ------- | ---------------------------------------------------- |
-| `estado`     | string  | `pendiente`, `en_proceso`, `finalizado`, `cancelado` |
-| `tecnico_id` | integer | Filtrar por técnico (usar `id` del usuario)          |
-| `search`     | string  | Busca por código OT o placa del vehículo             |
-| `per_page`   | integer | Resultados por página (default: 15)                  |
+| Parámetro    | Tipo    | Descripción                                                  |
+| ------------ | ------- | ------------------------------------------------------------ |
+| `estado`     | string  | `pendiente`, `en_proceso`, `finalizado`, `cancelado`         |
+| `tecnico_id` | integer | Filtrar por técnico (usar `id` del usuario)                  |
+| `search`     | string  | Busca por código OT, placa del vehículo o título de proyecto |
+| `per_page`   | integer | Resultados por página (default: 15)                          |
 
 **Ejemplo:**
 
@@ -161,7 +161,7 @@ GET /api/work-orders?tecnico_id=5&estado=pendiente&per_page=10
 Authorization: Bearer {token}
 ```
 
-**Respuesta `200`:**
+**Respuesta `200` — orden individual:**
 
 ```json
 {
@@ -172,6 +172,8 @@ Authorization: Bearer {token}
             {
                 "id": 42,
                 "codigo": "OT00042",
+                "es_proyecto": false,
+                "titulo_proyecto": null,
                 "estado": "pendiente",
                 "fecha_programada": "2026-05-12T08:00:00",
                 "tipo": { "id": 1, "nombre": "Instalación GPS" },
@@ -186,44 +188,102 @@ Authorization: Bearer {token}
 }
 ```
 
+**Respuesta `200` — orden tipo proyecto:**
+
+```json
+{
+    "id": 55,
+    "codigo": "OT00055",
+    "es_proyecto": true,
+    "titulo_proyecto": "Mantenimiento flota Arequipa",
+    "estado": "en_proceso",
+    "vehiculo": null,
+    "cliente": null,
+    "items_count": 12,
+    "tipo": { "id": 2, "nombre": "Mantenimiento" },
+    "tecnico": { "id": 5, "name": "Juan Pérez" }
+}
+```
+
 ---
 
 ### `GET /api/work-orders/{id}`
 
 Retorna el detalle completo de una orden con todas sus relaciones.
 
-**Relaciones incluidas:** tipo, vehículo, cliente, técnico, creador, historial de dispositivos, checklist, fotos, firmas, accesorios.
+**Relaciones incluidas (orden individual):** tipo, vehículo, cliente, técnico, creador, historial de dispositivos, checklist, fotos, firmas, accesorios.
 
-**Respuesta `200`:**
+**Relaciones incluidas (orden proyecto):** todo lo anterior **más** `items` (array de `WorkOrderItem`). Los campos `vehiculo` y `cliente` serán `null`.
+
+**Respuesta `200` — orden individual:**
 
 ```json
 {
-  "success": true,
-  "data": {
-    "id": 42,
-    "codigo": "OT00042",
-    "estado": "en_proceso",
-    "bloqueado": false,
-    "fecha_programada": "2026-05-12T08:00:00",
-    "fecha_inicio": "2026-05-12T08:15:00",
-    "fecha_finalizacion": null,
-    "observaciones": "Instalar en tablero central",
-    "sector": "SUTRAN",
-    "plan": "GPS Básico",
-    "contacto": "Carlos Ríos — Administrador — Tel: 999000111",
-    "metadata": { "accesorios": ["buzzer", "corte_motor"] },
-    "tipo": { ... },
-    "vehiculo": { ... },
-    "cliente": { ... },
-    "tecnico": { ... },
-    "checklists": [ ... ],
-    "photos": [ ... ],
-    "signatures": [ ... ],
-    "accessories": [ ... ],
-    "deviceHistory": [ ... ]
-  }
+    "success": true,
+    "data": {
+        "id": 42,
+        "codigo": "OT00042",
+        "es_proyecto": false,
+        "titulo_proyecto": null,
+        "estado": "en_proceso",
+        "bloqueado": false,
+        "fecha_programada": "2026-05-12T08:00:00",
+        "fecha_inicio": "2026-05-12T08:15:00",
+        "fecha_finalizacion": null,
+        "observaciones": "Instalar en tablero central",
+        "sector": "SUTRAN",
+        "plan": "GPS Básico",
+        "contacto": "Carlos Ríos — Administrador — Tel: 999000111",
+        "metadata": { "accesorios": ["buzzer", "corte_motor"] },
+        "tipo": { "id": 1, "nombre": "Instalación GPS" },
+        "vehiculo": { "id": 10, "placa": "ABC-123" },
+        "cliente": { "id": 3, "razon_social": "Empresa SAC" },
+        "tecnico": { "id": 5, "name": "Juan Pérez" },
+        "checklists": [],
+        "photos": [],
+        "signatures": [],
+        "accessories": [],
+        "deviceHistory": []
+    }
 }
 ```
+
+**Respuesta `200` — orden tipo proyecto:**
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 55,
+        "codigo": "OT00055",
+        "es_proyecto": true,
+        "titulo_proyecto": "Mantenimiento flota Arequipa",
+        "estado": "en_proceso",
+        "bloqueado": false,
+        "vehiculo": null,
+        "cliente": null,
+        "tipo": { "id": 2, "nombre": "Mantenimiento" },
+        "tecnico": { "id": 5, "name": "Juan Pérez" },
+        "items": [
+            {
+                "id": 101,
+                "placa": "ABC-123",
+                "estado": "pendiente",
+                "imei": null,
+                "numero_sim": null,
+                "notas": "Cambio de chip urgente",
+                "orden": 0,
+                "tipo": { "id": 2, "nombre": "Mantenimiento" },
+                "vehiculo": { "id": 10, "placa": "ABC-123", "marca": "VOLVO" }
+            }
+        ],
+        "photos": [],
+        "signatures": []
+    }
+}
+```
+
+> **Nota:** Para órdenes de tipo proyecto, los campos `checklist`, `deviceHistory` y `accessories` operan a nivel de la orden general. La asignación de IMEI/SIM por vehículo se gestiona en cada `WorkOrderItem` (ver sección 9).
 
 ---
 
@@ -572,7 +632,161 @@ Elimina un accesorio (solo si la orden no está bloqueada).
 
 ---
 
-## 9. Notificaciones Push (Firebase FCM)
+## 9. Ítems del Proyecto (WorkOrderItem)
+
+Disponibles **únicamente** cuando `es_proyecto = true`. Cada ítem representa un vehículo dentro de la orden de trabajo grupal.
+
+### Estructura de un WorkOrderItem
+
+| Campo                | Tipo    | Descripción                                             |
+| -------------------- | ------- | ------------------------------------------------------- |
+| `id`                 | integer | ID del ítem                                             |
+| `placa`              | string  | Placa del vehículo                                      |
+| `estado`             | string  | `pendiente`, `completado`, `omitido`                    |
+| `imei`               | string  | IMEI del dispositivo GPS asignado (null si no asignado) |
+| `numero_sim`         | string  | Número de SIM asignada (null si no asignada)            |
+| `notas`              | string  | Notas específicas para este vehículo                    |
+| `orden`              | integer | Posición en la lista                                    |
+| `work_order_type_id` | integer | ID del tipo de trabajo (FK a `work_order_types`)        |
+| `tipo`               | object  | Relación: `{ id, nombre }`                              |
+| `vehiculo`           | object  | Relación: datos del vehículo si existe en el sistema    |
+| `cliente_nombre`     | string  | Nombre de la empresa del vehículo (desnormalizado)      |
+
+> Retorna `422` si se llama sobre una orden que no es proyecto.
+
+---
+
+### `GET /api/work-orders/{id}/items`
+
+Lista todos los ítems del proyecto con contadores de progreso.
+
+**Respuesta `200`:**
+
+```json
+{
+    "success": true,
+    "data": {
+        "items": [
+            {
+                "id": 101,
+                "placa": "ABC-123",
+                "estado": "completado",
+                "imei": "354689112345678",
+                "numero_sim": "8951140000123456789",
+                "notas": "Cambio de chip",
+                "orden": 0,
+                "tipo": { "id": 2, "nombre": "Mantenimiento" },
+                "vehiculo": { "id": 10, "placa": "ABC-123", "marca": "VOLVO" }
+            }
+        ],
+        "total": 12,
+        "completados": 5,
+        "omitidos": 1,
+        "pendientes": 6,
+        "progreso": 42
+    }
+}
+```
+
+---
+
+### `POST /api/work-orders/{id}/items`
+
+Agrega un vehículo al proyecto. Si la placa existe en el sistema, se vincula automáticamente.
+
+**Body (JSON):**
+
+```json
+{
+    "placa": "ABC-123",
+    "work_order_type_id": 2,
+    "notas": "Revisión de antena GPS"
+}
+```
+
+| Campo                | Tipo    | Requerido | Descripción                                    |
+| -------------------- | ------- | --------- | ---------------------------------------------- |
+| `placa`              | string  | ✅        | Placa del vehículo (se convierte a MAYÚSCULAS) |
+| `work_order_type_id` | integer | ✅        | ID del tipo de trabajo (de `WorkOrderType`)    |
+| `notas`              | string  | ❌        | Observaciones específicas para este vehículo   |
+
+**Respuesta `201`:**
+
+```json
+{
+  "success": true,
+  "message": "Unidad ABC-123 agregada al proyecto.",
+  "data": { ... }
+}
+```
+
+---
+
+### `PATCH /api/work-orders/{id}/items/{item_id}/estado`
+
+Cambia el estado del ítem de forma cíclica: `pendiente → completado → omitido → pendiente`.
+
+No requiere body. Cada llamada avanza al siguiente estado.
+
+**Respuesta `200`:**
+
+```json
+{
+  "success": true,
+  "data": { "id": 101, "estado": "completado", ... }
+}
+```
+
+---
+
+### `PATCH /api/work-orders/{id}/items/{item_id}/dispositivo`
+
+Asigna el IMEI del GPS y/o el número de SIM a un vehículo específico del proyecto.
+
+**Body (JSON):**
+
+```json
+{
+    "imei": "354689112345678",
+    "numero_sim": "8951140000123456789"
+}
+```
+
+| Campo        | Tipo   | Requerido | Descripción                 |
+| ------------ | ------ | --------- | --------------------------- |
+| `imei`       | string | ❌        | IMEI del GPS (máx 20 chars) |
+| `numero_sim` | string | ❌        | Número ICCID/SIM (máx 22)   |
+
+> Al menos uno de los dos campos debe enviarse. Enviar cadena vacía limpia el valor.
+
+**Respuesta `200`:**
+
+```json
+{
+  "success": true,
+  "message": "Dispositivo asignado correctamente.",
+  "data": { "id": 101, "imei": "354689112345678", "numero_sim": "8951140000123456789", ... }
+}
+```
+
+---
+
+### `DELETE /api/work-orders/{id}/items/{item_id}`
+
+Elimina un vehículo del proyecto (solo si la orden no está bloqueada).
+
+**Respuesta `200`:**
+
+```json
+{
+    "success": true,
+    "message": "Unidad eliminada del proyecto."
+}
+```
+
+---
+
+## 10. Notificaciones Push (Firebase FCM)
 
 ### `POST /api/fcm/token`
 
@@ -641,67 +855,105 @@ Todos los endpoints retornan errores con la siguiente estructura:
 
 ## Flujo completo de una Orden de Trabajo
 
+### Orden individual (un vehículo)
+
 ```
 1. GET  /api/work-orders?tecnico_id={id}&estado=pendiente
         → Cargar órdenes asignadas al técnico
 
 2. GET  /api/work-orders/{id}
-        → Ver detalle completo de la orden
+        → Ver detalle (verificar es_proyecto = false)
 
 3. POST /api/work-orders/{id}/iniciar
         → Iniciar trabajo (estado: pendiente → en_proceso)
 
 4. GET  /api/work-orders/templates/checklist
-        → Cargar plantillas de inspección
-
-5. POST /api/work-orders/{id}/checklist  (repetir por cada ítem, fase="before")
-        → Registrar checklist inicial
+5. POST /api/work-orders/{id}/checklist  (fase="before", repetir por ítem)
+        → Checklist inicial del vehículo
 
 6. POST /api/work-orders/{id}/fotos      (varias veces)
-        → Subir fotos de evidencia
+        → Fotos de evidencia
 
 7. POST /api/work-orders/{id}/dispositivos
         → Registrar IMEI/SIM instalado
 
-8. POST /api/work-orders/{id}/checklist  (repetir por cada ítem, fase="after")
-        → Registrar checklist final
+8. POST /api/work-orders/{id}/checklist  (fase="after", repetir por ítem)
+        → Checklist final del vehículo
 
 9. POST /api/work-orders/{id}/firmas  (tipo="conformidad")
-        → Capturar firma del cliente
+        → Firma del cliente/conductor
 
 10. POST /api/work-orders/{id}/finalizar
-         → Finalizar orden (estado: en_proceso → finalizado)
+         → Finalizar orden (requiere firma de conformidad)
 ```
+
+### Orden de tipo proyecto (múltiples vehículos)
+
+```
+1. GET  /api/work-orders?tecnico_id={id}&estado=pendiente
+        → es_proyecto=true, items_count=N
+
+2. GET  /api/work-orders/{id}
+        → vehiculo=null, cliente=null, items=[...]
+
+3. POST /api/work-orders/{id}/iniciar
+        → Iniciar trabajo del proyecto
+
+4. GET  /api/work-orders/{id}/items
+        → Ver lista de vehículos con su estado
+
+5. Por cada vehículo:
+   a. POST /api/work-orders/{id}/fotos
+           → Foto de evidencia del vehículo (incluir descripción con placa)
+   b. PATCH /api/work-orders/{id}/items/{item_id}/dispositivo
+           → Asignar IMEI y SIM al vehículo
+   c. PATCH /api/work-orders/{id}/items/{item_id}/estado
+           → Marcar como completado (o omitido si no se realizó)
+
+6. POST /api/work-orders/{id}/firmas  (tipo="conformidad")
+        → Firma del responsable de la flota
+
+7. POST /api/work-orders/{id}/finalizar
+        → Finalizar cuando todos los ítems estén completados/omitidos
+```
+
+> **Para proyectos NO aplican:** checklist individual por vehículo ni el registro de dispositivos a nivel de orden (`/dispositivos`). Todo se gestiona por ítem.
 
 ---
 
 ## Resumen de endpoints
 
-| Método   | Endpoint                                | Auth | Descripción                |
-| -------- | --------------------------------------- | ---- | -------------------------- |
-| `POST`   | `/api/auth/login`                       | ❌   | Login con email/password   |
-| `POST`   | `/api/auth/logout`                      | ✅   | Cerrar sesión              |
-| `GET`    | `/api/auth/me`                          | ✅   | Perfil del técnico         |
-| `GET`    | `/api/work-orders`                      | ✅   | Listar órdenes             |
-| `GET`    | `/api/work-orders/{id}`                 | ✅   | Detalle de orden           |
-| `POST`   | `/api/work-orders/{id}/iniciar`         | ✅   | Iniciar orden              |
-| `POST`   | `/api/work-orders/{id}/finalizar`       | ✅   | Finalizar orden            |
-| `POST`   | `/api/work-orders/{id}/cerrar`          | ✅   | Cerrar y bloquear          |
-| `POST`   | `/api/work-orders/{id}/cancelar`        | ✅   | Cancelar orden             |
-| `GET`    | `/api/work-orders/templates/checklist`  | ✅   | Plantillas de checklist    |
-| `GET`    | `/api/work-orders/{id}/checklist`       | ✅   | Checklist de la orden      |
-| `POST`   | `/api/work-orders/{id}/checklist`       | ✅   | Guardar ítem de checklist  |
-| `GET`    | `/api/work-orders/{id}/fotos`           | ✅   | Listar fotos               |
-| `POST`   | `/api/work-orders/{id}/fotos`           | ✅   | Subir foto (multipart)     |
-| `DELETE` | `/api/work-orders/fotos/{id}`           | ✅   | Eliminar foto              |
-| `GET`    | `/api/work-orders/fotos/{id}/download`  | ✅   | Descargar foto             |
-| `GET`    | `/api/work-orders/{id}/firmas`          | ✅   | Listar firmas              |
-| `POST`   | `/api/work-orders/{id}/firmas`          | ✅   | Guardar firma (base64)     |
-| `GET`    | `/api/work-orders/firmas/{id}/download` | ✅   | Descargar firma PNG        |
-| `GET`    | `/api/work-orders/{id}/dispositivos`    | ✅   | Historial de dispositivos  |
-| `POST`   | `/api/work-orders/{id}/dispositivos`    | ✅   | Registrar IMEI/SIM         |
-| `GET`    | `/api/work-orders/{id}/accesorios`      | ✅   | Listar accesorios          |
-| `POST`   | `/api/work-orders/{id}/accesorios`      | ✅   | Agregar accesorio          |
-| `DELETE` | `/api/work-orders/accesorios/{id}`      | ✅   | Eliminar accesorio         |
-| `POST`   | `/api/fcm/token`                        | ✅   | Registrar token FCM (push) |
-| `DELETE` | `/api/fcm/token`                        | ✅   | Eliminar token FCM         |
+| Método       | Endpoint                                             | Auth | Descripción                       |
+| ------------ | ---------------------------------------------------- | ---- | --------------------------------- |
+| `POST`       | `/api/auth/login`                                    | ❌   | Login con email/password          |
+| `POST`       | `/api/auth/logout`                                   | ✅   | Cerrar sesión                     |
+| `GET`        | `/api/auth/me`                                       | ✅   | Perfil del técnico                |
+| `GET`        | `/api/work-orders`                                   | ✅   | Listar órdenes                    |
+| `GET`        | `/api/work-orders/{id}`                              | ✅   | Detalle de orden                  |
+| `PATCH`      | `/api/work-orders/{id}`                              | ✅   | Actualizar campos editables       |
+| `POST`       | `/api/work-orders/{id}/iniciar`                      | ✅   | Iniciar orden                     |
+| `POST`       | `/api/work-orders/{id}/finalizar`                    | ✅   | Finalizar orden                   |
+| `POST`       | `/api/work-orders/{id}/cerrar`                       | ✅   | Cerrar y bloquear                 |
+| `POST`       | `/api/work-orders/{id}/cancelar`                     | ✅   | Cancelar orden                    |
+| `GET`        | `/api/work-orders/templates/checklist`               | ✅   | Plantillas de checklist           |
+| `GET`        | `/api/work-orders/{id}/checklist`                    | ✅   | Checklist de la orden             |
+| `POST`       | `/api/work-orders/{id}/checklist`                    | ✅   | Guardar ítem de checklist         |
+| `GET`        | `/api/work-orders/{id}/fotos`                        | ✅   | Listar fotos                      |
+| `POST`       | `/api/work-orders/{id}/fotos`                        | ✅   | Subir foto (multipart)            |
+| `DELETE`     | `/api/work-orders/fotos/{id}`                        | ✅   | Eliminar foto                     |
+| `GET`        | `/api/work-orders/fotos/{id}/download`               | ✅   | Descargar foto                    |
+| `GET`        | `/api/work-orders/{id}/firmas`                       | ✅   | Listar firmas                     |
+| `POST`       | `/api/work-orders/{id}/firmas`                       | ✅   | Guardar firma (base64)            |
+| `GET`        | `/api/work-orders/firmas/{id}/download`              | ✅   | Descargar firma PNG               |
+| `GET`        | `/api/work-orders/{id}/dispositivos`                 | ✅   | Historial de dispositivos         |
+| `POST`       | `/api/work-orders/{id}/dispositivos`                 | ✅   | Registrar IMEI/SIM (orden entera) |
+| `GET`        | `/api/work-orders/{id}/accesorios`                   | ✅   | Listar accesorios                 |
+| `POST`       | `/api/work-orders/{id}/accesorios`                   | ✅   | Agregar accesorio                 |
+| `DELETE`     | `/api/work-orders/accesorios/{id}`                   | ✅   | Eliminar accesorio                |
+| **`GET`**    | **`/api/work-orders/{id}/items`**                    | ✅   | **Listar ítems del proyecto**     |
+| **`POST`**   | **`/api/work-orders/{id}/items`**                    | ✅   | **Agregar vehículo al proyecto**  |
+| **`PATCH`**  | **`/api/work-orders/{id}/items/{item}/estado`**      | ✅   | **Cambiar estado del ítem**       |
+| **`PATCH`**  | **`/api/work-orders/{id}/items/{item}/dispositivo`** | ✅   | **Asignar IMEI/SIM al ítem**      |
+| **`DELETE`** | **`/api/work-orders/{id}/items/{item}`**             | ✅   | **Eliminar ítem del proyecto**    |
+| `POST`       | `/api/fcm/token`                                     | ✅   | Registrar token FCM (push)        |
+| `DELETE`     | `/api/fcm/token`                                     | ✅   | Eliminar token FCM                |

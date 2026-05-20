@@ -250,6 +250,36 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
 
     /*
     |--------------------------------------------------------------------------
+    | Ítems del Proyecto (WorkOrderItem)
+    |--------------------------------------------------------------------------
+    | Solo disponibles cuando work_order.es_proyecto = true
+    | Cada ítem representa un vehículo dentro del proyecto
+    */
+
+    // GET /api/work-orders/{workOrder}/items
+    // Listar todos los ítems del proyecto con estado e info de dispositivo
+    Route::get('/{workOrder}/items', [WorkOrderController::class, 'listarItems'])->name('items.listar');
+
+    // POST /api/work-orders/{workOrder}/items
+    // Agregar un vehículo al proyecto
+    // Body: { "placa": "ABC-123", "work_order_type_id": 1, "notas": "string" }
+    Route::post('/{workOrder}/items', [WorkOrderController::class, 'agregarItem'])->name('items.agregar');
+
+    // PATCH /api/work-orders/{workOrder}/items/{item}/estado
+    // Cambiar estado del ítem: pendiente → completado → omitido → pendiente
+    Route::patch('/{workOrder}/items/{item}/estado', [WorkOrderController::class, 'toggleEstadoItem'])->name('items.estado');
+
+    // PATCH /api/work-orders/{workOrder}/items/{item}/dispositivo
+    // Asignar IMEI y/o SIM a un vehículo del proyecto
+    // Body: { "imei": "string", "numero_sim": "string" }
+    Route::patch('/{workOrder}/items/{item}/dispositivo', [WorkOrderController::class, 'guardarDispositivoItem'])->name('items.dispositivo');
+
+    // DELETE /api/work-orders/{workOrder}/items/{item}
+    // Eliminar un ítem del proyecto (solo si la orden no está bloqueada)
+    Route::delete('/{workOrder}/items/{item}', [WorkOrderController::class, 'eliminarItem'])->name('items.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
     | Tracking GPS del Técnico
     |--------------------------------------------------------------------------
     */
