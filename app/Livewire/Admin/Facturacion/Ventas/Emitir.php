@@ -15,6 +15,7 @@ use App\Models\Series;
 use App\Models\TipoComprobantes;
 use App\Models\Ventas;
 use App\Models\Productos;
+use App\Models\Presupuestos;
 use App\Models\Dispositivos;
 use App\Services\FactilizaService;
 use Carbon\Carbon;
@@ -82,6 +83,9 @@ class Emitir extends Component
 
     //PROPIEDAD PARA VERIFICAR EMPRESA
     public $empresa_id;
+
+    // Presupuesto a convertir
+    public $presupuestos_id = null;
 
     // Contexto de Cobros (para auto-update y redirect)
     public $cobro_id = null;
@@ -156,7 +160,7 @@ class Emitir extends Component
         }
     }
 
-    public function mount($notificacion_ids = null, $periodo_ids = null)
+    public function mount($notificacion_ids = null, $periodo_ids = null, $presupuesto_id = null)
     {
         $notificacion_ids = $notificacion_ids ?? $periodo_ids;
         //DEFINIR EL TIPO DE COMPROBANTE
@@ -241,6 +245,65 @@ class Emitir extends Component
 
             $this->procesarItemsDesdeNotificaciones($this->notificacion_ids_array);
         }
+
+        if ($presupuesto_id && !$notificacion_ids) {
+            $this->procesarDesdePresupuesto((int) $presupuesto_id);
+        }
+    }
+
+    /**
+     * Pre-rellena el formulario con los datos de un presupuesto.
+     */
+    private function procesarDesdePresupuesto(int $presupuestoId): void
+    {
+        $presupuesto = Presupuestos::with(['detalles.info_producto', 'clientes'])->findOrFail($presupuestoId);
+
+        $this->presupuestos_id = $presupuesto->id;
+        $this->cliente_id      = $presupuesto->clientes_id;
+        $this->cliente         = $presupuesto->clientes;
+        $this->direccion       = $presupuesto->clientes->direccion ?? '';
+        $this->divisa          = $presupuesto->divisa;
+        $this->simbolo         = $presupuesto->divisa === 'USD' ? '$' : 'S/. ';
+        if ((float) $presupuesto->tipo_cambio > 0) {
+            $this->tipo_cambio = (float) $presupuesto->tipo_cambio;
+        }
+        $this->metodo_pago_id  = $presupuesto->metodo_pago_id ?? $this->metodo_pago_id;
+        $this->comentario      = $presupuesto->comentario;
+        $this->forma_pago      = $presupuesto->forma_pago;
+
+        if ($presupuesto->forma_pago === 'CREDITO') {
+            $this->showCredit     = true;
+            $this->numero_cuotas  = $presupuesto->numero_cuotas;
+            $this->vence_cuotas   = $presupuesto->vence_cuotas;
+            $this->adelanto       = (float) $presupuesto->adelanto;
+            $this->detalle_cuotas = collect($presupuesto->detalle_cuotas ?? []);
+        }
+
+        foreach ($presupuesto->detalles as $detalle) {
+            $this->items->push([
+                'producto_id'       => $detalle->producto_id,
+                'codigo'            => $detalle->codigo,
+                'cantidad'          => (float) $detalle->cantidad,
+                'unit'              => $detalle->unit,
+                'unit_name'         => $detalle->unit_name,
+                'descripcion'       => $detalle->descripcion,
+                'descripcion_pdf'   => null,
+                'imeis'             => null,
+                'valor_unitario'    => (float) $detalle->valor_unitario,
+                'precio_unitario'   => (float) $detalle->precio_unitario,
+                'igv'               => (float) $detalle->igv,
+                'porcentaje_igv'    => (int) ($detalle->porcentaje_igv ?? 18),
+                'icbper'            => (float) ($detalle->icbper ?? 0.00),
+                'total_icbper'      => (float) ($detalle->total_icbper ?? 0.00),
+                'sub_total'         => (float) $detalle->sub_total,
+                'total'             => (float) $detalle->total,
+                'codigo_afectacion' => $detalle->codigo_afectacion,
+                'afecto_icbper'     => (bool) ($detalle->afecto_icbper ?? false),
+                'tipo'              => $detalle->info_producto?->tipo ?? 'servicio',
+            ]);
+        }
+
+        $this->reCalTotal();
     }
 
     /**
@@ -689,6 +752,7 @@ class Emitir extends Component
 
         $request = new VentasRequest();
         $datos = $this->validate($request->rules($this->detraccion), $request->messages());
+        $datos['presupuestos_id'] = $this->presupuestos_id ?: null;
         try {
             DB::beginTransaction();
             $venta = Ventas::create($datos);

@@ -5,7 +5,6 @@
 
     @livewire('admin.ventas.presupuestos.send')
     @livewire('admin.ventas.presupuestos.delete')
-    @livewire('admin.ventas.presupuestos.convert-to')
     @if (session('store'))
         <script>
             $(document).ready(function() {
