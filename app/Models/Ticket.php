@@ -38,6 +38,8 @@ class Ticket extends Model
         'first_response_at' => 'datetime',
         'resolved_at' => 'datetime',
         'closed_at' => 'datetime',
+        'due_at' => 'datetime',
+        'escalation_level' => 'integer',
     ];
 
     // Global Scope Empresa
@@ -150,8 +152,7 @@ class Ticket extends Model
 
     public function scopeOverdue($query)
     {
-        // TODO: Implementar lógica de tickets vencidos basado en SLA
-        return $query;
+        return $query->open()->whereNotNull('due_at')->where('due_at', '<', now());
     }
 
     // Helpers
@@ -179,6 +180,11 @@ class Ticket extends Model
         return $this->status === TicketStatus::CLOSED || $this->status === TicketStatus::RESOLVED;
     }
 
+    public function isOverdue(): bool
+    {
+        return $this->isOpen() && $this->due_at !== null && $this->due_at->isPast();
+    }
+
     public function isAssignedTo(User $user): bool
     {
         return $this->assigned_to === $user->id;
@@ -187,5 +193,10 @@ class Ticket extends Model
     public function belongsToTeam(Team $team): bool
     {
         return $this->team_id === $team->id;
+    }
+
+    public function relatedTickets(): HasMany
+    {
+        return $this->hasMany(TicketRelation::class, 'ticket_id');
     }
 }

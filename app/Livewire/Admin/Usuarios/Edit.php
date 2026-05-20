@@ -11,12 +11,15 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use WireUi\Traits\WireUiActions;
 
 class Edit extends Component
 {
+    use WireUiActions;
     public $showModal = false;
     public $usuario;
     public $name, $email, $password, $password_confirmation, $roles_id = [], $local_id;
+    public $telefonos  = '';
     public $document_id;
     public $series;
     public $series_id;
@@ -71,8 +74,9 @@ class Edit extends Component
     {
         $this->showModal = true;
         $this->usuario = $usuario;
-        $this->name = $usuario->name;
-        $this->email = $usuario->email;
+        $this->name     = $usuario->name;
+        $this->email    = $usuario->email;
+        $this->telefonos = $usuario->telefonos ?? '';
         $this->roles_id = $usuario->roles->pluck('id')->toArray();
         $this->series_id = $usuario->series_id;
         $this->ciudad_id = $usuario->ciudad_id;
@@ -107,23 +111,20 @@ class Edit extends Component
                 'password'  => $this->password ? Hash::make($this->password) : $this->usuario->password,
                 'series_id' => $this->series_id,
                 'ciudad_id' => $this->ciudad_id,
+                'telefonos' => $this->telefonos ?: null,
             ]);
             $this->usuario->syncRoles($this->roles_id);
             $this->dispatch('update-table');
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
+            $this->notification()->success(
                 title: 'USUARIO ACTUALIZADO',
-                mensaje: 'El usuario se ha actualizado correctamente'
+                description: 'El usuario se ha actualizado correctamente.',
             );
             $this->logoutUser($this->usuario->id);
             $this->closeModal();
         } catch (\Throwable $th) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
+            $this->notification()->error(
                 title: 'ERROR',
-                mensaje: 'Ha ocurrido un error al actualizar el usuario: ' . $th->getMessage()
+                description: 'Ha ocurrido un error al actualizar el usuario: ' . $th->getMessage(),
             );
         }
     }

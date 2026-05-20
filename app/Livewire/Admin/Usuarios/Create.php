@@ -8,13 +8,16 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
+use WireUi\Traits\WireUiActions;
 
 class Create extends Component
 {
+    use WireUiActions;
 
     public $name, $email, $password, $password_confirmation;
     public $roles_id = [], $local_id;
     public $showModal = false;
+    public $telefonos  = '';
 
     public $document_id;
     public $series;
@@ -107,29 +110,26 @@ class Create extends Component
                 $user->syncRoles($this->roles_id);
             } else {
                 $user = User::create([
-                    'name' => $this->name,
-                    'email' => $this->email,
-                    'password' => Hash::make($this->password),
+                    'name'      => $this->name,
+                    'email'     => $this->email,
+                    'password'  => Hash::make($this->password),
                     'series_id' => $this->series_id,
                     'ciudad_id' => $this->ciudad_id,
+                    'telefonos' => $this->telefonos ?: null,
                 ]);
                 $user->assignRole($this->roles_id);
                 $user->save();
             }
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
+            $this->notification()->success(
                 title: $this->editMode ? 'USUARIO ACTUALIZADO' : 'USUARIO CREADO',
-                mensaje: $this->editMode ? 'El usuario se ha actualizado correctamente' : 'El usuario se ha creado correctamente'
+                description: $this->editMode ? 'El usuario se ha actualizado correctamente.' : 'El usuario se ha creado correctamente.',
             );
             $this->closeModal();
             $this->dispatch('update-table');
         } catch (\Throwable $th) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
+            $this->notification()->error(
                 title: 'ERROR',
-                mensaje: 'Ha ocurrido un error al intentar guardar el usuario'
+                description: 'Ha ocurrido un error al intentar guardar el usuario.',
             );
         }
     }

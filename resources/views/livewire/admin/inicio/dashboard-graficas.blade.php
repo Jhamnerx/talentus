@@ -90,6 +90,23 @@
                         <p class="text-sm text-slate-400 text-center py-4">Sin tickets registrados.</p>
                     @endforelse
                 </div>
+                {{-- SLA alerts --}}
+                @if ($ticketsVencidos > 0 || $ticketsEscalados > 0)
+                    <div class="px-4 pb-3 flex flex-wrap gap-2">
+                        @if ($ticketsVencidos > 0)
+                            <a href="{{ route('admin.tickets.index') }}"
+                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 transition-colors">
+                                ⚠ {{ $ticketsVencidos }} vencido{{ $ticketsVencidos !== 1 ? 's' : '' }}
+                            </a>
+                        @endif
+                        @if ($ticketsEscalados > 0)
+                            <a href="{{ route('admin.tickets.index') }}"
+                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 transition-colors">
+                                🔺 {{ $ticketsEscalados }} escalado{{ $ticketsEscalados !== 1 ? 's' : '' }}
+                            </a>
+                        @endif
+                    </div>
+                @endif
                 <div class="px-5 pb-3">
                     <a href="{{ route('admin.tickets.index') }}" class="text-xs text-indigo-500 hover:underline">Ver
                         tickets →</a>

@@ -2,10 +2,13 @@
 
 namespace App\Observers;
 
+use App\Enums\TicketPriority;
 use App\Models\Ticket;
 use App\Models\TicketSequence;
 use App\Models\TicketEvent;
 use App\Enums\TicketEventType;
+use App\Models\User;
+use App\Scopes\EmpresaScope;
 
 class TicketObserver
 {
@@ -22,6 +25,23 @@ class TicketObserver
         // Generar código único si no tiene
         if (empty($ticket->code)) {
             $ticket->code = $this->generateTicketCode($ticket->empresa_id);
+        }
+
+        // Calcular due_at según prioridad (SLA)
+        if (empty($ticket->due_at) && !empty($ticket->priority)) {
+            $hours = match ($ticket->priority instanceof TicketPriority ? $ticket->priority->value : $ticket->priority) {
+                'urgent' => 2,
+                'high'   => 8,
+                'medium' => 24,
+                'low'    => 72,
+                default  => 24,
+            };
+            $ticket->due_at = now()->addHours($hours);
+        }
+
+        // Auto-asignar si no hay asignado: agente con menos tickets abiertos
+        if (empty($ticket->assigned_to)) {
+            $ticket->assigned_to = $this->getAutoAssignUser($ticket->empresa_id);
         }
 
         // Establecer timestamps iniciales
@@ -65,7 +85,7 @@ class TicketObserver
                 'actor_id' => $ticket->created_by,
                 'payload' => [
                     'assigned_to' => $ticket->assigned_to,
-                    'assigned_name' => $ticket->assignedTo->name,
+                    'assigned_name' => $ticket->assignedTo->name ?? 'N/A',
                 ],
             ]);
         }
@@ -91,6 +111,21 @@ class TicketObserver
 
         // Formatear código: TK-2026-000001
         return sprintf('TK-%d-%06d', $year, $sequence->last_number);
+    }
+
+    /**
+     * Auto-asignar al agente con menos tickets abiertos en la empresa.
+     */
+    protected function getAutoAssignUser(int $empresaId): ?int
+    {
+        return User::whereHas('roles', fn($q) => $q->whereIn('name', ['agente', 'admin']))
+            ->withCount(['assignedTickets as open_count' => function ($q) use ($empresaId) {
+                $q->withoutGlobalScope(EmpresaScope::class)
+                    ->where('empresa_id', $empresaId)
+                    ->whereNotIn('status', ['resolved', 'closed']);
+            }])
+            ->orderBy('open_count')
+            ->value('id');
     }
 
     /**

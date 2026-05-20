@@ -15,6 +15,7 @@ class Edit extends Component
     public ?int   $deviceId  = null;
     public string $body      = '';
     public string $webhook   = '';
+    public bool   $interno   = false;
 
     protected function rules(): array
     {
@@ -38,6 +39,7 @@ class Edit extends Component
         $this->deviceId = $deviceId;
         $this->body     = $device->body;
         $this->webhook  = $device->webhook ?? '';
+        $this->interno  = (bool) $device->interno;
         $this->resetValidation();
         $this->showModal = true;
     }
@@ -45,7 +47,7 @@ class Edit extends Component
     public function closeModal(): void
     {
         $this->showModal = false;
-        $this->reset(['deviceId', 'body', 'webhook']);
+        $this->reset(['deviceId', 'body', 'webhook', 'interno']);
         $this->resetValidation();
     }
 
@@ -54,9 +56,18 @@ class Edit extends Component
         $this->validate();
 
         $device = Device::findOrFail($this->deviceId);
+
+        // Si se marca como interno, desmarcar el dispositivo anterior
+        if ($this->interno) {
+            Device::where('interno', true)
+                ->where('id', '!=', $this->deviceId)
+                ->update(['interno' => false]);
+        }
+
         $device->update([
             'body'    => $this->body,
             'webhook' => $this->webhook,
+            'interno' => $this->interno,
         ]);
 
         $this->notification()->success(
