@@ -1,51 +1,123 @@
-<x-form.modal.card title="REGISTRAR CLIENTE" max-width="2xl" wire:model.live="modalSave" align="center">
+<x-form.modal.card title="REGISTRAR CLIENTE" max-width="3xl" wire:model.live="modalSave" align="center">
 
-    <div class="grid grid-cols-12 gap-4">
+    {{-- ── Sección 1: Datos del cliente ───────────────────────────────────────── --}}
+    <div class="space-y-4">
+        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+            Datos del cliente
+        </h3>
 
-        <div class="col-span-12 sm:col-span-6">
-            <x-form.select label="Seleccion tipo Doc.:" wire:model.live="tipo_documento_id"
-                placeholder="Selecciona un cliente" option-description="codigo" :async-data="route('api.documentos.index')"
-                option-label="descripcion" option-value="codigo" />
-        </div>
+        <div class="grid grid-cols-12 gap-4">
 
-        <div class="col-span-12 sm:col-span-6">
-            <x-form.input label="Número Documento:" placeholder="10203040" wire:model='numero_documento'>
-                @if (in_array($tipo_documento_id, [1, 6]))
-                    <x-slot name="append">
-                        <x-form.button class="h-full" icon="magnifying-glass" rounded="rounded-r-md" primary flat
-                            wire:click="buscarDocumento" wire:loading.attr="disabled" />
-                    </x-slot>
+            <div class="col-span-12 sm:col-span-6">
+                <x-form.select label="Tipo de documento *" wire:model.live="tipo_documento_id"
+                    placeholder="Selecciona tipo" option-description="codigo" :async-data="route('api.documentos.index')"
+                    option-label="descripcion" option-value="codigo" />
+            </div>
+
+            <div class="col-span-12 sm:col-span-6">
+                <x-form.input label="Número de documento *" placeholder="10203040" wire:model.live='numero_documento'>
+                    @if (in_array($tipo_documento_id, [1, 6]))
+                        <x-slot name="append">
+                            <x-form.button class="h-full" icon="magnifying-glass" rounded="rounded-r-md" primary flat
+                                wire:click="buscarDocumento" wire:loading.attr="disabled" />
+                        </x-slot>
+                    @endif
+                </x-form.input>
+                @if ($errorConsulta)
+                    <p class="mt-1 text-sm text-red-600">{{ $errorConsulta }}</p>
                 @endif
-            </x-form.input>
-            @if ($errorConsulta)
-                <p class="mt-1 text-sm text-red-600">{{ $errorConsulta }}</p>
+            </div>
+
+            <div class="col-span-12">
+                <x-form.input label="Razón Social *" placeholder="INGRESA LA RAZÓN SOCIAL"
+                    wire:model.live='razon_social' />
+            </div>
+
+            {{-- DNI: teléfono y email obligatorios (son también los del contacto) --}}
+            @if ($tipo_documento_id == 1)
+                <div class="col-span-12 sm:col-span-6">
+                    <x-form.input type="tel" label="Teléfono *" placeholder="987654321"
+                        wire:model.live='telefono' />
+                </div>
+                <div class="col-span-12 sm:col-span-6">
+                    <x-form.input type="email" label="Correo *" placeholder="cliente@correo.com"
+                        wire:model.live='email' />
+                </div>
+            @else
+                <div class="col-span-12 sm:col-span-6">
+                    <x-form.input type="tel" label="Teléfono empresa" placeholder="01-2345678"
+                        wire:model.live='telefono' />
+                </div>
+                <div class="col-span-12 sm:col-span-6">
+                    <x-form.input type="email" label="Correo empresa" placeholder="empresa@correo.com"
+                        wire:model.live='email' />
+                </div>
             @endif
-        </div>
 
-        <div class="col-span-12">
-            <x-form.input label="Razon Social:" placeholder="INGRESA LA RAZON SOCIAL" wire:model.live='razon_social' />
-        </div>
-
-        <div class="col-span-12 sm:col-span-6">
-            <x-form.input type="tel" label="Telefono:" placeholder="987654321" wire:model.live='telefono' />
-        </div>
-
-
-        <div class="col-span-12 sm:col-span-6">
-            <x-form.input type="email" label="Email:" placeholder="clientes@correo.com" wire:model.live='email' />
-        </div>
-
-        <div class="col-span-12">
-            <x-form.input label="Dirección:" wire:model.live='direccion' placeholder='Ingresa una direccion' />
+            <div class="col-span-12">
+                <x-form.input label="Dirección" wire:model.live='direccion' placeholder='Ingresa una dirección' />
+            </div>
         </div>
     </div>
 
+    {{-- ── Sección 2: Contacto principal ──────────────────────────────────────── --}}
+    @if ($tipo_documento_id == 6)
+        <div class="mt-6 space-y-4 border-t border-gray-200 dark:border-gray-700 pt-5">
+            <div class="flex items-center gap-2">
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                    Contacto principal
+                </h3>
+                <span
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                    Requerido
+                </span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+                Registra la persona natural responsable de la empresa (representante legal o contacto clave).
+            </p>
+
+            <div class="grid grid-cols-12 gap-4">
+
+                <div class="col-span-12 sm:col-span-7">
+                    <x-form.input label="Nombre completo *" placeholder="Juan Pérez García"
+                        wire:model.live='contacto_nombre' />
+                </div>
+
+                <div class="col-span-12 sm:col-span-5">
+                    <x-form.input label="DNI del contacto *" placeholder="12345678"
+                        wire:model.live='contacto_numero_documento' maxlength="8">
+                        <x-slot name="append">
+                            <x-form.button class="h-full" icon="magnifying-glass" rounded="rounded-r-md" primary flat
+                                wire:click="buscarContacto" wire:loading.attr="disabled" wire:target="buscarContacto" />
+                        </x-slot>
+                    </x-form.input>
+                    @if ($errorContacto)
+                        <p class="mt-1 text-sm text-red-600">{{ $errorContacto }}</p>
+                    @endif
+                </div>
+
+                <div class="col-span-12 sm:col-span-4">
+                    <x-form.input label="Cargo" placeholder="Gerente General" wire:model.live='contacto_cargo' />
+                </div>
+
+                <div class="col-span-12 sm:col-span-4">
+                    <x-form.input type="tel" label="Teléfono *" placeholder="987654321"
+                        wire:model.live='contacto_telefono' />
+                </div>
+
+                <div class="col-span-12 sm:col-span-4">
+                    <x-form.input type="email" label="Correo" placeholder="contacto@correo.com"
+                        wire:model.live='contacto_email' />
+                </div>
+
+            </div>
+        </div>
+    @endif
+
     <x-slot name="footer">
         <div class="flex justify-end gap-x-4">
-            <div class="flex">
-                <x-form.button flat label="Cancelar" x-on:click="close" />
-                <x-form.button primary label="Guardar" wire:click="save" />
-            </div>
+            <x-form.button flat label="Cancelar" x-on:click="close" />
+            <x-form.button primary label="Guardar cliente" wire:click="save" wire:loading.attr="disabled" />
         </div>
     </x-slot>
 </x-form.modal.card>

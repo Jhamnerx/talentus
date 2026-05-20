@@ -34,36 +34,34 @@
 
                 {{-- Tipo --}}
                 <div class="col-span-12 sm:col-span-6 md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo</label>
-                    <select wire:model.live="tipo" class="form-select w-full">
-                        <option value="">Todos</option>
-                        <option value="mantenimiento">Mantenimiento</option>
-                        <option value="suspension">Suspensión</option>
-                        <option value="reactivacion">Reactivación</option>
-                    </select>
+                    <x-form.select wire:model.live="tipo" label="Tipo" placeholder="Todos">
+                        <x-select.option value="mantenimiento" label="Mantenimiento" />
+                        <x-select.option value="suspension" label="Suspensión" />
+                        <x-select.option value="reactivacion" label="Reactivación" />
+                    </x-form.select>
                 </div>
 
                 {{-- Vehículo --}}
                 <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Vehículo</label>
-                    <select wire:model.live="vehiculo_id" class="form-select w-full">
-                        <option value="">Todos los vehículos</option>
+                    <x-form.select wire:model.live="vehiculo_id" label="Vehículo" placeholder="Todos los vehículos"
+                        :clearable="true">
                         @foreach ($vehiculos as $v)
-                            <option value="{{ $v->id }}">{{ $v->placa }} — {{ $v->marca }}</option>
+                            <x-select.option value="{{ $v->id }}"
+                                label="{{ $v->placa }} — {{ $v->marca }}" />
                         @endforeach
-                    </select>
+                    </x-form.select>
                 </div>
 
                 {{-- Desde --}}
                 <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Desde</label>
-                    <input wire:model.live="desde" type="date" class="form-input w-full" />
+                    <x-form.datetime.picker wire:model.live="desde" label="Desde" placeholder="dd/mm/aaaa"
+                        without-time />
                 </div>
 
                 {{-- Hasta --}}
                 <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Hasta</label>
-                    <input wire:model.live="hasta" type="date" class="form-input w-full" />
+                    <x-form.datetime.picker wire:model.live="hasta" label="Hasta" placeholder="dd/mm/aaaa"
+                        without-time />
                 </div>
 
             </div>

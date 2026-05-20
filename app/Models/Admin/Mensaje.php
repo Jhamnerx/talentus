@@ -4,7 +4,6 @@ namespace App\Models\Admin;
 
 use App\Models\Clientes;
 use App\Models\Cobros;
-use App\Models\DetalleCobros;
 use App\Models\Mantenimiento;
 use App\Models\User;
 use App\Notifications\EnviarMensaje;
@@ -58,11 +57,11 @@ class Mensaje extends Model
     }
 
 
-    public function sendCobroMessage($mensaje, DetalleCobros $detalle)
+    public function sendCobroMessage($mensaje, Cobros $cobro)
     {
         $users = User::role('admin')->get();
 
-        Notification::send($users, new EnviarMensajeCobro($mensaje, $detalle));
+        Notification::send($users, new EnviarMensajeCobro($mensaje, $cobro));
     }
 
 

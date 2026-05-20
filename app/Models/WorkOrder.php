@@ -47,12 +47,19 @@ class WorkOrder extends Model
         'tecnico_lat' => 'float',
         'tecnico_lng' => 'float',
         'tecnico_last_seen' => 'datetime',
+        'verified_at' => 'datetime',
     ];
 
     // Global Scope - Multi-empresa
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
+
+        static::creating(function (self $order) {
+            if (empty($order->verification_hash)) {
+                $order->verification_hash = \Illuminate\Support\Str::random(32);
+            }
+        });
     }
 
     // Relaciones
@@ -146,6 +153,13 @@ class WorkOrder extends Model
     public function scopeTecnico($query, $tecnicoId)
     {
         return $query->where('tecnico_id', $tecnicoId);
+    }
+
+    // URL pública de verificación en talentus-web
+    public function verificationUrl(): string
+    {
+        $base = config('app.talentus_web_url', 'https://talentus.pe');
+        return rtrim($base, '/') . '/verificar-orden/' . $this->verification_hash;
     }
 
     // Métodos de negocio

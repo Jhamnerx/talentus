@@ -136,6 +136,7 @@ class WorkOrderNotificationService
             ? $cliente->vehiculos()->count() <= 1
             : false;
 
+        $clienteEmoji = $esClienteNuevo ? '🆕' : '👤';
         $clienteLabel = $esClienteNuevo ? 'CLIENTE NUEVO' : 'CLIENTE';
 
         // Accesorios de metadata
@@ -153,44 +154,57 @@ class WorkOrderNotificationService
             ->setTimezone('America/Lima')
             ->translatedFormat('l d/m H:i A');
 
+        $sep = '─────────────────────';
+
+        // Placa + marca/modelo en una sola línea
+        $marcaModelo = trim(strtoupper($vehiculo->marca ?? '') . ' ' . strtoupper($vehiculo->modelo ?? ''));
+        $vehiculoLinea = strtoupper($vehiculo->placa ?? '-');
+        if ($marcaModelo) {
+            $vehiculoLinea .= ' — ' . $marcaModelo;
+        }
+
         $lineas = [
-            strtoupper($tipo->nombre ?? 'ORDEN DE TRABAJO') . ':',
+            '🔧 *ORDEN DE TRABAJO*',
             '',
-            "{$clienteLabel}: " . strtoupper($cliente->razon_social ?? '-'),
-            'RUC: '    . ($cliente->numero_documento ?? '-'),
-            'Correo: ' . ($cliente->email ?? '-'),
-            'PLACA: '  . strtoupper($vehiculo->placa ?? '-'),
+            '📋 *' . strtoupper($tipo->nombre ?? 'ORDEN') . '*',
+            $sep,
+            "{$clienteEmoji} *{$clienteLabel}:* " . strtoupper($cliente->razon_social ?? '-'),
+            '🪪 *RUC:* '    . ($cliente->numero_documento ?? '-'),
+            '📧 *Correo:* ' . ($cliente->email ?? '-'),
+            '🚗 *PLACA:* '  . $vehiculoLinea,
         ];
 
-        // Solo mostrar si tiene valor
         if (!empty($orden->sector) && $orden->sector !== '-') {
-            $lineas[] = 'SECTOR: ' . strtoupper($orden->sector);
+            $lineas[] = '📍 *SECTOR:* ' . strtoupper($orden->sector);
         }
         if (!empty($orden->plan) && $orden->plan !== '-') {
-            $lineas[] = 'PLAN: ' . strtoupper($orden->plan);
+            $lineas[] = '💳 *PLAN:* ' . strtoupper($orden->plan);
         }
 
-        // Marca y modelo del vehículo (no el campo "tipo" que guarda el color/categoría)
-        $marcaModelo = trim(
-            strtoupper($vehiculo->marca ?? '') . ' ' . strtoupper($vehiculo->modelo ?? '')
-        );
-        if ($marcaModelo) {
-            $lineas[] = 'VEHÍCULO: ' . $marcaModelo;
-        }
-
-        $lineas[] = 'TECNICO: '         . strtoupper($tecnico->name ?? '-');
-        $lineas[] = 'LUGAR Y FECHA: '   . strtoupper($fecha);
+        $lineas[] = $sep;
+        $lineas[] = '👷 *TÉCNICO:* '       . strtoupper($tecnico->name ?? '-');
+        $lineas[] = '📅 *LUGAR Y FECHA:* ' . strtoupper($fecha);
 
         if (!empty($orden->observaciones_inicial)) {
-            $lineas[] = 'CONSIDERACIONES: ' . strtoupper($orden->observaciones_inicial);
+            $lineas[] = '📝 *CONSIDERACIONES:* ' . strtoupper($orden->observaciones_inicial);
+        }
+
+        // Link de Google Maps si hay coordenadas registradas
+        if ($orden->ubicacion_lat && $orden->ubicacion_lng) {
+            $lineas[] = '🗺️ *UBICACIÓN:* https://maps.google.com/?q=' . $orden->ubicacion_lat . ',' . $orden->ubicacion_lng;
         }
 
         if (!empty($listaAcc)) {
-            $lineas[] = 'ACCESORIOS: ' . implode(', ', $listaAcc);
+            $lineas[] = $sep;
+            $lineas[] = '🔩 *ACCESORIOS:*';
+            foreach ($listaAcc as $acc) {
+                $lineas[] = '   • ' . $acc;
+            }
         }
 
         if ($orden->contacto) {
-            $lineas[] = 'CONTACTO: ' . $orden->contacto;
+            $lineas[] = $sep;
+            $lineas[] = '👋 *CONTACTO:* ' . $orden->contacto;
         }
 
         return implode("\n", $lineas);

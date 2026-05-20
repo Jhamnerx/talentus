@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\GpsController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LineasController;
 use App\Http\Controllers\Admin\MantenimientoController;
+use App\Http\Controllers\Admin\HistorialMantenimientosController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PaymentsController;
@@ -155,10 +156,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // COBROS (dentro del módulo de pagos)
     Route::controller(CobrosController::class)->group(function () {
-        Route::get('cobros/crear', 'create')->name('admin.cobros.create');
         Route::get('cobros', 'index')->name('admin.cobros.index');
-        Route::get('cobros-notificaciones', 'notificaciones')->name('admin.cobros.notificaciones');
-        Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
     });
 
     // PLANES DE SERVICIO
@@ -206,7 +204,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::controller(RecibosController::class)->group(function () {
         Route::get('recibos', 'index')->name('admin.ventas.recibos.index');
-        Route::get('recibos/crear/{notificacion_ids?}', 'create')->name('admin.ventas.recibos.create');
+        Route::get('recibos/crear/{periodo_ids?}', 'create')->name('admin.ventas.recibos.create');
         Route::get('recibos/{recibo}/editar', 'edit')->name('admin.ventas.recibos.edit');
     });
 
@@ -255,8 +253,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     // Historial de mantenimientos / suspensiones / reactivaciones (desde tracking)
-    Route::get('historial-mantenimientos', \App\Livewire\Admin\Vehiculos\HistorialMantenimientos::class)
-        ->name('admin.vehiculos.historial-mantenimientos.index');
+    Route::controller(HistorialMantenimientosController::class)->group(function () {
+        Route::get('historial-mantenimientos', 'index')->name('admin.vehiculos.historial-mantenimientos.index');
+    });
 
 
     // CERTIFICADOS
@@ -388,8 +387,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(ComprobantesController::class)->group(function () {
 
         Route::get('ventas', 'index')->name('admin.ventas.index');
-        Route::get('emitir/factura/{notificacion_ids?}', 'emitirFactura')->name('admin.factura.create');
-        Route::get('emitir/boleta/{notificacion_ids?}', 'emitirBoleta')->name('admin.boleta.create');
+        Route::get('emitir/factura/{periodo_ids?}', 'emitirFactura')->name('admin.factura.create');
+        Route::get('emitir/boleta/{periodo_ids?}', 'emitirBoleta')->name('admin.boleta.create');
         Route::get('emitir/nota-venta', 'emitirNotaVenta')->name('admin.nota.venta.create');
         Route::get('emitir/nota-credito', 'emitirNotaCredito')->name('admin.nota.credito.create');
         Route::get('emitir/nota-debito', 'emitirNotaDebito')->name('admin.nota.debito.create');

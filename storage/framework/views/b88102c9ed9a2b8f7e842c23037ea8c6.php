@@ -557,26 +557,6 @@
 
                                     
                                     <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.cobros.notificaciones')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
-                                            href="<?php echo e(route('admin.cobros.notificaciones')); ?>">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 flex items-center gap-2">
-                                                🔔 Notificaciones
-                                                <?php
-                                                    $pendientesCount = \App\Models\NotificacionCobro::pendientes()->count();
-                                                ?>
-                                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($pendientesCount > 0): ?>
-                                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                                                        <?php echo e($pendientesCount); ?>
-
-                                                    </span>
-                                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                                            </span>
-                                        </a>
-                                    </li>
-
-                                    
-                                    <li class="mb-1 last:mb-0">
                                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  <?php if(Route::is('admin.planes.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
                                             href="<?php echo e(route('admin.planes.index')); ?>">
                                             <span

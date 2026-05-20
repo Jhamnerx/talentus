@@ -2,24 +2,30 @@
 
 namespace App\Livewire\Admin\Cobros;
 
+use App\Enums\CobroEstado;
+use App\Exports\CobrosExport;
 use App\Models\Cobros;
-use App\Models\DetalleCobros;
+use App\Models\PeriodoCobro;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 use WireUi\Traits\WireUiActions;
 
 class Index extends Component
 {
     use WithPagination, WithoutUrlPagination, WireUiActions;
 
-    public $search;
+    public $search = '';
     public $estado;
     public $filtroFecha;
     public $filtroVencimiento;
     public $clienteId;
     public $perPage = 15;
+
+    // Multi-selección para cobrar
+    public array $selected = [];
 
     protected $listeners = [
         'render'
@@ -27,118 +33,108 @@ class Index extends Component
 
     public function render()
     {
-        $hoy = Carbon::now();
-        $fechaLimiteProximos7 = $hoy->copy()->addDays(7);
-        $fechaFinMes = $hoy->copy()->endOfMonth();
-        $fechaProximoMes = $hoy->copy()->addMonth();
+        $hoy = Carbon::today();
 
-        // Obtener detalles con sus relaciones
-        $detalles = DetalleCobros::query()
+        $cobros = Cobros::query()
             ->with([
-                'vehiculo.cliente',
-                'vehiculo.planSubscriptions.plan',
-                'cobro.clientes.contactos',
+                'vehiculo',
+                'clientes.contactos',
                 'plan',
-                'subscription.plan',
-                'notificaciones.venta.payments.paymentMethod',
-                'notificaciones.recibo.payments.paymentMethod',
+                'periodos' => fn($q) => $q->latest('fecha_fin')->limit(3),
             ])
-            // Excluir detalles de cobros eliminados
-            ->whereHas('cobro', function ($query) {
-                $query->whereNull('deleted_at');
-            })
-            // Filtro por cliente específico
-            ->when($this->clienteId, function ($query) {
-                $query->whereHas('cobro.clientes', function ($cliente) {
-                    $cliente->where('id', $this->clienteId);
-                });
-            })
+            ->when($this->clienteId, fn($q) => $q->where('clientes_id', $this->clienteId))
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    // Búsqueda por cliente
-                    $q->whereHas('cobro.clientes', function ($cliente) {
-                        $cliente->where('razon_social', 'like', '%' . $this->search . '%')
-                            ->orWhereHas('contactos', function ($contacto) {
-                                $contacto->where('nombre', 'like', '%' . $this->search . '%');
-                            });
-                    })
-                        // Búsqueda por placa
-                        ->orWhereHas('vehiculo', function ($vehiculo) {
-                            $vehiculo->where('placa', 'like', '%' . $this->search . '%');
+                    $q->whereHas('vehiculo', fn($v) => $v->where('placa', 'like', '%' . $this->search . '%'))
+                        ->orWhereHas('clientes', function ($c) {
+                            $c->where('razon_social', 'like', '%' . $this->search . '%')
+                                ->orWhereHas('contactos', fn($ct) => $ct->where('nombre', 'like', '%' . $this->search . '%'));
                         });
                 });
             })
-            // Filtro por estado del detalle
-            ->when($this->estado !== null, function ($query) {
-                $query->where('estado', $this->estado);
-            })
-            // FILTROS DE REGISTROS (cobros creados)
-            ->when($this->filtroFecha === 'registrados_7dias', function ($query) use ($hoy) {
-                $query->whereHas('cobro', function ($cobro) use ($hoy) {
-                    $cobro->whereBetween('created_at', [$hoy->copy()->subDays(7), $hoy]);
-                });
-            })
-            ->when($this->filtroFecha === 'registrados_mes', function ($query) use ($hoy) {
-                $query->whereHas('cobro', function ($cobro) use ($hoy) {
-                    $cobro->whereBetween('created_at', [$hoy->copy()->startOfMonth(), $hoy]);
-                });
-            })
-            // FILTROS DE VENCIMIENTO (por ends_at de la suscripción del vehículo)
-            ->when($this->filtroVencimiento === 'vencen_7dias', function ($query) use ($hoy, $fechaLimiteProximos7) {
-                $query->where('estado', 1)
-                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy, $fechaLimiteProximos7) {
-                        $q->whereNull('canceled_at')
-                            ->whereBetween('ends_at', [
-                                $hoy->copy()->startOfDay(),
-                                $fechaLimiteProximos7->copy()->endOfDay(),
-                            ]);
-                    });
-            })
-            ->when($this->filtroVencimiento === 'vencen_fin_mes', function ($query) use ($hoy, $fechaFinMes) {
-                $query->where('estado', 1)
-                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy, $fechaFinMes) {
-                        $q->whereNull('canceled_at')
-                            ->whereBetween('ends_at', [
-                                $hoy->copy()->startOfDay(),
-                                $fechaFinMes->copy()->endOfDay(),
-                            ]);
-                    });
-            })
-            ->when($this->filtroVencimiento === 'vencen_proximo_mes', function ($query) use ($hoy, $fechaProximoMes) {
-                $query->where('estado', 1)
-                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy, $fechaProximoMes) {
-                        $q->whereNull('canceled_at')
-                            ->whereBetween('ends_at', [
-                                $hoy->copy()->startOfDay(),
-                                $fechaProximoMes->copy()->endOfDay(),
-                            ]);
-                    });
-            })
-            ->when($this->filtroVencimiento === 'vencidos', function ($query) use ($hoy) {
-                $query->where('estado', 1)
-                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy) {
-                        $q->whereNull('canceled_at')
-                            ->where('ends_at', '<', $hoy->copy()->startOfDay());
-                    });
-            })
-            // Ordenar por cliente → cobro → fecha_vencimiento para mantener agrupación visual
-            // sin que el mismo cobro aparezca en filas no contiguas
-            ->orderByRaw('(
-                SELECT co.clientes_id
-                FROM cobros co
-                WHERE co.id = detalles_cobros.cobros_id
-                LIMIT 1
-            ) ASC')
-            ->orderBy('detalles_cobros.cobros_id', 'asc')
-            ->orderBy('detalles_cobros.fecha_vencimiento', 'asc')
+            ->when($this->estado !== null, fn($q) => $q->where('estado', $this->estado))
+            ->when($this->filtroFecha === 'registrados_7dias', fn($q) => $q->where('created_at', '>=', $hoy->copy()->subDays(7)))
+            ->when($this->filtroFecha === 'registrados_mes', fn($q) => $q->whereBetween('created_at', [$hoy->copy()->startOfMonth(), $hoy]))
+            ->when($this->filtroVencimiento === 'vencen_7dias', fn($q) => $q->where('estado', CobroEstado::ACTIVO)->whereBetween('fecha_vencimiento', [$hoy, $hoy->copy()->addDays(7)]))
+            ->when($this->filtroVencimiento === 'vencen_fin_mes', fn($q) => $q->where('estado', CobroEstado::ACTIVO)->whereBetween('fecha_vencimiento', [$hoy, $hoy->copy()->endOfMonth()]))
+            ->when($this->filtroVencimiento === 'vencen_proximo_mes', fn($q) => $q->where('estado', CobroEstado::ACTIVO)->whereBetween('fecha_vencimiento', [$hoy, $hoy->copy()->addMonth()]))
+            ->when($this->filtroVencimiento === 'vencidos', fn($q) => $q->where('estado', CobroEstado::ACTIVO)->where('fecha_vencimiento', '<', $hoy))
+            ->orderBy('clientes_id', 'asc')
+            ->orderBy('fecha_vencimiento', 'asc')
             ->paginate($this->perPage);
 
-        return view('livewire.admin.cobros.index', compact('detalles'));
+        return view('livewire.admin.cobros.index', compact('cobros'));
+    }
+
+    public function cobrarSeleccionados(): void
+    {
+        if (empty($this->selected)) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: 'Sin selección',
+                mensaje: 'Selecciona al menos un vehículo',
+            );
+            return;
+        }
+
+        // Solo el último período PENDIENTE por cobro
+        $periodos = collect($this->selected)->map(
+            fn($cobroId) => PeriodoCobro::where('cobros_id', $cobroId)
+                ->where('estado', 'PENDIENTE')
+                ->orderByDesc('fecha_inicio')
+                ->first()
+        )->filter()->values();
+
+        if ($periodos->isEmpty()) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: 'Sin períodos pendientes',
+                mensaje: 'Los vehículos seleccionados no tienen períodos pendientes de facturar',
+            );
+            return;
+        }
+
+        $primerCobro = Cobros::withoutGlobalScopes()->with('clientes')->find($this->selected[0]);
+        $tipo    = $primerCobro->tipo_pago ?? 'FACTURA';
+        $cliente = $primerCobro->clientes;
+
+        $periodoIdsJson = $periodos->pluck('id')->toJson();
+
+        session(['cobro_redirect_back' => route('admin.cobros.index')]);
+
+        if ($tipo === 'RECIBO') {
+            $this->redirect(
+                route('admin.ventas.recibos.create', ['periodo_ids' => $periodoIdsJson]),
+                navigate: true
+            );
+            return;
+        }
+
+        if (($cliente?->tipo_documento_id ?? null) == 6) {
+            $this->redirect(
+                route('admin.factura.create', ['periodo_ids' => $periodoIdsJson]),
+                navigate: true
+            );
+            return;
+        }
+
+        $this->redirect(
+            route('admin.boleta.create', ['periodo_ids' => $periodoIdsJson]),
+            navigate: true
+        );
+    }
+
+    public function clearSelected(): void
+    {
+        $this->selected = [];
     }
 
     public function setEstado($estado = null)
     {
         $this->estado = $estado;
+        $this->resetPage();
     }
 
     public function updatingSearch()
@@ -174,35 +170,30 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function openModalDelete(Cobros $cobro)
+    public function cambiarEstado(Cobros $cobro): void
     {
-        $this->dispatch('openModalDelete', $cobro);
+        $cobro->estado = $cobro->estado === CobroEstado::ACTIVO
+            ? CobroEstado::CANCELADO
+            : CobroEstado::ACTIVO;
+        $cobro->save();
+
+        $this->dispatch(
+            'notify-toast',
+            icon: $cobro->estado === CobroEstado::ACTIVO ? 'success' : 'warning',
+            title: $cobro->estado === CobroEstado::ACTIVO ? 'ACTIVADO' : 'CANCELADO',
+            mensaje: 'Estado del cobro actualizado correctamente',
+        );
     }
 
-    public function cambiarEstado(DetalleCobros $detalleCobros)
+    public function exportar()
     {
-        $nuevoEstado = !$detalleCobros->estado;
-
-        $detalleCobros->estado = $nuevoEstado;
-        $detalleCobros->save();
-
-        // Gestionar la suscripción asociada al detalle
-        $subscription = $detalleCobros->subscription
-            ?? $detalleCobros->vehiculo?->planSubscription('gps-tracking');
-
-        if ($subscription) {
-            if (!$nuevoEstado) {
-                // Desactivar → cancelar suscripción (mantiene ends_at para referencia)
-                $subscription->cancel();
-            } else {
-                // Activar → reactivar suscripción
-                $subscription->forceFill(['canceled_at' => null])->save();
-            }
-        }
-    }
-
-    public function createInvoice(Cobros $cobro): void
-    {
-        $this->dispatch('open-modal-create-invoice', cobro: $cobro);
+        $nombre = 'cobros_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new CobrosExport(
+            search: $this->search,
+            estado: $this->estado,
+            clienteId: $this->clienteId,
+            filtroFecha: $this->filtroFecha,
+            filtroVencimiento: $this->filtroVencimiento,
+        ), $nombre);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Livewire\Admin\Ventas\Recibos;
 
 use App\Models\Dispositivos;
-use App\Models\NotificacionCobro;
+use App\Models\PeriodoCobro;
 use App\Models\Recibos;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
@@ -38,15 +38,15 @@ class EliminarRecibo extends Component
             ])
             ->toArray();
 
-        // Cargar notificación de cobro vinculada (si existe)
-        $notif = NotificacionCobro::where('recibo_id', $recibo->id)->first();
-        $this->notificacion = $notif
+        // Cargar período de cobro vinculado (si existe)
+        $periodo = PeriodoCobro::where('recibo_id', $recibo->id)->first();
+        $this->notificacion = $periodo
             ? [
-                'id'           => $notif->id,
-                'descripcion'  => $notif->descripcion,
-                'monto'        => number_format($notif->monto, 2),
-                'moneda'       => $notif->moneda,
-                'vencimiento'  => $notif->fecha_vencimiento?->format('d/m/Y') ?? '-',
+                'id'           => $periodo->id,
+                'descripcion'  => $periodo->observaciones ?? ('Período ' . strtolower($periodo->periodo)),
+                'monto'        => number_format($periodo->monto, 2),
+                'moneda'       => $periodo->divisa,
+                'vencimiento'  => $periodo->fecha_fin?->format('d/m/Y') ?? '-',
             ]
             : null;
 
@@ -73,9 +73,9 @@ class EliminarRecibo extends Component
             Dispositivos::whereIn('id', $dispositivosIds)->update(['estado' => Dispositivos::STOCK]);
         }
 
-        // Revertir NotificacionesCobro vinculadas al recibo
-        NotificacionCobro::where('recibo_id', $this->recibo->id)
-            ->each(fn($n) => $n->resetFacturacion());
+        // Revertir PeriodosCobro vinculados al recibo
+        PeriodoCobro::where('recibo_id', $this->recibo->id)
+            ->each(fn($p) => $p->resetFacturacion());
 
         // Soft-delete de los pagos asociados
         $this->recibo->payments()->delete();

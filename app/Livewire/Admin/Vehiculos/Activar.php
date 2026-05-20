@@ -4,7 +4,7 @@ namespace App\Livewire\Admin\Vehiculos;
 
 use Livewire\Component;
 use App\Models\Vehiculos;
-use App\Models\DetalleCobros;
+use App\Models\Cobros;
 use App\Models\Lineas;
 use App\Models\Dispositivos;
 use Livewire\Attributes\On;
@@ -34,7 +34,7 @@ class Activar extends Component
     public function openModal(Vehiculos $vehiculo): void
     {
         $this->vehiculo = $vehiculo;
-        $this->tieneDetalleCobro = DetalleCobros::where('vehiculo_id', $vehiculo->id)->exists();
+        $this->tieneDetalleCobro = Cobros::where('vehiculos_id', $vehiculo->id)->exists();
 
         // Pre-cargar última línea conocida
         $this->numero = $vehiculo->old_numero;
@@ -191,10 +191,10 @@ class Activar extends Component
             $this->vehiculo->sincronizarDispositivos($this->dispositivos, $this->dispositivo_principal);
         }
 
-        // Reactivar DetalleCobros inactivos
-        DetalleCobros::where('vehiculo_id', $this->vehiculo->id)
-            ->where('estado', false)
-            ->update(['estado' => true]);
+        // Reactivar Cobros suspendidos del vehículo
+        Cobros::where('vehiculos_id', $this->vehiculo->id)
+            ->where('estado', 'SUSPENDIDO')
+            ->update(['estado' => 'ACTIVO']);
 
         // Reactivar suscripción cancelada
         $subscription = $this->vehiculo->planSubscription('gps-tracking');

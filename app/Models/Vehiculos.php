@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\EmpresaScope;
+use App\Models\Cobros;
 use Spatie\Activitylog\LogOptions;
 use App\Observers\VehiculosObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -144,14 +145,9 @@ class Vehiculos extends Model
         return $this->hasOne(Lineas::class, 'numero', 'numero')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
-    public function detalleCobro()
+    public function cobro()
     {
-        return $this->belongsTo(DetalleCobros::class, 'vehiculo_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
-    }
-
-    public function detallesCobros()
-    {
-        return $this->hasMany(DetalleCobros::class, 'vehiculo_id')->withoutGlobalScope(EmpresaScope::class);
+        return $this->hasOne(Cobros::class, 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     public function dispositivos()

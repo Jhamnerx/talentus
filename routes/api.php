@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ConsultasApiController;
 use App\Http\Controllers\Api\ContactoApiController;
 use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\WorkOrderTrackingController;
+use App\Http\Controllers\Api\PublicWorkOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,18 @@ Route::prefix('auth')->name('api.auth.')->middleware('auth:sanctum')->group(func
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+/*
+|--------------------------------------------------------------------------
+| ENDPOINTS PÚBLICOS (sin autenticación)
+|--------------------------------------------------------------------------
+| Usados por talentus-web para verificación de órdenes de trabajo.
+*/
+
+Route::prefix('public')->name('api.public.')->group(function () {
+    Route::get('work-orders/{hash}', [PublicWorkOrderController::class, 'show'])->name('work-orders.show');
+    Route::post('work-orders/{hash}/verify', [PublicWorkOrderController::class, 'verify'])->name('work-orders.verify');
 });
 
 /*

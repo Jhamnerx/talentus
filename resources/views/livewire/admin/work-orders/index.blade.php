@@ -232,51 +232,198 @@
                                 class="px-2 py-1 text-xs font-semibold rounded-full {{ $orden->estado->statusColor() }}">
                                 {{ $orden->estado->label() }}
                             </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                            <x-form.button xs icon="eye" wire:click="verDetalle({{ $orden->id }})" flat />
-
-                            @if ($orden->estado->value === 'pendiente')
-                                <x-form.button xs icon="play" wire:click="iniciarOrden({{ $orden->id }})"
-                                    primary />
+                            @if ($orden->verification_status === 'verified')
+                                <div class="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+                                    title="Verificado por el cliente el {{ $orden->verified_at?->format('d/m/Y H:i') }}">
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Verificado
+                                </div>
+                            @elseif ($orden->verification_status === 'rejected')
+                                <div class="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                                    title="Problema reportado el {{ $orden->verified_at?->format('d/m/Y H:i') }}{{ $orden->verification_notes ? ': ' . $orden->verification_notes : '' }}">
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                                    </svg>
+                                    Problema
+                                </div>
                             @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            @php
+                                try {
+                                    $mensajeWA = app(\App\Services\WorkOrderNotificationService::class)->formatMensaje(
+                                        $orden,
+                                    );
+                                } catch (\Throwable $e) {
+                                    $mensajeWA = '';
+                                }
+                                $verificationUrl = $orden->verification_hash
+                                    ? config('app.talentus_web_url', '') .
+                                        '/verificar-orden/' .
+                                        $orden->verification_hash
+                                    : '';
+                                $verificationMsg = $verificationUrl
+                                    ? "✅ *Orden de Trabajo Finalizada*\n\n📋 *Tipo:* {$orden->tipo?->nombre}\n" .
+                                        ($orden->cliente?->razon_social
+                                            ? "👤 *Cliente:* {$orden->cliente->razon_social}\n"
+                                            : '') .
+                                        ($orden->vehiculo?->placa ? "🚗 *Vehículo:* {$orden->vehiculo->placa}\n" : '') .
+                                        "\nPuede revisar y verificar el servicio realizado en el siguiente enlace:\n🔗 {$verificationUrl}"
+                                    : '';
+                            @endphp
+                            <div class="flex items-center gap-1" x-data="{ copiadoWA: false, copiadoLink: false }">
 
-                            {{-- Botón WA: verde si ya enviado, amarillo si pendiente, solo en pendiente/en_proceso --}}
-                            @if (in_array($orden->estado->value, ['pendiente', 'en_proceso']))
-                                @if ($orden->wa_message_id)
-                                    {{-- Ya enviado: botón verde para reenviar --}}
-                                    <button wire:click="reenviarNotificacionWA({{ $orden->id }})"
-                                        title="Reenviar notificación WA (ya enviada anteriormente)"
-                                        class="inline-flex items-center justify-center w-7 h-7 rounded text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition cursor-pointer">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                            <path
-                                                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L0 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                                {{-- Ver detalle --}}
+                                <x-form.button xs icon="eye" wire:click="verDetalle({{ $orden->id }})" flat
+                                    title="Ver detalle" />
+
+                                {{-- Iniciar (solo pendiente) --}}
+                                @if ($orden->estado->value === 'pendiente')
+                                    <x-form.button xs icon="play" wire:click="iniciarOrden({{ $orden->id }})"
+                                        primary title="Iniciar orden" />
+                                @endif
+
+                                {{-- Eliminar (solo pendiente sin relaciones, admin) --}}
+                                @if ($orden->estado->value === 'pendiente' && auth()->user()->hasRole('admin'))
+                                    @if ($eliminarOrdenId === $orden->id)
+                                        <span class="inline-flex items-center gap-0.5">
+                                            <button wire:click="eliminarOrden({{ $orden->id }})"
+                                                title="Confirmar eliminación"
+                                                class="inline-flex items-center justify-center w-7 h-7 rounded text-white bg-red-600 hover:bg-red-700 transition cursor-pointer">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </button>
+                                            <button wire:click="$set('eliminarOrdenId', null)" title="Cancelar"
+                                                class="inline-flex items-center justify-center w-7 h-7 rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    @else
+                                        <button wire:click="$set('eliminarOrdenId', {{ $orden->id }})"
+                                            title="Eliminar orden"
+                                            class="inline-flex items-center justify-center w-7 h-7 rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition cursor-pointer">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    @endif
+                                @endif
+
+                                {{-- Cancelar (admin, si no está bloqueada ni ya cancelada) --}}
+                                @if (auth()->user()->hasRole('admin') && !$orden->bloqueado && $orden->estado->value !== 'cancelado')
+                                    <button wire:click="abrirModalCancelar({{ $orden->id }})"
+                                        title="Cancelar orden"
+                                        class="inline-flex items-center justify-center w-7 h-7 rounded text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition cursor-pointer">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                         </svg>
                                     </button>
-                                @else
-                                    {{-- No enviado aún: botón amarillo --}}
+                                @endif
+
+                                {{-- Enviar / Reenviar WA al técnico (pendiente/en_proceso) --}}
+                                @if (in_array($orden->estado->value, ['pendiente', 'en_proceso']))
                                     <button wire:click="reenviarNotificacionWA({{ $orden->id }})"
-                                        title="Enviar notificación WA al técnico"
-                                        class="inline-flex items-center justify-center w-7 h-7 rounded text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition cursor-pointer">
+                                        title="{{ $orden->wa_message_id ? 'Reenviar notificación WA (ya enviada)' : 'Enviar notificación WA al técnico' }}"
+                                        class="inline-flex items-center justify-center w-7 h-7 rounded {{ $orden->wa_message_id ? 'text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20' : 'text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20' }} transition cursor-pointer">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L0 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                                         </svg>
                                     </button>
                                 @endif
-                            @endif
 
-                            @if (in_array($orden->estado->value, ['finalizado', 'cancelado']) || $orden->bloqueado)
-                                <a href="{{ route('admin.work-orders.pdf', $orden) }}" target="_blank"
-                                    class="inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                    </svg>
-                                    PDF
-                                </a>
-                            @endif
+                                {{-- Copiar mensaje WA para el técnico --}}
+                                @if ($mensajeWA)
+                                    <button
+                                        @click="
+                                            const copiar = (t) => {
+                                                if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+                                                const ta = document.createElement('textarea');
+                                                ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
+                                                document.body.appendChild(ta); ta.focus(); ta.select();
+                                                document.execCommand('copy'); document.body.removeChild(ta);
+                                                return Promise.resolve();
+                                            };
+                                            copiar(@js($mensajeWA)).then(() => { copiadoWA = true; setTimeout(() => copiadoWA = false, 2500); });
+                                        "
+                                        :title="copiadoWA ? '¡Copiado!' : 'Copiar mensaje WA al técnico'"
+                                        :class="copiadoWA ? 'text-emerald-600 bg-emerald-50' :
+                                            'text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20'"
+                                        class="inline-flex items-center justify-center w-7 h-7 rounded transition cursor-pointer">
+                                        <svg x-show="!copiadoWA" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        <svg x-show="copiadoWA" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
+                                @endif
+
+                                {{-- Descargar PDF --}}
+                                @if (in_array($orden->estado->value, ['finalizado', 'cancelado']) || $orden->bloqueado)
+                                    <a href="{{ route('admin.work-orders.pdf', $orden) }}" target="_blank"
+                                        title="Descargar PDF de la orden"
+                                        class="inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                        PDF
+                                    </a>
+                                @endif
+
+                                {{-- Copiar enlace de verificación para el cliente --}}
+                                @if ($verificationMsg)
+                                    <button
+                                        @click="
+                                            const copiar = (t) => {
+                                                if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+                                                const ta = document.createElement('textarea');
+                                                ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
+                                                document.body.appendChild(ta); ta.focus(); ta.select();
+                                                document.execCommand('copy'); document.body.removeChild(ta);
+                                                return Promise.resolve();
+                                            };
+                                            copiar(@js($verificationMsg)).then(() => { copiadoLink = true; setTimeout(() => copiadoLink = false, 2500); });
+                                        "
+                                        :title="copiadoLink ? '¡Copiado!' : 'Copiar enlace de verificación para el cliente'"
+                                        :class="copiadoLink ? 'text-emerald-600 bg-emerald-50' :
+                                            'text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/20'"
+                                        class="inline-flex items-center justify-center w-7 h-7 rounded transition cursor-pointer">
+                                        <svg x-show="!copiadoLink" class="w-4 h-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                        <svg x-show="copiadoLink" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
+                                @endif
+
+                            </div>
                         </td>
                     </tr>
                 @empty
@@ -560,5 +707,30 @@
             </x-slot>
         </x-form.modal.card>
     @endrole
+
+    {{-- Modal: Cancelar Orden --}}
+    <x-form.modal.card title="Cancelar Orden de Trabajo" wire:model="modalCancelar" blur>
+        <div class="space-y-4">
+            <div class="flex items-start gap-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                <svg class="w-5 h-5 text-orange-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p class="text-sm text-orange-700 dark:text-orange-300">
+                    Esta acción cancelará y bloqueará la orden de trabajo permanentemente. No podrá ser reabierta.
+                </p>
+            </div>
+            <x-form.textarea wire:model="motivoCancelacion" label="Motivo de cancelación"
+                placeholder="Describe el motivo por el que se cancela esta orden..." rows="3" required />
+        </div>
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+                <x-form.button flat label="Cerrar" wire:click="$set('modalCancelar', false)" />
+                <x-form.button negative label="Confirmar cancelación" wire:click="cancelarOrden"
+                    spinner="cancelarOrden" icon="no-symbol" />
+            </div>
+        </x-slot>
+    </x-form.modal.card>
 
 </div>

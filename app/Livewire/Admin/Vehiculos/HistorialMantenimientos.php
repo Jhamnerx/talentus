@@ -93,6 +93,6 @@ class HistorialMantenimientos extends Component
         return view('livewire.admin.vehiculos.historial-mantenimientos', [
             'registros' => $registros,
             'vehiculos' => $vehiculos,
-        ])->title('Historial de Mantenimientos');
+        ]);
     }
 }

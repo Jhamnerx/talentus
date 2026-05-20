@@ -35,6 +35,14 @@ class Index extends Component
     // Dispositivo WA seleccionado para enviar notificaciones
     public ?int $selectedWaDeviceId = null;
 
+    // Modal cancelar orden
+    public bool $modalCancelar = false;
+    public ?int $cancelarOrdenId = null;
+    public string $motivoCancelacion = '';
+
+    // Confirmar eliminar
+    public ?int $eliminarOrdenId = null;
+
     public function mount(): void
     {
         $this->authorize('ver-work_order');
@@ -115,10 +123,7 @@ class Index extends Component
             ? WhatsappGroup::where('user_id', auth()->id())->orderBy('name')->get()
             : collect();
 
-        return view(
-            'livewire.admin.work-orders.index',
-            compact('stats', 'ordenes', 'tipos', 'waDevice', 'waDevices', 'tecnicos', 'ciudades', 'waGroups')
-        );
+        return view('livewire.admin.work-orders.index', compact('stats', 'ordenes', 'tipos', 'waDevice', 'waDevices', 'tecnicos', 'ciudades', 'waGroups'));
     }
 
     public function openCreateModal()
@@ -173,15 +178,55 @@ class Index extends Component
         }
     }
 
-    public function cancelarOrden($ordenId, $motivo)
+    public function abrirModalCancelar(int $ordenId): void
     {
+        $this->cancelarOrdenId   = $ordenId;
+        $this->motivoCancelacion = '';
+        $this->modalCancelar     = true;
+    }
+
+    public function cancelarOrden(): void
+    {
+        $this->validate(['motivoCancelacion' => 'required|min:5'], [
+            'motivoCancelacion.required' => 'El motivo de cancelación es obligatorio.',
+            'motivoCancelacion.min'      => 'El motivo debe tener al menos 5 caracteres.',
+        ]);
+
         try {
-            $orden = WorkOrder::findOrFail($ordenId);
-            $orden->cancelar($motivo);
-            $this->notification()->success('ORDEN CANCELADA', "Orden {$orden->id} cancelada correctamente");
+            $orden = WorkOrder::findOrFail($this->cancelarOrdenId);
+            $orden->cancelar($this->motivoCancelacion);
+            $this->modalCancelar = false;
+            $this->notification()->success('ORDEN CANCELADA', "Orden #{$orden->id} cancelada correctamente");
         } catch (\Exception $e) {
             $this->notification()->error('ERROR', $e->getMessage());
         }
+    }
+
+    public function eliminarOrden(int $ordenId): void
+    {
+        $orden = WorkOrder::findOrFail($ordenId);
+
+        if ($orden->estado->value !== 'pendiente') {
+            $this->notification()->error('NO PERMITIDO', 'Solo se pueden eliminar órdenes en estado pendiente.');
+            return;
+        }
+
+        // Verificar si tiene relaciones dependientes
+        $tieneRelaciones = $orden->deviceHistory()->exists()
+            || $orden->checklists()->exists()
+            || $orden->photos()->exists()
+            || $orden->signatures()->exists()
+            || $orden->accessories()->exists();
+
+        if ($tieneRelaciones) {
+            $this->notification()->error('NO PERMITIDO', 'La orden tiene datos asociados (checklist, fotos, firmas o accesorios) y no puede eliminarse.');
+            return;
+        }
+
+        $id = $orden->id;
+        $orden->delete();
+        $this->eliminarOrdenId = null;
+        $this->notification()->success('ELIMINADO', "Orden #{$id} eliminada correctamente");
     }
 
     public function updatingSearch()

@@ -685,24 +685,20 @@
                                         </button>
                                     @endif
 
-                                    {{-- Cobros vinculados al vehículo --}}
-                                    @if ($vehiculo->detallesCobros->isNotEmpty())
+                                    {{-- Cobro vinculado al vehículo --}}
+                                    @if ($vehiculo->cobro)
+                                        @php $cobroVeh = $vehiculo->cobro; @endphp
                                         <div class="mt-1.5 flex flex-wrap justify-center gap-1">
-                                            @foreach ($vehiculo->detallesCobros as $det)
-                                                @if ($det->cobro)
-                                                    <a href="{{ route('admin.cobros.edit', $det->cobro) }}"
-                                                        title="Cobro #{{ $det->cobros_id }} — {{ $det->periodo }}"
-                                                        @class([
-                                                            'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold transition',
-                                                            'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200' =>
-                                                                $det->estado == 1,
-                                                            'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-gray-200 line-through' =>
-                                                                $det->estado == 0,
-                                                        ])>
-                                                        {{ $det->periodo ?? '—' }}
-                                                    </a>
-                                                @endif
-                                            @endforeach
+                                            <a href="{{ route('admin.cobros.index') }}"
+                                                title="Cobro #{{ $cobroVeh->id }} — {{ $cobroVeh->periodo }}"
+                                                @class([
+                                                    'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold transition',
+                                                    'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200' =>
+                                                        $cobroVeh->es_activo,
+                                                    'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-gray-200 line-through' => !$cobroVeh->es_activo,
+                                                ])>
+                                                {{ $cobroVeh->periodo ?? '—' }}
+                                            </a>
                                         </div>
                                     @endif
                                 </td>
