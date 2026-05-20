@@ -18,6 +18,11 @@ class Index extends Component
     public $from = '';
     public $to = '';
 
+    public function mount(): void
+    {
+        $this->authorize('ver-ticket');
+    }
+
     protected $listeners = [
         'render' => 'render',
         'update-table' => 'render',

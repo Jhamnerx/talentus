@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Ventas\Recibos;
 
-use App\Models\NotificacionCobro;
+use App\Models\PeriodoCobro;
 use App\Models\Recibos;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\On;
@@ -41,15 +41,15 @@ class ConfirmarEstadoRecibo extends Component
                 ])
                 ->toArray();
 
-            // Cobro vinculado
-            $notif = NotificacionCobro::where('recibo_id', $recibo->id)->first();
-            $this->notificacion = $notif
+            // Período de cobro vinculado
+            $periodo = PeriodoCobro::where('recibo_id', $recibo->id)->first();
+            $this->notificacion = $periodo
                 ? [
-                    'id'          => $notif->id,
-                    'descripcion' => $notif->descripcion,
-                    'monto'       => number_format($notif->monto, 2),
-                    'moneda'      => $notif->moneda,
-                    'vencimiento' => $notif->fecha_vencimiento?->format('d/m/Y') ?? '-',
+                    'id'          => $periodo->id,
+                    'descripcion' => $periodo->observaciones ?? ('Período ' . strtolower($periodo->periodo)),
+                    'monto'       => number_format($periodo->monto, 2),
+                    'moneda'      => $periodo->divisa,
+                    'vencimiento' => $periodo->fecha_fin?->format('d/m/Y') ?? '-',
                 ]
                 : null;
         } else {
@@ -75,9 +75,9 @@ class ConfirmarEstadoRecibo extends Component
         }
 
         if ($this->accion === 'anular') {
-            // Revertir NotificacionesCobro vinculadas
-            NotificacionCobro::where('recibo_id', $this->recibo->id)
-                ->each(fn($n) => $n->resetFacturacion());
+            // Revertir PeriodosCobro vinculados
+            PeriodoCobro::where('recibo_id', $this->recibo->id)
+                ->each(fn($p) => $p->resetFacturacion());
 
             // Soft-delete de los pagos asociados
             $this->recibo->payments()->delete();

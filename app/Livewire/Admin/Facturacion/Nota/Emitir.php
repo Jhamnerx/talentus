@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 use App\Models\Comprobantes;
 use App\Models\NotaDebito;
-use App\Models\NotificacionCobro;
+use App\Models\PeriodoCobro;
 
 class Emitir extends Component
 {
@@ -456,9 +456,9 @@ class Emitir extends Component
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $nota->getSerie->increment('correlativo');
 
-            // Revertir NotificacionesCobro vinculadas a la venta de referencia
-            NotificacionCobro::where('venta_id', $nota->invoice_id)
-                ->each(fn($n) => $n->resetFacturacion());
+            // Revertir PeriodosCobro vinculados a la venta de referencia
+            PeriodoCobro::where('venta_id', $nota->invoice_id)
+                ->each(fn($p) => $p->resetFacturacion());
 
             $api = new ApiFacturacion();
             $respuesta = $api->emitirNota($nota, $this->tipo_comprobante_id);

@@ -9,11 +9,10 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Search form -->
-            <form class="relative">
+            <form class="relative" @submit.prevent>
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
-                    placeholder="Buscar lineas" />
-
+                <input wire:model.live.debounce.500ms="search" class="form-input pl-9 focus:border-slate-300"
+                    type="search" placeholder="Buscar lineas" />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
@@ -117,48 +116,31 @@
                     <button wire:click.prevent="SetOperador()"
                         :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-smduration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                         Todas
                     </button>
                 </li>
+                @foreach ($operadoresList as $opBtn)
+                    <li class="m-1">
+                        <button wire:click.prevent="SetOperador({{ $opBtn->id }})"
+                            :class="clickeado === {{ $opBtn->id }} && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                            @click="clickeado = {{ $opBtn->id }}"
+                            class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
+                            {{ strtoupper($opBtn->name) }}
+                        </button>
+                    </li>
+                @endforeach
                 <li class="m-1">
-                    <button wire:click.prevent="SetOperador('claro')"
-                        :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 1"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                        Claro
-                    </button>
-                </li>
-                <li class="m-1">
-                    <button wire:click.prevent="SetOperador('entel')"
-                        :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 2"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                        Entel
-                    </button>
-                </li>
-                <li class="m-1">
-                    <button wire:click.prevent="SetOperador('movistar')"
-                        :class="clickeado === 3 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 3"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                        Movistar
-                    </button>
-                </li>
-                <li class="m-1">
-                    <button wire:click.prevent="SetOperador('cuy')"
-                        :class="clickeado === 4 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 4"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                        Cuy
-                    </button>
-                </li>
-                <li class="m-1">
-                    <button wire:click.prevent="SetOperador('multioperador')"
-                        :class="clickeado === 5 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 5"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-whiteduration-150 ease-in-out">
-                        MultiOperador (M2M)
+                    <button wire:click.prevent="toggleProximaReactivacion"
+                        :class="clickeado === 6 && 'border-transparent shadow-sm bg-amber-500 text-white'"
+                        @click="clickeado = 6"
+                        class="inline-flex items-center gap-1.5 justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-amber-300 hover:border-amber-400 shadow-sm bg-white text-amber-700 duration-150 ease-in-out">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Claro — Por reactivar
                     </button>
                 </li>
             </ul>
@@ -173,9 +155,9 @@
             </h2>
 
         </header>
-        <div class="min-h-[70vh]">
+        <div>
             <!-- Table -->
-            <div class="overflow-x-auto min-h-screen">
+            <div class="overflow-x-auto">
 
                 <table class="table-auto w-full">
                     <!-- Table header -->
@@ -197,9 +179,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">SIM CARD</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">EMPRESA ACTUAL</div>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">PLACA</div>
                             </th>
@@ -257,10 +237,40 @@
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    <div class="text-left text-slate-800 dark:text-slate-100">{{ $linea->operador }}
+                                    <div class="text-left text-slate-800 dark:text-slate-100">
+                                        {{ strtoupper($linea->operador?->name ?? '—') }}
                                     </div>
-
+                                    @php
+                                        $esClaro = strtoupper($linea->operador?->name ?? '') === 'CLARO';
+                                        $suspendida = $linea->estado?->name === 'SUSPENDIDA';
+                                        $fechaReact = $linea->date_to_suspend
+                                            ? \Carbon\Carbon::parse($linea->date_to_suspend)
+                                            : null;
+                                        $diasFaltan =
+                                            $fechaReact && $fechaReact->isFuture()
+                                                ? (int) now()->diffInDays($fechaReact)
+                                                : null;
+                                        $proximaReact =
+                                            $esClaro &&
+                                            $suspendida &&
+                                            !$linea->baja &&
+                                            $diasFaltan !== null &&
+                                            $diasFaltan <= 15;
+                                    @endphp
+                                    @if ($proximaReact)
+                                        <div
+                                            class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold
+                                            {{ $diasFaltan <= 3 ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-amber-100 text-amber-700 border border-amber-300' }}">
+                                            <svg class="w-3 h-3 flex-shrink-0" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            Reactiva en {{ $diasFaltan }}d &mdash;
+                                            {{ $fechaReact->format('d/m/Y') }}
+                                        </div>
+                                    @endif
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -274,22 +284,7 @@
 
 
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left font-medium text-slate-800 dark:text-slate-100">
 
-                                    </div>
-                                    @if (!empty($linea->sim_card))
-                                        <div class="text-left font-medium text-slate-800 dark:text-slate-100">
-                                            @if (!empty($linea->sim_card->vehiculos))
-                                                {{ $linea->sim_card->vehiculos->cliente->razon_social }}
-                                            @endif
-                                        </div>
-                                    @else
-                                        <div class="text-left font-medium text-red-400 dark:text-red-500"></div>
-                                    @endif
-
-
-                                </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left font-medium text-slate-800 dark:text-slate-100">
 
@@ -303,7 +298,6 @@
                                     @else
                                         <div class="text-left font-medium text-red-400 dark:text-red-500"></div>
                                     @endif
-
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

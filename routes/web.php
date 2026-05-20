@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\GpsController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LineasController;
 use App\Http\Controllers\Admin\MantenimientoController;
+use App\Http\Controllers\Admin\HistorialMantenimientosController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PaymentsController;
@@ -65,12 +66,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // ==================== FINANZAS ====================
     Route::controller(FinanzasController::class)->prefix('finanzas')->name('finanzas.')->group(function () {
-        Route::get('caja-chica', 'cajaChica')->name('caja-chica.index');
-        Route::get('movimientos', 'movimientos')->name('movimientos.index');
-        Route::get('transacciones', 'transacciones')->name('transacciones.index');
-        Route::get('cuentas-cobrar', 'cuentasCobrar')->name('cuentas-cobrar.index');
-        Route::get('cuentas-pagar', 'cuentasPagar')->name('cuentas-pagar.index');
-        Route::get('balance', 'balance')->name('balance.index');
+        Route::get('caja-chica', 'cajaChica')->name('caja-chica.index')->middleware('can:ver-finanzas-caja');
+        Route::get('movimientos', 'movimientos')->name('movimientos.index')->middleware('can:ver-finanzas-movimientos');
+        Route::get('transacciones', 'transacciones')->name('transacciones.index')->middleware('can:ver-finanzas-transacciones');
+        Route::get('cuentas-cobrar', 'cuentasCobrar')->name('cuentas-cobrar.index')->middleware('can:ver-finanzas-cuentas-cobrar');
+        Route::get('cuentas-pagar', 'cuentasPagar')->name('cuentas-pagar.index')->middleware('can:ver-finanzas-cuentas-pagar');
+        Route::get('balance', 'balance')->name('balance.index')->middleware('can:ver-finanzas-balance');
     });
 
     // Reportes de Caja Chica (igual que FactuPRO)
@@ -116,6 +117,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(LineasController::class)->group(function () {
         //lineas
         Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
+        Route::get('lineas-y-sim-card', 'indexCombinado')->name('admin.almacen.lineas-sim-card.index');
     });
 
     Route::controller(GpsController::class)->group(function () {
@@ -154,10 +156,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // COBROS (dentro del módulo de pagos)
     Route::controller(CobrosController::class)->group(function () {
-        Route::get('cobros/crear', 'create')->name('admin.cobros.create');
         Route::get('cobros', 'index')->name('admin.cobros.index');
-        Route::get('cobros-notificaciones', 'notificaciones')->name('admin.cobros.notificaciones');
-        Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
     });
 
     // PLANES DE SERVICIO
@@ -205,7 +204,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::controller(RecibosController::class)->group(function () {
         Route::get('recibos', 'index')->name('admin.ventas.recibos.index');
-        Route::get('recibos/crear/{notificacion_ids?}', 'create')->name('admin.ventas.recibos.create');
+        Route::get('recibos/crear/{periodo_ids?}', 'create')->name('admin.ventas.recibos.create');
         Route::get('recibos/{recibo}/editar', 'edit')->name('admin.ventas.recibos.edit');
     });
 
@@ -253,6 +252,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('reportes/{reporte}', 'show')->name('admin.vehiculos.reportes.show');
     });
 
+    // Historial de mantenimientos / suspensiones / reactivaciones (desde tracking)
+    Route::controller(HistorialMantenimientosController::class)->group(function () {
+        Route::get('historial-mantenimientos', 'index')->name('admin.vehiculos.historial-mantenimientos.index');
+    });
+
 
     // CERTIFICADOS
 
@@ -283,6 +287,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
     Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
+    Route::get('ajustes/operadores', [AjustesController::class, 'operadores'])->name('admin.ajustes.operadores');
     Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
     Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
     Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
@@ -382,8 +387,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(ComprobantesController::class)->group(function () {
 
         Route::get('ventas', 'index')->name('admin.ventas.index');
-        Route::get('emitir/factura/{notificacion_ids?}', 'emitirFactura')->name('admin.factura.create');
-        Route::get('emitir/boleta/{notificacion_ids?}', 'emitirBoleta')->name('admin.boleta.create');
+        Route::get('emitir/factura/{periodo_ids?}', 'emitirFactura')->name('admin.factura.create');
+        Route::get('emitir/boleta/{periodo_ids?}', 'emitirBoleta')->name('admin.boleta.create');
         Route::get('emitir/nota-venta', 'emitirNotaVenta')->name('admin.nota.venta.create');
         Route::get('emitir/nota-credito', 'emitirNotaCredito')->name('admin.nota.credito.create');
         Route::get('emitir/nota-debito', 'emitirNotaDebito')->name('admin.nota.debito.create');
@@ -432,10 +437,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     // ÓRDENES DE TRABAJO (WORK ORDERS)
-    Route::prefix('work-orders')->name('admin.work-orders.')->middleware(['auth'])->group(function () {
+    Route::prefix('work-orders')->name('admin.work-orders.')->middleware(['auth', 'can:ver-work_order'])->group(function () {
         Route::get('/', [WorkOrderController::class, 'index'])->name('index');
         Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');
-        Route::get('/{workOrder}/pdf', [WorkOrderPdfController::class, 'generate'])->name('pdf');
+        Route::get('/{workOrder}/pdf', [WorkOrderPdfController::class, 'generate'])->name('pdf')->middleware('can:descargar-work_order');
         Route::get('/{workOrder}/checklist/{fase}', function (WorkOrder $workOrder, string $fase) {
             return view('admin.work-orders.checklist', compact('workOrder', 'fase'));
         })->name('checklist');
@@ -452,7 +457,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     // TICKETS
-    Route::controller(\App\Http\Controllers\Admin\TicketsController::class)->group(function () {
+    Route::controller(\App\Http\Controllers\Admin\TicketsController::class)->middleware('can:ver-ticket')->group(function () {
         Route::get('tickets', 'index')->name('admin.tickets.index');
         Route::get('tickets/{ticket}', 'show')->name('admin.tickets.show');
 

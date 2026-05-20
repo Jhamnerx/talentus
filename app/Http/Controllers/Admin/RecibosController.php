@@ -20,10 +20,10 @@ class RecibosController extends Controller
         return view('admin.ventas.recibos.index');
     }
 
-    public function create($notificacion_ids = null)
+    public function create($periodo_ids = null)
     {
-        $notificacion_ids = $notificacion_ids ? json_decode($notificacion_ids, true) : [];
-        return view('admin.ventas.recibos.create', compact('notificacion_ids'));
+        $periodo_ids = $periodo_ids ? json_decode($periodo_ids, true) : [];
+        return view('admin.ventas.recibos.create', compact('periodo_ids'));
     }
 
 

@@ -201,6 +201,15 @@
 
                                     @can('ver-sim_card')
                                         <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.almacen.lineas-sim-card.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.almacen.lineas-sim-card.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Líneas &amp; Sim Cards</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('ver-sim_card')
+                                        <li class="mb-1 last:mb-0">
                                             <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.almacen.sim-card.index')) {{ 'text-violet-500!' }} @endif"
                                                 href="{{ route('admin.almacen.sim-card.index') }}">
                                                 <span
@@ -325,7 +334,7 @@
 
 
                     <!-- Tickets -->
-
+                    @can('ver-ticket')
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['tickets'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['tickets']) ? 1 : 0 }} }">
 
@@ -366,11 +375,93 @@
                                 </ul>
                             </div>
                         </li>
-
+                    @endcan
 
 
                     <!-- Finanzas -->
-                    {{-- TODO: implementar permisos de finanzas --}}
+
+                    <!-- WhatsApp -->
+                    @canany(['ver-dispositivos-wa', 'ver-contactos-wa', 'ver-campanias-wa', 'enviar-mensajes-wa', 'ver-historial-wa', 'gestionar-autoreplies-wa'])
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(1), ['whatsapp'])) {{ 'from-emerald-500/12 dark:from-emerald-500/24 to-emerald-500/4' }} @endif"
+                        x-data="{ open: {{ in_array(Request::segment(1), ['whatsapp']) ? 1 : 0 }} }">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition hover:text-gray-900 dark:hover:text-white"
+                            href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['whatsapp'])) text-emerald-500 @else text-gray-400 dark:text-gray-500 @endif" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.558 4.116 1.535 5.845L.057 23.997l6.31-1.656A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.562 16.963c-.235.66-1.37 1.26-1.882 1.33-.48.065-1.08.092-1.743-.11-.403-.128-.92-.298-1.582-.584-2.783-1.202-4.6-4.017-4.738-4.205-.137-.188-1.12-1.49-1.12-2.84 0-1.35.71-2.014 1.012-2.297.236-.225.516-.28.688-.28.174 0 .347.002.5.009.16.008.374-.06.585.446l.75 1.998c.063.17.01.36-.08.5l-.42.587c-.094.13-.193.27-.082.53.12.27.54 1.01 1.17 1.64.8.8 1.48 1.05 1.75 1.17.27.12.42.1.575-.06l.58-.65c.14-.16.36-.22.57-.14l2.01.95c.19.09.32.14.36.21.04.074.04.43-.194 1.09z"/>
+                                    </svg>
+                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">WhatsApp</span>
+                                </div>
+                                <div class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500"
+                                        :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
+                                        <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                            <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.devices', 'admin.whats-fleep.devices.*')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.devices') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dispositivos</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.autoreply')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.autoreply') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Auto Reply</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.campaign.create')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.campaign.create') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Crear Campaña</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.messages.test')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.messages.test') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mensaje de Prueba</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.contacts')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.contacts') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contactos</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.contacts.groups')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.contacts.groups') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Grupos WA</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.campaigns')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.campaigns') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Campañas</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.messages.history')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.messages.history') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Historial</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.api-docs')) text-emerald-500! @endif"
+                                        href="{{ route('admin.whats-fleep.api-docs') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">API Docs</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    @endcanany
+                    @canany(['ver-finanzas-caja', 'ver-finanzas-movimientos', 'ver-finanzas-transacciones', 'ver-finanzas-cuentas-cobrar', 'ver-finanzas-cuentas-pagar', 'ver-finanzas-balance', 'admin.cobros.index', 'admin.payments.index'])
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes', 'cobros-notificaciones']) ? 1 : 0 }} }">
 
@@ -471,25 +562,6 @@
                                         </a>
                                     </li>
 
-                                    {{-- Notificaciones de Cobro con Badge --}}
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.notificaciones')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.cobros.notificaciones') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 flex items-center gap-2">
-                                                🔔 Notificaciones
-                                                @php
-                                                    $pendientesCount = \App\Models\NotificacionCobro::pendientes()->count();
-                                                @endphp
-                                                @if($pendientesCount > 0)
-                                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                                                        {{ $pendientesCount }}
-                                                    </span>
-                                                @endif
-                                            </span>
-                                        </a>
-                                    </li>
-
                                     {{-- Planes de Servicio --}}
                                     <li class="mb-1 last:mb-0">
                                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
@@ -504,7 +576,7 @@
 
                             </div>
                         </li>
-
+                    @endcanany
 
                     <!-- Proveedores -->
                     @can('ver-proveedor')
@@ -837,17 +909,17 @@
 
                     <!-- Vehiculos -->
                     @canany(['ver-vehiculos-flotas', 'ver-vehiculos-vehiculos', 'ver-vehiculos-reportes',
-                        'ver-mantenimientos-vehiculos'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes']) ? 1 : 0 }} }">
+                        'ver-mantenimientos-vehiculos', 'ver-vehiculos-historial-mantenimientos'])
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition
-                                @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) hover:text-gray-900 dark:hover:text-white @endif"
+                                @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])) hover:text-gray-900 dark:hover:text-white @endif"
                                 href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes', 'historial-mantenimientos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -924,6 +996,20 @@
                                                 href="{{ route('admin.vehiculos.reportes.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Reportes
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('ver-vehiculos-historial-mantenimientos')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block
+                                                text-gray-800 dark:text-gray-100
+                                                hover:text-gray-900 dark:hover:text-white
+                                                @if (Route::is('admin.vehiculos.historial-mantenimientos.index')) {{ 'text-violet-500!' }} @endif
+                                                transition truncate"
+                                                href="{{ route('admin.vehiculos.historial-mantenimientos.index') }}">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Historial Mantenimientos
                                                 </span>
                                             </a>
                                         </li>
@@ -1043,6 +1129,7 @@
                     @endcanany
 
                     <!-- Órdenes de Trabajo -->
+                    @can('ver-work_order')
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['work-orders'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif">
                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.work-orders.index', 'admin.work-orders.show', 'admin.work-orders.checklist')) {{ 'text-violet-500!' }} @endif"
                             href="{{ route('admin.work-orders.index') }}">
@@ -1057,6 +1144,7 @@
                             </div>
                         </a>
                     </li>
+                    @endcan
 
                     <!-- administracion -->
                     @canany(['admin.solicitudes.index', 'admin.reportes.index', 'admin.usuarios.index',

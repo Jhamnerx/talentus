@@ -85,9 +85,8 @@ class PaymentsObserver
     }
 
     /**
-     * Cuando un pago completa el total de un Recibo/Venta vinculado a una
-     * NotificacionCobro en estado FACTURADO, la promueve a PAGADO y avanza
-     * el período del DetalleCobro.
+     * Cuando un pago completa el total de un Recibo/Venta vinculado a un
+     * PeriodoCobro en estado PENDIENTE, lo promueve a PAGADO.
      */
     protected function checkAndMarkNotificacionPagada(Payments $payment): void
     {
@@ -118,21 +117,21 @@ class PaymentsObserver
                 $documento->saveQuietly();
             }
 
-            // Buscar NotificacionCobro FACTURADA vinculada a este documento
+            // Buscar PeriodosCobro PENDIENTES vinculados a este documento
             $campo = ($payment->paymentable_type === \App\Models\Recibos::class)
                 ? 'recibo_id'
                 : 'venta_id';
 
-            $notificaciones = \App\Models\NotificacionCobro::withoutGlobalScopes()
+            $periodos = \App\Models\PeriodoCobro::withoutGlobalScopes()
                 ->where($campo, $payment->paymentable_id)
-                ->where('estado', 'FACTURADO')
+                ->where('estado', 'PENDIENTE')
                 ->get();
 
-            foreach ($notificaciones as $notif) {
-                $notif->marcarComoPagado();
+            foreach ($periodos as $periodo) {
+                $periodo->marcarComoPagado();
             }
         } catch (\Exception $e) {
-            Log::error('Error al verificar NotificacionCobro en PaymentsObserver', [
+            Log::error('Error al verificar PeriodoCobro en PaymentsObserver', [
                 'payment_id' => $payment->id,
                 'error'      => $e->getMessage(),
             ]);

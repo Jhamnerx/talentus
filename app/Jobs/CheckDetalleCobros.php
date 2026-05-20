@@ -2,9 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Admin\Mensaje;
 use App\Models\Cobros;
-use App\Models\DetalleCobros;
 use App\Models\User;
 use App\Notifications\EnviarMensajeCobro;
 use App\Scopes\EmpresaScope;
@@ -15,144 +13,102 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class CheckDetalleCobros implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $notificaciones = [15, 7, 5, 3, 1];
-    protected $timeout = 600;
-    protected $adminEmails = [
+    protected array $notificaciones = [15, 7, 5, 3, 1];
+    protected int $timeout = 600;
+    protected array $adminEmails = [
         'administracion@talentustechnology.com',
-        'monitoreo@talentustechnology.com'
+        'monitoreo@talentustechnology.com',
     ];
 
-    public function __construct()
+    public function handle(): void
     {
-        //
-    }
-
-    public function handle()
-    {
-        $hoy = Carbon::now()->format('Y-m-d');
+        $hoy = Carbon::now();
         $cobrosConsolidados = [];
-        $vehiculosOmitidos = [];
+        $vehiculosOmitidos  = [];
 
-        // Buscar todos los cobros que tienen detalles con estado = 1 y fechas en el rango de notificación
-        // y que estén asociados a vehículos activos
-        $cobrosConDetalles = Cobros::whereHas('detalle', function ($query) use ($hoy) {
-            $query->where('estado', 1) // Solo detalles activos
-                ->whereHas('vehiculo', function ($vehiculoQuery) {
-                    $vehiculoQuery->where('is_active', 1); // Solo vehículos activos
-                })
-                ->where(function ($q) use ($hoy) {
-                    $q->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
-                        ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
-                });
-        })->with(['detalle' => function ($query) use ($hoy) {
-            $query->where('estado', 1) // Solo detalles activos
-                ->whereHas('vehiculo', function ($vehiculoQuery) {
-                    $vehiculoQuery->where('is_active', 1); // Solo vehículos activos
-                })
-                ->where(function ($q) use ($hoy) {
-                    $q->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
-                        ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
-                });
-        }, 'detalle.vehiculo'])
-            ->withoutGlobalScope(EmpresaScope::class)
+        // Cobros activos con vehÃ­culo activo y fecha_vencimiento en rango de alerta
+        $cobros = Cobros::withoutGlobalScope(EmpresaScope::class)
+            ->with(['vehiculo'])
+            ->where('estado', 'ACTIVO')
+            ->whereHas('vehiculo', fn($q) => $q->where('is_active', 1))
+            ->where(function ($q) use ($hoy) {
+                $fechas = array_map(fn($d) => $hoy->copy()->addDays($d)->format('Y-m-d'), $this->notificaciones);
+                $q->whereIn('fecha_vencimiento', $fechas)
+                  ->orWhere('fecha_vencimiento', '<', $hoy->format('Y-m-d'));
+            })
             ->get();
 
-        foreach ($cobrosConDetalles as $cobro) {
-            $detallesAgrupados = [];
-
-            foreach ($cobro->detalle as $detalle) {
-                // Verificar si el vehículo existe y está activo
-                if (!$detalle->vehiculo || $detalle->vehiculo->is_active != 1) {
-                    // Registrar vehículos omitidos para propósitos de diagnóstico
-                    $vehiculosOmitidos[] = [
-                        'detalle_id' => $detalle->id,
-                        'cobro_id' => $cobro->id,
-                        'placa' => $detalle->vehiculo ? $detalle->vehiculo->placa : 'Sin vehículo',
-                        'estado_vehiculo' => $detalle->vehiculo ? ($detalle->vehiculo->is_active ? 'Activo' : 'Inactivo') : 'N/A',
-                    ];
-
-                    // Omitir detalles con vehículos inactivos o sin vehículo
-                    continue;
-                }
-
-                $diasRestantes = Carbon::now()->floatDiffInDays($detalle->fecha, false);
-
-                if ($diasRestantes <= 15 && $diasRestantes > 0) {
-                    $estadoNotificacion = $this->getEstadoNotificacion($diasRestantes);
-                    $detallesAgrupados[$estadoNotificacion][] = [
-                        'placa' => $detalle->vehiculo->placa,
-                        'fecha_vencimiento' => $detalle->fecha,
-                        'cobro_id' => $cobro->id,
-                    ];
-                } elseif ($diasRestantes <= 0) {
-                    $detallesAgrupados['VENCIDO'][] = [
-                        'placa' => $detalle->vehiculo->placa,
-                        'fecha_vencimiento' => $detalle->fecha,
-                        'cobro_id' => $cobro->id,
-                    ];
-                }
+        foreach ($cobros as $cobro) {
+            if (!$cobro->vehiculo || $cobro->vehiculo->is_active != 1) {
+                $vehiculosOmitidos[] = [
+                    'cobro_id' => $cobro->id,
+                    'placa'    => $cobro->vehiculo?->placa ?? 'Sin vehÃ­culo',
+                ];
+                continue;
             }
 
-            if (!empty($detallesAgrupados)) {
-                // Agregar los detalles al arreglo consolidado
-                foreach ($detallesAgrupados as $estado => $detalles) {
-                    foreach ($detalles as $detalle) {
-                        $cobrosConsolidados[$estado][] = $detalle;
-                    }
-                }
+            $diasRestantes = $hoy->floatDiffInDays($cobro->fecha_vencimiento, false);
+
+            if ($diasRestantes <= 15 && $diasRestantes > 0) {
+                $estado = $this->getEstadoNotificacion((int) $diasRestantes);
+            } elseif ($diasRestantes <= 0) {
+                $estado = 'VENCIDO';
+            } else {
+                continue;
             }
+
+            $cobrosConsolidados[$estado][] = [
+                'placa'             => $cobro->vehiculo->placa,
+                'fecha_vencimiento' => $cobro->fecha_vencimiento?->format('Y-m-d'),
+                'cobro_id'          => $cobro->id,
+            ];
         }
 
-        // Registrar vehículos omitidos
         if (!empty($vehiculosOmitidos)) {
-            Log::info('Vehículos omitidos en CheckDetalleCobros por estar inactivos:', $vehiculosOmitidos);
+            Log::info('VehÃ­culos omitidos en CheckDetalleCobros por estar inactivos:', $vehiculosOmitidos);
         }
 
-        // Enviar una única notificación con todos los cobros consolidados
         if (!empty($cobrosConsolidados)) {
             $this->enviarNotificacionConsolidada($cobrosConsolidados);
         }
     }
 
-    private function getEstadoNotificacion($dias)
+    private function getEstadoNotificacion(int $dias): string
     {
         return match ($dias) {
-            15 => 'POR VENCER EN 15 DÍAS',
-            7  => 'POR VENCER EN 7 DÍAS',
-            5  => 'POR VENCER EN 5 DÍAS',
-            4  => 'POR VENCER EN 4 DÍAS',
-            3  => 'POR VENCER EN 3 DÍAS',
-            1  => 'POR VENCER EN 1 DÍA',
+            15      => 'POR VENCER EN 15 DÃAS',
+            7       => 'POR VENCER EN 7 DÃAS',
+            5       => 'POR VENCER EN 5 DÃAS',
+            4       => 'POR VENCER EN 4 DÃAS',
+            3       => 'POR VENCER EN 3 DÃAS',
+            1       => 'POR VENCER EN 1 DÃA',
             default => 'POR VENCER',
         };
     }
 
-    private function enviarNotificacionConsolidada($cobrosConsolidados)
+    private function enviarNotificacionConsolidada(array $cobrosConsolidados): void
     {
         $mensaje = [
-            'body' => "Listado consolidado de vehículos con cobros próximos a vencer.",
-            'asunto' => "NOTIFICACIÓN CONSOLIDADA DE DETALLES DE COBROS - " . Carbon::now()->format('d/m/Y'),
-            'estado' => "Cobros por vencer",
-            'accion' => 'notification_detalle_cobro',
-            'url' => "admin.cobros.index",
-            'id_cobro' => 0, // No hay un ID específico para el consolidado
+            'body'    => "Listado consolidado de vehÃ­culos con cobros prÃ³ximos a vencer.",
+            'asunto'  => "NOTIFICACIÃ“N CONSOLIDADA DE COBROS - " . Carbon::now()->format('d/m/Y'),
+            'estado'  => "Cobros por vencer",
+            'accion'  => 'notification_detalle_cobro',
+            'url'     => "admin.cobros.index",
+            'id_cobro' => 0,
             'detalles' => $cobrosConsolidados,
         ];
 
-        // Enviar notificación a todos los correos configurados
         foreach ($this->adminEmails as $email) {
             $user = User::where('email', $email)->first();
-
             if ($user) {
                 $user->notify(new EnviarMensajeCobro($mensaje));
             } else {
-                Log::warning("Usuario no encontrado para enviar notificación de cobros: {$email}");
+                Log::warning("Usuario no encontrado para notificaciÃ³n de cobros: {$email}");
             }
         }
     }

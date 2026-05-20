@@ -21,12 +21,11 @@ class Save extends Component
     }
 
     #[On('open-modal-save')]
-    public function openModal()
+    public function openModal(int $clienteId = 0)
     {
-
-        // $this->birthday = Carbon::now();
-        $this->birthday = Carbon::now()->format('Y-m-d');
-        $this->modalSave = true;
+        $this->birthday   = Carbon::now()->format('Y-m-d');
+        $this->clientes_id = $clienteId ?: null;
+        $this->modalSave  = true;
     }
 
     public function closeModal()

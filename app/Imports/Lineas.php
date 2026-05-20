@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Events\LineasImportUpdated;
 use App\Models\Lineas as ModelsLineas;
+use App\Models\Operador;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
@@ -22,11 +23,11 @@ class Lineas implements ToModel, WithChunkReading, WithEvents, ShouldQueue
 
     public function model(array $row)
     {
-        // dd($row);
+        $operadorModel = Operador::whereRaw('UPPER(name) = ?', [strtoupper($row[1] ?? '')])->first();
         return new ModelsLineas([
-            'numero'    => $row[0],
-            'operador'    => $row[1],
-            'empresa_id'    => 1,
+            'numero'      => $row[0],
+            'operador_id' => $operadorModel?->id,
+            'empresa_id'  => 1,
         ]);
     }
 

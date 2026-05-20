@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\User;
 use App\Models\Lineas;
+use App\Models\Operador;
 use App\Models\SimCard;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Collection;
@@ -43,27 +44,31 @@ class LineasImport implements ToModel, WithChunkReading, SkipsOnError, ShouldQue
 
         if ($fila['numero'] != "no") {
 
+            $operadorModel = Operador::whereRaw('UPPER(name) = ?', [strtoupper($fila['operador'] ?? '')])->first();
+
             $linea = Lineas::create([
-                'numero'    => $fila['numero'],
-                'operador'    => $fila['operador'],
-                'empresa_id'    => 1,
+                'numero'       => $fila['numero'],
+                'operador_id'  => $operadorModel?->id,
+                'empresa_id'   => 1,
             ]);
 
             if ($linea) {
 
                 SimCard::create([
                     'sim_card'    => $fila['sim_card'],
-                    'operador'    => $fila['operador'],
-                    'lineas_id' => $linea->id,
-                    'empresa_id'    => 1,
+                    'operador_id' => $operadorModel?->id,
+                    'lineas_id'   => $linea->id,
+                    'empresa_id'  => 1,
                 ]);
             }
         } else {
 
+            $operadorModel = Operador::whereRaw('UPPER(name) = ?', [strtoupper($fila['operador'] ?? '')])->first();
+
             SimCard::create([
                 'sim_card'    => $fila['sim_card'],
-                'operador'    => $fila['operador'],
-                'empresa_id'    => 1,
+                'operador_id' => $operadorModel?->id,
+                'empresa_id'  => 1,
             ]);
         }
     }
@@ -71,7 +76,7 @@ class LineasImport implements ToModel, WithChunkReading, SkipsOnError, ShouldQue
     {
         $rules = [
             'numero' => 'required',
-            'operador' => 'required',
+            'operador' => 'required', // nombre del operador (se resuelve a ID en model())
             'sim_card' => 'required|unique:sim_card,sim_card',
             // 'empresa_id' => 'required',
         ];
@@ -105,9 +110,7 @@ class LineasImport implements ToModel, WithChunkReading, SkipsOnError, ShouldQue
         SimCardImportUpdated::dispatch();
     }
 
-    public static function importFailed(ImportFailed $event)
-    {
-    }
+    public static function importFailed(ImportFailed $event) {}
     public function onError(\Throwable $e)
     {
         // Handle the exception how you'd like.

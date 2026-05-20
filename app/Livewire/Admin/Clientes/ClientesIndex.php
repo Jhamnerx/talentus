@@ -124,6 +124,11 @@ class ClientesIndex extends Component
         $this->dispatch('abrir-modal-eliminar-cliente', cliente: $cliente);
     }
 
+    public function verContactos(int $clienteId): void
+    {
+        $this->dispatch('ver-contactos-cliente', clienteId: $clienteId);
+    }
+
     public function toggleStatus(Clientes $cliente)
     {
         $cliente->is_active = !$cliente->is_active; // Cambia el estado del toggle

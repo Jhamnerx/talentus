@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Operador;
+use App\Casts\SafeEnumCast;
 use App\Enums\LineasStatus;
 use App\Scopes\EmpresaScope;
 use App\Models\OldSimCardLinea;
@@ -34,9 +36,20 @@ class Lineas extends Model
 
 
     protected $casts = [
-
-        'estado' => LineasStatus::class,
+        'estado'   => LineasStatus::class,
     ];
+
+    /** Si el número de línea está vinculado físicamente al chip (M2M, CUY, IOT). */
+    public function getNumeroFijoAttribute(): bool
+    {
+        return $this->operador?->numero_fijo ?? false;
+    }
+
+    /** Si las líneas suspendidas se reactivarán automáticamente (solo CLARO). */
+    public function getAutoReactivacionAttribute(): bool
+    {
+        return $this->operador?->have_api ?? false;
+    }
 
 
 
@@ -50,7 +63,12 @@ class Lineas extends Model
     // Scope local de activo
     public function scopeOperador($query, $operador)
     {
-        return $query->where('operador', $operador);
+        return $query->where('operador_id', $operador);
+    }
+
+    public function operador()
+    {
+        return $this->belongsTo(Operador::class, 'operador_id');
     }
 
     public function sim_card()

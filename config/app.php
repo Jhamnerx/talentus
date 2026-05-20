@@ -16,6 +16,7 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     'token_fota_web' => env('TOKEN_FOTAWEB', null), // Token para la API de FotaWeb
+    'talentus_web_url' => env('TALENTUS_WEB_URL', 'https://tudominio.com'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment

@@ -31,7 +31,7 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
 
         if ($this->estado) {
 
-            if ($this->operador !== "todos") {
+            if ($this->operador) {
 
 
                 return Lineas::query()->whereNotNull('fecha_suspencion')->Operador($this->operador)->where('baja', false);
@@ -42,7 +42,7 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
             }
         } else {
 
-            if ($this->operador !== "todos") {
+            if ($this->operador) {
 
 
                 return Lineas::query()->Operador($this->operador)->where('baja', false);
@@ -77,7 +77,7 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
         return [
             $linea->id,
             $linea->numero,
-            $linea->operador,
+            $linea->operador?->name ?? '',
             ($linea->sim_card) ? $linea->sim_card->sim_card : '',
             ($linea->sim_card) ? ($linea->sim_card->vehiculos ? $linea->sim_card->vehiculos->cliente->razon_social : '') : '',
             ($linea->sim_card) ? ($linea->sim_card->vehiculos ? $linea->sim_card->vehiculos->placa : '') : '',

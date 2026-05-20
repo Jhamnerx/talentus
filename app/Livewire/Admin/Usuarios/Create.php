@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Usuarios;
 
 use App\Models\User;
+use App\Models\Ciudades;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -18,6 +19,7 @@ class Create extends Component
     public $document_id;
     public $series;
     public $series_id;
+    public ?int $ciudad_id = null;
 
     public $editMode = false;
     public $userId;
@@ -55,8 +57,11 @@ class Create extends Component
     public function render()
     {
         $roles = Role::all()->select('name', 'id');
+        $ciudades = Ciudades::where('is_active', true)->orderBy('nombre')->get();
+        $tecnicoRoleId = Role::findByName('tecnico', 'web')?->id;
+        $esTecnico = $tecnicoRoleId && in_array($tecnicoRoleId, (array) $this->roles_id);
 
-        return view('livewire.admin.usuarios.create', compact('roles'));
+        return view('livewire.admin.usuarios.create', compact('roles', 'ciudades', 'esTecnico'));
     }
 
     public function mount($userId = null)
@@ -69,6 +74,7 @@ class Create extends Component
             $this->email = $user->email;
             $this->roles_id = $user->roles->pluck('id')->toArray();
             $this->series_id = $user->series_id;
+            $this->ciudad_id = $user->ciudad_id;
 
             if ($user->series_id) {
                 $serie = $user->series;
@@ -96,6 +102,7 @@ class Create extends Component
                     $user->password = Hash::make($this->password);
                 }
                 $user->series_id = $this->series_id;
+                $user->ciudad_id = $this->ciudad_id;
                 $user->save();
                 $user->syncRoles($this->roles_id);
             } else {
@@ -104,12 +111,13 @@ class Create extends Component
                     'email' => $this->email,
                     'password' => Hash::make($this->password),
                     'series_id' => $this->series_id,
+                    'ciudad_id' => $this->ciudad_id,
                 ]);
                 $user->assignRole($this->roles_id);
                 $user->save();
             }
             $this->dispatch(
-                'notify',
+                'notify-toast',
                 icon: 'success',
                 title: $this->editMode ? 'USUARIO ACTUALIZADO' : 'USUARIO CREADO',
                 mensaje: $this->editMode ? 'El usuario se ha actualizado correctamente' : 'El usuario se ha creado correctamente'
@@ -118,7 +126,7 @@ class Create extends Component
             $this->dispatch('update-table');
         } catch (\Throwable $th) {
             $this->dispatch(
-                'notify',
+                'notify-toast',
                 icon: 'error',
                 title: 'ERROR',
                 mensaje: 'Ha ocurrido un error al intentar guardar el usuario'

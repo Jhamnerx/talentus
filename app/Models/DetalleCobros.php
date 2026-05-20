@@ -2,226 +2,134 @@
 
 namespace App\Models;
 
-use App\Enums\CobroEstado;
-use App\Observers\DetalleCobroObserver;
+use App\Scopes\EmpresaScope;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Carbon\Carbon;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-#[ObservedBy(DetalleCobroObserver::class)]
+#[ObservedBy(\App\Observers\DetalleCobroObserver::class)]
 class DetalleCobros extends Model
 {
     use HasFactory, SoftDeletes;
-
+    use LogsActivity;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'detalles_cobros';
 
     protected $casts = [
-        'cobros_id' => 'integer',
-        'vehiculos_id' => 'integer',
-        'plan_id' => 'integer',
-        'fecha' => 'date:Y-m-d',
-        'fecha_facturado' => 'date:Y-m-d',
-        'fecha_facturacion' => 'date:Y-m-d',
-        'fecha_inicio' => 'date:Y-m-d',
+        'empresa_id'        => 'integer',
+        'cliente_id'        => 'integer',
+        'cobros_id'         => 'integer',
+        'vehiculo_id'       => 'integer',
+        'plan_id'           => 'integer',
+        'monto'             => 'decimal:4',
+        'descuento'         => 'decimal:2',
+        'fecha_inicio'      => 'date:Y-m-d',
         'fecha_vencimiento' => 'date:Y-m-d',
-        'estado' => 'boolean',
+        'estado'            => 'boolean',
     ];
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+    }
+
+    // Relaciones
+
+    public function clientes()
+    {
+        return $this->belongsTo(Clientes::class, 'cliente_id')->withTrashed();
+    }
 
     public function vehiculo()
     {
-        return $this->belongsTo(\App\Models\Vehiculos::class)->withTrashed();
+        return $this->belongsTo(Vehiculos::class)->withTrashed();
     }
 
     public function cobro()
     {
-        return $this->belongsTo(\App\Models\Cobros::class, 'cobros_id')->withTrashed();
-    }
-
-    public function venta()
-    {
-        return $this->belongsTo(\App\Models\Ventas::class);
-    }
-
-    public function recibo()
-    {
-        return $this->belongsTo(\App\Models\Recibos::class);
+        return $this->belongsTo(Cobros::class, 'cobros_id')->withTrashed();
     }
 
     public function plan()
     {
-        return $this->belongsTo(\App\Models\Plan::class);
+        return $this->belongsTo(Plan::class, 'plan_id');
     }
 
-    /**
-     * Alias sin conflicto de nombre de columna.
-     * Usar este método cuando se necesite la relación Eloquent con Plan,
-     * ya que la columna legacy 'plan' en la tabla oculta la relación magic.
-     */
-    public function planModel()
+    public function periodos()
     {
-        return $this->belongsTo(\App\Models\Plan::class, 'plan_id');
+        return $this->hasMany(PeriodoCobro::class, 'detalle_cobro_id');
     }
 
-    /**
-     * Notificaciones de cobro generadas para este detalle
-     */
-    public function notificaciones()
+    public function periodoActual()
     {
-        return $this->hasMany(\App\Models\NotificacionCobro::class, 'detalle_cobro_id');
+        return $this->hasOne(PeriodoCobro::class, 'detalle_cobro_id')
+            ->whereIn('estado', ['PENDIENTE', 'PAGADO'])
+            ->latest('fecha_fin');
     }
 
-    /**
-     * Obtener el documento asociado (Venta o Recibo)
-     */
-    public function getDocumentoAttribute()
+    public function ultimoPeriodoPagado()
     {
-        return $this->venta ?? $this->recibo;
+        return $this->hasOne(PeriodoCobro::class, 'detalle_cobro_id')
+            ->where('estado', 'PAGADO')
+            ->latest('fecha_fin');
     }
 
-    /**
-     * Obtener el número completo del documento
-     */
-    public function getNumeroDocumentoAttribute(): ?string
-    {
-        if ($this->venta) {
-            return $this->venta->numero_completo ?? $this->venta->serie . '-' . $this->venta->correlativo;
-        }
-        if ($this->recibo) {
-            return $this->recibo->numero_completo ?? $this->recibo->serie . '-' . $this->recibo->correlativo;
-        }
-        return null;
-    }
+    // Accessors
 
-    /**
-     * Obtener el nombre del plan con lógica de fallback
-     * 
-     * Sistema NUEVO: plan_id tiene valor, campo 'plan' = NULL → usar relación
-     * Sistema LEGACY: plan_id = NULL, campo 'plan' tiene texto → usar campo legacy
-     * 
-     * @return string
-     */
     public function getPlanNombreAttribute(): string
     {
-        // Sistema NUEVO: Si plan_id está presente → usar relación planModel (sin conflicto de columna)
         if ($this->plan_id) {
-            $plan = $this->relationLoaded('planModel')
-                ? $this->getRelation('planModel')
-                : $this->planModel()->first();
-            if ($plan) {
-                return $plan->name ?? 'Plan #' . $this->plan_id;
-            }
+            $plan = $this->relationLoaded('plan')
+                ? $this->getRelation('plan')
+                : $this->plan()->first();
+            return $plan?->name ?? 'Plan #' . $this->plan_id;
         }
-
-        // Sistema LEGACY: Si campo 'plan' tiene texto (no numérico) → usar legacy
-        if (!empty($this->attributes['plan']) && !is_numeric($this->attributes['plan'])) {
-            return $this->attributes['plan'];
-        }
-
         return 'Sin plan';
     }
 
-    /**
-     * Monto bruto (con IGV incluido), SOLO USO INTERNO.
-     * Las vistas deben usar monto_efectivo, que ya incluye la conversión de divisa y el ajuste RECIBO.
-     *
-     * Sistema NUEVO:  monto_unidad guardado → lo retorna directamente
-     * Sistema NUEVO:  plan_id sin monto_unidad → price del plan × multiplicador de período
-     * Sistema LEGACY: campo 'plan' numérico → usar ese valor directamente
-     *
-     * @internal Usar monto_efectivo en vistas y reportes
-     * @return float
-     */
-    public function getMontoCalculadoAttribute(): float
+    public function getDiasRestantesAttribute(): int
     {
-        // Prioridad 1: monto_unidad guardado (incluye conversión de divisa y ajuste RECIBO)
-        // Se guarda al crear/editar el cobro con el importe ya calculado para la divisa del cobro
-        if (!empty($this->attributes['monto_unidad']) && (float) $this->attributes['monto_unidad'] > 0) {
-            return (float) $this->attributes['monto_unidad'];
+        if (!$this->fecha_vencimiento) {
+            return 0;
         }
-
-        // Prioridad 2 (fallback): calcular desde la relación con plans (precio base en PEN)
-        // Se usa planModel() para evitar el conflicto con la columna legacy 'plan'
-        if ($this->plan_id) {
-            $plan = $this->relationLoaded('planModel')
-                ? $this->getRelation('planModel')
-                : $this->planModel()->first();
-
-            if ($plan) {
-                $precioUnitario = (float) ($plan->price ?? 0);
-
-                $multiplicador = match ($this->periodo ?? 'MENSUAL') {
-                    'BIMENSUAL'  => 2,
-                    'TRIMESTRAL' => 3,
-                    'SEMESTRAL'  => 6,
-                    'ANUAL'      => 12,
-                    default      => 1,
-                };
-
-                return $precioUnitario * $multiplicador;
-            }
-        }
-
-        // Sistema LEGACY: si campo 'plan' era numérico (guardaba el monto)
-        if (!empty($this->attributes['plan']) && is_numeric($this->attributes['plan'])) {
-            return (float) $this->attributes['plan'];
-        }
-
-        return 0.0;
+        return max(0, (int) Carbon::today()->diffInDays($this->fecha_vencimiento, false));
     }
 
-    /**
-     * Monto efectivo a cobrar al cliente.
-     *
-     * Si monto_unidad ya está guardado, ya contiene el ajuste de divisa y RECIBO.
-     * Si viene del fallback de plan (precio en PEN), aplicar descuento RECIBO si corresponde.
-     */
-    public function getMontoEfectivoAttribute(): float
+    public function getVencidoAttribute(): bool
     {
-        // Si monto_unidad está guardado, ya es el importe final (conversión + RECIBO incluidos)
-        if (!empty($this->attributes['monto_unidad']) && (float) $this->attributes['monto_unidad'] > 0) {
-            return (float) $this->attributes['monto_unidad'];
-        }
-
-        // Fallback: precio base del plan (sin IGV). Sumar IGV si es Factura/Boleta.
-        $monto = $this->monto_calculado;
-
-        if (
-            $monto > 0
-            && $this->cobro
-            && $this->cobro->tipo_pago !== 'RECIBO'
-        ) {
-            return round($monto * 1.18, 2);
-        }
-
-        return $monto;
-    }
-    public function scopeSinFacturar($query)
-    {
-        return $query->whereNull('venta_id')->whereNull('recibo_id');
+        return $this->fecha_vencimiento && Carbon::today()->gt($this->fecha_vencimiento);
     }
 
-    public function scopeFacturado($query)
+    // Scopes
+
+    public function scopeActivos($query)
     {
-        return $query->where(function ($q) {
-            $q->whereNotNull('venta_id')->orWhereNotNull('recibo_id');
-        });
+        return $query->where('estado', true);
     }
 
-    public function scopePagado($query)
-    {
-        return $query->where(function ($q) {
-            $q->whereNotNull('venta_id')->orWhereNotNull('recibo_id');
-        });
-    }
-
-    // Atributo personalizado para obtener los detalles vencidos
     public function scopeVencidos($query)
     {
-        return $query->where('fecha', '<', Carbon::now());
+        return $query->where('estado', true)
+            ->where('fecha_vencimiento', '<', Carbon::today());
+    }
+
+    public function scopeProximosAVencer($query, int $dias = 7)
+    {
+        return $query->where('estado', true)
+            ->whereBetween('fecha_vencimiento', [
+                Carbon::today(),
+                Carbon::today()->addDays($dias),
+            ]);
     }
 }

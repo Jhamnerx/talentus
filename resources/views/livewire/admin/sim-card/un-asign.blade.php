@@ -41,7 +41,8 @@
                                     actual</p>
                                 <p class="text-lg font-bold text-gray-900 dark:text-gray-100">📱
                                     {{ $sim_card->linea->numero }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $sim_card->linea->operador }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ $sim_card->linea->operador?->name ?? '—' }}</p>
                             </div>
                         @endif
                     </div>

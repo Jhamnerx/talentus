@@ -9,7 +9,7 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Search form -->
-            <form class="relative">
+            <form class="relative" @submit.prevent>
                 <label for="action-search" class="sr-only">Buscar</label>
                 <input wire:model.live="search" id="action-search"
                     class="form-input pl-9 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:border-gray-300 dark:focus:border-gray-600"

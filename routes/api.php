@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WorkOrderController;
 use App\Http\Controllers\Api\ConsultasApiController;
 use App\Http\Controllers\Api\ContactoApiController;
+use App\Http\Controllers\Api\MobileAuthController;
+use App\Http\Controllers\Api\WorkOrderTrackingController;
+use App\Http\Controllers\Api\PublicWorkOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +22,28 @@ use App\Http\Controllers\Api\ContactoApiController;
 
 /*
 |--------------------------------------------------------------------------
+| Autenticación Móvil (Técnicos)
+|--------------------------------------------------------------------------
+| Endpoints de autenticación para la app móvil de técnicos.
+| El login devuelve un Bearer token Sanctum de larga duración.
+| No requieren autenticación previa.
+*/
+
+Route::prefix('auth')->name('api.auth.')->group(function () {
+    // POST /api/auth/login
+    Route::post('login', [MobileAuthController::class, 'login'])->name('login');
+});
+
+Route::prefix('auth')->name('api.auth.')->middleware('auth:sanctum')->group(function () {
+    // POST /api/auth/logout
+    Route::post('logout', [MobileAuthController::class, 'logout'])->name('logout');
+
+    // GET /api/auth/me
+    Route::get('me', [MobileAuthController::class, 'me'])->name('me');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Autenticación de Usuario
 |--------------------------------------------------------------------------
 | Obtiene los datos del usuario autenticado mediante token Sanctum.
@@ -27,6 +52,18 @@ use App\Http\Controllers\Api\ContactoApiController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+/*
+|--------------------------------------------------------------------------
+| ENDPOINTS PÚBLICOS (sin autenticación)
+|--------------------------------------------------------------------------
+| Usados por talentus-web para verificación de órdenes de trabajo.
+*/
+
+Route::prefix('public')->name('api.public.')->group(function () {
+    Route::get('work-orders/{hash}', [PublicWorkOrderController::class, 'show'])->name('work-orders.show');
+    Route::post('work-orders/{hash}/verify', [PublicWorkOrderController::class, 'verify'])->name('work-orders.verify');
 });
 
 /*
@@ -71,6 +108,10 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
     // GET /api/work-orders/{workOrder}
     // Ver detalle completo de una orden con todas sus relaciones cargadas
     Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');
+
+    // PATCH /api/work-orders/{workOrder}
+    // Actualizar campos editables desde la app móvil (imei_gps, imei_sim, contacto, etc.)
+    Route::patch('/{workOrder}', [WorkOrderController::class, 'update'])->name('update');
 
     /*
     |--------------------------------------------------------------------------
@@ -206,6 +247,22 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
     // DELETE /api/work-orders/accesorios/{accessory}
     // Eliminar accesorio (solo si orden no está bloqueada)
     Route::delete('/accesorios/{accessory}', [WorkOrderController::class, 'eliminarAccesorio'])->name('accesorios.eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tracking GPS del Técnico
+    |--------------------------------------------------------------------------
+    */
+
+    // POST /api/work-orders/{workOrder}/tracking
+    // El técnico envía su posición GPS cada ~1 minuto
+    // Body: { "lat": numeric, "lng": numeric, "accuracy": numeric, "speed": numeric }
+    Route::post('/{workOrder}/tracking', [WorkOrderTrackingController::class, 'update'])->name('tracking');
+
+    // PATCH /api/work-orders/{workOrder}/ubicacion
+    // El administrador establece la ubicación del servicio
+    // Body: { "lat": numeric, "lng": numeric, "direccion": "string" }
+    Route::patch('/{workOrder}/ubicacion', [WorkOrderTrackingController::class, 'setUbicacion'])->name('ubicacion');
 });
 
 /*
@@ -258,3 +315,25 @@ Route::prefix('consultas')->name('api.consultas.')->group(function () {
 // Body: { "name": "...", "email": "...", "phone": "...", "company": "...", "message": "...", "g-recaptcha-response": "..." }
 // Respuesta: { "success": true, "message": "Mensaje enviado correctamente" }
 Route::post('/contacto', [ContactoApiController::class, 'store'])->name('api.contacto.store');
+
+/*
+|--------------------------------------------------------------------------
+| TRACKING SYSTEM API — Integración con talentus-pro-tracking
+|--------------------------------------------------------------------------
+| Recibe registros de mantenimiento/suspensión/reactivación desde
+| el sistema de tracking GPS. Autenticación via X-API-KEY header.
+*/
+
+Route::prefix('tracking')->name('api.tracking.')->group(function () {
+    // POST /api/tracking/device-maintenances/sync
+    // Recibe un lote de registros desde talentus-pro-tracking
+    // Header: X-API-KEY: {TRACKING_API_KEY}
+    Route::post('/device-maintenances/sync', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'sync'])
+        ->name('device-maintenances.sync');
+
+    // GET /api/tracking/device-maintenances
+    // Lista paginada (uso interno)
+    Route::get('/device-maintenances', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'index'])
+        ->name('device-maintenances.index')
+        ->middleware('auth:sanctum');
+});

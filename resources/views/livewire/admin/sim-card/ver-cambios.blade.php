@@ -16,7 +16,7 @@
                     <div>
                         <p class="text-xs text-gray-600 dark:text-gray-400 uppercase font-semibold">SIM Card</p>
                         <p class="text-lg font-bold text-indigo-900 dark:text-indigo-100">{{ $sim_card->sim_card }}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ $sim_card->operador }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ $sim_card->operador?->name ?? '—' }}</p>
                     </div>
                 </div>
                 @if ($sim_card->linea)

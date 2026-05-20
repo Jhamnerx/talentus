@@ -7,8 +7,8 @@ use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 use App\Http\Requests\VentasRequest;
 use App\Models\Clientes;
 use App\Models\CodigosDetracciones;
-use App\Models\NotificacionCobro;
 use App\Models\PaymentMethodType;
+use App\Models\PeriodoCobro;
 use App\Models\Payments;
 use App\Models\plantilla;
 use App\Models\Series;
@@ -86,6 +86,7 @@ class Emitir extends Component
     // Contexto de Cobros (para auto-update y redirect)
     public $cobro_id = null;
     public $notificacion_ids_array = [];
+    public int $notificacion_periodos = 1;
     public $cobro_redirect_back = null;
 
     // Modal selección de IMEI para equipos GPS
@@ -155,8 +156,9 @@ class Emitir extends Component
         }
     }
 
-    public function mount($notificacion_ids = null)
+    public function mount($notificacion_ids = null, $periodo_ids = null)
     {
+        $notificacion_ids = $notificacion_ids ?? $periodo_ids;
         //DEFINIR EL TIPO DE COMPROBANTE
         $this->tipo_comprobante_id = TipoComprobantes::where('slug', $this->comprobante_slug)->first()->codigo;
         $this->setSerieMount();
@@ -206,21 +208,21 @@ class Emitir extends Component
 
         $this->empresa_id = plantilla::first()->empresa->id;
 
-        // Asignar cliente y contexto desde NotificacionCobro
+        // Asignar cliente y contexto desde PeriodoCobro
         if ($notificacion_ids) {
             $ids = is_array($notificacion_ids) ? $notificacion_ids : (json_decode($notificacion_ids, true) ?? []);
-            $firstNotif = NotificacionCobro::with(['cobro.clientes', 'cliente'])->find(
+            $firstPeriodo = PeriodoCobro::with(['cobro.clientes', 'cliente'])->find(
                 is_array($ids) ? $ids[0] : $ids
             );
 
-            if ($firstNotif) {
-                $cobro = $firstNotif->cobro;
-                $this->cliente    = $firstNotif->cliente;
+            if ($firstPeriodo) {
+                $cobro = $firstPeriodo->cobro;
+                $this->cliente    = $firstPeriodo->cliente;
                 $this->direccion  = $this->cliente->direccion ?? '';
-                $this->cliente_id = $firstNotif->cliente_id;
-                $this->divisa     = $firstNotif->moneda ?? $cobro->divisa ?? 'PEN';
+                $this->cliente_id = $firstPeriodo->cliente_id;
+                $this->divisa     = $firstPeriodo->divisa ?? $cobro->divisa ?? 'PEN';
                 $this->simbolo    = $this->divisa === 'USD' ? '$' : 'S/. ';
-                $this->cobro_id   = $firstNotif->cobro_id;
+                $this->cobro_id   = $firstPeriodo->cobros_id;
                 $this->cobro_redirect_back = session('cobro_redirect_back');
 
                 $sessionFormaPago = session('cobro_forma_pago');
@@ -233,83 +235,102 @@ class Emitir extends Component
 
             $this->notificacion_ids_array = is_array($ids) ? $ids : [$ids];
 
+            // Períodos a avanzar al facturar (cliente pagó N períodos de una sola vez)
+            $this->notificacion_periodos = max(1, (int) session('notificacion_periodos', 1));
+            session()->forget('notificacion_periodos');
+
             $this->procesarItemsDesdeNotificaciones($this->notificacion_ids_array);
         }
     }
 
     /**
-     * Procesa items desde NotificacionCobro (nuevo flujo preferido).
+     * Procesa items desde PeriodoCobro.
      * El monto ya incluye totales por periodo, divisa y ajuste IGV/RECIBO.
      */
     public function procesarItemsDesdeNotificaciones(array $notificacionIds): void
     {
-        $notificaciones = NotificacionCobro::with([
-            'detalleCobro.planModel',
-            'cobro.producto.unit',
+        $notificaciones = PeriodoCobro::with([
+            'cobro.plan',
             'vehiculo',
         ])->whereIn('id', $notificacionIds)->get();
 
-        $servicioCobro = Productos::getServicioCobro();
+        $servicioCobro       = Productos::getServicioCobro();
         $servicioDescripcion = $servicioCobro?->descripcion ?? '';
 
+        // Períodos a facturar: 1 = 1 ítem, 2 = 2 ítems, etc.
+        $periodos = max(1, $this->notificacion_periodos);
+
         foreach ($notificaciones as $notificacion) {
-            $detalle  = $notificacion->detalleCobro;
             $cobro    = $notificacion->cobro;
             $vehiculo = $notificacion->vehiculo;
-            $producto = $cobro->producto;
 
             $montoTotal = (float) $notificacion->monto;
             $esFactura  = ($cobro->tipo_pago ?? 'FACTURA') !== 'RECIBO';
 
             // Extraer valor_unitario del total (cantidad = 1 siempre)
             if ($esFactura) {
-                $tasaIgv         = (float) $this->plantilla->igv; // 0.18
-                $valorUnitario   = round($montoTotal / (1 + $tasaIgv), 4);
-                $igvProducto     = round($montoTotal - $valorUnitario, 4);
+                $tasaIgv          = (float) $this->plantilla->igv; // 0.18
+                $valorUnitario    = round($montoTotal / (1 + $tasaIgv), 4);
+                $igvProducto      = round($montoTotal - $valorUnitario, 4);
                 $codigoAfectacion = '10';
-                $porcentajeIgv   = 18;
+                $porcentajeIgv    = 18;
             } else {
-                $valorUnitario   = $montoTotal;
-                $igvProducto     = 0.00;
+                $valorUnitario    = $montoTotal;
+                $igvProducto      = 0.00;
                 $codigoAfectacion = '20';
-                $porcentajeIgv   = 0;
+                $porcentajeIgv    = 0;
             }
 
-            // Construir descripción con periodo
-            $periodo = $detalle?->periodo ?? $cobro->periodo ?? 'MENSUAL';
-            $periodoTexto = match (strtoupper((string) $periodo)) {
-                'BIMENSUAL'  => '2 meses',
+            // Construir descripción
+            $periodo = strtoupper($cobro->periodo ?? 'MENSUAL');
+            $periodoTexto = match ($periodo) {
+                'BIMESTRAL', 'BIMENSUAL' => '2 meses',
                 'TRIMESTRAL' => '3 meses',
                 'SEMESTRAL'  => '6 meses',
                 'ANUAL'      => '12 meses',
                 default      => '1 mes',
             };
 
-            $planNombre  = $detalle?->planModel?->name ?? $producto?->descripcion ?? 'Servicio GPS';
-            $placa       = $vehiculo?->placa ?? 'S/P';
-            $fechaInicio = $detalle?->fecha_inicio?->format('d/m/Y') ?? '';
-            $fechaVence  = $notificacion->fecha_vencimiento?->format('d/m/Y') ?? '';
-            $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$fechaInicio} - fin {$fechaVence}");
+            $planNombre = $cobro->plan?->name ?? $servicioCobro?->descripcion ?? 'Servicio GPS';
+            $placa      = $vehiculo?->placa ?? 'S/P';
 
-            $this->addProducto([
-                'producto_id'       => $cobro->producto_id,
-                'codigo'            => $producto->codigo,
-                'cantidad'          => 1,
-                'unit'              => $producto->unit_code,
-                'unit_name'         => $producto->unit->descripcion,
-                'descripcion'       => $descripcion,
-                'valor_unitario'    => $valorUnitario,
-                'precio_unitario'   => round($valorUnitario * (1 + (float) $this->plantilla->igv), 4),
-                'igv'               => $igvProducto,
-                'porcentaje_igv'    => $porcentajeIgv,
-                'icbper'            => 0.00,
-                'total_icbper'      => 0.00,
-                'sub_total'         => $valorUnitario,
-                'total'             => $montoTotal,
-                'codigo_afectacion' => $codigoAfectacion,
-                'afecto_icbper'     => false,
-                'tipo'              => $producto->tipo,
-            ]);
+            $periodoStart = Carbon::parse($notificacion->fecha_inicio);
+            $periodoEnd   = Carbon::parse($notificacion->fecha_fin);
+
+            for ($p = 0; $p < $periodos; $p++) {
+                if ($p > 0) {
+                    $periodoStart = $periodoEnd->copy();
+                    $periodoEnd = match ($periodo) {
+                        'BIMESTRAL', 'BIMENSUAL' => $periodoStart->copy()->addMonthsNoOverflow(2),
+                        'TRIMESTRAL' => $periodoStart->copy()->addMonthsNoOverflow(3),
+                        'SEMESTRAL'  => $periodoStart->copy()->addMonthsNoOverflow(6),
+                        'ANUAL'      => $periodoStart->copy()->addYearNoOverflow(),
+                        default      => $periodoStart->copy()->addMonthNoOverflow(),
+                    };
+                }
+
+                $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$periodoStart->format('d/m/Y')} - fin {$periodoEnd->format('d/m/Y')}");
+
+                $this->addProducto([
+                    'producto_id'       => $servicioCobro?->id,
+                    'codigo'            => $servicioCobro?->codigo,
+                    'cantidad'          => 1,
+                    'unit'              => $servicioCobro?->unit_code,
+                    'unit_name'         => $servicioCobro?->unit?->descripcion,
+                    'descripcion'       => $descripcion,
+                    'valor_unitario'    => $valorUnitario,
+                    'precio_unitario'   => round($valorUnitario * (1 + (float) $this->plantilla->igv), 4),
+                    'igv'               => $igvProducto,
+                    'porcentaje_igv'    => $porcentajeIgv,
+                    'icbper'            => 0.00,
+                    'total_icbper'      => 0.00,
+                    'sub_total'         => $valorUnitario,
+                    'total'             => $montoTotal,
+                    'codigo_afectacion' => $codigoAfectacion,
+                    'afecto_icbper'     => false,
+                    'tipo'              => $servicioCobro?->tipo,
+                ]);
+            }
         }
     }
 
@@ -766,28 +787,22 @@ class Emitir extends Component
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $venta->getSerie->increment('correlativo');
 
-            // AUTO-UPDATE desde flujo de notificaciones
+            // AUTO-UPDATE desde flujo de períodos de cobro
             if (!empty($this->notificacion_ids_array)) {
                 $ventaPagada = $venta->fresh()->pago_estado === 'PAID';
 
-                $notificaciones = NotificacionCobro::with(['detalleCobro', 'cobro'])
-                    ->whereIn('id', $this->notificacion_ids_array)->get();
+                $periodos = PeriodoCobro::whereIn('id', $this->notificacion_ids_array)->get();
 
                 if ($ventaPagada) {
-                    // Pagado: avanzar período y marcar como PAGADO
-                    foreach ($notificaciones as $notif) {
-                        $notif->venta_id          = $venta->id;
-                        $notif->fecha_facturacion = now();
-                        $notif->saveQuietly();
-                        $notif->marcarComoPagado();
+                    // Pagado: marcar período como PAGADO con referencia a la venta
+                    foreach ($periodos as $periodo) {
+                        $periodo->marcarComoPagado($venta->id, null);
                     }
                 } else {
-                    // Solo facturado sin pagar: vincular documento, no avanzar período
-                    NotificacionCobro::whereIn('id', $this->notificacion_ids_array)->update([
-                        'estado'            => 'FACTURADO',
-                        'venta_id'          => $venta->id,
-                        'fecha_facturacion' => now(),
-                    ]);
+                    // Facturado sin pagar: marcar como FACTURADO y vincular documento
+                    foreach ($periodos as $periodo) {
+                        $periodo->marcarComoFacturado($venta->id, null);
+                    }
                 }
             }
 
@@ -912,7 +927,7 @@ class Emitir extends Component
     public function calcularIgv()
     {
         // Sumar el IGV ya calculado por ítem para evitar diferencias de redondeo
-        // cuando el monto viene pre-calculado (flujo NotificacionCobro)
+        // cuando el monto viene pre-calculado (flujo PeriodoCobro)
         $igv = round(
             $this->items
                 ->where('codigo_afectacion', '10')

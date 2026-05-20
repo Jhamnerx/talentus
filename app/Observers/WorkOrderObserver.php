@@ -36,14 +36,25 @@ class WorkOrderObserver
 
         // Guardar snapshot del tipo de orden (preservar costos y configuración)
         if ($workOrder->tipo && !$workOrder->tipo_data) {
+            $tipo = $workOrder->tipo;
+            $costoResuelto = $tipo->costoResuelto($workOrder->tecnico_id);
+
             $workOrder->tipo_data = [
-                'nombre' => $workOrder->tipo->nombre,
-                'descripcion' => $workOrder->tipo->descripcion,
-                'costo_base' => $workOrder->tipo->costo_base,
-                'requiere_imei' => $workOrder->tipo->requiere_imei,
-                'requiere_sim' => $workOrder->tipo->requiere_sim,
-                'requiere_accesorios' => $workOrder->tipo->requiere_accesorios,
-                'requiere_checklist' => $workOrder->tipo->requiere_checklist,
+                'id'                          => $tipo->id,
+                'nombre'                      => $tipo->nombre,
+                'descripcion'                 => $tipo->descripcion,
+                'costo'                       => $costoResuelto,
+                'costo_base'                  => (float) $tipo->costo_base,
+                'costo_personalizado'         => $tipo->costoParaTecnico($workOrder->tecnico_id) !== null,
+                'requiere_imei'               => $tipo->requiere_imei,
+                'requiere_sim'                => $tipo->requiere_sim,
+                'requiere_accesorios'         => $tipo->requiere_accesorios,
+                'requiere_checklist'          => $tipo->requiere_checklist,
+                'muestra_sector'              => $tipo->muestra_sector,
+                'muestra_plan'                => $tipo->muestra_plan,
+                'muestra_accesorios_instalar' => $tipo->muestra_accesorios_instalar,
+                'es_mantenimiento_programado' => $tipo->es_mantenimiento_programado,
+                'snapshot_at'                 => now()->toDateTimeString(),
             ];
         }
 

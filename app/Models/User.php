@@ -42,6 +42,8 @@ class User extends Authenticatable
         'password',
         'series_id',
         'fcm_token',
+        'ciudad_id',
+        'wa_group_id',
     ];
 
     // protected $attributes = [
@@ -173,5 +175,47 @@ class User extends Authenticatable
     public function routeNotificationForFcm()
     {
         return $this->fcm_token;
+    }
+
+    // ─── WhatsApp (WhatsFleep) ───────────────────────────────────────────────
+
+    public function ciudad()
+    {
+        return $this->belongsTo(\App\Models\Ciudades::class, 'ciudad_id');
+    }
+
+    public function waDevices()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Device::class);
+    }
+
+    public function waTags()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\WaTag::class);
+    }
+
+    public function waContacts()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Contact::class);
+    }
+
+    public function waCampaigns()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Campaign::class);
+    }
+
+    public function waBlasts()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Blast::class);
+    }
+
+    public function waMessageHistories()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\MessageHistory::class);
+    }
+
+    public function waAutoreplies()
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\Autoreply::class);
     }
 }

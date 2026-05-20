@@ -35,7 +35,7 @@
             </ul>
         </div>
     </div>
-
+    {{ json_encode($errors->all()) }}
     {{-- Banner de contexto de cobros --}}
     @if ($cobro_id)
         <div class="container px-10 mx-auto mb-4">

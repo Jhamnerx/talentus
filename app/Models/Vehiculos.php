@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\EmpresaScope;
+use App\Models\Cobros;
 use Spatie\Activitylog\LogOptions;
 use App\Observers\VehiculosObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -144,14 +145,9 @@ class Vehiculos extends Model
         return $this->hasOne(Lineas::class, 'numero', 'numero')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
-    public function detalleCobro()
+    public function cobro()
     {
-        return $this->belongsTo(DetalleCobros::class, 'vehiculo_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
-    }
-
-    public function detallesCobros()
-    {
-        return $this->hasMany(DetalleCobros::class, 'vehiculo_id')->withoutGlobalScope(EmpresaScope::class);
+        return $this->hasOne(Cobros::class, 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     public function dispositivos()
@@ -192,7 +188,6 @@ class Vehiculos extends Model
             if (empty($dispositivos)) {
                 // Limpiar los campos del vehículo
                 $this->update([
-                    'dispositivo_imei' => null,
                     'dispositivos_id' => null
                 ]);
 
@@ -249,10 +244,9 @@ class Vehiculos extends Model
                 // Marcar este dispositivo para que no sea desinstalado
                 $dispositivos_que_permanecen[] = $modeloDispositivo->id;
 
-                // Si es principal, actualizar los campos directos
+                // Si es principal, actualizar el campo directo
                 if ($es_principal) {
                     $this->update([
-                        'dispositivo_imei' => $dispositivo['imei'],
                         'dispositivos_id' => $modeloDispositivo->id
                     ]);
                 }

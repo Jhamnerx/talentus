@@ -6,6 +6,7 @@ use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\WorkOrderTypeCost;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,6 +33,9 @@ class WorkOrderType extends Model
         'requiere_checklist' => 'boolean',
         'active' => 'boolean',
         'es_mantenimiento_programado' => 'boolean',
+        'muestra_sector' => 'boolean',
+        'muestra_plan' => 'boolean',
+        'muestra_accesorios_instalar' => 'boolean',
         'costo_base' => 'decimal:2',
     ];
 
@@ -45,6 +49,38 @@ class WorkOrderType extends Model
     public function workOrders(): HasMany
     {
         return $this->hasMany(WorkOrder::class);
+    }
+
+    public function costs(): HasMany
+    {
+        return $this->hasMany(WorkOrderTypeCost::class);
+    }
+
+    /**
+     * Devuelve el costo específico para un técnico, o null si no tiene costo especial.
+     */
+    public function costoParaTecnico(?int $tecnicoId): ?float
+    {
+        if (!$tecnicoId) {
+            return null;
+        }
+
+        $registro = $this->costs->isNotEmpty()
+            ? $this->costs->firstWhere('tecnico_id', $tecnicoId)
+            : WorkOrderTypeCost::withoutGlobalScope(\App\Scopes\EmpresaScope::class)
+            ->where('work_order_type_id', $this->id)
+            ->where('tecnico_id', $tecnicoId)
+            ->first();
+
+        return $registro ? (float) $registro->costo : null;
+    }
+
+    /**
+     * Costo resuelto: usa el costo del técnico si existe, sino el costo_base.
+     */
+    public function costoResuelto(?int $tecnicoId): float
+    {
+        return $this->costoParaTecnico($tecnicoId) ?? (float) $this->costo_base;
     }
 
     // Scopes

@@ -7,10 +7,8 @@ use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Contactos;
 use Livewire\Attributes\On;
-use Illuminate\Validation\Rule;
 use WireUi\Traits\WireUiActions;
 use App\Services\FactilizaService;
-use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ClientesRequest;
 
 class Save extends Component
@@ -19,28 +17,107 @@ class Save extends Component
 
     public $modalSave = false;
 
+    // Datos del cliente
     public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
 
-    public $errorConsulta;
+    // Datos del contacto principal (para RUC: se llena manualmente; para DNI: se sincroniza automáticamente)
+    public $contacto_nombre;
+    public $contacto_numero_documento;
+    public $contacto_cargo = 'GERENTE GENERAL';
+    public $contacto_telefono;
+    public $contacto_email;
 
+    public $errorConsulta;
+    public $errorContacto;
 
     public function render()
     {
         return view('livewire.admin.clientes.save');
     }
 
-    public function buscarDocumento()
+    // ─── Sincronización para DNI ────────────────────────────────────────────────
+
+    public function updatedRazonSocial($value): void
+    {
+        if ($this->tipo_documento_id == 1) {
+            $this->contacto_nombre = $value;
+        }
+    }
+
+    public function updatedNumeroDocumento($value): void
+    {
+        if ($this->tipo_documento_id == 1) {
+            $this->contacto_numero_documento = $value;
+        }
+    }
+
+    public function updatedTelefono($value): void
+    {
+        if ($this->tipo_documento_id == 1) {
+            $this->contacto_telefono = $value;
+        }
+    }
+
+    public function updatedEmail($value): void
+    {
+        if ($this->tipo_documento_id == 1) {
+            $this->contacto_email = $value;
+        }
+    }
+
+    public function updatedTipoDocumentoId($value): void
+    {
+        if ($value == 1) {
+            // DNI: el contacto es el mismo cliente
+            $this->contacto_nombre           = $this->razon_social;
+            $this->contacto_numero_documento = $this->numero_documento;
+            $this->contacto_cargo            = 'GERENTE';
+            $this->contacto_telefono         = $this->telefono;
+            $this->contacto_email            = $this->email;
+        } else {
+            // RUC: limpiar para que el usuario llene manualmente
+            $this->contacto_nombre           = null;
+            $this->contacto_numero_documento = null;
+            $this->contacto_cargo            = 'GERENTE GENERAL';
+            $this->contacto_telefono         = null;
+            $this->contacto_email            = null;
+        }
+        $this->reset('errorConsulta');
+    }
+
+    // ─── Búsqueda de documento ───────────────────────────────────────────────────
+
+    public function buscarContacto(): void
+    {
+        $this->reset('errorContacto');
+        $numero = trim($this->contacto_numero_documento);
+
+        if (!ctype_digit($numero) || strlen($numero) != 8) {
+            $this->errorContacto = 'El DNI debe tener exactamente 8 dígitos';
+            return;
+        }
+
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarDni($numero);
+
+        if (($resultado['success'] ?? false) && ($resultado['nombres'] ?? false)) {
+            $this->contacto_nombre = $resultado['nombre_completo'];
+            $this->notification()->success('DNI encontrado', 'Datos del contacto cargados');
+        } else {
+            $this->errorContacto = $resultado['message'] ?? 'No se encontró información para este DNI';
+        }
+    }
+
+    public function buscarDocumento(): void
     {
         $this->reset('errorConsulta');
         $numero = trim($this->numero_documento);
 
-        // Validar que solo contenga números
         if (!ctype_digit($numero)) {
             $this->errorConsulta = 'El número de documento solo debe contener dígitos';
             return;
         }
 
-        // Validar formato según tipo de documento
         if ($this->tipo_documento_id == 1) {
             if (strlen($numero) != 8) {
                 $this->errorConsulta = 'El DNI debe tener exactamente 8 dígitos';
@@ -58,15 +135,18 @@ class Save extends Component
         }
     }
 
-    protected function consultarDni($numero)
+    protected function consultarDni(string $numero): void
     {
         $factiliza = new FactilizaService();
         $resultado = $factiliza->consultarDni($numero);
 
         if ($resultado['success'] ?? false) {
             if ($resultado['nombres'] ?? false) {
-                $this->razon_social = $resultado['nombre_completo'];
-                $this->direccion = $resultado['direccion_completa'] ?? '';
+                $this->razon_social              = $resultado['nombre_completo'];
+                $this->direccion                 = $resultado['direccion_completa'] ?? '';
+                // Sincronizar contacto
+                $this->contacto_nombre           = $this->razon_social;
+                $this->contacto_numero_documento = $numero;
                 $this->notification()->success('DNI encontrado', 'Datos cargados correctamente');
             } else {
                 $this->errorConsulta = 'No se encontró información para este DNI';
@@ -76,7 +156,7 @@ class Save extends Component
         }
     }
 
-    protected function consultarRuc($numero)
+    protected function consultarRuc(string $numero): void
     {
         $factiliza = new FactilizaService();
         $resultado = $factiliza->consultarRuc($numero);
@@ -84,8 +164,11 @@ class Save extends Component
         if ($resultado['success'] ?? false) {
             if ($resultado['nombre_o_razon_social'] ?? false) {
                 $this->razon_social = $resultado['nombre_o_razon_social'];
-                $this->direccion = $resultado['direccion_completa'] ?? '';
+                $this->direccion    = $resultado['direccion_completa'] ?? '';
                 $this->notification()->success('RUC encontrado', 'Datos cargados correctamente');
+
+                // Intentar pre-llenar contacto desde representante legal
+                $this->preLlenarContactoDesdeRuc($numero);
             } else {
                 $this->errorConsulta = 'No se encontró información para este RUC';
             }
@@ -94,30 +177,114 @@ class Save extends Component
         }
     }
 
-    public function save()
+    protected function preLlenarContactoDesdeRuc(string $ruc): void
     {
-        $request = new ClientesRequest();
-        $data = $this->validate($request->rules(), $request->messages());
-
         try {
-            $cliente = Clientes::create($data);
-            $this->afterSave($cliente);
-        } catch (\Throwable $th) {
+            $factiliza = new FactilizaService();
+            $resultado = $factiliza->consultarRucRepresentantes($ruc);
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR:',
-                mensaje: $th->getMessage(),
-            );
+            if (($resultado['success'] ?? false) && !empty($resultado['representantes'])) {
+                $gerente = collect($resultado['representantes'])->first(
+                    fn($rep) => stripos($rep['cargo'] ?? '', 'GERENTE') !== false
+                ) ?? $resultado['representantes'][0];
+
+                $this->contacto_nombre           = $gerente['nombre'] ?? null;
+                $this->contacto_numero_documento = $gerente['numero_de_documento'] ?? null;
+                $this->contacto_cargo            = $gerente['cargo'] ?? 'GERENTE GENERAL';
+            }
+        } catch (\Throwable) {
+            // No bloquear si falla la consulta de representantes
         }
     }
 
-    public function afterSave($cliente)
-    {
-        // Crear contacto automáticamente según tipo de documento
-        $this->crearContactoAutomatico($cliente);
+    // ─── Guardar ─────────────────────────────────────────────────────────────────
 
+    public function save(): void
+    {
+        $request      = new ClientesRequest();
+        $clienteRules = $request->rules();
+
+        // DNI: teléfono y email obligatorios en el cliente
+        if ($this->tipo_documento_id == 1) {
+            $clienteRules['telefono'] = 'required|digits_between:6,15|numeric';
+            $clienteRules['email']    = 'required|email';
+        }
+
+        // Reglas del contacto
+        if ($this->tipo_documento_id == 6) {
+            $contactoRules = [
+                'contacto_nombre'           => 'required|min:3',
+                'contacto_numero_documento' => 'required|digits:8|numeric',
+                'contacto_cargo'            => 'nullable|string|max:100',
+                'contacto_telefono'         => 'required|digits_between:6,15|numeric',
+                'contacto_email'            => 'nullable|email',
+            ];
+        } else {
+            $contactoRules = [
+                'contacto_telefono' => 'required|digits_between:6,15|numeric',
+                'contacto_email'    => 'required|email',
+            ];
+        }
+
+        $messages = array_merge($request->messages(), [
+            'contacto_nombre.required'           => 'El nombre del contacto es obligatorio',
+            'contacto_nombre.min'                => 'El nombre debe tener al menos 3 caracteres',
+            'contacto_numero_documento.required' => 'El DNI del contacto es obligatorio',
+            'contacto_numero_documento.digits'   => 'El DNI debe tener exactamente 8 dígitos',
+            'contacto_numero_documento.numeric'  => 'El DNI solo debe contener números',
+            'contacto_telefono.required'         => 'El teléfono del contacto es obligatorio',
+            'contacto_email.required'            => 'El correo del contacto es obligatorio',
+            'contacto_email.email'               => 'El correo del contacto no tiene un formato válido',
+            'telefono.required'                  => 'El teléfono es obligatorio',
+            'email.required'                     => 'El correo es obligatorio',
+        ]);
+
+        $data = $this->validate(array_merge($clienteRules, $contactoRules), $messages);
+
+        try {
+            $cliente = Clientes::create($data);
+            $this->crearContacto($cliente);
+            $this->afterSave($cliente);
+        } catch (\Throwable $th) {
+            $this->dispatch('notify-toast', icon: 'error', title: 'ERROR:', mensaje: $th->getMessage());
+        }
+    }
+
+    protected function crearContacto(Clientes $cliente): void
+    {
+        if ($this->tipo_documento_id == 1) {
+            // DNI: el mismo cliente es el contacto
+            Contactos::create([
+                'clientes_id'      => $cliente->id,
+                'nombre'           => $this->razon_social,
+                'numero_documento' => $this->numero_documento,
+                'cargo'            => 'GERENTE',
+                'is_gerente'       => true,
+                'telefono'         => $this->telefono,
+                'email'            => $this->email,
+                'birthday'         => Carbon::now(),
+                'descripcion'      => 'Contacto creado automáticamente',
+                'empresa_id'       => $cliente->empresa_id,
+            ]);
+        } else {
+            // RUC: contacto ingresado en el formulario
+            Contactos::create([
+                'clientes_id'      => $cliente->id,
+                'nombre'           => $this->contacto_nombre,
+                'numero_documento' => $this->contacto_numero_documento,
+                'cargo'            => $this->contacto_cargo ?: 'GERENTE GENERAL',
+                'is_gerente'       => true,
+                'telefono'         => $this->contacto_telefono,
+                'email'            => $this->contacto_email,
+                'birthday'         => Carbon::now(),
+                'descripcion'      => 'Contacto registrado al crear cliente',
+                'empresa_id'       => $cliente->empresa_id,
+            ]);
+        }
+    }
+
+    public function afterSave(Clientes $cliente): void
+    {
         $this->closeModal();
         $this->dispatch(
             'notify',
@@ -125,124 +292,49 @@ class Save extends Component
             title: 'CLIENTE GUARDADO',
             mensaje: 'El cliente ' . $cliente->razon_social . ' fue registrado correctamente'
         );
-
         $this->dispatch('update-table');
         $this->resetProp();
     }
 
-    /**
-     * Crea un contacto automáticamente después de guardar el cliente
-     * - Si es RUC: Consulta representante legal y lo guarda como GERENTE
-     * - Si es DNI: Guarda el mismo cliente como contacto
-     */
-    protected function crearContactoAutomatico($cliente)
+    public function resetProp(): void
     {
-        try {
-            if ($cliente->tipo_documento_id == 6) {
-                // Es RUC: Consultar representante legal
-                $this->crearContactoDesdeRepresentante($cliente);
-            } elseif ($cliente->tipo_documento_id == 1) {
-                // Es DNI: Guardar el mismo cliente como contacto
-                $this->crearContactoDesdeDNI($cliente);
-            }
-        } catch (\Throwable $th) {
-            // Log del error pero no detener el flujo principal
-            Log::warning('Error al crear contacto automático: ' . $th->getMessage(), [
-                'cliente_id' => $cliente->id,
-                'tipo_documento_id' => $cliente->tipo_documento_id,
-            ]);
-        }
+        $this->reset(
+            'tipo_documento_id',
+            'numero_documento',
+            'razon_social',
+            'telefono',
+            'email',
+            'web_site',
+            'direccion',
+            'contacto_nombre',
+            'contacto_numero_documento',
+            'contacto_cargo',
+            'contacto_telefono',
+            'contacto_email',
+            'errorConsulta',
+            'errorContacto'
+        );
+        $this->tipo_documento_id = 1;
+        $this->contacto_cargo    = 'GERENTE GENERAL';
     }
 
-    /**
-     * Crea contacto desde el representante legal consultando a Factiliza
-     */
-    protected function crearContactoDesdeRepresentante($cliente)
-    {
-        $factiliza = new FactilizaService();
-        $resultado = $factiliza->consultarRucRepresentantes($cliente->numero_documento);
-
-        if (($resultado['success'] ?? false) && !empty($resultado['representantes'])) {
-            // Buscar el gerente general en los representantes
-            $gerente = collect($resultado['representantes'])->first(function ($rep) {
-                return stripos($rep['cargo'] ?? '', 'GERENTE') !== false;
-            });
-
-            // Si no hay gerente, tomar el primer representante
-            $gerente = $gerente ?? $resultado['representantes'][0];
-
-            // Extraer número de documento (puede estar enmascarado con *****)
-            $numeroDocumento = $gerente['numero_de_documento'];
-
-            // Verificar si ya existe un contacto con este documento
-            $existeContacto = Contactos::where('clientes_id', $cliente->id)
-                ->where('numero_documento', $numeroDocumento)
-                ->exists();
-
-            if (!$existeContacto) {
-                Contactos::create([
-                    'clientes_id' => $cliente->id,
-                    'nombre' => $gerente['nombre'],
-                    'numero_documento' => $numeroDocumento,
-                    'cargo' => $gerente['cargo'] ?? 'GERENTE GENERAL',
-                    'is_gerente' => true,
-                    'telefono' => $cliente->telefono ?? '',
-                    'email' => $cliente->email ?? '',
-                    'birthday' => Carbon::now(),
-                    'descripcion' => 'Contacto creado automáticamente desde representante legal',
-                    'empresa_id' => $cliente->empresa_id,
-                ]);
-            }
-        }
-    }
-
-    /**
-     * Crea contacto desde el mismo cliente cuando es DNI
-     */
-    protected function crearContactoDesdeDNI($cliente)
-    {
-        // Verificar si ya existe un contacto con este DNI
-        $existeContacto = Contactos::where('clientes_id', $cliente->id)
-            ->where('numero_documento', $cliente->numero_documento)
-            ->exists();
-
-        if (!$existeContacto) {
-            Contactos::create([
-                'clientes_id' => $cliente->id,
-                'nombre' => $cliente->razon_social,
-                'numero_documento' => $cliente->numero_documento,
-                'cargo' => 'GERENTE',
-                'is_gerente' => true,
-                'telefono' => $cliente->telefono ?? '',
-                'email' => $cliente->email ?? '',
-                'birthday' => Carbon::now(),
-                'descripcion' => 'Contacto creado automáticamente desde cliente DNI',
-                'empresa_id' => $cliente->empresa_id,
-            ]);
-        }
-    }
-
-    public function resetProp()
-    {
-
-        $this->reset('tipo_documento_id', 'numero_documento', 'razon_social', 'telefono', 'email', 'web_site', 'direccion');
-    }
-
-    public function updated($value)
+    public function updated($value): void
     {
         $request = new ClientesRequest();
         $this->validateOnly($value, $request->rules(), $request->messages());
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->modalSave = false;
     }
 
     #[On(['open-modal-save-cliente'])]
-    public function openModalSaveCliente($busqueda = null)
+    public function openModalSaveCliente($busqueda = null): void
     {
-        $this->razon_social = $busqueda;
-        $this->modalSave = true;
+        $this->resetProp();
+        $this->razon_social    = $busqueda;
+        $this->contacto_nombre = $busqueda;
+        $this->modalSave       = true;
     }
 }

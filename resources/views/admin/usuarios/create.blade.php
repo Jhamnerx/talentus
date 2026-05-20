@@ -60,13 +60,13 @@
                                 {!! Html::decode(
                                     Form::label('name', 'Nombre: <span class="text-rose-500">*</span>', [
                                         'class' => 'block
-                                                            text-sm font-medium mb-1',
+                                                                                            text-sm font-medium mb-1',
                                     ]),
                                 ) !!}
 
                                 {!! Form::text('name', null, [
                                     'class' => 'form-input w-full valid:border-emerald-300
-                                                            required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
                                     'required' => '',
                                     'placeholder' => 'Escribe el nombre',
                                 ]) !!}
@@ -82,13 +82,13 @@
                                 {!! Html::decode(
                                     Form::label('email', 'Email: <span class="text-rose-500">*</span>', [
                                         'class' => 'block
-                                                            text-sm font-medium mb-1',
+                                                                                            text-sm font-medium mb-1',
                                     ]),
                                 ) !!}
 
                                 {!! Form::text('email', null, [
                                     'class' => 'form-input w-full valid:border-emerald-300
-                                                            required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
                                     'required' => '',
                                     'placeholder' => 'Escribe el email',
                                 ]) !!}
@@ -103,7 +103,7 @@
                                 {!! Html::decode(
                                     Form::label('roles', 'Rol: <span class="text-rose-500">*</span>', [
                                         'class' => 'block text-sm
-                                                            font-medium mb-1',
+                                                                                            font-medium mb-1',
                                     ]),
                                 ) !!}
 
@@ -118,7 +118,7 @@
                             <div class="col-span-12 sm:col-span-6">
                                 {!! Form::label('password', 'Contraseña:', [
                                     'class' => 'block text-sm font-medium
-                                                            mb-1',
+                                                                                            mb-1',
                                 ]) !!}
 
                                 {!! Form::password('password', [
@@ -134,8 +134,8 @@
                             <div class="col-span-12 sm:col-span-6">
                                 {!! Form::label('password_confirmation', 'Confirmar Contraseña:', [
                                     'class' => 'block text-sm
-                                                            font-medium
-                                                            mb-1',
+                                                                                            font-medium
+                                                                                            mb-1',
                                 ]) !!}
 
                                 {!! Form::password('password_confirmation', [
@@ -178,8 +178,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                            focus:ring-2 focus:ring-offset-2
-                                            focus:ring-emerald-600 text-white',
+                                                                    focus:ring-2 focus:ring-offset-2
+                                                                    focus:ring-emerald-600 text-white',
                         ]) !!}
                     </div>
                 </div>

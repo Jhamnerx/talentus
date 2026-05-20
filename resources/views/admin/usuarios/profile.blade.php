@@ -38,7 +38,7 @@
                     <!-- Group body -->
                     <div class="px-5 py-4">
                         <!-- Search form -->
-                        <form class="relative">
+                        <form class="relative" @submit.prevent>
                             <label for="profile-search" class="sr-only">Buscar</label>
                             <input id="profile-search" class="form-input w-full pl-9 focus:border-slate-300"
                                 type="search" placeholder="Search…" />

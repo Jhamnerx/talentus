@@ -62,8 +62,8 @@ class DashboardReportes extends Component
 
         $suspensionesDetallesMes = Lineas::where('estado', LineasStatus::SUSPENDIDA)
             ->whereBetween('updated_at', [$mesI, $mesF])
-            ->with(['sim_card'])
-            ->select('id', 'numero', 'operador', 'updated_at')
+            ->select('id', 'numero', 'operador_id', 'updated_at')
+            ->with(['sim_card', 'operador'])
             ->limit(20)
             ->get();
 

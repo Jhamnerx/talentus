@@ -36,7 +36,7 @@ class VehiculosIndex extends Component
         $hasta = $this->to;
 
         $vehiculos = Vehiculos::query()
-            ->with(['planSubscriptions', 'detallesCobros.cobro'])
+            ->with(['planSubscriptions', 'cobro'])
             ->when($this->clientes_id, function ($query) {
                 $query->where('clientes_id', $this->clientes_id);
             })
@@ -46,8 +46,7 @@ class VehiculosIndex extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->whereHas('sim_card', function ($query) {
-                        $query->where('sim_card', 'LIKE', '%' . $this->search . '%')
-                            ->orWhere('operador', 'LIKE', '%' . $this->search . '%');
+                        $query->where('sim_card', 'LIKE', '%' . $this->search . '%');
                         $query->orwhereHas('linea', function ($linea) {
                             $linea->where('numero', 'LIKE', '%' . $this->search . '%');
                         });
@@ -62,7 +61,6 @@ class VehiculosIndex extends Component
                         ->orWhere('color', 'like', '%' . $this->search . '%')
                         ->orWhere('motor', 'like', '%' . $this->search . '%')
                         ->orWhere('serie', 'like', '%' . $this->search . '%')
-                        ->orWhere('dispositivo_imei', 'like', '%' . $this->search . '%')
                         ->orWhere('old_numero', 'like', '%' . $this->search . '%')
                         ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
                         ->orWhere('year', 'like', '%' . $this->search . '%');

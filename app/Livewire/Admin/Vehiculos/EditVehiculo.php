@@ -47,12 +47,12 @@ class EditVehiculo extends Component
         $this->color = $vehiculo->color;
         $this->motor = $vehiculo->motor;
         $this->serie = $vehiculo->serie;
-        $this->dispositivo_imei = $vehiculo->dispositivo_imei;
+        $this->dispositivo_imei = ''; // campo de entrada temporal, no viene de BD
         $this->modelo_gps = $vehiculo->dispositivoPrincipal ? $vehiculo->dispositivoPrincipal->dispositivo->modelo->modelo : null;
         $this->sim_card_id = $vehiculo->sim_card_id;
         $this->numero = $vehiculo->numero;
         $this->sim_card = $vehiculo->sim_card ? $vehiculo->sim_card->sim_card : null;
-        $this->operador = $vehiculo->sim_card ? $vehiculo->sim_card->operador : null;
+        $this->operador = $vehiculo->sim_card ? $vehiculo->sim_card->operador?->name : null;
         $this->clientes_id = $vehiculo->clientes_id;
         $this->dispositivos_id = $vehiculo->dispositivos_id;
         $this->descripcion = $vehiculo->descripcion;
@@ -263,7 +263,7 @@ class EditVehiculo extends Component
         if ($numero) {
             $linea = Lineas::where('numero', $numero)->first();
             if (!$linea) return;
-            $this->operador = $linea->operador;
+            $this->operador = $linea->operador?->name;
             $this->sim_card_id = $linea->sim_card ? $linea->sim_card->id : null;
             $this->sim_card = $linea->sim_card ? $linea->sim_card->sim_card : null;
         }

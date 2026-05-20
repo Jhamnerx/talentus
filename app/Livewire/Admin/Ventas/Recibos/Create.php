@@ -13,11 +13,11 @@ use App\Models\Dispositivos;
 use App\Models\plantilla;
 use App\Models\Productos;
 use App\Models\PaymentMethodType;
+use App\Models\PeriodoCobro;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RecibosRequest;
 use App\Helpers\PaymentDestinationHelper;
-use App\Models\NotificacionCobro;
 use Livewire\Attributes\Computed;
 
 class Create extends Component
@@ -45,6 +45,7 @@ class Create extends Component
     public $cobro_id;
     public $empresa_id;
     public $notificacion_ids_array = [];
+    public int $notificacion_periodos = 1;
     public $cobro_redirect_back = null;
 
     // Modal selección de IMEI para equipos GPS
@@ -56,7 +57,7 @@ class Create extends Component
 
     public $tipo_cambio = 0.00;
 
-    public function mount($notificacion_ids = null)
+    public function mount($periodo_ids = null)
     {
         $this->setSerieMount();
 
@@ -93,20 +94,20 @@ class Create extends Component
 
 
         // Asignar cliente y contexto
-        if ($notificacion_ids) {
-            $ids = is_array($notificacion_ids)
-                ? $notificacion_ids
-                : (json_decode($notificacion_ids, true) ?? []);
-            $firstNotif = NotificacionCobro::with(['cobro', 'cliente'])->find(
+        if ($periodo_ids) {
+            $ids = is_array($periodo_ids)
+                ? $periodo_ids
+                : (json_decode($periodo_ids, true) ?? []);
+            $firstPeriodo = PeriodoCobro::with(['cobro', 'cliente'])->find(
                 is_array($ids) ? $ids[0] : $ids
             );
 
-            if ($firstNotif) {
-                $cobro = $firstNotif->cobro;
-                $this->cliente   = $firstNotif->cliente;
-                $this->clientes_id = $firstNotif->cliente_id;
-                $this->divisa    = $firstNotif->moneda ?? $cobro->divisa ?? 'PEN';
-                $this->cobro_id  = $firstNotif->cobro_id;
+            if ($firstPeriodo) {
+                $cobro = $firstPeriodo->cobro;
+                $this->cliente    = $firstPeriodo->cliente;
+                $this->clientes_id = $firstPeriodo->cliente_id;
+                $this->divisa    = $firstPeriodo->divisa ?? $cobro->divisa ?? 'PEN';
+                $this->cobro_id  = $firstPeriodo->cobros_id;
                 $this->cobro_redirect_back = session('cobro_redirect_back');
 
                 $sessionFormaPago = session('cobro_forma_pago');
@@ -118,6 +119,10 @@ class Create extends Component
             }
 
             $this->notificacion_ids_array = is_array($ids) ? $ids : [$ids];
+
+            // Períodos a avanzar al facturar (cliente pagó N períodos de una sola vez)
+            $this->notificacion_periodos = max(1, (int) session('notificacion_periodos', 1));
+            session()->forget('notificacion_periodos');
 
             $this->procesarItemsDesdeNotificaciones($this->notificacion_ids_array);
         }
@@ -179,52 +184,67 @@ class Create extends Component
         }
     }
     /**
-     * Procesa items desde NotificacionCobro.
+     * Procesa items desde PeriodoCobro.
      * Para recibos: sin IGV, valor_unitario = monto total (exonerado).
      */
     public function procesarItemsDesdeNotificaciones(array $notificacionIds): void
     {
-        $notificaciones = NotificacionCobro::with([
-            'detalleCobro.planModel',
-            'cobro.producto.unit',
+        $notificaciones = PeriodoCobro::with([
+            'cobro.plan',
             'vehiculo',
         ])->whereIn('id', $notificacionIds)->get();
 
-        $servicioCobro = Productos::getServicioCobro();
+        $servicioCobro       = Productos::getServicioCobro();
         $servicioDescripcion = $servicioCobro?->descripcion ?? '';
 
+        // Períodos a facturar: 1 = 1 ítem, 2 = 2 ítems, etc.
+        $periodos = max(1, $this->notificacion_periodos);
+
         foreach ($notificaciones as $notificacion) {
-            $detalle  = $notificacion->detalleCobro;
             $cobro    = $notificacion->cobro;
             $vehiculo = $notificacion->vehiculo;
-            $producto = $cobro->producto;
 
             $montoTotal = (float) $notificacion->monto;
 
-            // Construir descripción con periodo (igual que Emitir.php)
-            $periodo = $detalle?->periodo ?? $cobro->periodo ?? 'MENSUAL';
-            $periodoTexto = match (strtoupper((string) $periodo)) {
-                'BIMENSUAL'  => '2 meses',
+            // Construir descripción
+            $periodo = strtoupper($cobro->periodo ?? 'MENSUAL');
+            $periodoTexto = match ($periodo) {
+                'BIMESTRAL', 'BIMENSUAL' => '2 meses',
                 'TRIMESTRAL' => '3 meses',
                 'SEMESTRAL'  => '6 meses',
                 'ANUAL'      => '12 meses',
                 default      => '1 mes',
             };
 
-            $planNombre  = $detalle?->planModel?->name ?? $producto?->descripcion ?? 'Servicio GPS';
-            $placa       = $vehiculo?->placa ?? 'S/P';
-            $fechaInicio = $detalle?->fecha_inicio?->format('d/m/Y') ?? '';
-            $fechaVence  = $notificacion->fecha_vencimiento?->format('d/m/Y') ?? '';
-            $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$fechaInicio} - fin {$fechaVence}");
+            $planNombre = $cobro->plan?->name ?? $servicioCobro?->descripcion ?? 'Servicio GPS';
+            $placa      = $vehiculo?->placa ?? 'S/P';
 
-            $this->items->push([
-                'producto_id' => $cobro->producto_id,
-                'producto'    => $producto->descripcion,
-                'descripcion' => $descripcion,
-                'cantidad'    => 1,
-                'precio'      => $montoTotal,
-                'total'       => $montoTotal,
-            ]);
+            $periodoStart = Carbon::parse($notificacion->fecha_inicio);
+            $periodoEnd   = Carbon::parse($notificacion->fecha_fin);
+
+            for ($p = 0; $p < $periodos; $p++) {
+                if ($p > 0) {
+                    $periodoStart = $periodoEnd->copy();
+                    $periodoEnd = match ($periodo) {
+                        'BIMESTRAL', 'BIMENSUAL' => $periodoStart->copy()->addMonthsNoOverflow(2),
+                        'TRIMESTRAL' => $periodoStart->copy()->addMonthsNoOverflow(3),
+                        'SEMESTRAL'  => $periodoStart->copy()->addMonthsNoOverflow(6),
+                        'ANUAL'      => $periodoStart->copy()->addYearNoOverflow(),
+                        default      => $periodoStart->copy()->addMonthNoOverflow(),
+                    };
+                }
+
+                $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$periodoStart->format('d/m/Y')} - fin {$periodoEnd->format('d/m/Y')}");
+
+                $this->items->push([
+                    'producto_id' => $servicioCobro?->id,
+                    'producto'    => $servicioCobro?->descripcion,
+                    'descripcion' => $descripcion,
+                    'cantidad'    => 1,
+                    'precio'      => $montoTotal,
+                    'total'       => $montoTotal,
+                ]);
+            }
         }
 
         $this->reCalTotal();
@@ -567,28 +587,22 @@ class Create extends Component
         //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
         $recibo->getSerie->increment('correlativo');
 
-        // AUTO-UPDATE desde flujo de notificaciones
+        // AUTO-UPDATE desde flujo de períodos de cobro
         if (!empty($this->notificacion_ids_array)) {
             $reciboPagado = $recibo->fresh()->pago_estado === 'PAID';
 
-            $notificaciones = NotificacionCobro::with(['detalleCobro', 'cobro'])
-                ->whereIn('id', $this->notificacion_ids_array)->get();
+            $periodos = PeriodoCobro::whereIn('id', $this->notificacion_ids_array)->get();
 
             if ($reciboPagado) {
-                // Pagado: avanzar período y marcar como PAGADO
-                foreach ($notificaciones as $notif) {
-                    $notif->recibo_id         = $recibo->id;
-                    $notif->fecha_facturacion = now();
-                    $notif->saveQuietly();
-                    $notif->marcarComoPagado();
+                // Pagado: marcar período como PAGADO con referencia al recibo
+                foreach ($periodos as $periodo) {
+                    $periodo->marcarComoPagado(null, $recibo->id);
                 }
             } else {
-                // Solo facturado sin pagar: vincular documento, no avanzar período
-                NotificacionCobro::whereIn('id', $this->notificacion_ids_array)->update([
-                    'estado'            => 'FACTURADO',
-                    'recibo_id'         => $recibo->id,
-                    'fecha_facturacion' => now(),
-                ]);
+                // Facturado sin pagar: marcar como FACTURADO y vincular documento
+                foreach ($periodos as $periodo) {
+                    $periodo->marcarComoFacturado(null, $recibo->id);
+                }
             }
         }
 

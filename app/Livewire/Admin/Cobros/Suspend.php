@@ -4,9 +4,7 @@ namespace App\Livewire\Admin\Cobros;
 
 use App\Models\Cobros;
 use Livewire\Component;
-use App\Models\DetalleCobros;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
 
 class Suspend extends Component
 {
@@ -26,7 +24,7 @@ class Suspend extends Component
         return view('livewire.admin.cobros.suspend');
     }
 
-    public function openModalSuspend(DetalleCobros $detalle)
+    public function openModalSuspend(Cobros $cobro)
     {
         $this->dispatch('suspend-vehiculo-cobro', detalle: $this->detalle);
     }

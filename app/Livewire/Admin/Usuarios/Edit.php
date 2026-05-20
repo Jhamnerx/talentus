@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Usuarios;
 
 use App\Models\User;
+use App\Models\Ciudades;
 use App\Models\Locales;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -19,6 +20,7 @@ class Edit extends Component
     public $document_id;
     public $series;
     public $series_id;
+    public ?int $ciudad_id = null;
 
     public $locales = [];
 
@@ -57,8 +59,11 @@ class Edit extends Component
     public function render()
     {
         $roles = Role::all()->select('name', 'id');
+        $ciudades = Ciudades::where('is_active', true)->orderBy('nombre')->get();
+        $tecnicoRoleId = Role::findByName('tecnico', 'web')?->id;
+        $esTecnico = $tecnicoRoleId && in_array($tecnicoRoleId, (array) $this->roles_id);
 
-        return view('livewire.admin.usuarios.edit', compact('roles'));
+        return view('livewire.admin.usuarios.edit', compact('roles', 'ciudades', 'esTecnico'));
     }
 
     #[On('open-modal-edit')]
@@ -68,8 +73,9 @@ class Edit extends Component
         $this->usuario = $usuario;
         $this->name = $usuario->name;
         $this->email = $usuario->email;
-        $this->roles_id = $usuario->roles->pluck('id');
+        $this->roles_id = $usuario->roles->pluck('id')->toArray();
         $this->series_id = $usuario->series_id;
+        $this->ciudad_id = $usuario->ciudad_id;
         if ($usuario->series_id) {
             $serie = $usuario->series;
             $this->document_id = $serie ? $serie->tipo_comprobante_id : null;
@@ -93,17 +99,19 @@ class Edit extends Component
     public function save()
     {
         $this->validate();
-        $this->usuario->update([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => $this->password ? Hash::make($this->password) : $this->usuario->password,
-            'series_id' => $this->series_id,
-        ]);
+
         try {
+            $this->usuario->update([
+                'name'      => $this->name,
+                'email'     => $this->email,
+                'password'  => $this->password ? Hash::make($this->password) : $this->usuario->password,
+                'series_id' => $this->series_id,
+                'ciudad_id' => $this->ciudad_id,
+            ]);
             $this->usuario->syncRoles($this->roles_id);
             $this->dispatch('update-table');
             $this->dispatch(
-                'notify',
+                'notify-toast',
                 icon: 'success',
                 title: 'USUARIO ACTUALIZADO',
                 mensaje: 'El usuario se ha actualizado correctamente'
@@ -112,10 +120,10 @@ class Edit extends Component
             $this->closeModal();
         } catch (\Throwable $th) {
             $this->dispatch(
-                'notify',
+                'notify-toast',
                 icon: 'error',
                 title: 'ERROR',
-                mensaje: 'Ha ocurrido un error al actualizar el usuario'
+                mensaje: 'Ha ocurrido un error al actualizar el usuario: ' . $th->getMessage()
             );
         }
     }

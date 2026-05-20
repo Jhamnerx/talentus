@@ -4,8 +4,8 @@ namespace App\Livewire\Admin\Vehiculos;
 
 use Livewire\Component;
 use App\Models\Actas;
+use App\Models\Cobros;
 use App\Models\Vehiculos;
-use App\Models\DetalleCobros;
 use Livewire\Attributes\On;
 
 class Suspend extends Component
@@ -36,8 +36,6 @@ class Suspend extends Component
         }
 
         if ($this->remove) {
-            $this->vehiculo->setAttribute('old_imei', $this->vehiculo->dispositivo_imei);
-            $this->vehiculo->setAttribute('dispositivo_imei', null);
             $this->vehiculo->setAttribute('dispositivos_id', null);
         }
 
@@ -50,10 +48,10 @@ class Suspend extends Component
         $subscription = $this->vehiculo->planSubscription('gps-tracking');
         $subscription?->cancel(immediately: true);
 
-        // Marcar DetalleCobros activos como inactivo (estado = false)
-        DetalleCobros::where('vehiculo_id', $this->vehiculo->id)
-            ->where('estado', true)
-            ->update(['estado' => false]);
+        // Suspender Cobros activos del vehículo
+        Cobros::where('vehiculos_id', $this->vehiculo->id)
+            ->where('estado', 'ACTIVO')
+            ->update(['estado' => 'SUSPENDIDO']);
 
         // Anular la última acta activa del vehículo
         $ultimaActa = Actas::where('vehiculos_id', $this->vehiculo->id)

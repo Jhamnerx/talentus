@@ -32,7 +32,7 @@ class LineasRequest extends FormRequest
         $rules = [
             "sim_card"  => 'nullable|unique:lineas',
             'numero' => 'nullable|unique:lineas',
-            'operador' => 'required',
+            'operador_id' => 'required|exists:operadores,id',
         ];
 
         if ($lineas) {

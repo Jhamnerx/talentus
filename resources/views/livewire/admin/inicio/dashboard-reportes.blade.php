@@ -61,7 +61,7 @@
                         class="flex items-center justify-between py-1.5 border-b border-slate-50 dark:border-slate-700 last:border-0">
                         <div>
                             <p class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ $linea->numero }}</p>
-                            <p class="text-xs text-slate-400">{{ $linea->operador }}</p>
+                            <p class="text-xs text-slate-400">{{ $linea->operador?->name ?? '—' }}</p>
                         </div>
                         <span class="text-xs text-slate-400">{{ $linea->updated_at->format('d/m/Y') }}</span>
                     </div>

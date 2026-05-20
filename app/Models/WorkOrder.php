@@ -40,12 +40,27 @@ class WorkOrder extends Model
         'tipo_data' => 'array',
         'metadata' => 'array',
         'bloqueado' => 'boolean',
+        'wa_message_id' => 'string',
+        'wa_group_id' => 'string',
+        'ubicacion_lat' => 'float',
+        'ubicacion_lng' => 'float',
+        'tecnico_lat' => 'float',
+        'tecnico_lng' => 'float',
+        'tecnico_last_seen' => 'datetime',
+        'verified_at' => 'datetime',
+        'es_proyecto' => 'boolean',
     ];
 
     // Global Scope - Multi-empresa
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
+
+        static::creating(function (self $order) {
+            if (empty($order->verification_hash)) {
+                $order->verification_hash = \Illuminate\Support\Str::random(32);
+            }
+        });
     }
 
     // Relaciones
@@ -115,6 +130,11 @@ class WorkOrder extends Model
         return $this->hasMany(WorkOrderAccessory::class);
     }
 
+    public function items(): HasMany
+    {
+        return $this->hasMany(WorkOrderItem::class)->orderBy('orden')->orderBy('id');
+    }
+
     // Scopes
     public function scopeEstado($query, $estado)
     {
@@ -139,6 +159,13 @@ class WorkOrder extends Model
     public function scopeTecnico($query, $tecnicoId)
     {
         return $query->where('tecnico_id', $tecnicoId);
+    }
+
+    // URL pública de verificación en talentus-web
+    public function verificationUrl(): string
+    {
+        $base = config('app.talentus_web_url', 'https://talentus.pe');
+        return rtrim($base, '/') . '/verificar-orden/' . $this->verification_hash;
     }
 
     // Métodos de negocio
