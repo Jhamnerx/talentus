@@ -254,15 +254,15 @@ class Show extends Component
         $this->notification()->success('Ticket reasignado');
     }
 
-    // â”€â”€ Cambiar categorÃ­a â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â”€â”€ Cambiar categoría â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function changeCategory(): void
     {
         $this->validate(['newCategoryId' => 'nullable|exists:ticket_categories,id']);
 
-        $oldCategory = $this->ticket->category?->name ?? 'Sin categorÃ­a';
+        $oldCategory = $this->ticket->category?->name ?? 'Sin categoría';
         $this->ticket->update(['category_id' => $this->newCategoryId ?: null]);
         $this->ticket->refresh();
-        $newCategory = $this->ticket->category?->name ?? 'Sin categorÃ­a';
+        $newCategory = $this->ticket->category?->name ?? 'Sin categoría';
 
         TicketEvent::create([
             'ticket_id' => $this->ticket->id,
@@ -272,7 +272,7 @@ class Show extends Component
         ]);
 
         $this->refreshTicket();
-        $this->notification()->success('CategorÃ­a actualizada');
+        $this->notification()->success('Categoría actualizada');
     }
 
     // â”€â”€ Reabrir ticket â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -309,7 +309,7 @@ class Show extends Component
         $related = Ticket::where('code', strtoupper(trim($this->relatedTicketCode)))->first();
 
         if (! $related) {
-            $this->notification()->error('No se encontrÃ³ un ticket con ese cÃ³digo.');
+            $this->notification()->error('No se encontró un ticket con ese código.');
             return;
         }
 
@@ -344,7 +344,7 @@ class Show extends Component
             ->delete();
 
         $this->refreshTicket();
-        $this->notification()->success('VÃ­nculo eliminado.');
+        $this->notification()->success('Vínculo eliminado.');
     }
 
     // â”€â”€ Email al cliente â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -373,9 +373,9 @@ class Show extends Component
         $message = "âœ… *Tu ticket ha sido {$statusLabel}*\n\n"
             . "Ticket: *{$this->ticket->code}*\n"
             . "Asunto: {$this->ticket->subject}\n\n"
-            . "Â¿CÃ³mo calificarÃ­as la atenciÃ³n recibida?\n"
+            . "Â¿Cómo calificarías la atención recibida?\n"
             . "1ï¸âƒ£ Excelente  2ï¸âƒ£ Buena  3ï¸âƒ£ Regular  4ï¸âƒ£ Mala\n\n"
-            . "Responde con el nÃºmero. Â¡Gracias por tu opiniÃ³n!";
+            . "Responde con el nÃºmero. Â¡Gracias por tu opinión!";
 
         try {
             app(TicketWhatsAppService::class)->sendMessage($phone, $message);
@@ -414,25 +414,25 @@ class Show extends Component
             : null;
 
         return match ($event->type->value) {
-            'created'          => 'creÃ³ el ticket',
-            'status_changed'   => 'cambiÃ³ el estado de ' . ($beforeStatus ?? 'N/A') . ' a ' . ($afterStatus ?? 'N/A'),
-            'priority_changed' => 'cambiÃ³ la prioridad de '
+            'created'          => 'creó el ticket',
+            'status_changed'   => 'cambió el estado de ' . ($beforeStatus ?? 'N/A') . ' a ' . ($afterStatus ?? 'N/A'),
+            'priority_changed' => 'cambió la prioridad de '
                 . (isset($event->payload['before']) ? TicketPriority::tryFrom($event->payload['before'])?->label() : 'N/A')
                 . ' a '
                 . (isset($event->payload['after']) ? TicketPriority::tryFrom($event->payload['after'])?->label() : 'N/A'),
-            'assigned_changed' => 'reasignÃ³ el ticket a ' . ($event->payload['after_name'] ?? 'Sin asignar'),
-            'team_changed'     => 'cambiÃ³ el equipo',
-            'message_added'    => 'agregÃ³ un mensaje',
-            'internal_note'    => 'agregÃ³ una nota interna',
-            'attachment_added' => 'adjuntÃ³ un archivo: ' . ($event->payload['file_name'] ?? ''),
-            'reopened'         => 'reabriÃ³ el ticket',
-            'closed'           => 'cerrÃ³ el ticket',
-            'resolved'         => 'resolviÃ³ el ticket',
-            'category_changed' => 'cambiÃ³ la categorÃ­a de '
+            'assigned_changed' => 'reasignó el ticket a ' . ($event->payload['after_name'] ?? 'Sin asignar'),
+            'team_changed'     => 'cambió el equipo',
+            'message_added'    => 'agregó un mensaje',
+            'internal_note'    => 'agregó una nota interna',
+            'attachment_added' => 'adjuntó un archivo: ' . ($event->payload['file_name'] ?? ''),
+            'reopened'         => 'reabrió el ticket',
+            'closed'           => 'cerró el ticket',
+            'resolved'         => 'resolvió el ticket',
+            'category_changed' => 'cambió la categoría de '
                 . ($event->payload['before'] ?? 'N/A') . ' a ' . ($event->payload['after'] ?? 'N/A'),
-            'escalated'        => 'ticket escalado â€” nivel ' . ($event->payload['level'] ?? '?')
+            'escalated'        => 'ticket escalado — nivel ' . ($event->payload['level'] ?? '?')
                 . ': ' . ($event->payload['reason'] ?? ''),
-            default            => 'realizÃ³ una acciÃ³n',
+            default            => 'realizó una acción',
         };
     }
 

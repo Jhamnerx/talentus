@@ -35,6 +35,14 @@
                     </span>
                 </button>
                 @can('admin.cobros.create')
+                    <button wire:click="$dispatch('abrirImportarCobros')"
+                        class="btn bg-teal-500 text-white hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-500"
+                        title="Importar cobros desde Excel">
+                        <svg class="w-4 h-4 fill-current opacity-80 shrink-0" viewBox="0 0 16 16">
+                            <path d="M8 16L3 11h3V4h4v7h3L8 16zM0 2h16V0H0v2z" />
+                        </svg>
+                        <span class="hidden xs:block ml-2">Importar</span>
+                    </button>
                     <button wire:click="$dispatch('abrirRegistrarFlota')"
                         class="btn bg-indigo-500 text-white hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500">
                         <svg class="w-4 h-4 fill-current opacity-70 shrink-0" viewBox="0 0 16 16">
@@ -729,5 +737,8 @@
 
     {{-- Modal historial de períodos --}}
     @livewire('admin.cobros.ver-periodos')
+
+    {{-- Modal importar cobros desde Excel --}}
+    @livewire('admin.cobros.importar-cobros')
 
 </div>

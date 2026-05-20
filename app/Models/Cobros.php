@@ -74,13 +74,13 @@ class Cobros extends Model
     public function scopeVencidos($query)
     {
         return $query->where('estado', CobroEstado::ACTIVO)
-                     ->where('fecha_vencimiento', '<', Carbon::today());
+            ->where('fecha_vencimiento', '<', Carbon::today());
     }
 
     public function scopeProximosAVencer($query, int $dias = 7)
     {
         return $query->where('estado', CobroEstado::ACTIVO)
-                     ->whereBetween('fecha_vencimiento', [Carbon::today(), Carbon::today()->addDays($dias)]);
+            ->whereBetween('fecha_vencimiento', [Carbon::today(), Carbon::today()->addDays($dias)]);
     }
 
     // ─── Relaciones ───────────────────────────────────────────────────────────
@@ -155,4 +155,3 @@ class Cobros extends Model
         return $this->estado === CobroEstado::ACTIVO;
     }
 }
-

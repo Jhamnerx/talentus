@@ -28,7 +28,8 @@ class Index extends Component
     public array $selected = [];
 
     protected $listeners = [
-        'render'
+        'render',
+        'cobrosImportados' => '$refresh',
     ];
 
     public function render()

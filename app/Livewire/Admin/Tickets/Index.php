@@ -7,6 +7,7 @@ use App\Enums\TicketStatus;
 use App\Exports\TicketsExport;
 use App\Models\Ticket;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -64,8 +65,8 @@ class Index extends Component
             ->when($this->assignedFilter === 'mine', fn($q) => $q->where('assigned_to', Auth::id()))
             ->when($this->assignedFilter && $this->assignedFilter !== 'mine', fn($q) => $q->where('assigned_to', $this->assignedFilter))
             ->when($this->from && $this->to, fn($q) => $q->whereBetween('created_at', [
-                $this->from . ' 00:00:00',
-                $this->to . ' 23:59:59',
+                Carbon::parse($this->from)->startOfDay(),
+                Carbon::parse($this->to)->endOfDay(),
             ]))
             ->latest('last_activity_at');
 
@@ -80,6 +81,17 @@ class Index extends Component
             'priorities' => TicketPriority::options(),
             'agents'     => $agents,
         ]);
+    }
+
+    public function limpiarFiltros(): void
+    {
+        $this->search          = '';
+        $this->statusFilter    = '';
+        $this->priorityFilter  = '';
+        $this->assignedFilter  = '';
+        $this->from            = '';
+        $this->to              = '';
+        $this->resetPage();
     }
 
     public function filter($dias): void
