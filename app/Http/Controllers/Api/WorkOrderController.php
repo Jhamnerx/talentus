@@ -6,11 +6,14 @@ use App\Models\WorkOrder;
 use Illuminate\Http\Request;
 use App\Models\DeviceHistory;
 use App\Enums\WorkOrderStatus;
+use App\Models\WorkOrderItem;
 use App\Models\WorkOrderPhoto;
 use App\Models\ChecklistTemplate;
 use App\Models\WorkOrderAccessory;
 use App\Models\WorkOrderChecklist;
 use App\Models\WorkOrderSignature;
+use App\Models\Vehiculos;
+use App\Scopes\EmpresaScope;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -27,11 +30,20 @@ class WorkOrderController extends Controller
             ->when($request->search, function ($q, $search) {
                 $q->where(function ($query) use ($search) {
                     $query->where('codigo', 'like', "%{$search}%")
-                        ->orWhereHas('vehiculo', fn($q) => $q->where('placa', 'like', "%{$search}%"));
+                        ->orWhereHas('vehiculo', fn($q) => $q->where('placa', 'like', "%{$search}%"))
+                        ->orWhere('titulo_proyecto', 'like', "%{$search}%");
                 });
             })
             ->orderBy('created_at', 'desc')
             ->paginate($request->per_page ?? 15);
+
+        // Añadir items_count para órdenes tipo proyecto
+        $ordenes->getCollection()->transform(function ($orden) {
+            if ($orden->es_proyecto) {
+                $orden->items_count = $orden->items()->count();
+            }
+            return $orden;
+        });
 
         return response()->json([
             'success' => true,
@@ -41,7 +53,7 @@ class WorkOrderController extends Controller
 
     public function show(WorkOrder $workOrder)
     {
-        $workOrder->load([
+        $relations = [
             'tipo',
             'vehiculo.cliente',
             'cliente',
@@ -53,8 +65,15 @@ class WorkOrderController extends Controller
             'checklists.photos',
             'photos',
             'signatures',
-            'accessories.producto'
-        ]);
+            'accessories.producto',
+        ];
+
+        if ($workOrder->es_proyecto) {
+            $relations[] = 'items.vehiculo';
+            $relations[] = 'items.tipo';
+        }
+
+        $workOrder->load($relations);
 
         return response()->json([
             'success' => true,
@@ -602,6 +621,126 @@ class WorkOrderController extends Controller
         return response()->json([
             'success' => true,
             'data' => $templates
+        ]);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Ítems del Proyecto (WorkOrderItem)
+    // Solo disponibles cuando work_order.es_proyecto = true
+    // ─────────────────────────────────────────────────────────────────────
+
+    public function listarItems(WorkOrder $workOrder)
+    {
+        abort_unless($workOrder->es_proyecto, 422, 'Esta orden no es de tipo proyecto.');
+
+        $items = $workOrder->items()
+            ->with(['vehiculo', 'tipo'])
+            ->orderBy('orden')
+            ->orderBy('id')
+            ->get();
+
+        $completados = $items->where('estado', 'completado')->count();
+        $total       = $items->count();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'items'       => $items,
+                'total'       => $total,
+                'completados' => $completados,
+                'omitidos'    => $items->where('estado', 'omitido')->count(),
+                'pendientes'  => $items->where('estado', 'pendiente')->count(),
+                'progreso'    => $total > 0 ? round($completados / $total * 100) : 0,
+            ],
+        ]);
+    }
+
+    public function agregarItem(Request $request, WorkOrder $workOrder)
+    {
+        abort_unless($workOrder->es_proyecto, 422, 'Esta orden no es de tipo proyecto.');
+        abort_if($workOrder->bloqueado, 422, 'La orden está bloqueada.');
+
+        $data = $request->validate([
+            'placa'              => 'required|string|max:20',
+            'work_order_type_id' => 'required|exists:work_order_types,id',
+            'notas'              => 'nullable|string|max:500',
+        ]);
+
+        $placa    = strtoupper(trim($data['placa']));
+        $vehiculo = Vehiculos::withoutGlobalScope(EmpresaScope::class)
+            ->where('placa', $placa)->first();
+
+        $item = $workOrder->items()->create([
+            'vehiculo_id'        => $vehiculo?->id,
+            'cliente_id'         => $vehiculo?->clientes_id,
+            'placa'              => $placa,
+            'cliente_nombre'     => $vehiculo?->cliente?->razon_social,
+            'work_order_type_id' => $data['work_order_type_id'],
+            'notas'              => $data['notas'] ?? null,
+            'estado'             => 'pendiente',
+            'orden'              => $workOrder->items()->count(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Unidad {$placa} agregada al proyecto.",
+            'data'    => $item->load(['vehiculo', 'tipo']),
+        ], 201);
+    }
+
+    public function toggleEstadoItem(Request $request, WorkOrder $workOrder, WorkOrderItem $item)
+    {
+        abort_unless($workOrder->es_proyecto, 422, 'Esta orden no es de tipo proyecto.');
+        abort_if($workOrder->bloqueado, 422, 'La orden está bloqueada.');
+        abort_if($item->work_order_id !== $workOrder->id, 404, 'Ítem no pertenece a esta orden.');
+
+        $item->estado = match ($item->estado) {
+            'pendiente'  => 'completado',
+            'completado' => 'omitido',
+            default      => 'pendiente',
+        };
+        $item->save();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $item->fresh(['vehiculo', 'tipo']),
+        ]);
+    }
+
+    public function guardarDispositivoItem(Request $request, WorkOrder $workOrder, WorkOrderItem $item)
+    {
+        abort_unless($workOrder->es_proyecto, 422, 'Esta orden no es de tipo proyecto.');
+        abort_if($workOrder->bloqueado, 422, 'La orden está bloqueada.');
+        abort_if($item->work_order_id !== $workOrder->id, 404, 'Ítem no pertenece a esta orden.');
+
+        $data = $request->validate([
+            'imei'       => 'nullable|string|max:20',
+            'numero_sim' => 'nullable|string|max:22',
+        ]);
+
+        $item->update([
+            'imei'       => trim($data['imei'] ?? '') ?: null,
+            'numero_sim' => trim($data['numero_sim'] ?? '') ?: null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Dispositivo asignado correctamente.',
+            'data'    => $item->fresh(['vehiculo', 'tipo']),
+        ]);
+    }
+
+    public function eliminarItem(WorkOrder $workOrder, WorkOrderItem $item)
+    {
+        abort_unless($workOrder->es_proyecto, 422, 'Esta orden no es de tipo proyecto.');
+        abort_if($workOrder->bloqueado, 422, 'La orden está bloqueada.');
+        abort_if($item->work_order_id !== $workOrder->id, 404, 'Ítem no pertenece a esta orden.');
+
+        $item->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Unidad eliminada del proyecto.',
         ]);
     }
 }

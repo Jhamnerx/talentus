@@ -12,6 +12,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Gate;
+use Livewire\Livewire;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -37,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        // Registro explícito para evitar problemas de case-sensitivity en Linux
+        // (Livewire resuelve 'm2m-panel' → M2mPanel, pero la clase es M2MPanel)
+        Livewire::component('admin.sim-card.m2m-panel', \App\Livewire\Admin\SimCard\M2MPanel::class);
 
         try {
             Storage::extend('google', function ($app, $config) {
