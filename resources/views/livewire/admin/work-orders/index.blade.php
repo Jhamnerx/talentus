@@ -216,10 +216,26 @@
                             {{ $orden->tipo->nombre }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            {{ $orden->vehiculo->placa }}
+                            @if ($orden->es_proyecto)
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                    </svg>
+                                    {{ $orden->items_count ?? $orden->items->count() }} unidades
+                                </span>
+                            @else
+                                {{ $orden->vehiculo?->placa ?? '—' }}
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            {{ Str::limit($orden->cliente->razon_social, 30) }}
+                            @if ($orden->es_proyecto)
+                                <span
+                                    class="text-indigo-600 dark:text-indigo-400 font-medium">{{ Str::limit($orden->titulo_proyecto ?? 'Proyecto', 30) }}</span>
+                            @else
+                                {{ Str::limit($orden->cliente?->razon_social ?? '—', 30) }}
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                             {{ $orden->tecnico->name }}
@@ -268,10 +284,14 @@
                                     : '';
                                 $verificationMsg = $verificationUrl
                                     ? "✅ *Orden de Trabajo Finalizada*\n\n📋 *Tipo:* {$orden->tipo?->nombre}\n" .
-                                        ($orden->cliente?->razon_social
-                                            ? "👤 *Cliente:* {$orden->cliente->razon_social}\n"
-                                            : '') .
-                                        ($orden->vehiculo?->placa ? "🚗 *Vehículo:* {$orden->vehiculo->placa}\n" : '') .
+                                        ($orden->es_proyecto
+                                            ? "📦 *Proyecto:* {$orden->titulo_proyecto}\n"
+                                            : ($orden->cliente?->razon_social
+                                                    ? "👤 *Cliente:* {$orden->cliente->razon_social}\n"
+                                                    : '') .
+                                                ($orden->vehiculo?->placa
+                                                    ? "🚗 *Vehículo:* {$orden->vehiculo->placa}\n"
+                                                    : '')) .
                                         "\nPuede revisar y verificar el servicio realizado en el siguiente enlace:\n🔗 {$verificationUrl}"
                                     : '';
                             @endphp

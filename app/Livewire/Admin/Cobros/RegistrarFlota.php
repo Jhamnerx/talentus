@@ -167,12 +167,12 @@ class RegistrarFlota extends Component
     protected function calcularFechaFin(string $fechaInicio, string $periodo): string
     {
         return match ($periodo) {
-            'MENSUAL'    => Carbon::parse($fechaInicio)->addMonthNoOverflow()->format('Y-m-d'),
-            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(2)->format('Y-m-d'),
-            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonthsNoOverflow(3)->format('Y-m-d'),
-            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(6)->format('Y-m-d'),
-            'ANUAL'      => Carbon::parse($fechaInicio)->addYearNoOverflow()->format('Y-m-d'),
-            default      => Carbon::parse($fechaInicio)->addMonthNoOverflow()->format('Y-m-d'),
+            'MENSUAL'    => Carbon::parse($fechaInicio)->addMonthNoOverflow()->subDay()->format('Y-m-d'),
+            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(2)->subDay()->format('Y-m-d'),
+            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonthsNoOverflow(3)->subDay()->format('Y-m-d'),
+            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(6)->subDay()->format('Y-m-d'),
+            'ANUAL'      => Carbon::parse($fechaInicio)->addYearNoOverflow()->subDay()->format('Y-m-d'),
+            default      => Carbon::parse($fechaInicio)->addMonthNoOverflow()->subDay()->format('Y-m-d'),
         };
     }
 

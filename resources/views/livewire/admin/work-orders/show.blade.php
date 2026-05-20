@@ -48,26 +48,29 @@
                 </p>
             </div>
 
-            <div>
-                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                    Vehículo</h3>
-                <p class="text-sm text-gray-900 dark:text-white font-medium">
-                    {{ $workOrder->vehiculo->placa ?? 'N/A' }}
-                </p>
-                @if ($workOrder->vehiculo)
-                    <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                        {{ $workOrder->vehiculo->marca ?? '' }} {{ $workOrder->vehiculo->modelo ?? '' }}
+            @if (!$workOrder->es_proyecto)
+                <div>
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Vehículo</h3>
+                    <p class="text-sm text-gray-900 dark:text-white font-medium">
+                        {{ $workOrder->vehiculo->placa ?? 'N/A' }}
                     </p>
-                @endif
-            </div>
+                    @if ($workOrder->vehiculo)
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            {{ $workOrder->vehiculo->marca ?? '' }} {{ $workOrder->vehiculo->modelo ?? '' }}
+                        </p>
+                    @endif
+                </div>
 
-            <div>
-                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Cliente
-                </h3>
-                <p class="text-sm text-gray-900 dark:text-white font-medium">
-                    {{ $workOrder->cliente->razon_social ?? ($workOrder->vehiculo->cliente->razon_social ?? 'N/A') }}
-                </p>
-            </div>
+                <div>
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Cliente
+                    </h3>
+                    <p class="text-sm text-gray-900 dark:text-white font-medium">
+                        {{ $workOrder->cliente->razon_social ?? ($workOrder->vehiculo->cliente->razon_social ?? 'N/A') }}
+                    </p>
+                </div>
+            @endif
 
             <div>
                 <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Técnico
@@ -145,6 +148,265 @@
         </div>
     </div>
 
+    {{-- ══ ÍTEMS DEL PROYECTO (solo si es_proyecto = true) ══════════════ --}}
+    @if ($workOrder->es_proyecto)
+        <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900">
+                        <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-900 dark:text-white">
+                            {{ $workOrder->titulo_proyecto ?? 'Unidades del Proyecto' }}
+                        </h2>
+                        @php
+                            $totalItems = $workOrder->items->count();
+                            $completados = $workOrder->items->where('estado', 'completado')->count();
+                            $omitidos = $workOrder->items->where('estado', 'omitido')->count();
+                            $pendientes = $workOrder->items->where('estado', 'pendiente')->count();
+                            $pct = $totalItems > 0 ? round(($completados / $totalItems) * 100) : 0;
+                        @endphp
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            {{ $totalItems }} unidades — {{ $completados }} completadas · {{ $omitidos }}
+                            omitidas · {{ $pendientes }} pendientes
+                        </p>
+                    </div>
+                </div>
+                @if (!$workOrder->bloqueado)
+                    <button wire:click="$toggle('mostrarAddItem')"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Agregar unidad
+                    </button>
+                @endif
+            </div>
+
+            {{-- Barra de progreso --}}
+            @if ($totalItems > 0)
+                <div class="px-6 pt-3 pb-1">
+                    <div class="flex items-center gap-2">
+                        <div class="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div class="bg-emerald-500 h-2 rounded-full transition-all"
+                                style="width: {{ $pct }}%"></div>
+                        </div>
+                        <span
+                            class="text-xs font-medium text-gray-600 dark:text-gray-400 w-10 text-right">{{ $pct }}%</span>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Formulario agregar ítem --}}
+            @if ($mostrarAddItem)
+                <div
+                    class="px-6 py-4 bg-indigo-50 dark:bg-indigo-950/20 border-b border-indigo-100 dark:border-indigo-800">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Placa
+                                *</label>
+                            <input wire:model="nuevoItemPlaca" type="text" placeholder="ARS-173"
+                                class="w-full uppercase rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-mono text-gray-900 dark:text-white px-3 py-2" />
+                            @error('nuevoItemPlaca')
+                                <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <x-form.select wire:model="nuevoItemTipoTrabajo" label="Tipo de trabajo"
+                                placeholder="Seleccionar..." option-label="nombre" option-value="id"
+                                :options="$tiposOrden" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Notas
+                                (opcional)</label>
+                            <input wire:model="nuevoItemNotas" type="text" placeholder="Ej: cambio de chip"
+                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white px-3 py-2" />
+                        </div>
+                        <div class="flex gap-2">
+                            <button wire:click="agregarItem" wire:loading.attr="disabled"
+                                class="flex-1 px-3 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition disabled:opacity-50">
+                                <span wire:loading.remove wire:target="agregarItem">Agregar</span>
+                                <span wire:loading wire:target="agregarItem">...</span>
+                            </button>
+                            <button wire:click="$set('mostrarAddItem', false)"
+                                class="px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Tabla de ítems --}}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th
+                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase w-6">
+                                #</th>
+                            <th
+                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                Placa</th>
+                            <th
+                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase hidden sm:table-cell">
+                                Tipo</th>
+                            <th
+                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase hidden md:table-cell">
+                                Notas</th>
+                            <th
+                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase hidden lg:table-cell">
+                                IMEI / SIM</th>
+                            <th
+                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                Estado</th>
+                            <th
+                                class="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
+                        @forelse($workOrder->items as $item)
+                            <tr wire:key="item-{{ $item->id }}"
+                                class="{{ $item->estado === 'completado' ? 'bg-emerald-50/40 dark:bg-emerald-950/10' : ($item->estado === 'omitido' ? 'opacity-50' : '') }}">
+                                <td class="px-4 py-2.5 text-xs text-gray-400">{{ $loop->iteration }}</td>
+                                <td class="px-4 py-2.5">
+                                    <span
+                                        class="font-mono text-sm font-semibold text-gray-900 dark:text-white">{{ $item->placa }}</span>
+                                    @if ($item->cliente_nombre)
+                                        <p class="text-xs text-gray-400 truncate max-w-[200px]">
+                                            {{ $item->cliente_nombre }}</p>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-2.5 hidden sm:table-cell">
+                                    @php
+                                        $tipoBadge = match ($item->tipo_trabajo) {
+                                            'instalacion'
+                                                => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+                                            'mantenimiento'
+                                                => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+                                            'cambio_chip'
+                                                => 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+                                            'retiro' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+                                            default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
+                                        };
+                                    @endphp
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $tipoBadge }}">
+                                        {{ $item->labelTipoTrabajo() }}
+                                    </span>
+                                </td>
+                                <td
+                                    class="px-4 py-2.5 text-xs text-gray-500 dark:text-gray-400 hidden md:table-cell max-w-[160px] truncate">
+                                    {{ $item->notas ?? '—' }}
+                                </td>
+                                <td class="px-4 py-2.5 hidden lg:table-cell" x-data="{ editImei: false, imei: '{{ $item->imei ?? '' }}', sim: '{{ $item->numero_sim ?? '' }}' }">
+                                    @if ($item->imei || $item->numero_sim)
+                                        <div class="text-xs font-mono text-gray-700 dark:text-gray-300">
+                                            @if ($item->imei)
+                                                <p>IMEI: {{ $item->imei }}</p>
+                                            @endif
+                                            @if ($item->numero_sim)
+                                                <p>SIM: {{ $item->numero_sim }}</p>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-gray-400">—</span>
+                                    @endif
+                                    @if (!$workOrder->bloqueado)
+                                        <button @click="editImei = !editImei"
+                                            class="text-xs text-indigo-500 hover:underline mt-0.5">
+                                            <span x-text="editImei ? 'cancelar' : 'editar'"></span>
+                                        </button>
+                                        <div x-show="editImei" x-cloak class="mt-1 space-y-1">
+                                            <input x-model="imei" type="text" placeholder="IMEI" maxlength="20"
+                                                class="w-full text-xs font-mono rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-2 py-1" />
+                                            <input x-model="sim" type="text" placeholder="N° SIM" maxlength="30"
+                                                class="w-full text-xs font-mono rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-2 py-1" />
+                                            <button
+                                                @click="$wire.guardarImeiItem({{ $item->id }}, imei, sim); editImei = false"
+                                                class="w-full text-xs bg-indigo-600 text-white rounded px-2 py-1 hover:bg-indigo-700">
+                                                Guardar
+                                            </button>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-2.5">
+                                    <button wire:click="toggleItemEstado({{ $item->id }})"
+                                        @disabled($workOrder->bloqueado)
+                                        title="{{ $workOrder->bloqueado ? '' : 'Click para cambiar estado' }}"
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition
+                                        {{ $item->estado === 'completado'
+                                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
+                                            : ($item->estado === 'omitido'
+                                                ? 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
+                                                : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300') }}
+                                        {{ !$workOrder->bloqueado ? 'cursor-pointer hover:opacity-80' : '' }}">
+                                        @if ($item->estado === 'completado')
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Completado
+                                        @elseif ($item->estado === 'omitido')
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                            </svg>
+                                            Omitido
+                                        @else
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Pendiente
+                                        @endif
+                                    </button>
+                                </td>
+                                <td class="px-4 py-2.5 text-right">
+                                    @if (!$workOrder->bloqueado)
+                                        <button wire:click="eliminarItem({{ $item->id }})"
+                                            wire:confirm="¿Eliminar esta unidad de la orden?"
+                                            class="text-red-400 hover:text-red-600 transition p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                                            title="Quitar unidad">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7"
+                                    class="px-6 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+                                    <svg class="w-10 h-10 mx-auto mb-2 text-gray-300 dark:text-gray-600"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                    No hay unidades registradas. Usa "Agregar unidad" para añadirlas.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
+    {{-- ══════════════════════════════════════════════════════════════════ --}}
+
     {{-- Mantenimiento Vinculado --}}
     @if ($workOrder->mantenimiento)
         @php $mt = $workOrder->mantenimiento; @endphp
@@ -161,7 +423,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-base font-semibold text-gray-900 dark:text-white">Mantenimiento Programado Vinculado
+                    <h2 class="text-base font-semibold text-gray-900 dark:text-white">Mantenimiento Programado
+                        Vinculado
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400">Esta orden fue generada a partir de un
                         mantenimiento programado</p>
@@ -267,31 +530,34 @@
                 @endif
 
                 @if ($workOrder->estado->value === 'en_proceso')
-                    <x-form.button teal icon="qr-code" wire:click="abrirModalDispositivo('imei', 'instalado')"
-                        spinner="abrirModalDispositivo('imei', 'instalado')">
-                        Registrar IMEI
-                    </x-form.button>
-
-                    <x-form.button purple icon="identification" wire:click="abrirModalDispositivo('sim', 'instalado')"
-                        spinner="abrirModalDispositivo('sim', 'instalado')">
-                        Registrar SIM
-                    </x-form.button>
-
-                    <x-form.button secondary icon="clipboard-document-list" wire:click="verChecklist('before')"
-                        spinner="verChecklist('before')">
-                        Checklist Inicial
-                    </x-form.button>
-
-                    <x-form.button secondary icon="clipboard-document-check" wire:click="verChecklist('after')"
-                        spinner="verChecklist('after')">
-                        Checklist Final
-                    </x-form.button>
-
-                    @if (!$workOrder->signatures()->where('tipo', 'conformidad')->exists())
-                        <x-form.button warning icon="pencil-square" wire:click="abrirModalFirma"
-                            spinner="abrirModalFirma">
-                            Firma de Conformidad
+                    @if (!$workOrder->es_proyecto)
+                        <x-form.button teal icon="qr-code" wire:click="abrirModalDispositivo('imei', 'instalado')"
+                            spinner="abrirModalDispositivo('imei', 'instalado')">
+                            Registrar IMEI
                         </x-form.button>
+
+                        <x-form.button purple icon="identification"
+                            wire:click="abrirModalDispositivo('sim', 'instalado')"
+                            spinner="abrirModalDispositivo('sim', 'instalado')">
+                            Registrar SIM
+                        </x-form.button>
+
+                        <x-form.button secondary icon="clipboard-document-list" wire:click="verChecklist('before')"
+                            spinner="verChecklist('before')">
+                            Checklist Inicial
+                        </x-form.button>
+
+                        <x-form.button secondary icon="clipboard-document-check" wire:click="verChecklist('after')"
+                            spinner="verChecklist('after')">
+                            Checklist Final
+                        </x-form.button>
+
+                        @if (!$workOrder->signatures()->where('tipo', 'conformidad')->exists())
+                            <x-form.button warning icon="pencil-square" wire:click="abrirModalFirma"
+                                spinner="abrirModalFirma">
+                                Firma de Conformidad
+                            </x-form.button>
+                        @endif
                     @endif
 
                     <x-form.button positive icon="check" wire:click="finalizar" spinner="finalizar">

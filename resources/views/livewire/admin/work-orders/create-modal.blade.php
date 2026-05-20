@@ -5,46 +5,133 @@
         <x-form.select label="Tipo de Orden *" wire:model.live="work_order_type_id" placeholder="Seleccionar tipo"
             :options="$tipos" option-label="nombre" option-value="id" />
 
-        @if ($costoEstimado !== null)
-            <div class="flex items-center gap-2 -mt-2">
-                <span
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
-                    {{ $costoPersonalizado ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' }}">
-                    @if ($costoPersonalizado)
-                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        Costo del técnico:
-                    @else
-                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19V7a2 2 0 012-2h8l4 4v10a2 2 0 01-2 2H6a2 2 0 01-2-2z" />
-                        </svg>
-                        Costo base:
-                    @endif
-                    <span class="font-bold">S/ {{ number_format($costoEstimado, 2) }}</span>
-                </span>
-                @if ($costoPersonalizado)
-                    <span class="text-xs text-gray-400 dark:text-gray-500">Precio personalizado para este técnico</span>
-                @endif
+        {{-- ── Toggle: Individual vs Proyecto ───────────────────────────── --}}
+        <div class="flex items-center gap-4 py-1">
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de asignación:</span>
+            <div class="flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-gray-700 p-1">
+                <button type="button" wire:click="$set('esProyecto', false)"
+                    class="px-3 py-1.5 text-xs font-medium rounded-md transition
+                        {{ !$esProyecto ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                    <svg class="inline w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Individual
+                </button>
+                <button type="button" wire:click="$set('esProyecto', true)"
+                    class="px-3 py-1.5 text-xs font-medium rounded-md transition
+                        {{ $esProyecto ? 'bg-indigo-600 text-white shadow' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                    <svg class="inline w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    Proyecto (múltiples vehículos)
+                </button>
             </div>
-        @endif
+        </div>
 
-        {{-- ── Vehículo ────────────────────────────────────────────────────── --}}
-        <x-form.select autocomplete="off" label="Vehículo *" wire:model.live="vehiculo_id"
-            placeholder="Buscar por placa" :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id"
-            option-description="option_description">
+        {{-- ── MODO PROYECTO ──────────────────────────────────────────────── --}}
+        @if ($esProyecto)
+            <div
+                class="rounded-lg border border-indigo-200 bg-indigo-50 dark:border-indigo-600/30 dark:bg-indigo-950/20 p-4 space-y-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span class="text-sm font-semibold text-indigo-700 dark:text-indigo-300">Configuración del
+                        proyecto</span>
+                </div>
 
-            <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                <x-form.button wire:click.prevent="addVehiculo(`${search}`)" x-on:click="close" primary flat full>
-                    <span x-html="`Registrar Vehículo <b>${search}</b>`"></span>
-                </x-form.button>
-            </x-slot>
-        </x-form.select>
+                <x-form.input wire:model="tituloProyecto" label="Título del proyecto *"
+                    placeholder="Ej: MANTENIMIENTO EQUIPOS FMC920 — SÁBADO 24/05" class="uppercase" />
 
-        {{-- ── Cliente (autocompleta) ──────────────────────────────────────── --}}
-        <x-form.input label="Cliente *" wire:model="cliente_nombre" disabled />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Tipo de trabajo por defecto
+                        </label>
+                        <select wire:model="itemsTipoTrabajo"
+                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white px-3 py-2">
+                            <option value="mantenimiento">Mantenimiento</option>
+                            <option value="instalacion">Instalación</option>
+                            <option value="cambio_chip">Cambio de chip</option>
+                            <option value="retiro">Retiro de equipo</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            Las líneas con <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">- cambio de
+                                chip</code> se detectan automáticamente.
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Lista de placas
+                        <span class="text-xs text-gray-400 font-normal ml-1">(una por línea, acepta notas: <code
+                                class="bg-gray-100 dark:bg-gray-700 px-1 rounded">ARS-173 - cambio de
+                                chip</code>)</span>
+                    </label>
+                    <textarea wire:model="placasTexto" rows="10"
+                        placeholder="M8G-926&#10;CME-065&#10;M8R-730&#10;M8G-803 - cambio de chip&#10;M7O-825"
+                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-mono text-gray-900 dark:text-white px-3 py-2 resize-y"></textarea>
+                    @if (trim($placasTexto))
+                        @php $numLineas = count(array_filter(preg_split('/[\r\n]+/', trim($placasTexto)))); @endphp
+                        <p class="text-xs text-indigo-600 dark:text-indigo-400 mt-1">{{ $numLineas }}
+                            {{ $numLineas === 1 ? 'unidad' : 'unidades' }} a registrar</p>
+                    @endif
+                </div>
+
+                <p class="text-xs text-gray-400 dark:text-gray-500">
+                    💡 Puedes dejar la lista vacía y el técnico agregará las unidades desde la orden.
+                </p>
+            </div>
+        @else
+            {{-- ── MODO INDIVIDUAL: Vehículo y Cliente ───────────────────── --}}
+            @if ($costoEstimado !== null)
+                <div class="flex items-center gap-2 -mt-2">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
+                        {{ $costoPersonalizado ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' }}">
+                        @if ($costoPersonalizado)
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            Costo del técnico:
+                        @else
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19V7a2 2 0 012-2h8l4 4v10a2 2 0 01-2 2H6a2 2 0 01-2-2z" />
+                            </svg>
+                            Costo base:
+                        @endif
+                        <span class="font-bold">S/ {{ number_format($costoEstimado, 2) }}</span>
+                    </span>
+                    @if ($costoPersonalizado)
+                        <span class="text-xs text-gray-400 dark:text-gray-500">Precio personalizado para este
+                            técnico</span>
+                    @endif
+                </div>
+            @endif
+
+            {{-- ── Vehículo ────────────────────────────────────────────────── --}}
+            <x-form.select autocomplete="off" label="Vehículo *" wire:model.live="vehiculo_id"
+                placeholder="Buscar por placa" :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id"
+                option-description="option_description">
+                <x-slot name="beforeOptions" class="p-2 flex justify-center">
+                    <x-form.button wire:click.prevent="addVehiculo(`${search}`)" x-on:click="close" primary flat full>
+                        <span x-html="`Registrar Vehículo <b>${search}</b>`"></span>
+                    </x-form.button>
+                </x-slot>
+            </x-form.select>
+
+            {{-- ── Cliente (autocompleta) ──────────────────────────────────── --}}
+            <x-form.input label="Cliente *" wire:model="cliente_nombre" disabled />
+        @endif{{-- /esProyecto --}}
 
         {{-- ── Sector de operación ─────────────────────────────────────────── --}}
         @if ($tipoMuestraSector || $tipoMuestraPlan)
@@ -78,8 +165,9 @@
             <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Asignación de
                 Técnico</p>
 
-            <x-form.select label="Filtrar por ciudad" wire:model.live="ciudad_filter" placeholder="Todas las ciudades"
-                option-label="nombre" option-value="id" :options="$ciudades" :clearable="false" />
+            <x-form.select label="Filtrar por ciudad" wire:model.live="ciudad_filter"
+                placeholder="Todas las ciudades" option-label="nombre" option-value="id" :options="$ciudades"
+                :clearable="false" />
 
             <x-form.select label="Técnico Asignado *" wire:model.live="tecnico_id" placeholder="Seleccionar técnico"
                 :options="$tecnicos" option-label="name" option-value="id" />
@@ -94,8 +182,8 @@
             <div
                 class="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-600/30 dark:bg-amber-950/20">
                 <div class="mb-2 flex items-center gap-2">
-                    <svg class="h-4 w-4 shrink-0 text-amber-500 dark:text-amber-400" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
+                    <svg class="h-4 w-4 shrink-0 text-amber-500 dark:text-amber-400" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -184,8 +272,10 @@
                         }
                     });
                 }
-                if (this.map) { this.map.remove();
-                    this.map = null; }
+                if (this.map) {
+                    this.map.remove();
+                    this.map = null;
+                }
                 const centerLat = this.tempLat ?? -12.0464;
                 const centerLng = this.tempLng ?? -77.0428;
                 this.map = L.map('create-map-container').setView([centerLat, centerLng], this.tempLat ? 15 : 13);
@@ -204,11 +294,15 @@
                 this.map.on('click', (e) => {
                     this.tempLat = e.latlng.lat;
                     this.tempLng = e.latlng.lng;
-                    if (this.marker) { this.marker.setLatLng(e.latlng); } else { this.marker = L.marker(e.latlng, { draggable: true }).addTo(this.map);
-                        this.marker.on('dragend', (ev) => { const p = ev.target.getLatLng();
+                    if (this.marker) { this.marker.setLatLng(e.latlng); } else {
+                        this.marker = L.marker(e.latlng, { draggable: true }).addTo(this.map);
+                        this.marker.on('dragend', (ev) => {
+                            const p = ev.target.getLatLng();
                             this.tempLat = p.lat;
                             this.tempLng = p.lng;
-                            this.reverseGeocode(p.lat, p.lng); }); }
+                            this.reverseGeocode(p.lat, p.lng);
+                        });
+                    }
                     this.reverseGeocode(e.latlng.lat, e.latlng.lng);
                 });
             },
@@ -227,11 +321,15 @@
                     this.tempLng = parseFloat(lon);
                     this.tempDireccion = display_name;
                     this.map.setView([lat, lon], 16);
-                    if (this.marker) { this.marker.setLatLng([lat, lon]); } else { this.marker = L.marker([lat, lon], { draggable: true }).addTo(this.map);
-                        this.marker.on('dragend', (e) => { const p = e.target.getLatLng();
+                    if (this.marker) { this.marker.setLatLng([lat, lon]); } else {
+                        this.marker = L.marker([lat, lon], { draggable: true }).addTo(this.map);
+                        this.marker.on('dragend', (e) => {
+                            const p = e.target.getLatLng();
                             this.tempLat = p.lat;
                             this.tempLng = p.lng;
-                            this.reverseGeocode(p.lat, p.lng); }); }
+                            this.reverseGeocode(p.lat, p.lng);
+                        });
+                    }
                 }
             },
             guardar() {
@@ -257,7 +355,8 @@
                         </svg>
                         <div class="min-w-0">
                             @if ($ubicacion_direccion)
-                                <p class="text-sm text-gray-700 dark:text-gray-200 truncate">{{ $ubicacion_direccion }}
+                                <p class="text-sm text-gray-700 dark:text-gray-200 truncate">
+                                    {{ $ubicacion_direccion }}
                                 </p>
                             @endif
                             <p class="text-xs font-mono text-gray-400 dark:text-gray-500">

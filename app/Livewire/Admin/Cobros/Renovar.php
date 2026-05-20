@@ -15,23 +15,23 @@ class Renovar extends Component
     use WireUiActions;
 
     public bool $modalOpen = false;
-    public ?int $cobro_id = null;
+    public ?int $cobroId = null;
 
     // Datos del período a renovar
-    public string $fecha_inicio   = '';
-    public string $fecha_fin      = '';
+    public string $fechaInicio   = '';
+    public string $fechaFin      = '';
     public string $periodo        = 'MENSUAL';
     public float $monto           = 0;
     public float $descuento       = 0;
     public string $divisa         = 'PEN';
     public string $observaciones  = '';
-    public bool $cobrar_ahora     = false;
+    public bool $cobrarAhora      = false;
 
     protected function rules(): array
     {
         return [
-            'fecha_inicio'  => 'required|date',
-            'fecha_fin'     => 'required|date|after:fecha_inicio',
+            'fechaInicio'   => 'required|date',
+            'fechaFin'      => 'required|date|after:fechaInicio',
             'monto'         => 'required|numeric|min:0',
             'descuento'     => 'nullable|numeric|min:0',
             'observaciones' => 'nullable|string|max:500',
@@ -49,47 +49,47 @@ class Renovar extends Component
             return;
         }
 
-        $this->cobro_id = $cobroId;
+        $this->cobroId = $cobroId;
 
         // La fecha inicio es el día siguiente al vencimiento actual
         $fechaActualFin   = $cobro->fecha_vencimiento ?? Carbon::today();
         $nuevaFechaInicio = Carbon::parse($fechaActualFin)->addDay()->format('Y-m-d');
 
-        $this->fecha_inicio  = $nuevaFechaInicio;
+        $this->fechaInicio   = $nuevaFechaInicio;
         $this->periodo       = $cobro->periodo ?? 'MENSUAL';
-        $this->fecha_fin     = $this->calcularFechaFin($nuevaFechaInicio, $this->periodo);
+        $this->fechaFin      = $this->calcularFechaFin($nuevaFechaInicio, $this->periodo);
         $this->monto         = (float) ($cobro->monto ?? 0);
         $this->descuento     = 0;
         $this->divisa        = $cobro->divisa ?? 'PEN';
         $this->observaciones = '';
-        $this->cobrar_ahora  = false;
+        $this->cobrarAhora   = false;
 
         $this->modalOpen = true;
     }
 
     public function updatedFechaInicio(): void
     {
-        if ($this->fecha_inicio) {
-            $this->fecha_fin = $this->calcularFechaFin($this->fecha_inicio, $this->periodo);
+        if ($this->fechaInicio) {
+            $this->fechaFin = $this->calcularFechaFin($this->fechaInicio, $this->periodo);
         }
     }
 
     public function updatedPeriodo(): void
     {
-        if ($this->fecha_inicio) {
-            $this->fecha_fin = $this->calcularFechaFin($this->fecha_inicio, $this->periodo);
+        if ($this->fechaInicio) {
+            $this->fechaFin = $this->calcularFechaFin($this->fechaInicio, $this->periodo);
         }
     }
 
     protected function calcularFechaFin(string $fechaInicio, string $periodo): string
     {
         return match ($periodo) {
-            'MENSUAL'    => Carbon::parse($fechaInicio)->addMonthNoOverflow()->format('Y-m-d'),
-            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(2)->format('Y-m-d'),
-            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonthsNoOverflow(3)->format('Y-m-d'),
-            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(6)->format('Y-m-d'),
-            'ANUAL'      => Carbon::parse($fechaInicio)->addYearNoOverflow()->format('Y-m-d'),
-            default      => Carbon::parse($fechaInicio)->addMonthNoOverflow()->format('Y-m-d'),
+            'MENSUAL'    => Carbon::parse($fechaInicio)->addMonthNoOverflow()->subDay()->format('Y-m-d'),
+            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(2)->subDay()->format('Y-m-d'),
+            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonthsNoOverflow(3)->subDay()->format('Y-m-d'),
+            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(6)->subDay()->format('Y-m-d'),
+            'ANUAL'      => Carbon::parse($fechaInicio)->addYearNoOverflow()->subDay()->format('Y-m-d'),
+            default      => Carbon::parse($fechaInicio)->addMonthNoOverflow()->subDay()->format('Y-m-d'),
         };
     }
 
@@ -98,7 +98,7 @@ class Renovar extends Component
         $this->validate();
 
         try {
-            $cobro      = Cobros::findOrFail($this->cobro_id);
+            $cobro      = Cobros::findOrFail($this->cobroId);
             $montoFinal = max(0, $this->monto - $this->descuento);
 
             // Crear el nuevo período
@@ -106,8 +106,8 @@ class Renovar extends Component
                 'cobros_id'     => $cobro->id,
                 'cliente_id'    => $cobro->clientes_id,
                 'vehiculo_id'   => $cobro->vehiculos_id,
-                'fecha_inicio'  => $this->fecha_inicio,
-                'fecha_fin'     => $this->fecha_fin,
+                'fecha_inicio'  => $this->fechaInicio,
+                'fecha_fin'     => $this->fechaFin,
                 'periodo'       => $this->periodo,
                 'monto'         => $montoFinal,
                 'divisa'        => $this->divisa,
@@ -118,8 +118,8 @@ class Renovar extends Component
 
             // Actualizar fechas del cobro al nuevo período
             $cobro->update([
-                'fecha_inicio'      => $this->fecha_inicio,
-                'fecha_vencimiento' => $this->fecha_fin,
+                'fecha_inicio'      => $this->fechaInicio,
+                'fecha_vencimiento' => $this->fechaFin,
                 'periodo'           => $this->periodo,
                 'monto'             => $montoFinal,
                 'estado'            => CobroEstado::ACTIVO,
@@ -128,7 +128,7 @@ class Renovar extends Component
             $this->modalOpen = false;
             $this->dispatch('render');
 
-            if ($this->cobrar_ahora) {
+            if ($this->cobrarAhora) {
                 $tipoComprobante = $cobro->tipo_pago ?? 'FACTURA';
                 $periodoIdsJson  = json_encode([$periodo->id]);
 
@@ -165,8 +165,7 @@ class Renovar extends Component
 
     public function cerrar(): void
     {
-        $this->modalOpen = false;
-        $this->reset(['cobro_id', 'fecha_inicio', 'fecha_fin', 'monto', 'descuento', 'observaciones']);
+        $this->modalOpen     = false;
     }
 
     public function render()

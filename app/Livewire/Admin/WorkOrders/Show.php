@@ -4,6 +4,10 @@ namespace App\Livewire\Admin\WorkOrders;
 
 use Livewire\Component;
 use App\Models\WorkOrder;
+use App\Models\WorkOrderItem;
+use App\Models\WorkOrderType;
+use App\Models\Vehiculos;
+use App\Scopes\EmpresaScope;
 use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -28,6 +32,12 @@ class Show extends Component
     public string $observacionesDispositivo = '';
     public string $ubicacionInstalacion = '';
     public string $ubicacionPersonalizada = '';
+
+    // ── Gestión de ítems del proyecto ────────────────────────────────────
+    public string $nuevoItemPlaca = '';
+    public string $nuevoItemTipoTrabajo = 'mantenimiento';
+    public string $nuevoItemNotas = '';
+    public bool $mostrarAddItem = false;
 
     public const UBICACIONES = [
         'TABLERO CENTRAL',
@@ -62,7 +72,9 @@ class Show extends Component
             'checklists.photos',
             'photos',
             'signatures',
-            'accessories.producto'
+            'accessories.producto',
+            'items.vehiculo',
+            'items.tipo',
         ]);
     }
 
@@ -82,8 +94,76 @@ class Show extends Component
             'checklists.photos',
             'photos',
             'signatures',
-            'accessories.producto'
+            'accessories.producto',
+            'items.vehiculo',
+            'items.tipo',
         ]);
+    }
+
+    // ── Métodos de gestión de ítems (proyecto) ───────────────────────────
+
+    public function agregarItem(): void
+    {
+        $this->validate([
+            'nuevoItemPlaca'       => 'required|string|max:20',
+            'nuevoItemTipoTrabajo' => 'required|exists:work_order_types,id',
+        ], [
+            'nuevoItemPlaca.required'       => 'La placa es obligatoria.',
+            'nuevoItemTipoTrabajo.required' => 'El tipo de trabajo es obligatorio.',
+            'nuevoItemTipoTrabajo.exists'   => 'Tipo de trabajo no válido.',
+        ]);
+
+        $placa    = strtoupper(trim($this->nuevoItemPlaca));
+        $vehiculo = Vehiculos::withoutGlobalScope(EmpresaScope::class)
+            ->where('placa', $placa)->first();
+
+        $this->workOrder->items()->create([
+            'vehiculo_id'         => $vehiculo?->id,
+            'cliente_id'          => $vehiculo?->cliente_id,
+            'placa'               => $placa,
+            'cliente_nombre'      => $vehiculo?->cliente?->razon_social,
+            'work_order_type_id'  => $this->nuevoItemTipoTrabajo,
+            'tipo_trabajo'        => $this->nuevoItemTipoTrabajo, // FK id stored as fallback
+            'notas'               => trim($this->nuevoItemNotas) ?: null,
+            'estado'              => 'pendiente',
+            'orden'               => $this->workOrder->items()->count(),
+        ]);
+
+        $this->nuevoItemPlaca       = '';
+        $this->nuevoItemNotas       = '';
+        $this->nuevoItemTipoTrabajo = '';
+        $this->mostrarAddItem       = false;
+        $this->refreshWorkOrder();
+        $this->notification()->success('ÍTEM AGREGADO', "Unidad {$placa} registrada en la orden");
+    }
+
+    public function toggleItemEstado(int $itemId): void
+    {
+        $item = WorkOrderItem::findOrFail($itemId);
+        $item->estado = match ($item->estado) {
+            'pendiente'  => 'completado',
+            'completado' => 'omitido',
+            default      => 'pendiente',
+        };
+        $item->save();
+        $this->refreshWorkOrder();
+    }
+
+    public function guardarImeiItem(int $itemId, string $imei, string $sim = ''): void
+    {
+        $item = WorkOrderItem::findOrFail($itemId);
+        $item->update([
+            'imei'       => trim($imei) ?: null,
+            'numero_sim' => trim($sim)  ?: null,
+        ]);
+        $this->refreshWorkOrder();
+        $this->notification()->success('GUARDADO', 'Datos del dispositivo actualizados.');
+    }
+
+    public function eliminarItem(int $itemId): void
+    {
+        WorkOrderItem::findOrFail($itemId)->delete();
+        $this->refreshWorkOrder();
     }
 
     public function iniciar()
@@ -422,7 +502,8 @@ class Show extends Component
         $timeline = $timeline->sortBy('fecha');
 
         return view('livewire.admin.work-orders.show', [
-            'timeline' => $timeline,
+            'timeline'   => $timeline,
+            'tiposOrden' => WorkOrderType::orderBy('nombre')->get(['id', 'nombre']),
         ]);
     }
 }

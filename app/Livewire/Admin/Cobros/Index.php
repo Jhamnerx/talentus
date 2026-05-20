@@ -66,6 +66,23 @@ class Index extends Component
         return view('livewire.admin.cobros.index', compact('cobros'));
     }
 
+    public function renovarSeleccionados(): void
+    {
+        if (empty($this->selected)) {
+            $this->dispatch('notify-toast', icon: 'warning', title: 'Sin selección', mensaje: 'Selecciona al menos un cobro');
+            return;
+        }
+
+        $cobros = Cobros::withoutGlobalScopes()->whereIn('id', $this->selected)->get();
+
+        if ($cobros->pluck('periodo')->unique()->count() > 1) {
+            $this->dispatch('notify-toast', icon: 'warning', title: 'Período diferente', mensaje: 'Todos los cobros seleccionados deben tener el mismo período de facturación (MENSUAL, TRIMESTRAL, etc.)');
+            return;
+        }
+
+        $this->dispatch('abrirRenovarMultiple', cobroIds: $this->selected);
+    }
+
     public function cobrarSeleccionados(): void
     {
         if (empty($this->selected)) {

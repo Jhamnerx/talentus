@@ -124,20 +124,10 @@ class WorkOrderNotificationService
      */
     public function formatMensaje(WorkOrder $orden): string
     {
-        $orden->loadMissing(['tipo', 'vehiculo', 'tecnico']);
+        $orden->loadMissing(['tipo', 'vehiculo', 'tecnico', 'items']);
 
-        $cliente  = $orden->vehiculo?->cliente ?? $orden->cliente;
-        $vehiculo = $orden->vehiculo;
-        $tecnico  = $orden->tecnico;
-        $tipo     = $orden->tipo;
-
-        // ¿Es cliente nuevo? (tiene solo 1 vehículo registrado en la empresa)
-        $esClienteNuevo = $cliente
-            ? $cliente->vehiculos()->count() <= 1
-            : false;
-
-        $clienteEmoji = $esClienteNuevo ? '🆕' : '👤';
-        $clienteLabel = $esClienteNuevo ? 'CLIENTE NUEVO' : 'CLIENTE';
+        $tecnico = $orden->tecnico;
+        $tipo    = $orden->tipo;
 
         // Accesorios de metadata
         $meta       = $orden->metadata ?? [];
@@ -156,8 +146,74 @@ class WorkOrderNotificationService
 
         $sep = '─────────────────────';
 
+        // ── PROYECTO: mensaje resumido ────────────────────────────────────
+        if ($orden->es_proyecto) {
+            $totalUnidades = $orden->items->count();
+            $unidadesTexto = $totalUnidades > 0
+                ? "{$totalUnidades} " . ($totalUnidades === 1 ? 'vehículo' : 'vehículos') . ' registrados'
+                : 'Unidades por confirmar';
+
+            $lineas = [
+                '🔧 *ORDEN DE TRABAJO — PROYECTO*',
+                '',
+                '📋 *' . strtoupper($tipo->nombre ?? 'ORDEN') . '*',
+                $sep,
+                '📦 *PROYECTO:* ' . strtoupper($orden->titulo_proyecto ?? 'SIN TÍTULO'),
+                '🚛 *UNIDADES:* ' . $unidadesTexto,
+                '   _(Las placas y datos por unidad se gestionan en el detalle de la orden)_',
+            ];
+
+            if (!empty($orden->sector) && $orden->sector !== '-') {
+                $lineas[] = '📍 *SECTOR:* ' . strtoupper($orden->sector);
+            }
+            if (!empty($orden->plan) && $orden->plan !== '-') {
+                $lineas[] = '💳 *PLAN:* ' . strtoupper($orden->plan);
+            }
+
+            $lineas[] = $sep;
+            $lineas[] = '👷 *TÉCNICO:* '       . strtoupper($tecnico->name ?? '-');
+            $lineas[] = '📅 *LUGAR Y FECHA:* ' . strtoupper($fecha);
+
+            if (!empty($orden->observaciones_inicial)) {
+                $lineas[] = '📝 *CONSIDERACIONES:* ' . strtoupper($orden->observaciones_inicial);
+            }
+
+            if ($orden->ubicacion_lat && $orden->ubicacion_lng) {
+                $lineas[] = '🗺️ *UBICACIÓN:* https://maps.google.com/?q=' . $orden->ubicacion_lat . ',' . $orden->ubicacion_lng;
+            }
+
+            if (!empty($listaAcc)) {
+                $lineas[] = $sep;
+                $lineas[] = '🔩 *ACCESORIOS:*';
+                foreach ($listaAcc as $acc) {
+                    $lineas[] = '   • ' . $acc;
+                }
+            }
+
+            if ($orden->contacto) {
+                $lineas[] = $sep;
+                $lineas[] = '👋 *CONTACTO:* ' . $orden->contacto;
+            }
+
+            return implode("\n", $lineas);
+        }
+
+        // ── ORDEN INDIVIDUAL ──────────────────────────────────────────────
+        $cliente  = $orden->vehiculo?->cliente ?? $orden->cliente;
+        $vehiculo = $orden->vehiculo;
+
+        // ¿Es cliente nuevo? (tiene solo 1 vehículo registrado en la empresa)
+        $esClienteNuevo = $cliente
+            ? $cliente->vehiculos()->count() <= 1
+            : false;
+
+        $clienteEmoji = $esClienteNuevo ? '🆕' : '👤';
+        $clienteLabel = $esClienteNuevo ? 'CLIENTE NUEVO' : 'CLIENTE';
+
+        $sep = '─────────────────────';
+
         // Placa + marca/modelo en una sola línea
-        $marcaModelo = trim(strtoupper($vehiculo->marca ?? '') . ' ' . strtoupper($vehiculo->modelo ?? ''));
+        $marcaModelo   = trim(strtoupper($vehiculo->marca ?? '') . ' ' . strtoupper($vehiculo->modelo ?? ''));
         $vehiculoLinea = strtoupper($vehiculo->placa ?? '-');
         if ($marcaModelo) {
             $vehiculoLinea .= ' — ' . $marcaModelo;

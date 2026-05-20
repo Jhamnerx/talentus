@@ -356,6 +356,17 @@
                     class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
                     Quitar selección
                 </button>
+                <button wire:click="renovarSeleccionados" wire:loading.attr="disabled"
+                    class="btn bg-amber-500 hover:bg-amber-600 text-white text-sm py-1.5 px-4">
+                    <span wire:loading.remove wire:target="renovarSeleccionados" class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Renovar
+                    </span>
+                    <span wire:loading wire:target="renovarSeleccionados">Procesando...</span>
+                </button>
                 <button wire:click="cobrarSeleccionados" wire:loading.attr="disabled"
                     class="btn bg-indigo-600 hover:bg-indigo-700 text-white text-sm py-1.5 px-4">
                     <span wire:loading.remove wire:target="cobrarSeleccionados" class="flex items-center gap-1">
@@ -704,8 +715,11 @@
 
     </div>
 
-    {{-- Modal de renovación de período --}}
+    {{-- Modal de renovación de período (individual) --}}
     @livewire('admin.cobros.renovar')
+
+    {{-- Modal de renovación masiva --}}
+    @livewire('admin.cobros.renovar-multiple')
 
     {{-- Modal registrar / editar suscripción --}}
     @livewire('admin.cobros.registrar-cobro')

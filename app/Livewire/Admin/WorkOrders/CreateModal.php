@@ -11,6 +11,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Models\Vehiculos;
 use App\Models\WorkOrder;
+use App\Models\WorkOrderItem;
 use Livewire\Attributes\On;
 use App\Models\WorkOrderType;
 use App\Enums\WorkOrderStatus;
@@ -56,12 +57,18 @@ class CreateModal extends Component
     public ?float $ubicacion_lng = null;
     public string $ubicacion_direccion = '';
 
+    // ── Modo proyecto (múltiples vehículos) ─────────────────────────────
+    public bool $esProyecto = false;
+    public string $tituloProyecto = '';
+    public string $placasTexto = '';        // Pegado de placas una por línea
+    public string $itemsTipoTrabajo = 'mantenimiento'; // Tipo por defecto para todos los ítems
+
     protected function rules()
     {
         return [
             'work_order_type_id'  => 'required|exists:work_order_types,id',
-            'vehiculo_id'         => 'required|exists:vehiculos,id',
-            'cliente_id'          => 'required|exists:clientes,id',
+            'vehiculo_id'         => $this->esProyecto ? 'nullable' : 'required|exists:vehiculos,id',
+            'cliente_id'          => $this->esProyecto ? 'nullable' : 'required|exists:clientes,id',
             'tecnico_id'          => 'required|exists:users,id',
             'fecha_programada'    => 'required|date|after_or_equal:today',
             'observaciones_inicial' => 'nullable|string|max:1000',
@@ -72,6 +79,8 @@ class CreateModal extends Component
             'contacto_id'         => 'nullable|exists:contactos,id',
             'accesorios'          => ($this->tipoRequiereAccesorios ? 'required|array|min:1' : 'nullable|array'),
             'accesorios.*'        => 'in:buzzer,corte_motor,apertura_puertas,telemetria,combustible,temperatura,horas_motor,rpm,acelerometro,camara',
+            'tituloProyecto'      => $this->esProyecto ? 'required|string|max:255' : 'nullable',
+            'placasTexto'         => $this->esProyecto ? 'nullable|string' : 'nullable',
         ];
     }
 
@@ -80,12 +89,13 @@ class CreateModal extends Component
         return [
             'work_order_type_id.required' => 'Debe seleccionar un tipo de orden',
             'vehiculo_id.required' => 'Debe seleccionar un vehículo',
-            'cliente_id.required' => 'Debe seleccionar un cliente',
-            'tecnico_id.required' => 'Debe asignar un técnico',
+            'cliente_id.required'  => 'Debe seleccionar un cliente',
+            'tecnico_id.required'  => 'Debe asignar un técnico',
             'fecha_programada.required'     => 'La fecha programada es requerida',
             'fecha_programada.after_or_equal' => 'La fecha no puede ser anterior a hoy',
-            'accesorios.required'       => 'Seleccione al menos un accesorio para este tipo de orden',
-            'accesorios.min'            => 'Seleccione al menos un accesorio',
+            'accesorios.required'  => 'Seleccione al menos un accesorio para este tipo de orden',
+            'accesorios.min'       => 'Seleccione al menos un accesorio',
+            'tituloProyecto.required' => 'El título del proyecto es obligatorio',
         ];
     }
 
@@ -254,6 +264,7 @@ class CreateModal extends Component
         try {
             $data['empresa_id'] = Auth::user()->empresa_id;
             $data['estado']     = WorkOrderStatus::PENDIENTE;
+            $data['es_proyecto'] = $this->esProyecto;
 
             // Eliminar mantenimiento_id si el tipo no lo requiere
             if (!$this->tipoRequiereMantenimiento) {
@@ -301,13 +312,68 @@ class CreateModal extends Component
             $data['ubicacion_lng']       = $this->ubicacion_lng ?: null;
             $data['ubicacion_direccion'] = $this->ubicacion_direccion ?: null;
 
+            // Modo proyecto: limpiar campos que no aplican
+            if ($this->esProyecto) {
+                $data['vehiculo_id'] = null;
+                $data['cliente_id']  = null;
+                $data['titulo_proyecto'] = strtoupper(trim($this->tituloProyecto));
+            }
+
             // Eliminar campos que no son columnas de work_orders
-            unset($data['ciudad_filter'], $data['sector_especifico'], $data['accesorios']);
+            unset(
+                $data['ciudad_filter'],
+                $data['sector_especifico'],
+                $data['accesorios'],
+                $data['tituloProyecto'],
+                $data['placasTexto'],
+                $data['itemsTipoTrabajo']
+            );
 
             $workOrder = WorkOrder::create($data);
 
-            // Enviar notificación WA al grupo del técnico (no bloquea si falla)
-            app(WorkOrderNotificationService::class)->enviarAlGrupo($workOrder);
+            // Crear ítems si es proyecto y se pegaron placas
+            if ($this->esProyecto && trim($this->placasTexto)) {
+                $lineas = preg_split('/[\r\n]+/', trim($this->placasTexto));
+                $orden  = 0;
+
+                foreach ($lineas as $linea) {
+                    $linea = trim($linea);
+                    if (empty($linea)) {
+                        continue;
+                    }
+
+                    // Detectar nota inline: "ABC-123 - cambio de chip"
+                    $partes   = preg_split('/\s+-\s+/', $linea, 2);
+                    $placa    = strtoupper(trim($partes[0]));
+                    $notasItem = isset($partes[1]) ? trim($partes[1]) : null;
+
+                    // Buscar vehículo en el sistema (sin filtro de empresa)
+                    $vehiculo = Vehiculos::withoutGlobalScope(\App\Scopes\EmpresaScope::class)
+                        ->where('placa', $placa)->first();
+
+                    // Determinar tipo de trabajo: si la nota menciona "cambio de chip" → cambio_chip
+                    $tipoItem = $this->itemsTipoTrabajo;
+                    if ($notasItem && preg_match('/chip/i', $notasItem)) {
+                        $tipoItem = 'cambio_chip';
+                    }
+
+                    $workOrder->items()->create([
+                        'vehiculo_id'   => $vehiculo?->id,
+                        'cliente_id'    => $vehiculo?->cliente_id,
+                        'placa'         => $placa,
+                        'cliente_nombre' => $vehiculo?->cliente?->razon_social,
+                        'tipo_trabajo'  => $tipoItem,
+                        'notas'         => $notasItem,
+                        'estado'        => 'pendiente',
+                        'orden'         => $orden++,
+                    ]);
+                }
+            }
+
+            // Enviar notificación WA solo para órdenes individuales
+            if (!$this->esProyecto) {
+                app(WorkOrderNotificationService::class)->enviarAlGrupo($workOrder);
+            }
 
             $this->notification()->success('ÉXITO', "Orden " . str_pad($workOrder->id, 5, '0', STR_PAD_LEFT) . " creada correctamente");
 
@@ -345,6 +411,11 @@ class CreateModal extends Component
         $this->ubicacion_direccion = '';
         $this->costoEstimado       = null;
         $this->costoPersonalizado  = false;
+        // Proyecto
+        $this->esProyecto          = false;
+        $this->tituloProyecto      = '';
+        $this->placasTexto         = '';
+        $this->itemsTipoTrabajo    = 'mantenimiento';
     }
 
     public function setUbicacion(float $lat, float $lng, string $direccion = ''): void

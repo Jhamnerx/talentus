@@ -48,6 +48,7 @@ class WorkOrder extends Model
         'tecnico_lng' => 'float',
         'tecnico_last_seen' => 'datetime',
         'verified_at' => 'datetime',
+        'es_proyecto' => 'boolean',
     ];
 
     // Global Scope - Multi-empresa
@@ -127,6 +128,11 @@ class WorkOrder extends Model
     public function accessories(): HasMany
     {
         return $this->hasMany(WorkOrderAccessory::class);
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(WorkOrderItem::class)->orderBy('orden')->orderBy('id');
     }
 
     // Scopes
