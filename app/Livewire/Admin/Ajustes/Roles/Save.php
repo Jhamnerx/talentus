@@ -61,7 +61,8 @@ class Save extends Component
         $values = $this->validate($rolRequest->rules(), $rolRequest->messages());
 
         $rol = Role::create(['name' => $this->name]);
-        $rol->syncPermissions($this->permission);
+        $permissions = Permission::whereIn('name', $this->permission)->get();
+        $rol->syncPermissions($permissions);
         return redirect()->route('admin.ajustes.roles')->with('store', 'rol creado satisfactoriamente');
     }
 

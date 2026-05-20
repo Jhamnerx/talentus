@@ -16,6 +16,7 @@ class Create extends Component
     public bool   $showModal = false;
     public string $body      = '';
     public string $webhook   = '';
+    public bool   $interno   = false;
 
     protected function rules(): array
     {
@@ -34,7 +35,7 @@ class Create extends Component
     #[On('open-wa-create-device-modal')]
     public function openModal(): void
     {
-        $this->reset(['body', 'webhook']);
+        $this->reset(['body', 'webhook', 'interno']);
         $this->resetValidation();
         $this->showModal = true;
     }
@@ -42,7 +43,7 @@ class Create extends Component
     public function closeModal(): void
     {
         $this->showModal = false;
-        $this->reset(['body', 'webhook']);
+        $this->reset(['body', 'webhook', 'interno']);
         $this->resetValidation();
     }
 
@@ -50,12 +51,18 @@ class Create extends Component
     {
         $this->validate();
 
+        // Si se marca como interno, desmarcar el dispositivo anterior
+        if ($this->interno) {
+            \App\Models\WhatsFleep\Device::where('interno', true)->update(['interno' => false]);
+        }
+
         Device::create([
-            'body'    => $this->body,
-            'webhook' => $this->webhook,
-            'api_key' => Str::random(32),
-            'status'  => 'Disconnect',
-            'user_id' => Auth::id(),
+            'body'     => $this->body,
+            'webhook'  => $this->webhook,
+            'api_key'  => Str::random(32),
+            'status'   => 'Disconnect',
+            'user_id'  => Auth::id(),
+            'interno'  => $this->interno,
         ]);
 
         $this->notification()->success(

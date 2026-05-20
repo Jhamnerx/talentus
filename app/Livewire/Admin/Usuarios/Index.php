@@ -5,10 +5,11 @@ namespace App\Livewire\Admin\Usuarios;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use WireUi\Traits\WireUiActions;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WireUiActions;
     public $search;
     public $roleFilter = '';
 
@@ -51,7 +52,33 @@ class Index extends Component
 
     public function openModalEdit(User $usuario)
     {
-
         $this->dispatch('open-modal-edit', usuario: $usuario);
+    }
+
+    public function confirmDelete(int $id): void
+    {
+        $this->dialog()->confirm([
+            'title'       => '¿Eliminar usuario?',
+            'description' => 'Esta acción no se puede deshacer.',
+            'icon'        => 'error',
+            'accept'      => [
+                'label'  => 'Sí, eliminar',
+                'method' => 'deleteUser',
+                'params' => $id,
+            ],
+            'reject' => [
+                'label' => 'Cancelar',
+            ],
+        ]);
+    }
+
+    public function deleteUser(int $id): void
+    {
+        $usuario = User::findOrFail($id);
+        $usuario->delete();
+        $this->notification()->success(
+            title: 'USUARIO ELIMINADO',
+            description: 'El usuario ha sido eliminado correctamente.',
+        );
     }
 }

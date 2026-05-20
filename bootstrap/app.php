@@ -1,6 +1,7 @@
 <?php
 
 use App\Jobs\CheckDetalleCobros;
+use App\Jobs\CheckTicketSlaJob;
 use App\Jobs\CheckBirthdayContacts;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -40,6 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //$schedule->job(new checkMantenimientoVehiculos)->daily();
         $schedule->job(new CheckBirthdayContacts)->dailyAt('07:50');
         $schedule->command('telescope:prune')->daily();
+        $schedule->job(new CheckTicketSlaJob)->hourly();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Ajustes\Roles;
 use App\Http\Requests\RolesRequest;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 
 use Livewire\Component;
@@ -73,7 +74,8 @@ class Edit extends Component
         $rol->name = $this->name;
         $rol->save();
 
-        $rol->syncPermissions($this->permission);
+        $permissions = Permission::whereIn('name', $this->permission)->get();
+        $rol->syncPermissions($permissions);
         $this->dispatch(
             'notify',
             icon: 'success',

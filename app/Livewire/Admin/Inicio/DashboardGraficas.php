@@ -75,7 +75,10 @@ class DashboardGraficas extends Component
             ];
         })->filter(fn($item) => $item['total'] > 0)->values();
 
-        $totalTickets = $ticketsPorEstado->sum('total');
+        $totalTickets   = $ticketsPorEstado->sum('total');
+        $ticketsVencidos = Ticket::overdue()->count();
+        $ticketsEscalados = Ticket::whereIn('status', ['open', 'in_progress'])
+            ->where('escalation_level', '>', 0)->count();
 
         // ── Card: Work Orders por estado ──────────────────────────────
         $workOrdersPorEstado = collect(WorkOrderStatus::cases())->map(function (WorkOrderStatus $status) {
@@ -95,6 +98,8 @@ class DashboardGraficas extends Component
             'dispositivosPorModelo',
             'ticketsPorEstado',
             'totalTickets',
+            'ticketsVencidos',
+            'ticketsEscalados',
             'workOrdersPorEstado',
             'totalWorkOrders',
         ));

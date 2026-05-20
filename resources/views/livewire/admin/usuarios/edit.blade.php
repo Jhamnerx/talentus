@@ -15,6 +15,10 @@
             <x-form.password label="Confirma tu Contraseña" wire:model.live="password_confirmation"
                 id="password_confirmation-e" placeholder="Confirma tu contraseña (*):" class="mb-2" />
         </div>
+        <div class="col-span-12 sm:col-span-6">
+            <x-form.input label="Teléfonos:" wire:model.live="telefonos" placeholder="Ej: 51987654321"
+                description="Incluir código de país sin '+'. Ej: 51987654321" class="mb-2" />
+        </div>
         <div class="col-span-12 md:col-span-6">
             <x-form.select label="Rol (*):" wire:model.live="roles_id" placeholder="Selecciona" :options="$roles"
                 option-label="name" option-value="id" :searchable="false" multiselect class="mb-2" />

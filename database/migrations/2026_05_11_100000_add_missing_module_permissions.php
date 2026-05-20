@@ -53,7 +53,8 @@ return new class extends Migration
         // Asignar todos los permisos nuevos al rol admin
         $admin = \Spatie\Permission\Models\Role::where('name', 'admin')->first();
         if ($admin) {
-            $admin->givePermissionTo($this->permissions);
+            $perms = \Spatie\Permission\Models\Permission::whereIn('name', $this->permissions)->get();
+            $admin->givePermissionTo($perms);
         }
     }
 

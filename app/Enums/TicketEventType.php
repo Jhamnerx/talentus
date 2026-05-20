@@ -16,6 +16,7 @@ enum TicketEventType: string
     case CLOSED = 'closed';
     case RESOLVED = 'resolved';
     case CATEGORY_CHANGED = 'category_changed';
+    case ESCALATED = 'escalated';
 
     public function label(): string
     {
@@ -32,6 +33,7 @@ enum TicketEventType: string
             self::CLOSED => 'Ticket cerrado',
             self::RESOLVED => 'Ticket resuelto',
             self::CATEGORY_CHANGED => 'Categoría cambiada',
+            self::ESCALATED => 'Ticket escalado',
         };
     }
 
@@ -50,6 +52,7 @@ enum TicketEventType: string
             self::CLOSED => 'lock-closed',
             self::RESOLVED => 'check-circle',
             self::CATEGORY_CHANGED => 'tag',
+            self::ESCALATED => 'arrow-up',
         };
     }
 
@@ -67,6 +70,7 @@ enum TicketEventType: string
             self::CLOSED => 'text-gray-600 dark:text-gray-400',
             self::RESOLVED => 'text-green-600 dark:text-green-400',
             self::CATEGORY_CHANGED => 'text-pink-600 dark:text-pink-400',
+            self::ESCALATED => 'text-red-600 dark:text-red-400',
         };
     }
 
@@ -84,6 +88,7 @@ enum TicketEventType: string
             self::CLOSED => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
             self::RESOLVED => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
             self::CATEGORY_CHANGED => 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
+            self::ESCALATED => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
         };
     }
 }

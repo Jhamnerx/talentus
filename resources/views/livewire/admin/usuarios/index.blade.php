@@ -264,7 +264,7 @@
                                             </button>
                                         @endcan
                                         @can('admin.usuarios.delete')
-                                            <button @click.prevent="modalDelete = true"
+                                            <button wire:click.prevent="confirmDelete({{ $usuario->id }})"
                                                 class="text-rose-500 hover:text-rose-600 rounded-full p-1"
                                                 title="Eliminar">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor"
