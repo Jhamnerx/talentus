@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -22,7 +22,7 @@
             background: #fff;
         }
 
-        /* ── CABECERA ─────────────────────────────── */
+        /* -- CABECERA ------------------------------- */
         .header-wrapper {
             width: 100%;
             border-collapse: collapse;
@@ -104,7 +104,7 @@
         }
 
 
-        /* ── CONTENEDOR REDONDEADO ───────────────── */
+        /* -- CONTENEDOR REDONDEADO ----------------- */
         .tabla-borde {
             border: 1px solid #0e2157;
             border-radius: 8px;
@@ -112,7 +112,7 @@
             overflow: hidden;
         }
 
-        /* ── TABLA PRODUCTOS ──────────────────────── */
+        /* -- TABLA PRODUCTOS ------------------------ */
         .products-table {
             width: 100%;
             border-collapse: collapse;
@@ -167,7 +167,7 @@
             line-height: 1.4;
         }
 
-        /* ── TOTALES ──────────────────────────────── */
+        /* -- TOTALES -------------------------------- */
         .totales-tabla {
             width: 270px;
             border-collapse: collapse;
@@ -203,7 +203,7 @@
             text-align: right;
         }
 
-        /* ── TÉRMINOS ─────────────────────────────── */
+        /* -- T�RMINOS ------------------------------- */
         .terminos-section {
             margin-top: 16px;
             clear: both;
@@ -238,7 +238,7 @@
             color: #333;
         }
 
-        /* ── PIE DE PÁGINA ───────────────────────── */
+        /* -- PIE DE P�GINA ------------------------- */
         .footer-wrapper {
             position: fixed;
             bottom: 0;
@@ -262,7 +262,7 @@
             white-space: nowrap;
         }
 
-        /* ── FEATURES PAGE ───────────────────────── */
+        /* -- FEATURES PAGE ------------------------- */
         .page-break {
             page-break-after: always;
         }
@@ -279,9 +279,9 @@
 <body>
     <div style="padding: 8mm 6mm 20mm 6mm;">
 
-        {{-- ══════════════════════════════════════════
+        {{-- ------------------------------------------
          CABECERA: LOGO | EMPRESA | DOCUMENTO
-    ══════════════════════════════════════════ --}}
+    ------------------------------------------ --}}
         @php
             $dir = $plantilla->direccion;
             $dirTexto = is_array($dir) ? implode(', ', array_filter($dir)) : $dir;
@@ -308,26 +308,26 @@
                     @endif
                 </td>
 
-                {{-- RUC + Tipo + Número --}}
+                {{-- RUC + Tipo + N�mero --}}
                 <td class="header-doc">
                     <div class="doc-box">
                         <span class="doc-ruc">R.U.C. {{ $plantilla->ruc }}</span>
-                        <span class="doc-tipo">Cotización</span>
+                        <span class="doc-tipo">Cotizaci�n</span>
                         <span class="doc-num">{{ $presupuesto->serie_correlativo }}</span>
                     </div>
                 </td>
             </tr>
         </table>
 
-        {{-- ══════════════════════════════════════════
+        {{-- ------------------------------------------
          DATOS DEL CLIENTE
-    ══════════════════════════════════════════ --}}
+    ------------------------------------------ --}}
         <div class="tabla-borde">
             <table width="100%" border="0" cellpadding="7" cellspacing="0">
                 <tbody>
                     <tr>
                         <td width="60%" style="font-size:11px; border-bottom: 0.5px solid #e4e9f0;">
-                            <strong style="color:#0e2157;">Razón Social:</strong>
+                            <strong style="color:#0e2157;">Raz�n Social:</strong>
                             {{ $presupuesto->clientes->razon_social }}
                         </td>
                         <td width="40%"
@@ -335,18 +335,18 @@
                             <strong style="color:#0e2157;">
                                 {{ $presupuesto->clientes->tipoDocumento->descripcion ?? 'Doc.' }}:
                             </strong>
-                            {{ $presupuesto->clientes->numero_documento ?? '—' }}
+                            {{ $presupuesto->clientes->numero_documento ?? '�' }}
                         </td>
                     </tr>
                     <tr>
                         <td width="60%" style="font-size:11px; border-bottom: 0.5px solid #e4e9f0;">
-                            <strong style="color:#0e2157;">Fecha Emisión:</strong>
+                            <strong style="color:#0e2157;">Fecha Emisi�n:</strong>
                             {{ $presupuesto->fecha->format('d/m/Y') }}
                         </td>
                         <td width="40%"
                             style="font-size:11px; border-bottom: 0.5px solid #e4e9f0; border-left: 0.5px solid #e4e9f0;">
-                            <strong style="color:#0e2157;">Dirección:</strong>
-                            {{ $presupuesto->clientes->direccion ?? '—' }}
+                            <strong style="color:#0e2157;">Direcci�n:</strong>
+                            {{ $presupuesto->clientes->direccion ?? '�' }}
                         </td>
                     </tr>
                     <tr>
@@ -356,23 +356,23 @@
                         </td>
                         <td width="40%" style="font-size:11px; border-left: 0.5px solid #e4e9f0;">
                             <strong style="color:#0e2157;">Tipo Moneda:</strong>
-                            {{ $presupuesto->divisa == 'PEN' ? 'SOLES' : 'DÓLARES' }}
+                            {{ $presupuesto->divisa == 'PEN' ? 'SOLES' : 'D�LARES' }}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        {{-- ══════════════════════════════════════════
+        {{-- ------------------------------------------
          TABLA DE PRODUCTOS/SERVICIOS
-    ══════════════════════════════════════════ --}}
+    ------------------------------------------ --}}
         <div class="tabla-borde">
             <table class="products-table">
                 <thead>
                     <tr>
                         <th style="width:8%;">CANTIDAD</th>
-                        <th style="width:10%;">CÓDIGO</th>
-                        <th class="th-desc" style="width:50%;">DESCRIPCIÓN</th>
+                        <th style="width:10%;">C�DIGO</th>
+                        <th class="th-desc" style="width:50%;">DESCRIPCI�N</th>
                         <th style="width:16%;">VALOR UNITARIO</th>
                         <th style="width:16%;">VALOR TOTAL</th>
                     </tr>
@@ -382,7 +382,7 @@
                         @php
                             $descLineas = $detalle->descripcion ? explode("\n", trim($detalle->descripcion)) : [];
                             $productNombre = trim($detalle->info_producto->descripcion ?? '');
-                            // Si la primera línea de descripcion es igual al nombre del producto, omitirla
+                            // Si la primera l�nea de descripcion es igual al nombre del producto, omitirla
                             $extraLineas =
                                 !empty($descLineas) && trim($descLineas[0]) === $productNombre
                                     ? array_slice($descLineas, 1)
@@ -406,9 +406,9 @@
             </table>
         </div>{{-- fin tabla items --}}
 
-        {{-- ══════════════════════════════════════════
+        {{-- ------------------------------------------
          TOTALES
-    ══════════════════════════════════════════ --}}
+    ------------------------------------------ --}}
         @if ($presupuesto->divisa == 'USD')
             {{-- USD --}}
             <table class="totales-tabla">
@@ -430,7 +430,7 @@
                 <table class="totales-tabla" style="margin-top:4px;">
                     <tr>
                         <td class="lbl" style="color:#122f71;">Tipo de Cambio</td>
-                        <td class="val">{{ $presupuesto->tipo_cambio ?? '—' }}</td>
+                        <td class="val">{{ $presupuesto->tipo_cambio ?? '�' }}</td>
                     </tr>
                     <tr class="total-row">
                         <td class="lbl" style="color:#fff;">Total Soles</td>
@@ -456,11 +456,11 @@
             </table>
         @endif
 
-        {{-- ══════════════════════════════════════════
-         TÉRMINOS Y CONDICIONES
-    ══════════════════════════════════════════ --}}
+        {{-- ------------------------------------------
+         T�RMINOS Y CONDICIONES
+    ------------------------------------------ --}}
         <div class="terminos-section">
-            <div class="terminos-titulo">Términos y Condiciones</div>
+            <div class="terminos-titulo">T�rminos y Condiciones</div>
             @if ($presupuesto->terminos && $presupuesto->terminos->isNotEmpty())
                 <ul>
                     @foreach ($presupuesto->terminos as $termino)
@@ -469,8 +469,8 @@
                 </ul>
             @else
                 <ul>
-                    <li>Esta cotización es válida hasta su fecha de caducidad.</li>
-                    <li>El tiempo de entrega es inmediata, previa solicitud con anticipación.</li>
+                    <li>Esta cotizaci�n es v�lida hasta su fecha de caducidad.</li>
+                    <li>El tiempo de entrega es inmediata, previa solicitud con anticipaci�n.</li>
                 </ul>
             @endif
 
@@ -485,9 +485,9 @@
 
     </div>{{-- fin wrapper principal --}}
 
-    {{-- ══════════════════════════════════════════
-     PIE DE PÁGINA (sub-footer) — fuera del wrapper para position:fixed
-══════════════════════════════════════════ --}}
+    {{-- ------------------------------------------
+     PIE DE P�GINA (sub-footer) � fuera del wrapper para position:fixed
+------------------------------------------ --}}
     <div class="footer-wrapper">
         <table class="footer-bar">
             <tr>
@@ -502,9 +502,9 @@
         </table>
     </div>
 
-    {{-- ══════════════════════════════════════════
-     HOJA DE CARACTERÍSTICAS (página 2)
-══════════════════════════════════════════ --}}
+    {{-- ------------------------------------------
+     HOJA DE CARACTER�STICAS (p�gina 2)
+------------------------------------------ --}}
     @if ($presupuesto->features)
         <div class="page-break"></div>
 
@@ -515,47 +515,47 @@
         <div class="contenedor-caracteristicas">
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Homologación oficial</strong>
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Homologaci�n oficial</strong>
                 por SUTRAN, OSINERGMIN, MININTER y Cia Minera Buenaventura en Los Proyectos De Coimolache Y Minera La
                 Zanja.
             </p>
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Equipos europeos Teltonika,</strong> de alta precisión y durabilidad.
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Equipos europeos Teltonika,</strong> de alta precisi�n y durabilidad.
             </p>
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Distribuidores oficiales Teltonika</strong> en Perú.
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Distribuidores oficiales Teltonika</strong> en Per�.
             </p>
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Soporte técnico inmediato y especializado,</strong> con atención en línea o presencial.
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Soporte t�cnico inmediato y especializado,</strong> con atenci�n en l�nea o presencial.
             </p>
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Atención personalizada,</strong> orientada a las necesidades de cada cliente y tipo de flota.
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Atenci�n personalizada,</strong> orientada a las necesidades de cada cliente y tipo de flota.
             </p>
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Reportes automatizados,</strong> generados a través de bots inteligentes o programación avanzada
-                de la plataforma, configurados según los indicadores del cliente.
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Reportes automatizados,</strong> generados a trav�s de bots inteligentes o programaci�n avanzada
+                de la plataforma, configurados seg�n los indicadores del cliente.
             </p>
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Alertas y notificaciones inteligentes,</strong> en tiempo real, vía plataforma, correo o
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Alertas y notificaciones inteligentes,</strong> en tiempo real, v�a plataforma, correo o
                 WhatsApp.
             </p>
 
             <p style="text-align:justify; margin-bottom:10px; line-height:1.5;">
-                <span style="color:#0e2157; font-weight:bold; font-size:15px;">•</span>
-                <strong>Monitoreo 24/7,</strong> con personal técnico calificado y respuesta rápida ante cualquier
+                <span style="color:#0e2157; font-weight:bold; font-size:15px;">�</span>
+                <strong>Monitoreo 24/7,</strong> con personal t�cnico calificado y respuesta r�pida ante cualquier
                 eventualidad.
             </p>
 
@@ -563,8 +563,8 @@
                 style="text-align:justify; margin-top:15px; padding:10px;
                   background-color:#f0f3f9; border-left:4px solid #0e2157; line-height:1.5;">
                 <em>Con <strong>Talentus Technology</strong>, no solo adquiere un GPS, sino una
-                    <strong>solución tecnológica completa, segura y certificada</strong>,
-                    respaldada por una empresa autorizada y homologada por las principales entidades del país.</em>
+                    <strong>soluci�n tecnol�gica completa, segura y certificada</strong>,
+                    respaldada por una empresa autorizada y homologada por las principales entidades del pa�s.</em>
             </p>
 
             <p>&nbsp;</p>
@@ -579,21 +579,21 @@
                     </td>
                     <td style="vertical-align:top;">
                         <p style="font-size:14px; font-weight:bold; color:#0e2157; margin-bottom:6px;">FMC920 - 4G</p>
-                        <p style="font-size:11px; color:#898989; margin-bottom:8px;">Teltonika — Características</p>
+                        <p style="font-size:11px; color:#898989; margin-bottom:8px;">Teltonika � Caracter�sticas</p>
                         <ul style="list-style-type:disc; padding-left:16px;">
                             <li style="font-size:11px; margin-bottom:3px;">Cobertura 4G con respaldo 2G</li>
                             <li style="font-size:11px; margin-bottom:3px;">Memoria de 128 MB</li>
-                            <li style="font-size:11px; margin-bottom:3px;">Buzzer o pánico</li>
-                            <li style="font-size:11px; margin-bottom:3px;">Condiciones de manejo: frenado, aceleración
+                            <li style="font-size:11px; margin-bottom:3px;">Buzzer o p�nico</li>
+                            <li style="font-size:11px; margin-bottom:3px;">Condiciones de manejo: frenado, aceleraci�n
                                 y giro brusco (plataforma premium)</li>
-                            <li style="font-size:11px; margin-bottom:3px;">Detección de Jumping</li>
+                            <li style="font-size:11px; margin-bottom:3px;">Detecci�n de Jumping</li>
                             <li style="font-size:11px; margin-bottom:3px;">Reportes variados: paradas, alertas,
                                 kilometrajes (plataforma premium)</li>
                             <li style="font-size:11px; margin-bottom:3px;">Geocercas con reglas de velocidad
                                 (plataforma premium)</li>
                         </ul>
                         <p style="font-size:10px; margin-top:8px; color:#555;">
-                            Más info: <a
+                            M�s info: <a
                                 href="https://talentustechnology.com/servicios/venta-de-equipos/">talentustechnology.com</a>
                         </p>
                     </td>
@@ -610,22 +610,22 @@
                     </td>
                     <td style="vertical-align:top;">
                         <p style="font-size:14px; font-weight:bold; color:#0e2157; margin-bottom:6px;">FMC130 - 4G</p>
-                        <p style="font-size:11px; color:#898989; margin-bottom:8px;">Teltonika — Características</p>
+                        <p style="font-size:11px; color:#898989; margin-bottom:8px;">Teltonika � Caracter�sticas</p>
                         <ul style="list-style-type:disc; padding-left:16px;">
                             <li style="font-size:11px; margin-bottom:3px;">Cobertura 4G</li>
                             <li style="font-size:11px; margin-bottom:3px;">Memoria de 128 MB</li>
-                            <li style="font-size:11px; margin-bottom:3px;">Corte de motor, buzzer, pánico, apertura de
+                            <li style="font-size:11px; margin-bottom:3px;">Corte de motor, buzzer, p�nico, apertura de
                                 puertas</li>
-                            <li style="font-size:11px; margin-bottom:3px;">Condiciones de manejo: frenado, aceleración
+                            <li style="font-size:11px; margin-bottom:3px;">Condiciones de manejo: frenado, aceleraci�n
                                 y giro brusco</li>
-                            <li style="font-size:11px; margin-bottom:3px;">Detección de Jumping</li>
+                            <li style="font-size:11px; margin-bottom:3px;">Detecci�n de Jumping</li>
                             <li style="font-size:11px; margin-bottom:3px;">Reportes variados: paradas, alertas,
                                 kilometrajes</li>
                             <li style="font-size:11px; margin-bottom:3px;">Geocercas con reglas de velocidad</li>
-                            <li style="font-size:11px; margin-bottom:3px;">Buzzer o pánico</li>
+                            <li style="font-size:11px; margin-bottom:3px;">Buzzer o p�nico</li>
                         </ul>
                         <p style="font-size:10px; margin-top:8px; color:#555;">
-                            Más info: <a
+                            M�s info: <a
                                 href="https://talentustechnology.com/servicios/venta-de-equipos/">talentustechnology.com</a>
                         </p>
                     </td>

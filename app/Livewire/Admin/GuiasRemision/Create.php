@@ -41,7 +41,13 @@ class Create extends Component
 
     public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
 
-    public $transp_tipo_doc, $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer, $numero_doc_chofer;
+    public $transp_tipo_doc = '6', $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer = '1', $numero_doc_chofer;
+    public $driver_id, $transport_id, $dispatcher_id;
+    public $chofer_nombre, $chofer_apellidos, $chofer_licencia;
+    public $transp_address, $transp_numero_mtc, $placa_semirremolque;
+    public $fecha_entrega_transportista;
+    public bool $is_transport_m1l = false;
+    public bool $has_transport_driver_01 = false;
     public $asignarTecnico = false;
 
     public $docu_rel_tipo = '50', $docu_rel_numero =  '000-0000-10-000000';
@@ -197,7 +203,7 @@ class Create extends Component
     public function save()
     {
         $request = new GuiaRemisionRequest();
-        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc), $request->messages());
+        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc, $this->modalidad_transporte_id), $request->messages());
 
         try {
             DB::beginTransaction();
@@ -237,11 +243,11 @@ class Create extends Component
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('guia-store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                    $this->redirectRoute('admin.almacen.guias.index');
+                    $this->redirectRoute('admin.guias.index');
                 } else {
 
                     session()->flash('guia-store', $mensaje['fe_mensaje_sunat']);
-                    $this->redirectRoute('admin.almacen.guias.index');
+                    $this->redirectRoute('admin.guias.index');
                 }
             }
             DB::commit();
@@ -264,6 +270,44 @@ class Create extends Component
             $this->tipo_documento = $cliente->tipo_documento_id;
             $this->numero_documento = $cliente->numero_documento;
             $this->razon_social = $cliente->razon_social;
+        }
+    }
+
+    public function updatedDriverId($id): void
+    {
+        if ($id) {
+            $driver = \App\Models\Driver::find($id);
+            if ($driver) {
+                $this->tipo_doc_chofer   = $driver->tipo_doc;
+                $this->numero_doc_chofer = $driver->numero_doc;
+                $this->chofer_nombre     = $driver->nombres;
+                $this->chofer_apellidos  = $driver->apellidos;
+                $this->chofer_licencia   = $driver->licencia;
+            }
+        }
+    }
+
+    public function updatedTransportId($id): void
+    {
+        if ($id) {
+            $transport = \App\Models\Transport::find($id);
+            if ($transport) {
+                $this->transp_placa = $transport->placa;
+            }
+        }
+    }
+
+    public function updatedDispatcherId($id): void
+    {
+        if ($id) {
+            $dispatcher = \App\Models\Dispatcher::find($id);
+            if ($dispatcher) {
+                $this->transp_tipo_doc    = $dispatcher->tipo_doc;
+                $this->transp_numero_doc  = $dispatcher->numero_doc;
+                $this->transp_razon_social = $dispatcher->razon_social;
+                $this->transp_address     = $dispatcher->address;
+                $this->transp_numero_mtc  = $dispatcher->numero_mtc;
+            }
         }
     }
 

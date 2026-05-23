@@ -12,12 +12,13 @@ class GuiaRemisionRequest extends FormRequest
         return true;
     }
 
-    public function rules($guia = null, $motivo_traslado_id = null, $docu_rel_tipo = null, $numero_docu_empresa = null)
+    public function rules($guia = null, $motivo_traslado_id = null, $docu_rel_tipo = null, $numero_docu_empresa = null, $modalidad_transporte_id = null)
     {
 
         $rules = [
             'serie_correlativo' => [
-                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                'required',
+                Rule::unique('guia_remision', 'serie_correlativo')->where(fn($query) => $query->where('empresa_id', session('empresa'))
                     ->whereNull('deleted_at')),
             ],
             'serie' => 'required',
@@ -90,13 +91,27 @@ class GuiaRemisionRequest extends FormRequest
             ];
         }
 
+        // Transporte Público (01): requiere datos del transportista y fecha entrega
+        if ($modalidad_transporte_id == '01') {
+            $rules['transp_numero_doc'] = 'required';
+            $rules['transp_razon_social'] = 'required';
+            $rules['fecha_entrega_transportista'] = 'required|date';
+        }
+
+        // Transporte Privado (02): requiere placa y datos del chofer
+        if ($modalidad_transporte_id == '02') {
+            $rules['transp_placa'] = 'required';
+            $rules['tipo_doc_chofer'] = 'required';
+            $rules['numero_doc_chofer'] = 'required';
+        }
+
 
 
         if ($guia) {
 
             $rules['serie_correlativo'] = [
                 'required',
-                Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                Rule::unique('guia_remision', 'serie_correlativo')->where(fn($query) => $query->where('empresa_id', session('empresa'))
                     ->whereNull('deleted_at'))
                     ->ignore($guia->id),
 

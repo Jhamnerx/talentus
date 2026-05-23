@@ -3,6 +3,7 @@
 use App\Jobs\CheckDetalleCobros;
 use App\Jobs\CheckTicketSlaJob;
 use App\Jobs\CheckBirthdayContacts;
+use App\Jobs\ReconectarDispositivosWA;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Jobs\checkMantenimientoVehiculos;
@@ -42,6 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->job(new CheckBirthdayContacts)->dailyAt('07:50');
         $schedule->command('telescope:prune')->daily();
         $schedule->job(new CheckTicketSlaJob)->hourly();
+        $schedule->job(new ReconectarDispositivosWA)->everyFiveMinutes();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

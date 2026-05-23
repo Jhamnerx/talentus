@@ -229,6 +229,230 @@
 
         </div>
 
+        {{-- ===================== DATOS MODO DE TRASLADO ===================== --}}
+        <div class="border-solid border-b-2 border-gray-200 mb-3">
+            <span class="font-semibold text-base leading-tight font-sans text-gray-800 dark:text-gray-100">
+                DATOS MODO DE TRASLADO:
+            </span>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 mb-4">
+
+            {{-- Indicador M1 o L --}}
+            <div class="col-span-12 mb-2">
+                <x-form.toggle wire:model.live="is_transport_m1l"
+                    label="Traslados de vehículos de la categoría M1 o L" md />
+            </div>
+
+            {{-- TRANSPORTE PÚBLICO (01) --}}
+            @if ($modalidad_transporte_id == '01')
+
+                <div class="col-span-12 mb-2">
+                    <x-form.toggle wire:model.live="has_transport_driver_01"
+                        label="Registrar vehículos y conductores del transportista" md />
+                </div>
+
+                <div class="col-span-12 sm:col-span-6 xl:col-span-3 mb-2">
+                    <x-form.datetime.picker label="Fecha entrega al transporte *:" id="fecha_entrega_transportista"
+                        name="fecha_entrega_transportista" wire:model.live="fecha_entrega_transportista" without-time
+                        parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                </div>
+
+                {{-- Datos Transportista --}}
+                <div class="col-span-12">
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Datos del
+                                Transportista</span>
+                            <x-form.button flat xs icon="plus"
+                                wire:click="$dispatch('open-modal-create-dispatcher')">
+                                Nuevo
+                            </x-form.button>
+                        </div>
+                        <div class="grid grid-cols-12 gap-3">
+                            <div class="col-span-12">
+                                <x-form.select label="Transportista registrado:" wire:model.live="dispatcher_id"
+                                    placeholder="Buscar transportista..." :async-data="['api' => route('api.dispatchers.index')]"
+                                    option-label="razon_social" option-value="id" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-2">
+                                <x-form.select id="transp_tipo_doc" label="Tipo Doc.:"
+                                    wire:model.live="transp_tipo_doc" :options="[['id' => '6', 'name' => 'RUC'], ['id' => '1', 'name' => 'DNI']]" option-label="name"
+                                    option-value="id" :clearable="false" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-4">
+                                <x-form.input label="N° Documento:" wire:model.live="transp_numero_doc"
+                                    placeholder="20123456789" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <x-form.input label="Razón Social:" wire:model.live="transp_razon_social"
+                                    placeholder="Transportes SAC" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <x-form.input label="Dirección:" wire:model.live="transp_address"
+                                    placeholder="Dirección del transportista" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <x-form.input label="N° Habilitación MTC:" wire:model.live="transp_numero_mtc"
+                                    placeholder="MTC-12345" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Conductor y vehículo del transportista (si has_transport_driver_01) --}}
+                @if ($has_transport_driver_01)
+                    <div class="col-span-12">
+                        <div class="border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-semibold text-blue-700 dark:text-blue-300">Conductor del
+                                    Transportista</span>
+                                <x-form.button flat xs icon="plus"
+                                    wire:click="$dispatch('open-modal-create-driver')">
+                                    Nuevo
+                                </x-form.button>
+                            </div>
+                            <div class="grid grid-cols-12 gap-3">
+                                <div class="col-span-12">
+                                    <x-form.select label="Conductor registrado:" wire:model.live="driver_id"
+                                        placeholder="Buscar conductor..." :async-data="['api' => route('api.drivers.index')]"
+                                        option-label="nombre_completo" option-description="descripcion"
+                                        option-value="id" />
+                                </div>
+                                <div class="col-span-12 sm:col-span-2">
+                                    <x-form.select label="Tipo Doc.:" wire:model.live="tipo_doc_chofer"
+                                        :options="[['id' => '1', 'name' => 'DNI'], ['id' => '4', 'name' => 'C.E.']]" option-label="name" option-value="id" :clearable="false" />
+                                </div>
+                                <div class="col-span-12 sm:col-span-4">
+                                    <x-form.input label="N° Documento:" wire:model.live="numero_doc_chofer"
+                                        placeholder="12345678" />
+                                </div>
+                                <div class="col-span-12 sm:col-span-3">
+                                    <x-form.input label="Nombres:" wire:model.live="chofer_nombre"
+                                        placeholder="Nombres" />
+                                </div>
+                                <div class="col-span-12 sm:col-span-3">
+                                    <x-form.input label="Apellidos:" wire:model.live="chofer_apellidos"
+                                        placeholder="Apellidos" />
+                                </div>
+                                <div class="col-span-12 sm:col-span-4">
+                                    <x-form.input label="Licencia:" wire:model.live="chofer_licencia"
+                                        placeholder="A-IIB-12345" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-12">
+                        <div class="border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-semibold text-blue-700 dark:text-blue-300">Vehículo del
+                                    Transportista</span>
+                                <x-form.button flat xs icon="plus"
+                                    wire:click="$dispatch('open-modal-create-transport')">
+                                    Nuevo
+                                </x-form.button>
+                            </div>
+                            <div class="grid grid-cols-12 gap-3">
+                                <div class="col-span-12">
+                                    <x-form.select label="Vehículo registrado:" wire:model.live="transport_id"
+                                        placeholder="Buscar vehículo..." :async-data="['api' => route('api.transports.index')]" option-label="placa"
+                                        option-value="id" />
+                                </div>
+                                <div class="col-span-12 sm:col-span-4">
+                                    <x-form.input label="Placa:" wire:model.live="transp_placa"
+                                        placeholder="ABC-123" />
+                                </div>
+                                <div class="col-span-12 sm:col-span-4">
+                                    <x-form.input label="N° Placa Semirremolque:"
+                                        wire:model.live="placa_semirremolque" placeholder="XYZ-789" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+            @endif
+
+            {{-- TRANSPORTE PRIVADO (02) --}}
+            @if ($modalidad_transporte_id == '02')
+                {{-- Datos Conductor --}}
+                <div class="col-span-12">
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Datos del
+                                Conductor</span>
+                            <x-form.button flat xs icon="plus" wire:click="$dispatch('open-modal-create-driver')">
+                                Nuevo
+                            </x-form.button>
+                        </div>
+                        <div class="grid grid-cols-12 gap-3">
+                            <div class="col-span-12">
+                                <x-form.select label="Conductor registrado:" wire:model.live="driver_id"
+                                    placeholder="Buscar conductor..." :async-data="['api' => route('api.drivers.index')]"
+                                    option-label="nombre_completo" option-description="descripcion"
+                                    option-value="id" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-2">
+                                <x-form.select label="Tipo Doc.:" wire:model.live="tipo_doc_chofer" :options="[['id' => '1', 'name' => 'DNI'], ['id' => '4', 'name' => 'C.E.']]"
+                                    option-label="name" option-value="id" :clearable="false" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-4">
+                                <x-form.input label="N° Documento *:" wire:model.live="numero_doc_chofer"
+                                    placeholder="12345678" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-3">
+                                <x-form.input label="Nombres:" wire:model.live="chofer_nombre"
+                                    placeholder="Nombres" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-3">
+                                <x-form.input label="Apellidos:" wire:model.live="chofer_apellidos"
+                                    placeholder="Apellidos" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-4">
+                                <x-form.input label="Licencia:" wire:model.live="chofer_licencia"
+                                    placeholder="A-IIB-12345" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Datos Vehículo --}}
+                <div class="col-span-12">
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Datos del
+                                Vehículo</span>
+                            <x-form.button flat xs icon="plus"
+                                wire:click="$dispatch('open-modal-create-transport')">
+                                Nuevo
+                            </x-form.button>
+                        </div>
+                        <div class="grid grid-cols-12 gap-3">
+                            <div class="col-span-12">
+                                <x-form.select label="Vehículo registrado:" wire:model.live="transport_id"
+                                    placeholder="Buscar vehículo..." :async-data="['api' => route('api.transports.index')]" option-label="placa"
+                                    option-value="id" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-4">
+                                <x-form.input label="Placa *:" wire:model.live="transp_placa"
+                                    placeholder="ABC-123" />
+                            </div>
+                            <div class="col-span-12 sm:col-span-4">
+                                <x-form.input label="N° Placa Semirremolque:" wire:model.live="placa_semirremolque"
+                                    placeholder="XYZ-789" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+        </div>
+
+        @livewire('admin.drivers.save-modal')
+        @livewire('admin.transports.save-modal')
+        @livewire('admin.dispatchers.save-modal')
+
         <div class="border-solid border-b-2 border-gray-200 mb-3">
             <span class="font-semibold  text-base leading-tight font-sans text-gray-800 dark:text-gray-100">
                 DOCUMENTO DE REFERENCIA:

@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use App\Observers\DriverObserver;
+use App\Scopes\EmpresaScope;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+#[ObservedBy(DriverObserver::class)]
+class Driver extends Model
+{
+    use HasFactory;
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    public function getNombreCompletoAttribute(): string
+    {
+        return trim($this->nombres . ' ' . $this->apellidos);
+    }
+}

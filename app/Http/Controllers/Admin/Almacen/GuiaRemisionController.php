@@ -37,7 +37,7 @@ class GuiaRemisionController extends Controller
     {
         if ($guia->fe_estado != '0') {
 
-            return redirect()->route('admin.almacen.guias.index')->with('info', 'No se puede editar una guia de remision que ya ha sido aceptada');
+            return redirect()->route('admin.guias.index')->with('info', 'No se puede editar una guia de remision que ya ha sido aceptada');
         } else {
             return view('admin.almacen.guias.edit', compact('guia'));
         }

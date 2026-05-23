@@ -29,7 +29,7 @@
 
             <!-- Create invoice button -->
             @can('crear-guias')
-                <a href="{{ route('admin.almacen.guias.create') }}">
+                <a href="{{ route('admin.guias.create') }}">
                     <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                         <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                             <path
@@ -633,7 +633,7 @@
                                             @can('editar-guias')
                                                 @if ($guia->fe_estado == '0')
                                                     <x-dropdown.item icon='pencil' label="Editar"
-                                                        href="{{ route('admin.almacen.guias.edit', $guia) }}" />
+                                                        href="{{ route('admin.guias.edit', $guia) }}" />
                                                 @else
                                                     <x-dropdown.item disabled icon='pencil' label="Editar" />
                                                 @endif

@@ -127,10 +127,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     Route::controller(GuiaRemisionController::class)->group(function () {
-        Route::get('guias', 'index')->name('admin.almacen.guias.index');
-        Route::get('guias/crear', 'create')->name('admin.almacen.guias.create');
-        Route::get('guias/{guia}/editar', 'edit')->name('admin.almacen.guias.edit');
+        Route::get('guias', 'index')->name('admin.guias.index');
+        Route::get('guias/crear', 'create')->name('admin.guias.create');
+        Route::get('guias/{guia}/editar', 'edit')->name('admin.guias.edit');
     });
+
+    Route::get('conductores', fn() => view('admin.drivers.index'))->name('admin.guias.drivers.index');
+    Route::get('vehiculos-guia', fn() => view('admin.transports.index'))->name('admin.guias.transports.index');
+    Route::get('transportistas', fn() => view('admin.dispatchers.index'))->name('admin.guias.dispatchers.index');
 
     //Route::resource('clientes', ClientesController::class)->names('admin.clientes');
 
@@ -431,6 +435,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('api/unidades', 'codesProductosGre')->name('api.unidades.index');
         Route::get('api/detracciones', 'codigosDetracciones')->name('api.detracciones.index');
         Route::get('api/metodos-pago', 'metodosPago')->name('api.metodos.pago.index');
+
+        Route::get('api/drivers', 'drivers')->name('api.drivers.index');
+        Route::get('api/transports', 'transports')->name('api.transports.index');
+        Route::get('api/dispatchers', 'dispatchers')->name('api.dispatchers.index');
 
         Route::get('/lineas/disponibles', [SelectsController::class, 'lineasDisponibles'])->name('api.lineas.disponibles');
         Route::get('/simcards/disponibles', [SelectsController::class, 'simCardsDisponibles'])->name('api.simcards.disponibles');
