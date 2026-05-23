@@ -18,9 +18,9 @@
                     <tr>
                         <th class="px-4 py-3 text-left">Tipo Doc.</th>
                         <th class="px-4 py-3 text-left">N° Documento</th>
-                        <th class="px-4 py-3 text-left">Nombres</th>
-                        <th class="px-4 py-3 text-left">Apellidos</th>
+                        <th class="px-4 py-3 text-left">Nombre completo</th>
                         <th class="px-4 py-3 text-left">Licencia</th>
+                        <th class="px-4 py-3 text-left">Teléfono</th>
                         <th class="px-4 py-3 text-left">Estado</th>
                         <th class="px-4 py-3 text-right">Acciones</th>
                     </tr>
@@ -30,9 +30,9 @@
                         <tr>
                             <td class="px-4 py-3">{{ $driver->tipo_doc == '1' ? 'DNI' : 'C.E.' }}</td>
                             <td class="px-4 py-3">{{ $driver->numero_doc }}</td>
-                            <td class="px-4 py-3">{{ $driver->nombres }}</td>
-                            <td class="px-4 py-3">{{ $driver->apellidos }}</td>
+                            <td class="px-4 py-3">{{ $driver->name }}</td>
                             <td class="px-4 py-3">{{ $driver->licencia }}</td>
+                            <td class="px-4 py-3">{{ $driver->telephone }}</td>
                             <td class="px-4 py-3">
                                 <span
                                     class="px-2 py-1 rounded-full text-xs {{ $driver->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">

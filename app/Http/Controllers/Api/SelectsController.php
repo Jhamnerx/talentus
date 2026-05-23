@@ -1316,13 +1316,12 @@ class SelectsController extends Controller
     public function drivers(Request $request): Collection
     {
         return Driver::query()
-            ->select('id', 'tipo_doc', 'numero_doc', 'nombres', 'apellidos', 'licencia')
+            ->select('id', 'tipo_doc', 'numero_doc', 'name', 'licencia')
             ->where('is_active', true)
             ->when(
                 $request->search,
                 fn(Builder $query) => $query
-                    ->where('nombres', 'like', "%{$request->search}%")
-                    ->orWhere('apellidos', 'like', "%{$request->search}%")
+                    ->where('name', 'like', "%{$request->search}%")
                     ->orWhere('numero_doc', 'like', "%{$request->search}%")
             )
             ->when(
@@ -1332,20 +1331,19 @@ class SelectsController extends Controller
             )
             ->get()
             ->map(fn($d) => [
-                'id'             => $d->id,
-                'nombre_completo' => trim($d->nombres . ' ' . $d->apellidos),
-                'descripcion'    => $d->numero_doc . ($d->licencia ? ' | Lic: ' . $d->licencia : ''),
-                'nombres'        => $d->nombres,
-                'apellidos'      => $d->apellidos,
-                'numero_doc'     => $d->numero_doc,
-                'licencia'       => $d->licencia,
+                'id'              => $d->id,
+                'nombre_completo' => $d->name,
+                'descripcion'     => $d->numero_doc . ($d->licencia ? ' | Lic: ' . $d->licencia : ''),
+                'name'            => $d->name,
+                'numero_doc'      => $d->numero_doc,
+                'licencia'        => $d->licencia,
             ]);
     }
 
     public function transports(Request $request): Collection
     {
         return Transport::query()
-            ->select('id', 'placa', 'marca', 'modelo')
+            ->select('id', 'placa', 'marca', 'modelo', 'is_default')
             ->where('is_active', true)
             ->when(
                 $request->search,
@@ -1358,7 +1356,15 @@ class SelectsController extends Controller
                 fn(Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn(Builder $query) => $query->limit(20)
             )
-            ->get();
+            ->get()
+            ->map(fn($t) => [
+                'id'          => $t->id,
+                'placa'       => $t->placa,
+                'descripcion' => trim(($t->marca ?? '') . ' ' . ($t->modelo ?? '')),
+                'marca'       => $t->marca,
+                'modelo'      => $t->modelo,
+                'is_default'  => $t->is_default,
+            ]);
     }
 
     public function dispatchers(Request $request): Collection

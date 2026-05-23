@@ -335,7 +335,7 @@
                                 <div class="col-span-12">
                                     <x-form.select label="Vehículo:" wire:model.live="transport_id"
                                         placeholder="Buscar vehículo..." :async-data="['api' => route('api.transports.index')]" option-label="placa"
-                                        option-value="id" />
+                                        option-description="descripcion" option-value="id" />
                                 </div>
                                 <div class="col-span-12 sm:col-span-4">
                                     <x-form.input label="Placa:" wire:model.live="transp_placa" />
@@ -399,7 +399,7 @@
                             <div class="col-span-12">
                                 <x-form.select label="Vehículo:" wire:model.live="transport_id"
                                     placeholder="Buscar vehículo..." :async-data="['api' => route('api.transports.index')]" option-label="placa"
-                                    option-value="id" />
+                                    option-description="descripcion" option-value="id" />
                             </div>
                             <div class="col-span-12 sm:col-span-4">
                                 <x-form.input label="Placa *:" wire:model.live="transp_placa" />

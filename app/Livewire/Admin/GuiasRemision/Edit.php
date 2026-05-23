@@ -224,7 +224,15 @@ class Edit extends Component
 
             $cliente = Clientes::where('numero_documento', '=', $this->numero_documento)->firstOrFail();
             $this->razon_social = $cliente->razon_social;
-            $this->cliente_id = $cliente->id;
+            $this->cliente_id   = $cliente->id;
+
+            // Auto-completar punto de llegada desde los datos registrados del cliente
+            if ($cliente->direccion && !$this->direccion_llegada) {
+                $this->direccion_llegada = $cliente->direccion;
+            }
+            if ($cliente->ubigeo && !$this->ubigeo_llegada) {
+                $this->ubigeo_llegada = $cliente->ubigeo;
+            }
         } catch (Exception $e) {
 
             $this->dispatch(
@@ -262,8 +270,8 @@ class Edit extends Component
             if ($driver) {
                 $this->tipo_doc_chofer   = $driver->tipo_doc;
                 $this->numero_doc_chofer = $driver->numero_doc;
-                $this->chofer_nombre     = $driver->nombres;
-                $this->chofer_apellidos  = $driver->apellidos;
+                $this->chofer_nombre     = $driver->name;
+                $this->chofer_apellidos  = '';
                 $this->chofer_licencia   = $driver->licencia;
             }
         }

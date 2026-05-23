@@ -23,11 +23,7 @@ class Driver extends Model
     }
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'is_active'   => 'boolean',
+        'is_default'  => 'boolean',
     ];
-
-    public function getNombreCompletoAttribute(): string
-    {
-        return trim($this->nombres . ' ' . $this->apellidos);
-    }
 }

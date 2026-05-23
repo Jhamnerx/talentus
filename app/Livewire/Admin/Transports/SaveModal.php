@@ -16,15 +16,19 @@ class SaveModal extends Component
     public string $placa = '';
     public string $marca = '';
     public string $modelo = '';
+    public string $tuc = '';
+    public bool $is_default = false;
     public bool $is_active = true;
 
     protected function rules(): array
     {
         return [
-            'placa'     => 'required|max:10',
-            'marca'     => 'nullable',
-            'modelo'    => 'nullable',
-            'is_active' => 'boolean',
+            'placa'      => 'required|max:10',
+            'marca'      => 'nullable',
+            'modelo'     => 'nullable',
+            'tuc'        => 'nullable|max:20',
+            'is_default' => 'boolean',
+            'is_active'  => 'boolean',
         ];
     }
 
@@ -37,7 +41,7 @@ class SaveModal extends Component
     public function openCreate(): void
     {
         $this->resetValidation();
-        $this->reset(['transport', 'placa', 'marca', 'modelo', 'is_active']);
+        $this->reset(['transport', 'placa', 'marca', 'modelo', 'tuc', 'is_default', 'is_active']);
         $this->is_active = true;
         $this->modalOpen = true;
     }
@@ -46,12 +50,14 @@ class SaveModal extends Component
     public function openEdit(Transport $transport): void
     {
         $this->resetValidation();
-        $this->transport = $transport;
-        $this->placa     = $transport->placa;
-        $this->marca     = $transport->marca ?? '';
-        $this->modelo    = $transport->modelo ?? '';
-        $this->is_active = (bool) $transport->is_active;
-        $this->modalOpen = true;
+        $this->transport  = $transport;
+        $this->placa      = $transport->placa;
+        $this->marca      = $transport->marca ?? '';
+        $this->modelo     = $transport->modelo ?? '';
+        $this->tuc        = $transport->tuc ?? '';
+        $this->is_default = (bool) $transport->is_default;
+        $this->is_active  = (bool) $transport->is_active;
+        $this->modalOpen  = true;
     }
 
     public function save(): void

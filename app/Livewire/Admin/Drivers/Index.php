@@ -17,8 +17,7 @@ class Index extends Component
     public function render()
     {
         $drivers = Driver::query()
-            ->when($this->search, fn($q) => $q->where('nombres', 'like', '%' . $this->search . '%')
-                ->orWhere('apellidos', 'like', '%' . $this->search . '%')
+            ->when($this->search, fn($q) => $q->where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('numero_doc', 'like', '%' . $this->search . '%'))
             ->orderByDesc('id')
             ->paginate($this->perPage);

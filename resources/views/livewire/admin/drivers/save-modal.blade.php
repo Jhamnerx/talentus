@@ -5,14 +5,26 @@
             <div class="grid grid-cols-2 gap-4">
                 <x-form.select label="Tipo Documento *" wire:model.live="tipo_doc" :options="[['id' => '1', 'name' => 'DNI'], ['id' => '4', 'name' => 'Carnet de Extranjería']]" option-label="name"
                     option-value="id" :clearable="false" />
-                <x-form.input label="N° Documento *" wire:model.live="numero_doc" placeholder="12345678" />
+                <div>
+                    <x-form.input label="N° Documento *" wire:model.live="numero_doc" placeholder="12345678">
+                        <x-slot name="append">
+                            <div class="flex items-center mr-1">
+                                <x-form.button wire:click="searchDni" spinner="searchDni" icon="magnifying-glass" xs
+                                    primary :disabled="$tipo_doc !== '1'" title="Buscar en RENIEC" />
+                            </div>
+                        </x-slot>
+                    </x-form.input>
+                </div>
             </div>
+            <x-form.input label="Nombre completo *" wire:model.live="name" placeholder="Apellidos Nombres" />
             <div class="grid grid-cols-2 gap-4">
-                <x-form.input label="Nombres *" wire:model.live="nombres" placeholder="Nombres" />
-                <x-form.input label="Apellidos" wire:model.live="apellidos" placeholder="Apellidos" />
+                <x-form.input label="Licencia de Conducir" wire:model.live="licencia" placeholder="A-IIB-12345" />
+                <x-form.input label="Teléfono" wire:model.live="telephone" placeholder="987654321" />
             </div>
-            <x-form.input label="Licencia de Conducir" wire:model.live="licencia" placeholder="A-IIB-12345" />
-            <x-form.toggle wire:model.live="is_active" label="Activo" md />
+            <div class="flex items-center gap-6">
+                <x-form.toggle wire:model.live="is_default" label="Predeterminado" md />
+                <x-form.toggle wire:model.live="is_active" label="Activo" md />
+            </div>
         </div>
 
         <x-slot name="footer">

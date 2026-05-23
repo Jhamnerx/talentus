@@ -37,4 +37,8 @@
     @livewire('admin.sim-card.save')
     @livewire('admin.items.create-modal')
 
+    @livewire('admin.drivers.save-modal')
+    @livewire('admin.transports.save-modal')
+    @livewire('admin.dispatchers.save-modal')
+    @livewire('admin.dispositivos.save')
 </x-admin-layout>

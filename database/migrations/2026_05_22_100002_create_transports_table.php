@@ -13,7 +13,9 @@ return new class extends Migration
             $table->string('marca')->nullable();
             $table->string('modelo')->nullable();
             $table->string('placa', 10);
+            $table->string('tuc')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_default')->default(false);
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
             $table->timestamps();

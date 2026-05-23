@@ -56,7 +56,7 @@
 
             <div class="col-span-12 sm:col-span-6 xl:col-span-4 mb-2">
 
-                <x-form.input wire:model.live='numero_documento' label="N° Documento:" placeholder="10203040">
+                <x-form.input wire:model='numero_documento' label="N° Documento:" placeholder="10203040">
 
                     <x-slot name="append">
                         <div class="absolute inset-y-0 right-0 flex items-center p-0.5">
@@ -357,7 +357,7 @@
                                 <div class="col-span-12">
                                     <x-form.select label="Vehículo registrado:" wire:model.live="transport_id"
                                         placeholder="Buscar vehículo..." :async-data="['api' => route('api.transports.index')]" option-label="placa"
-                                        option-value="id" />
+                                        option-description="descripcion" option-value="id" />
                                 </div>
                                 <div class="col-span-12 sm:col-span-4">
                                     <x-form.input label="Placa:" wire:model.live="transp_placa"
@@ -432,7 +432,7 @@
                             <div class="col-span-12">
                                 <x-form.select label="Vehículo registrado:" wire:model.live="transport_id"
                                     placeholder="Buscar vehículo..." :async-data="['api' => route('api.transports.index')]" option-label="placa"
-                                    option-value="id" />
+                                    option-description="descripcion" option-value="id" />
                             </div>
                             <div class="col-span-12 sm:col-span-4">
                                 <x-form.input label="Placa *:" wire:model.live="transp_placa"
@@ -449,9 +449,6 @@
 
         </div>
 
-        @livewire('admin.drivers.save-modal')
-        @livewire('admin.transports.save-modal')
-        @livewire('admin.dispatchers.save-modal')
 
         <div class="border-solid border-b-2 border-gray-200 mb-3">
             <span class="font-semibold  text-base leading-tight font-sans text-gray-800 dark:text-gray-100">
@@ -665,7 +662,6 @@
 </div>
 
 @push('modals')
-    @livewire('admin.dispositivos.save')
 @endpush
 
 @section('js')
