@@ -45,6 +45,13 @@ class VisualizarArchivosController extends Controller
         return $guia->downloadXml();
     }
 
+    public function cdr_guia($serie_correlativo)
+    {
+        $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->firstOrFail();
+
+        return $guia->downloadCdr();
+    }
+
 
 
 

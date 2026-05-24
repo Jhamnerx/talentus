@@ -1672,4 +1672,26 @@ router.post("/api/send-list", checkIpWhitelist, async (req, res) => {
     }
 });
 
+/**
+ * @route POST /backend-initialize
+ * @desc Reconectar / mantener activa una sesión de WhatsApp (keep-alive)
+ */
+router.post("/backend-initialize", async (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res
+            .status(400)
+            .json({ status: false, message: "Token requerido" });
+    }
+
+    try {
+        const result = await wa.keepSessionAlive(token);
+        return res.json(result);
+    } catch (error) {
+        logger.error(`Error en /backend-initialize para ${token}:`, error);
+        return res.status(500).json({ status: false, message: error.message });
+    }
+});
+
 export default router;

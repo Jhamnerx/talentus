@@ -18,7 +18,7 @@ class Save extends Component
     public $modalSave = false;
 
     // Datos del cliente
-    public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
+    public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion, $ubigeo;
 
     // Datos del contacto principal (para RUC: se llena manualmente; para DNI: se sincroniza automáticamente)
     public $contacto_nombre;
@@ -144,6 +144,7 @@ class Save extends Component
             if ($resultado['nombres'] ?? false) {
                 $this->razon_social              = $resultado['nombre_completo'];
                 $this->direccion                 = $resultado['direccion_completa'] ?? '';
+                $this->ubigeo                    = $resultado['ubigeo_sunat'] ?? '';
                 // Sincronizar contacto
                 $this->contacto_nombre           = $this->razon_social;
                 $this->contacto_numero_documento = $numero;
@@ -165,6 +166,7 @@ class Save extends Component
             if ($resultado['nombre_o_razon_social'] ?? false) {
                 $this->razon_social = $resultado['nombre_o_razon_social'];
                 $this->direccion    = $resultado['direccion_completa'] ?? '';
+                $this->ubigeo       = $resultado['ubigeo_sunat'] ?? '';
                 $this->notification()->success('RUC encontrado', 'Datos cargados correctamente');
 
                 // Intentar pre-llenar contacto desde representante legal
@@ -306,6 +308,7 @@ class Save extends Component
             'email',
             'web_site',
             'direccion',
+            'ubigeo',
             'contacto_nombre',
             'contacto_numero_documento',
             'contacto_cargo',

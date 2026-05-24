@@ -51,6 +51,9 @@ class GuiaRemision extends Model
         'user_id' => 'integer',
         'detalle_cuotas' => AsCollection::class,
         'nota' => AsCollection::class,
+        'is_transport_m1l' => 'boolean',
+        'has_transport_driver_01' => 'boolean',
+        'fecha_entrega_transportista' => 'date',
     ];
 
     //GLOBAL SCOPE EMPRESA
@@ -113,6 +116,21 @@ class GuiaRemision extends Model
     {
         return $this->belongsTo(User::class, 'tecnico_id', 'id');
     }
+
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(Driver::class);
+    }
+
+    public function transport(): BelongsTo
+    {
+        return $this->belongsTo(Transport::class);
+    }
+
+    public function dispatcher(): BelongsTo
+    {
+        return $this->belongsTo(Dispatcher::class);
+    }
     public function getSerie(): BelongsTo
     {
         return $this->belongsTo(Series::class, 'serie', 'serie');
@@ -163,5 +181,13 @@ class GuiaRemision extends Model
         $util = Util::getInstance();
 
         return $util->downloadXml($this);
+    }
+
+    public function downloadCdr()
+    {
+
+        $util = Util::getInstance();
+
+        return $util->downloadCdr($this);
     }
 }

@@ -26,6 +26,9 @@ use App\Models\PaymentMethodType;
 use App\Models\ModelosDispositivo;
 use App\Models\CodigosDetracciones;
 use App\Models\ModalidadTransporte;
+use App\Models\Driver;
+use App\Models\Transport;
+use App\Models\Dispatcher;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
@@ -1308,5 +1311,78 @@ class SelectsController extends Controller
                     'operador' => $sim->operador?->name ?? '',
                 ];
             });
+    }
+
+    public function drivers(Request $request): SupportCollection
+    {
+        return Driver::query()
+            ->select('id', 'tipo_doc', 'numero_doc', 'name', 'licencia')
+            ->where('is_active', true)
+            ->when(
+                $request->search,
+                fn(Builder $query) => $query
+                    ->where('name', 'like', "%{$request->search}%")
+                    ->orWhere('numero_doc', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn(Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn(Builder $query) => $query->limit(20)
+            )
+            ->get()
+            ->map(fn($d) => [
+                'id'              => $d->id,
+                'nombre_completo' => $d->name,
+                'descripcion'     => $d->numero_doc . ($d->licencia ? ' | Lic: ' . $d->licencia : ''),
+                'name'            => $d->name,
+                'numero_doc'      => $d->numero_doc,
+                'licencia'        => $d->licencia,
+            ]);
+    }
+
+    public function transports(Request $request): SupportCollection
+    {
+        return Transport::query()
+            ->select('id', 'placa', 'marca', 'modelo', 'is_default')
+            ->where('is_active', true)
+            ->when(
+                $request->search,
+                fn(Builder $query) => $query
+                    ->where('placa', 'like', "%{$request->search}%")
+                    ->orWhere('marca', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn(Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn(Builder $query) => $query->limit(20)
+            )
+            ->get()
+            ->map(fn($t) => [
+                'id'          => $t->id,
+                'placa'       => $t->placa,
+                'descripcion' => trim(($t->marca ?? '') . ' ' . ($t->modelo ?? '')),
+                'marca'       => $t->marca,
+                'modelo'      => $t->modelo,
+                'is_default'  => $t->is_default,
+            ]);
+    }
+
+    public function dispatchers(Request $request): Collection
+    {
+        return Dispatcher::query()
+            ->select('id', 'tipo_doc', 'numero_doc', 'razon_social', 'address', 'numero_mtc')
+            ->where('is_active', true)
+            ->when(
+                $request->search,
+                fn(Builder $query) => $query
+                    ->where('razon_social', 'like', "%{$request->search}%")
+                    ->orWhere('numero_doc', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn(Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn(Builder $query) => $query->limit(20)
+            )
+            ->get();
     }
 }

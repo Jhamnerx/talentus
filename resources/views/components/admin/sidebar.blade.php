@@ -100,9 +100,9 @@
                     @endrole
 
                     <!-- Almacen -->
-                    @canany(['ver-categoria', 'ver-producto', 'ver-sim_card', 'ver-dispositivo', 'ver-guias'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(1), ['categorias', 'productos','servicios' ,'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos']) ? 1 : 0 }} }">
+                    @canany(['ver-categoria', 'ver-producto', 'ver-sim_card', 'ver-dispositivo'])
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['categorias', 'productos','servicios' ,'sim-card', 'lineas', 'dispositivos', 'modelos']) ? 1 : 0 }} }">
 
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
@@ -111,7 +111,7 @@
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
 
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['categorias', 'productos', 'servicios', 'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['categorias', 'productos', 'servicios', 'sim-card', 'lineas', 'dispositivos', 'modelos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 64 64">
                                             <g fill="currentColor" class="nc-icon-wrapper">
                                                 <path
@@ -236,17 +236,6 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    @can('ver-guias')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.almacen.guias.index', 'admin.almacen.guias.create', 'admin.almacen.guias.edit')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('admin.almacen.guias.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Guias
-                                                    Remisión
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
 
                                 </ul>
                             </div>
@@ -255,6 +244,77 @@
 
                     @if (auth()->user()->can('*-categoria'))
                     @endif
+
+                    <!-- Guías de Remisión -->
+                    @can('ver-guias')
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['guias', 'conductores', 'vehiculos-guia', 'transportistas'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['guias', 'conductores', 'vehiculos-guia', 'transportistas']) ? 1 : 0 }} }">
+
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition hover:text-gray-900 dark:hover:text-white"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['guias', 'conductores', 'vehiculos-guia', 'transportistas'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <g class="nc-icon-wrapper">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l1.9-.1M13 16l-2-8H4m9 8h2m4 0h1a1 1 0 001-1v-4l-3-4H14a1 1 0 00-1 1v7" />
+                                            </g>
+                                        </svg>
+                                        <span
+                                            class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Guías Remisión</span>
+                                    </div>
+                                    <!-- Icon -->
+                                    <div
+                                        class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500"
+                                            :class="open && 'transform rotate-180'" viewBox="0 0 12 12">
+                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.index', 'admin.guias.create', 'admin.guias.edit')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.guias.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">G.R. Remitente
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.dispatchers.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.guias.dispatchers.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transportistas
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.drivers.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.guias.drivers.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Conductores
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.transports.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.guias.transports.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Vehículos GR
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    @endcan
 
                     <!-- Clientes -->
                     @canany(['ver-cliente', 'ver-contacto'])

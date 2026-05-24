@@ -11,7 +11,6 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Models\Vehiculos;
 use App\Models\WorkOrder;
-use App\Models\WorkOrderItem;
 use Livewire\Attributes\On;
 use App\Models\WorkOrderType;
 use App\Enums\WorkOrderStatus;

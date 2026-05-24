@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Livewire\Admin\Transports;
+
+use App\Models\Transport;
+use Livewire\Component;
+use Livewire\Attributes\On;
+use WireUi\Traits\WireUiActions;
+
+class SaveModal extends Component
+{
+    use WireUiActions;
+
+    public bool $modalOpen = false;
+    public ?Transport $transport = null;
+    public string $placa = '';
+    public string $marca = '';
+    public string $modelo = '';
+    public string $tuc = '';
+    public bool $is_default = false;
+    public bool $is_active = true;
+
+    protected function rules(): array
+    {
+        return [
+            'placa'      => ['required', 'regex:/^(?!0+$)[A-Z0-9]{6,8}$/'],  // ERROR SUNAT 2567
+            'marca'      => 'nullable',
+            'modelo'     => 'nullable',
+            'tuc'        => 'nullable|max:20',
+            'is_default' => 'boolean',
+            'is_active'  => 'boolean',
+        ];
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.transports.save-modal');
+    }
+
+    #[On('open-modal-create-transport')]
+    public function openCreate(): void
+    {
+        $this->resetValidation();
+        $this->reset(['transport', 'placa', 'marca', 'modelo', 'tuc', 'is_default', 'is_active']);
+        $this->is_active = true;
+        $this->modalOpen = true;
+    }
+
+    #[On('open-modal-edit-transport')]
+    public function openEdit(Transport $transport): void
+    {
+        $this->resetValidation();
+        $this->transport  = $transport;
+        $this->placa      = $transport->placa;
+        $this->marca      = $transport->marca ?? '';
+        $this->modelo     = $transport->modelo ?? '';
+        $this->tuc        = $transport->tuc ?? '';
+        $this->is_default = (bool) $transport->is_default;
+        $this->is_active  = (bool) $transport->is_active;
+        $this->modalOpen  = true;
+    }
+
+    public function updatedPlaca(string $value): void
+    {
+        $this->placa = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
+    public function save(): void
+    {
+        $this->placa = strtoupper(preg_replace('/[\s\-]/', '', $this->placa));
+        $datos = $this->validate();
+
+        try {
+            if ($this->transport) {
+                $this->transport->update($datos);
+                $msg = 'Vehículo actualizado correctamente';
+            } else {
+                Transport::create($datos);
+                $msg = 'Vehículo registrado correctamente';
+            }
+            $this->modalOpen = false;
+            $this->notification()->success(title: 'VEHÍCULO', description: $msg);
+            $this->dispatch('transport-saved');
+        } catch (\Throwable $th) {
+            $this->notification()->error(title: 'ERROR', description: $th->getMessage());
+        }
+    }
+}

@@ -32,6 +32,9 @@ use Greenter\Model\Voided\VoidedDetail;
 use Illuminate\Support\Facades\Storage;
 use Greenter\Model\Sale\DetailAttribute;
 use Luecano\NumeroALetras\NumeroALetras;
+use Greenter\Model\Despatch\Transportist;
+use Greenter\Model\Despatch\Driver as GreenterDriver;
+use Greenter\Model\Despatch\Vehicle;
 use Greenter\Model\Despatch\AdditionalDoc;
 use Greenter\Model\Despatch\DespatchDetail;
 use Greenter\Model\Response\StatusCdrResult;
@@ -728,47 +731,102 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
-    //EMITIR GUIA DE REMISION
-    public function emitirGuia(GuiaRemision $guia)
+    //CONSTRUIR OBJETO DESPATCH DE GREENTER (helper compartido)
+    private function buildDespatch(GuiaRemision $guia): Despatch
     {
         $util = Util::getInstance();
         $plantilla = plantilla::first();
         $cliente = $this->getCliente($guia->cliente);
 
-        //ESTABLECER DATOS DE LA GUIA DE REMISION
+        // --- SHIPMENT ---
         $envio = new Shipment();
         $envio
-            ->setCodTraslado($guia->motivo_traslado_id) // Cat.20 - Traslado entre establecimientos de la misma empresa
-            ->setModTraslado($guia->modalidad_transporte_id) // Cat.18 - Transp. Privado
-            ->setIndicadores(['SUNAT_Envio_IndicadorTrasladoVehiculoM1L']) // Transp M1 y L
+            ->setCodTraslado($guia->motivo_traslado_id)
+            ->setModTraslado($guia->modalidad_transporte_id)
             ->setFecTraslado(new DateTime($guia->fecha_inicio_traslado))
-            ->setPesoTotal($guia->peso)
+            ->setPesoTotal((float) $guia->peso)
             ->setUndPesoTotal('KGM')
             ->setLlegada($this->getDirectionGuiaLLegada($guia, $plantilla->ruc))
-
             ->setPartida($this->getDirectionGuiaPartida($guia, $plantilla->ruc));
 
+        // Indicadores condicionales
+        $indicadores = [];
+        if ($guia->is_transport_m1l) {
+            $indicadores[] = 'SUNAT_Envio_IndicadorTrasladoVehiculoM1L';
+        }
+        if ($guia->modalidad_transporte_id === '01' && $guia->has_transport_driver_01) {
+            $indicadores[] = 'SUNAT_Envio_IndicadorVehiculoConductoresTransp';
+        }
+        if (!empty($indicadores)) {
+            $envio->setIndicadores($indicadores);
+        }
 
-        //VERIFICA SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION y AGREGA EL PUERTO
-        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
+        // Transporte Público (01)
+        if ($guia->modalidad_transporte_id === '01') {
+            $transportista = (new Transportist())
+                ->setTipoDoc($guia->transp_tipo_doc ?? '6')
+                ->setNumDoc($guia->transp_numero_doc)
+                ->setRznSocial($guia->transp_razon_social)
+                ->setNroMtc($guia->transp_numero_mtc);
+            $envio->setTransportista($transportista);
 
+            if ($guia->has_transport_driver_01 && $guia->transp_placa) {
+                $vehicle = (new Vehicle())->setPlaca($guia->transp_placa);
+                if ($guia->placa_semirremolque) {
+                    $vehicle->setSecundarios([(new Vehicle())->setPlaca($guia->placa_semirremolque)]);
+                }
+                $envio->setVehiculo($vehicle);
+
+                if ($guia->numero_doc_chofer) {
+                    $driver = (new GreenterDriver())
+                        ->setTipo('Principal')
+                        ->setTipoDoc($guia->tipo_doc_chofer ?? '1')
+                        ->setNroDoc($guia->numero_doc_chofer)
+                        ->setNombres($guia->chofer_nombre)
+                        ->setApellidos($guia->chofer_apellidos)
+                        ->setLicencia($guia->chofer_licencia);
+                    $envio->setChoferes([$driver]);
+                }
+            }
+        }
+
+        // Transporte Privado (02) — NO debe incluirse Transportista (CarrierParty), solo vehículo y conductor
+        if ($guia->modalidad_transporte_id === '02') {
+            if ($guia->transp_placa) {
+                $vehicle = (new Vehicle())->setPlaca($guia->transp_placa);
+                if ($guia->placa_semirremolque) {
+                    $vehicle->setSecundarios([(new Vehicle())->setPlaca($guia->placa_semirremolque)]);
+                }
+                $envio->setVehiculo($vehicle);
+            }
+
+            if ($guia->numero_doc_chofer) {
+                $driver = (new GreenterDriver())
+                    ->setTipo('Principal')
+                    ->setTipoDoc($guia->tipo_doc_chofer ?? '1')
+                    ->setNroDoc($guia->numero_doc_chofer)
+                    ->setNombres($guia->chofer_nombre)
+                    ->setApellidos($guia->chofer_apellidos)
+                    ->setLicencia($guia->chofer_licencia);
+                $envio->setChoferes([$driver]);
+            }
+        }
+
+        // Puerto para importación/exportación
+        if ($guia->motivo_traslado_id === '08' || $guia->motivo_traslado_id === '09') {
             $envio->setContenedores([$guia->numero_contenedor]);
-
-            $puerto = (new Puerto())->setCodigo($guia->data_puerto['code_puerto'])
+            $puerto = (new Puerto())
+                ->setCodigo($guia->data_puerto['code_puerto'])
                 ->setNombre($guia->data_puerto['nombre_puerto']);
-
             $envio->setPuerto($puerto);
         }
 
-        $envio->setDesTraslado($guia->motivoTraslado->descripcion);
+        $descripcion = $guia->motivo_traslado_id === '13'
+            ? $guia->descripcion_motivo_traslado
+            : $guia->motivoTraslado->descripcion;
+        $envio->setDesTraslado($descripcion);
 
-        //VERIFICA SI EL MOTIVO DE TRASLADO ES OTRO Y AGREGA LA DESCRIPCION
-        if ($guia->motivo_traslado_id == '13') {
-
-            $envio->setDesTraslado($guia->descripcion_motivo_traslado);
-        }
-
-        //ESTABLECER GUIA DE REMISION
+        // --- DESPATCH ---
         $despatch = new Despatch();
         $despatch->setVersion('2022')
             ->setTipoDoc('09')
@@ -776,36 +834,37 @@ class ApiFacturacion extends Controller
             ->setCorrelativo($guia->correlativo)
             ->setFechaEmision(new DateTime($guia->fecha_emision))
             ->setCompany($util->getCompany())
-            ->setDestinatario($cliente) // misma empresa
+            ->setDestinatario($cliente)
             ->setEnvio($envio);
 
-        //AGREGAR DOCUMENTO RELACIONADO SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION
-        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
-
+        // Documentos relacionados
+        if ($guia->motivo_traslado_id === '08' || $guia->motivo_traslado_id === '09') {
             $relDoc = (new AdditionalDoc())
                 ->setTipo($guia->docu_rel_tipo)
                 ->setTipoDesc('Declaración Aduanera de Mercancías')
                 ->setNro($guia->docu_rel_numero);
-            // ->setNro('235-2024-10-000329');  //formato para el nro de documento relacionado tipo 50
             $despatch->setAddDocs([$relDoc]);
-        } else {
-
-            //AGREGAR DOCUMENTO RELACIONADO SI ES QUE LA GUIA ESTA RELACIONADA A UNA VENTA
-            if ($guia->venta) {
-
-                $relDoc = (new AdditionalDoc())
-                    ->setTipo($guia->venta->tipo_comprobante_id)
-                    ->setTipoDesc('Factura')
-                    ->setEmisor($plantilla->ruc)
-                    ->setNro($guia->venta->serie_correlativo);
-
-                $despatch->setAddDocs([$relDoc]);
-            }
+        } elseif ($guia->venta) {
+            $relDoc = (new AdditionalDoc())
+                ->setTipo($guia->venta->tipo_comprobante_id)
+                ->setTipoDesc('Factura')
+                ->setEmisor($plantilla->ruc)
+                ->setNro($guia->venta->serie_correlativo);
+            $despatch->setAddDocs([$relDoc]);
         }
 
-        //ESTABLECER ITEMS DE LA GUIA DE REMISION
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
         $despatch->setObservacion($guia->observacion);
+
+        return $despatch;
+    }
+
+    //EMITIR GUIA DE REMISION
+    public function emitirGuia(GuiaRemision $guia)
+    {
+        $util = Util::getInstance();
+        $despatch = $this->buildDespatch($guia);
+
         // Envio a SUNAT.
         $api = $util->getSeeApi();
         try {
@@ -851,173 +910,26 @@ class ApiFacturacion extends Controller
 
     public function updateClaseGuia(GuiaRemision $guia)
     {
-
-        $util = Util::getInstance();
-        $plantilla = plantilla::first();
-        $cliente = $this->getCliente($guia->cliente);
-
-        //ESTABLECER DATOS DE LA GUIA DE REMISION
-        $envio = new Shipment();
-        $envio
-            ->setCodTraslado($guia->motivo_traslado_id) // Cat.20 - Traslado entre establecimientos de la misma empresa
-            ->setModTraslado($guia->modalidad_transporte_id) // Cat.18 - Transp. Privado
-            ->setIndicadores(['SUNAT_Envio_IndicadorTrasladoVehiculoM1L']) // Transp M1 y L
-            ->setFecTraslado(new DateTime($guia->fecha_inicio_traslado))
-            ->setPesoTotal($guia->peso)
-            ->setUndPesoTotal('KGM')
-            ->setLlegada($this->getDirectionGuiaLLegada($guia, $plantilla->ruc))
-
-            ->setPartida($this->getDirectionGuiaPartida($guia, $plantilla->ruc));
-
-
-        //VERIFICA SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION y AGREGA EL PUERTO
-        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
-
-            $envio->setContenedores([$guia->numero_contenedor]);
-
-            $puerto = (new Puerto())->setCodigo($guia->data_puerto['code_puerto'])
-                ->setNombre($guia->data_puerto['nombre_puerto']);
-
-            $envio->setPuerto($puerto);
-        }
-
-
-        //VERIFICA SI EL MOTIVO DE TRASLADO ES OTRO Y AGREGA LA DESCRIPCION
-        if ($guia->motivo_traslado_id == '13') {
-
-            $envio->setDesTraslado($guia->descripcion_motivo_traslado);
-        }
-        //ESTABLECER GUIA DE REMISION
-        $despatch = new Despatch();
-        $despatch->setVersion('2022')
-            ->setTipoDoc('09')
-            ->setSerie($guia->serie)
-            ->setCorrelativo($guia->correlativo)
-            ->setFechaEmision(new DateTime($guia->fecha_emision))
-            ->setCompany($util->getCompany())
-            ->setDestinatario($cliente) // misma empresa
-            ->setEnvio($envio);
-
-        //AGREGAR DOCUMENTO RELACIONADO SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION
-        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
-
-            $relDoc = (new AdditionalDoc())
-                ->setTipo($guia->docu_rel_tipo)
-                ->setTipoDesc('Declaración Aduanera de Mercancías')
-                ->setNro($guia->docu_rel_numero);
-            // ->setNro('235-2024-10-000329');  //formato para el nro de documento relacionado tipo 50
-            $despatch->setAddDocs([$relDoc]);
-        } else {
-
-            //AGREGAR DOCUMENTO RELACIONADO SI ES QUE LA GUIA ESTA RELACIONADA A UNA VENTA
-            if ($guia->venta) {
-
-                $relDoc = (new AdditionalDoc())
-                    ->setTipo($guia->venta->tipo_comprobante_id)
-                    ->setTipoDesc('Factura')
-                    ->setEmisor($plantilla->ruc)
-                    ->setNro($guia->venta->serie_correlativo);
-
-                $despatch->setAddDocs([$relDoc]);
-            }
-        }
-
-        //ESTABLECER ITEMS DE LA GUIA DE REMISION
-        $despatch->setDetails($this->getItemsGuia($guia->detalle));
-        $despatch->setObservacion($guia->observacion);
+        $despatch = $this->buildDespatch($guia);
 
         $guia->update([
             'clase' => $despatch,
         ]);
 
-
-        $respuesta
-            =  [
-                'estado_texto' => 'ESTADO: SE CREÓ LA CLASE',
-                'fe_mensaje_sunat' => "El comprobante fue serializado correctamente",
-                'fe_mensaje_error' => null,
-                'nota' => '',
-                'fe_codigo_error' => null,
-            ];
-        return $respuesta;
+        return [
+            'estado_texto' => 'ESTADO: SE CREÓ LA CLASE',
+            'fe_mensaje_sunat' => 'El comprobante fue serializado correctamente',
+            'fe_mensaje_error' => null,
+            'nota' => '',
+            'fe_codigo_error' => null,
+        ];
     }
 
     //FUNCION QUE SE EJECUTA CUANDO SE ACTUALIZA UNA GUIA DE REMISION
     public function createXmlGuia(GuiaRemision $guia)
     {
         $util = Util::getInstance();
-        $plantilla = plantilla::first();
-        $cliente = $this->getCliente($guia->cliente);
-
-        //ESTABLECER DATOS DE LA GUIA DE REMISION
-        $envio = new Shipment();
-        $envio
-            ->setCodTraslado($guia->motivo_traslado_id) // Cat.20 - Traslado entre establecimientos de la misma empresa
-            ->setModTraslado($guia->modalidad_transporte_id) // Cat.18 - Transp. Privado
-            ->setIndicadores(['SUNAT_Envio_IndicadorTrasladoVehiculoM1L']) // Transp M1 y L
-            ->setFecTraslado(new DateTime($guia->fecha_inicio_traslado))
-            ->setPesoTotal($guia->peso)
-            ->setUndPesoTotal('KGM')
-            ->setLlegada($this->getDirectionGuiaLLegada($guia, $plantilla->ruc))
-
-            ->setPartida($this->getDirectionGuiaPartida($guia, $plantilla->ruc));
-
-
-        //VERIFICA SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION y AGREGA EL PUERTO
-        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
-
-            $envio->setContenedores([$guia->numero_contenedor]);
-
-            $puerto = (new Puerto())->setCodigo($guia->data_puerto['code_puerto'])
-                ->setNombre($guia->data_puerto['nombre_puerto']);
-
-            $envio->setPuerto($puerto);
-        }
-
-
-        //VERIFICA SI EL MOTIVO DE TRASLADO ES OTRO Y AGREGA LA DESCRIPCION
-        if ($guia->motivo_traslado_id == '13') {
-
-            $envio->setDesTraslado($guia->descripcion_motivo_traslado);
-        }
-        //ESTABLECER GUIA DE REMISION
-        $despatch = new Despatch();
-        $despatch->setVersion('2022')
-            ->setTipoDoc('09')
-            ->setSerie($guia->serie)
-            ->setCorrelativo($guia->correlativo)
-            ->setFechaEmision(new DateTime($guia->fecha_emision))
-            ->setCompany($util->getCompany())
-            ->setDestinatario($cliente) // misma empresa
-            ->setEnvio($envio);
-
-        //AGREGAR DOCUMENTO RELACIONADO SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION
-        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
-
-            $relDoc = (new AdditionalDoc())
-                ->setTipo($guia->docu_rel_tipo)
-                ->setTipoDesc('Declaración Aduanera de Mercancías')
-                ->setNro($guia->docu_rel_numero);
-            // ->setNro('235-2024-10-000329');  //formato para el nro de documento relacionado tipo 50
-            $despatch->setAddDocs([$relDoc]);
-        } else {
-
-            //AGREGAR DOCUMENTO RELACIONADO SI ES QUE LA GUIA ESTA RELACIONADA A UNA VENTA
-            if ($guia->venta) {
-
-                $relDoc = (new AdditionalDoc())
-                    ->setTipo($guia->venta->tipo_comprobante_id)
-                    ->setTipoDesc('Factura')
-                    ->setEmisor($plantilla->ruc)
-                    ->setNro($guia->venta->serie_correlativo);
-
-                $despatch->setAddDocs([$relDoc]);
-            }
-        }
-
-        //ESTABLECER ITEMS DE LA GUIA DE REMISION
-        $despatch->setDetails($this->getItemsGuia($guia->detalle));
-        $despatch->setObservacion($guia->observacion);
+        $despatch = $this->buildDespatch($guia);
 
         // Envio a SUNAT.
         $api = $util->getSeeApi();

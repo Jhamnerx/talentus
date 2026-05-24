@@ -38,9 +38,9 @@ class DeviceMaintenanceController extends Controller
      */
     public function sync(Request $request): JsonResponse
     {
-        // Validar IP de origen
-        $allowedIp = config('services.tracking.allowed_ip');
-        if ($allowedIp && $request->ip() !== $allowedIp) {
+        // Validar API key de origen
+        $apiKey = config('services.tracking.api_key');
+        if ($apiKey && $request->header('X-API-KEY') !== $apiKey) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

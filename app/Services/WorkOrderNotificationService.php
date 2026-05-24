@@ -104,8 +104,8 @@ class WorkOrderNotificationService
             // Si el error es "Connection Closed", marcar el device como desconectado para evitar futuros intentos fallidos
             $nodeError = $response->json('error') ?? '';
             if (str_contains($nodeError, 'Connection Closed') || str_contains($nodeError, 'Connection')) {
-                Log::warning("WorkOrder #{$orden->id}: device #{$device->id} ({$device->body}) tiene sesión caída. Marcando como Disconnected.");
-                $device->update(['status' => 'Disconnected']);
+                Log::warning("WorkOrder #{$orden->id}: device #{$device->id} ({$device->body}) tiene sesión caída. Marcando como Disconnect.");
+                $device->update(['status' => 'Disconnect']);
             }
 
             Log::warning("WorkOrder #{$orden->id}: WA falló. HTTP {$response->status()}. Error: {$nodeError}. Body: " . $response->body());

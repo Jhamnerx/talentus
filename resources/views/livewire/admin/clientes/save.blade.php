@@ -57,6 +57,14 @@
             <div class="col-span-12">
                 <x-form.input label="Dirección" wire:model.live='direccion' placeholder='Ingresa una dirección' />
             </div>
+
+            <div class="col-span-12 sm:col-span-6">
+                <x-form.select id="ubigeo" name="ubigeo" label="Ubigeo:" wire:model.live="ubigeo"
+                    placeholder="Buscar departamento / provincia / distrito" :async-data="[
+                        'api' => route('api.ubigeos.index'),
+                    ]"
+                    option-label="option_description" option-value="ubigeo_inei" />
+            </div>
         </div>
     </div>
 

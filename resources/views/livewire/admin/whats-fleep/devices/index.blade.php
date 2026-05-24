@@ -52,7 +52,6 @@
                             <th class="px-4 py-3 text-left">Clave API</th>
                             <th class="px-4 py-3 text-center">Mensajes enviados</th>
                             <th class="px-4 py-3 text-center">Sistema</th>
-                            <th class="px-4 py-3 text-center">Sistema</th>
                             <th class="px-4 py-3 text-center">Estado</th>
                             <th class="px-4 py-3 text-right">Acciones</th>
                         </tr>

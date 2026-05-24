@@ -41,7 +41,13 @@ class Create extends Component
 
     public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
 
-    public $transp_tipo_doc, $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer, $numero_doc_chofer;
+    public $transp_tipo_doc = '6', $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer = '1', $numero_doc_chofer;
+    public $driver_id, $transport_id, $dispatcher_id;
+    public $chofer_nombre, $chofer_apellidos, $chofer_licencia;
+    public $transp_address, $transp_numero_mtc, $placa_semirremolque;
+    public $fecha_entrega_transportista;
+    public bool $is_transport_m1l = false;
+    public bool $has_transport_driver_01 = false;
     public $asignarTecnico = false;
 
     public $docu_rel_tipo = '50', $docu_rel_numero =  '000-0000-10-000000';
@@ -60,6 +66,10 @@ class Create extends Component
         $this->setSerieMount();
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_inicio_traslado = Carbon::now()->format('Y-m-d');
+
+        // Auto-completar punto de partida desde datos de la empresa
+        $this->direccion_partida = $this->plantilla->direccion['direccion'] ?? '';
+        $this->ubigeo_partida    = $this->plantilla->direccion['ubigeo'] ?? '';
 
         $this->items = collect();
         $this->items_dispositivos = collect();
@@ -179,7 +189,15 @@ class Create extends Component
 
             $cliente = Clientes::where('numero_documento', '=', $this->numero_documento)->firstOrFail();
             $this->razon_social = $cliente->razon_social;
-            $this->cliente_id = $cliente->id;
+            $this->cliente_id   = $cliente->id;
+
+            // Auto-completar punto de llegada desde los datos registrados del cliente
+            if ($cliente->direccion && !$this->direccion_llegada) {
+                $this->direccion_llegada = $cliente->direccion;
+            }
+            if ($cliente->ubigeo && !$this->ubigeo_llegada) {
+                $this->ubigeo_llegada = $cliente->ubigeo;
+            }
         } catch (Exception $e) {
 
             $this->dispatch(
@@ -197,7 +215,7 @@ class Create extends Component
     public function save()
     {
         $request = new GuiaRemisionRequest();
-        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc), $request->messages());
+        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc, $this->modalidad_transporte_id, $this->is_transport_m1l), $request->messages());
 
         try {
             DB::beginTransaction();
@@ -237,11 +255,11 @@ class Create extends Component
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('guia-store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                    $this->redirectRoute('admin.almacen.guias.index');
+                    $this->redirectRoute('admin.guias.index');
                 } else {
 
                     session()->flash('guia-store', $mensaje['fe_mensaje_sunat']);
-                    $this->redirectRoute('admin.almacen.guias.index');
+                    $this->redirectRoute('admin.guias.index');
                 }
             }
             DB::commit();
@@ -256,14 +274,66 @@ class Create extends Component
     }
     public function updatedMotivoTrasladoId($value)
     {
-
-        if ($value == '04' || '02' || '07') {
+        if ($value == '04' || $value == '02' || $value == '18') {
 
             $cliente = Clientes::where('numero_documento', $this->plantilla->ruc)->first();
             $this->cliente_id = $cliente->id;
             $this->tipo_documento = $cliente->tipo_documento_id;
             $this->numero_documento = $cliente->numero_documento;
             $this->razon_social = $cliente->razon_social;
+        }
+    }
+
+    public function updatedDriverId($id): void
+    {
+        if ($id) {
+            $driver = \App\Models\Driver::find($id);
+            if ($driver) {
+                $this->tipo_doc_chofer   = $driver->tipo_doc;
+                $this->numero_doc_chofer = $driver->numero_doc;
+                $this->chofer_nombre     = $driver->name;
+                $this->chofer_apellidos  = $driver->last_name ?? '';
+                $this->chofer_licencia   = $driver->licencia;
+            }
+        }
+    }
+
+    public function updatedTransportId($id): void
+    {
+        if ($id) {
+            $transport = \App\Models\Transport::find($id);
+            if ($transport) {
+                $this->transp_placa = strtoupper(preg_replace('/[\s\-]/', '', $transport->placa));
+            }
+        }
+    }
+
+    public function updatedTranspPlaca(string $value): void
+    {
+        $this->transp_placa = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
+    public function updatedPlacaSemirremolque(string $value): void
+    {
+        $this->placa_semirremolque = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
+    public function updatedChoferLicencia(string $value): void
+    {
+        $this->chofer_licencia = strtoupper(preg_replace('/[^A-Z0-9]/i', '', $value));
+    }
+
+    public function updatedDispatcherId($id): void
+    {
+        if ($id) {
+            $dispatcher = \App\Models\Dispatcher::find($id);
+            if ($dispatcher) {
+                $this->transp_tipo_doc    = $dispatcher->tipo_doc;
+                $this->transp_numero_doc  = $dispatcher->numero_doc;
+                $this->transp_razon_social = $dispatcher->razon_social;
+                $this->transp_address     = $dispatcher->address;
+                $this->transp_numero_mtc  = $dispatcher->numero_mtc;
+            }
         }
     }
 
