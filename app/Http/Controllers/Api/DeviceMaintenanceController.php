@@ -79,7 +79,7 @@ class DeviceMaintenanceController extends Controller
         if (! empty($item['device_imei'])) {
             $vehiculoId = Vehiculos::withoutGlobalScopes()
                 ->where('empresa_id', $empresaId)
-                ->whereHas('dispositivosAsignados', fn($q) => $q->where('imei', $item['device_imei']))
+                ->whereHas('dispositivosAsignados', fn($q) => $q->where('dispositivos.imei', $item['device_imei']))
                 ->value('id');
         }
 
