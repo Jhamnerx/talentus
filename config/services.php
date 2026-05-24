@@ -45,7 +45,8 @@ return [
     ],
 
     'tracking' => [
-        'allowed_ip' => env('TRACKING_ALLOWED_IP', ''),   // IP del servidor talentus-pro-tracking
+        'allowed_ip' => env('TRACKING_ALLOWED_IP', ''),   // IP del servidor talentus-pro-tracking (legacy)
+        'api_key'    => env('TRACKING_API_KEY', ''),       // API key para autenticación del servidor de tracking
     ],
 
 ];

@@ -16,7 +16,10 @@
                     </x-form.input>
                 </div>
             </div>
-            <x-form.input label="Nombre completo *" wire:model.live="name" placeholder="Apellidos Nombres" />
+            <div class="grid grid-cols-2 gap-4">
+                <x-form.input label="Nombres *" wire:model.live="name" placeholder="ROBERTO" />
+                <x-form.input label="Apellidos" wire:model.live="last_name" placeholder="RODRIGUEZ VALENCIA" />
+            </div>
             <div class="grid grid-cols-2 gap-4">
                 <x-form.input label="Licencia de Conducir" wire:model.live="licencia" placeholder="A-IIB-12345" />
                 <x-form.input label="Teléfono" wire:model.live="telephone" placeholder="987654321" />

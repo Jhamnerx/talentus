@@ -67,6 +67,10 @@ class Create extends Component
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_inicio_traslado = Carbon::now()->format('Y-m-d');
 
+        // Auto-completar punto de partida desde datos de la empresa
+        $this->direccion_partida = $this->plantilla->direccion['direccion'] ?? '';
+        $this->ubigeo_partida    = $this->plantilla->direccion['ubigeo'] ?? '';
+
         $this->items = collect();
         $this->items_dispositivos = collect();
         $this->items_sim_card = collect();
@@ -211,7 +215,7 @@ class Create extends Component
     public function save()
     {
         $request = new GuiaRemisionRequest();
-        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc, $this->modalidad_transporte_id), $request->messages());
+        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc, $this->modalidad_transporte_id, $this->is_transport_m1l), $request->messages());
 
         try {
             DB::beginTransaction();
@@ -270,8 +274,7 @@ class Create extends Component
     }
     public function updatedMotivoTrasladoId($value)
     {
-
-        if ($value == '04' || '02' || '07') {
+        if ($value == '04' || $value == '02' || $value == '18') {
 
             $cliente = Clientes::where('numero_documento', $this->plantilla->ruc)->first();
             $this->cliente_id = $cliente->id;
@@ -289,7 +292,7 @@ class Create extends Component
                 $this->tipo_doc_chofer   = $driver->tipo_doc;
                 $this->numero_doc_chofer = $driver->numero_doc;
                 $this->chofer_nombre     = $driver->name;
-                $this->chofer_apellidos  = '';
+                $this->chofer_apellidos  = $driver->last_name ?? '';
                 $this->chofer_licencia   = $driver->licencia;
             }
         }
@@ -300,9 +303,24 @@ class Create extends Component
         if ($id) {
             $transport = \App\Models\Transport::find($id);
             if ($transport) {
-                $this->transp_placa = $transport->placa;
+                $this->transp_placa = strtoupper(preg_replace('/[\s\-]/', '', $transport->placa));
             }
         }
+    }
+
+    public function updatedTranspPlaca(string $value): void
+    {
+        $this->transp_placa = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
+    public function updatedPlacaSemirremolque(string $value): void
+    {
+        $this->placa_semirremolque = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
+    public function updatedChoferLicencia(string $value): void
+    {
+        $this->chofer_licencia = strtoupper(preg_replace('/[^A-Z0-9]/i', '', $value));
     }
 
     public function updatedDispatcherId($id): void

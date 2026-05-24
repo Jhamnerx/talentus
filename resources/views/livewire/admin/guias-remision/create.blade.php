@@ -31,7 +31,7 @@
             <div class="col-span-12 sm:col-span-6 xl:col-span-4 mb-2">
 
                 <x-form.datetime.picker label="Fecha de Emisión:" id="fecha_emision" name="fecha_emision"
-                    wire:model.live="fecha_emision" :min="now()->subDays(10)" :max="now()" without-time
+                    wire:model.live="fecha_emision" :min="now()->subDays(1)" :max="now()" without-time
                     parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
 
             </div>
@@ -137,21 +137,24 @@
 
             </div>
 
-            <div class="col-span-6 sm:col-span-3 mb-2">
+            @if (in_array($motivo_traslado_id, ['08', '09']))
+                <div class="col-span-6 sm:col-span-3 mb-2">
 
-                <x-form.input wire:model.live='numero_contenedor' label="Numero Contenedor:" placeholder="0454141" />
+                    <x-form.input wire:model.live='numero_contenedor' label="Numero Contenedor:"
+                        placeholder="0454141" />
 
-            </div>
+                </div>
 
-            <div class="col-span-6 sm:col-span-3 mb-2 ">
+                <div class="col-span-6 sm:col-span-3 mb-2 ">
 
-                <x-form.select id="code_puerto" name="code_puerto" label="Codigo Puerto:" searchable="false"
-                    wire:model.live="code_puerto" placeholder="PUB" :async-data="[
-                        'api' => route('api.puertos.index'),
-                    ]" option-label="descripcion"
-                    option-value="descripcion" />
+                    <x-form.select id="code_puerto" name="code_puerto" label="Codigo Puerto:" searchable="false"
+                        wire:model.live="code_puerto" placeholder="PUB" :async-data="[
+                            'api' => route('api.puertos.index'),
+                        ]" option-label="descripcion"
+                        option-value="descripcion" />
 
-            </div>
+                </div>
+            @endif
 
 
         </div>
@@ -327,11 +330,11 @@
                                     <x-form.input label="N° Documento:" wire:model.live="numero_doc_chofer"
                                         placeholder="12345678" />
                                 </div>
-                                <div class="col-span-12 sm:col-span-3">
+                                <div class="col-span-12 sm:col-span-6">
                                     <x-form.input label="Nombres:" wire:model.live="chofer_nombre"
                                         placeholder="Nombres" />
                                 </div>
-                                <div class="col-span-12 sm:col-span-3">
+                                <div class="col-span-12 sm:col-span-6">
                                     <x-form.input label="Apellidos:" wire:model.live="chofer_apellidos"
                                         placeholder="Apellidos" />
                                 </div>
@@ -401,11 +404,11 @@
                                 <x-form.input label="N° Documento *:" wire:model.live="numero_doc_chofer"
                                     placeholder="12345678" />
                             </div>
-                            <div class="col-span-12 sm:col-span-3">
+                            <div class="col-span-12 sm:col-span-6">
                                 <x-form.input label="Nombres:" wire:model.live="chofer_nombre"
                                     placeholder="Nombres" />
                             </div>
-                            <div class="col-span-12 sm:col-span-3">
+                            <div class="col-span-12 sm:col-span-6">
                                 <x-form.input label="Apellidos:" wire:model.live="chofer_apellidos"
                                     placeholder="Apellidos" />
                             </div>

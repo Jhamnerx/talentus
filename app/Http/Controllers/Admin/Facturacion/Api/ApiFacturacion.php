@@ -779,7 +779,7 @@ class ApiFacturacion extends Controller
 
                 if ($guia->numero_doc_chofer) {
                     $driver = (new GreenterDriver())
-                        ->setTipo('01')
+                        ->setTipo('Principal')
                         ->setTipoDoc($guia->tipo_doc_chofer ?? '1')
                         ->setNroDoc($guia->numero_doc_chofer)
                         ->setNombres($guia->chofer_nombre)
@@ -790,17 +790,8 @@ class ApiFacturacion extends Controller
             }
         }
 
-        // Transporte Privado (02)
+        // Transporte Privado (02) — NO debe incluirse Transportista (CarrierParty), solo vehículo y conductor
         if ($guia->modalidad_transporte_id === '02') {
-            $transportista = (new Transportist())
-                ->setTipoDoc($guia->transp_tipo_doc ?? '6')
-                ->setNumDoc($guia->transp_numero_doc)
-                ->setRznSocial($guia->transp_razon_social)
-                ->setPlaca($guia->transp_placa)
-                ->setChoferTipoDoc($guia->tipo_doc_chofer ?? '1')
-                ->setChoferDoc($guia->numero_doc_chofer);
-            $envio->setTransportista($transportista);
-
             if ($guia->transp_placa) {
                 $vehicle = (new Vehicle())->setPlaca($guia->transp_placa);
                 if ($guia->placa_semirremolque) {
@@ -811,7 +802,7 @@ class ApiFacturacion extends Controller
 
             if ($guia->numero_doc_chofer) {
                 $driver = (new GreenterDriver())
-                    ->setTipo('01')
+                    ->setTipo('Principal')
                     ->setTipoDoc($guia->tipo_doc_chofer ?? '1')
                     ->setNroDoc($guia->numero_doc_chofer)
                     ->setNombres($guia->chofer_nombre)

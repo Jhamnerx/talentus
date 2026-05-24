@@ -17,6 +17,7 @@ class SaveModal extends Component
     public string $tipo_doc = '1';
     public string $numero_doc = '';
     public string $name = '';
+    public string $last_name = '';
     public string $licencia = '';
     public string $telephone = '';
     public bool $is_default = false;
@@ -29,6 +30,7 @@ class SaveModal extends Component
             'tipo_doc'   => 'required',
             'numero_doc' => 'required',
             'name'       => 'required',
+            'last_name'  => 'nullable',
             'licencia'   => 'nullable',
             'telephone'  => 'nullable',
             'is_default' => 'boolean',
@@ -45,7 +47,7 @@ class SaveModal extends Component
     public function openCreate(): void
     {
         $this->resetValidation();
-        $this->reset(['driver', 'tipo_doc', 'numero_doc', 'name', 'licencia', 'telephone', 'is_default', 'is_active', 'buscando']);
+        $this->reset(['driver', 'tipo_doc', 'numero_doc', 'name', 'last_name', 'licencia', 'telephone', 'is_default', 'is_active', 'buscando']);
         $this->is_active = true;
         $this->tipo_doc  = '1';
         $this->modalOpen = true;
@@ -59,6 +61,7 @@ class SaveModal extends Component
         $this->tipo_doc   = $driver->tipo_doc;
         $this->numero_doc = $driver->numero_doc;
         $this->name       = $driver->name ?? '';
+        $this->last_name  = $driver->last_name ?? '';
         $this->licencia   = $driver->licencia ?? '';
         $this->telephone  = $driver->telephone ?? '';
         $this->is_default = (bool) $driver->is_default;
@@ -77,7 +80,8 @@ class SaveModal extends Component
             $nombres   = $data['nombres'] ?? '';
             $aPaterno  = $data['apellido_paterno'] ?? '';
             $aMaterno  = $data['apellido_materno'] ?? '';
-            $this->name = trim("{$aPaterno} {$aMaterno} {$nombres}");
+            $this->name      = trim($nombres);
+            $this->last_name = trim("{$aPaterno} {$aMaterno}");
         } catch (\Throwable) {
             $this->notification()->error(title: 'RENIEC', description: 'No se encontró el DNI o hubo un error al consultarlo.');
         } finally {

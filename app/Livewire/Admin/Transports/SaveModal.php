@@ -23,7 +23,7 @@ class SaveModal extends Component
     protected function rules(): array
     {
         return [
-            'placa'      => 'required|max:10',
+            'placa'      => ['required', 'regex:/^(?!0+$)[A-Z0-9]{6,8}$/'],  // ERROR SUNAT 2567
             'marca'      => 'nullable',
             'modelo'     => 'nullable',
             'tuc'        => 'nullable|max:20',
@@ -60,8 +60,14 @@ class SaveModal extends Component
         $this->modalOpen  = true;
     }
 
+    public function updatedPlaca(string $value): void
+    {
+        $this->placa = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
     public function save(): void
     {
+        $this->placa = strtoupper(preg_replace('/[\s\-]/', '', $this->placa));
         $datos = $this->validate();
 
         try {

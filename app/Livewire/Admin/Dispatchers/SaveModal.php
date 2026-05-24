@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Dispatchers;
 
 use App\Models\Dispatcher;
+use App\Services\FactilizaService;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use WireUi\Traits\WireUiActions;
@@ -19,6 +20,7 @@ class SaveModal extends Component
     public string $address = '';
     public string $numero_mtc = '';
     public bool $is_active = true;
+    public string $errorConsulta = '';
 
     protected function rules(): array
     {
@@ -41,7 +43,7 @@ class SaveModal extends Component
     public function openCreate(): void
     {
         $this->resetValidation();
-        $this->reset(['dispatcher', 'tipo_doc', 'numero_doc', 'razon_social', 'address', 'numero_mtc', 'is_active']);
+        $this->reset(['dispatcher', 'tipo_doc', 'numero_doc', 'razon_social', 'address', 'numero_mtc', 'is_active', 'errorConsulta']);
         $this->is_active = true;
         $this->tipo_doc = '6';
         $this->modalOpen = true;
@@ -58,7 +60,64 @@ class SaveModal extends Component
         $this->address      = $dispatcher->address ?? '';
         $this->numero_mtc   = $dispatcher->numero_mtc ?? '';
         $this->is_active    = (bool) $dispatcher->is_active;
+        $this->errorConsulta = '';
         $this->modalOpen    = true;
+    }
+
+    public function buscarDocumento(): void
+    {
+        $this->errorConsulta = '';
+        $numero = trim($this->numero_doc);
+
+        if ($this->tipo_doc === '1') {
+            if (strlen($numero) !== 8) {
+                $this->errorConsulta = 'El DNI debe tener exactamente 8 dígitos';
+                return;
+            }
+            $this->consultarDni($numero);
+        } elseif ($this->tipo_doc === '6') {
+            if (strlen($numero) !== 11) {
+                $this->errorConsulta = 'El RUC debe tener exactamente 11 dígitos';
+                return;
+            }
+            $this->consultarRuc($numero);
+        }
+    }
+
+    protected function consultarRuc(string $numero): void
+    {
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarRuc($numero);
+
+        if ($resultado['success'] ?? false) {
+            if ($resultado['nombre_o_razon_social'] ?? false) {
+                $this->razon_social = $resultado['nombre_o_razon_social'];
+                $this->address      = $resultado['direccion_completa'] ?? '';
+                $this->notification()->success(title: 'RUC encontrado', description: 'Datos cargados correctamente');
+            } else {
+                $this->errorConsulta = 'No se encontró información para este RUC';
+            }
+        } else {
+            $this->errorConsulta = $resultado['message'] ?? 'Error al consultar el RUC';
+        }
+    }
+
+    protected function consultarDni(string $numero): void
+    {
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarDni($numero);
+
+        if ($resultado['success'] ?? false) {
+            if ($resultado['nombres'] ?? false) {
+                $this->razon_social = $resultado['nombre_completo'];
+                $this->address      = $resultado['direccion_completa'] ?? '';
+                $this->notification()->success(title: 'DNI encontrado', description: 'Datos cargados correctamente');
+            } else {
+                $this->errorConsulta = 'No se encontró información para este DNI';
+            }
+        } else {
+            $this->errorConsulta = $resultado['message'] ?? 'Error al consultar el DNI';
+        }
     }
 
     public function save(): void

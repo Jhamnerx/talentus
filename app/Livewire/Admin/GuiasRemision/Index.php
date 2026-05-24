@@ -6,6 +6,7 @@ use App\Models\Guias;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\GuiaRemision;
+use App\Models\MotivoTraslado;
 use Livewire\WithPagination;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 
@@ -13,32 +14,100 @@ class Index extends Component
 {
     use WithPagination;
     public $search = '';
-
+    public $filterModalidad      = '';
+    public $filterEstado         = '';
+    public $filterFechaDesde     = '';
+    public $filterFechaHasta     = '';
+    public $filterMotivoTraslado = '';
+    public $filterConductor      = '';
+    public $filterVehiculo       = '';
+    public bool $showFilters = false;
 
     protected $listeners = [
         'updateTable' => 'render',
     ];
 
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterModalidad(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterEstado(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterFechaDesde(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterFechaHasta(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterMotivoTraslado(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterConductor(): void
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterVehiculo(): void
+    {
+        $this->resetPage();
+    }
+
+    public function clearFilters(): void
+    {
+        $this->reset(['search', 'filterModalidad', 'filterEstado', 'filterFechaDesde', 'filterFechaHasta', 'filterMotivoTraslado', 'filterConductor', 'filterVehiculo']);
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $guias = GuiaRemision::whereHas('motivoTraslado', function ($query) {
-            $query->where('descripcion', 'like', '%' . $this->search . '%');
-        })
-            ->orWhereHas('cliente', function ($cliente) {
-                $cliente->where('razon_social', 'like', '%' . $this->search . '%')
-                    ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
-            })
-            ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-            ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
-            ->orWhere('serie', 'like', '%' . $this->search . '%')
-            ->orWhere('correlativo', 'like', '%' . $this->search . '%')
-            ->orWhere('ubigeo_partida', 'like', '%' . $this->search . '%')
-            ->orWhere('ubigeo_llegada', 'like', '%' . $this->search . '%')
-            ->orderBy('id', 'DESC')
-            ->paginate(10);
+        $query = GuiaRemision::query()
+            ->where(function ($q) {
+                $q->whereHas('motivoTraslado', fn($s) => $s->where('descripcion', 'like', '%' . $this->search . '%'))
+                    ->orWhereHas('cliente', fn($s) => $s->where('razon_social', 'like', '%' . $this->search . '%')
+                        ->orWhere('numero_documento', 'like', '%' . $this->search . '%'))
+                    ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
+                    ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
+                    ->orWhere('transp_placa', 'like', '%' . $this->search . '%')
+                    ->orWhere('chofer_nombre', 'like', '%' . $this->search . '%');
+            });
 
+        if ($this->filterModalidad !== '') {
+            $query->where('modalidad_transporte_id', $this->filterModalidad);
+        }
+        if ($this->filterEstado !== '') {
+            $query->where('fe_estado', $this->filterEstado);
+        }
+        if ($this->filterFechaDesde !== '') {
+            $query->whereDate('fecha_emision', '>=', $this->filterFechaDesde);
+        }
+        if ($this->filterFechaHasta !== '') {
+            $query->whereDate('fecha_emision', '<=', $this->filterFechaHasta);
+        }
+        if ($this->filterMotivoTraslado !== '') {
+            $query->where('motivo_traslado_id', $this->filterMotivoTraslado);
+        }
+        if ($this->filterConductor !== '') {
+            $query->where(function ($q) {
+                $q->where('chofer_nombre', 'like', '%' . $this->filterConductor . '%')
+                    ->orWhere('chofer_apellidos', 'like', '%' . $this->filterConductor . '%');
+            });
+        }
+        if ($this->filterVehiculo !== '') {
+            $query->where('transp_placa', 'like', '%' . $this->filterVehiculo . '%');
+        }
 
-        return view('livewire.admin.guias-remision.index', compact('guias'));
+        $guias = $query->orderBy('id', 'DESC')->paginate(15);
+        $motivosTraslado = MotivoTraslado::orderBy('descripcion')->get();
+
+        return view('livewire.admin.guias-remision.index', compact('guias', 'motivosTraslado'));
     }
 
 

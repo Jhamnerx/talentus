@@ -1313,7 +1313,7 @@ class SelectsController extends Controller
             });
     }
 
-    public function drivers(Request $request): Collection
+    public function drivers(Request $request): SupportCollection
     {
         return Driver::query()
             ->select('id', 'tipo_doc', 'numero_doc', 'name', 'licencia')
@@ -1340,7 +1340,7 @@ class SelectsController extends Controller
             ]);
     }
 
-    public function transports(Request $request): Collection
+    public function transports(Request $request): SupportCollection
     {
         return Transport::query()
             ->select('id', 'placa', 'marca', 'modelo', 'is_default')

@@ -30,6 +30,7 @@ class ClientesRequest extends FormRequest
                 'tipo_documento_id' => 'required',
                 'razon_social' => 'required',
                 'direccion' => 'nullable',
+                'ubigeo' => 'nullable|string|max:10',
                 'web_site' => 'nullable',
                 'telefono' => 'nullable|digits_between:6,9|numeric',
                 'email' => 'email|nullable',
@@ -39,7 +40,7 @@ class ClientesRequest extends FormRequest
                     'alpha_num',
 
                     Rule::unique('clientes', 'numero_documento')->where(
-                        fn ($query) =>
+                        fn($query) =>
                         $query->where('empresa_id', session('empresa'))
                             ->where('is_active', 1)
                             ->whereNull('deleted_at')
@@ -55,6 +56,7 @@ class ClientesRequest extends FormRequest
                     'tipo_documento_id' => 'required',
                     'razon_social' => 'required',
                     'direccion' => 'nullable',
+                    'ubigeo' => 'nullable|string|max:10',
                     'web_site' => 'nullable',
                     'telefono' => 'nullable|digits_between:6,9|numeric',
                     'email' => 'email|nullable',
@@ -63,7 +65,7 @@ class ClientesRequest extends FormRequest
                         'min:6',
 
                         Rule::unique('clientes', 'numero_documento')->where(
-                            fn ($query) =>
+                            fn($query) =>
                             $query->where('empresa_id', session('empresa'))
                                 ->where('is_active', 1)
                                 ->whereNull('deleted_at')

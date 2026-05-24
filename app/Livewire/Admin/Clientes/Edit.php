@@ -5,7 +5,6 @@ namespace App\Livewire\Admin\Clientes;
 use Livewire\Component;
 use App\Models\Clientes;
 use Livewire\Attributes\On;
-use Illuminate\Validation\Rule;
 use App\Http\Requests\ClientesRequest;
 use App\Services\FactilizaService;
 use WireUi\Traits\WireUiActions;
@@ -17,6 +16,7 @@ class Edit extends Component
     public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
 
     public $errorConsulta;
+    public $ubigeo;
     public Clientes $cliente;
 
     public function render()
@@ -36,6 +36,7 @@ class Edit extends Component
         $this->email = $cliente->email;
         $this->web_site = $cliente->web_site;
         $this->direccion = $cliente->direccion;
+        $this->ubigeo = $cliente->ubigeo;
     }
 
     public function buscarDocumento()
@@ -76,6 +77,7 @@ class Edit extends Component
             if ($resultado['nombres'] ?? false) {
                 $this->razon_social = $resultado['nombre_completo'];
                 $this->direccion = $resultado['direccion_completa'] ?? '';
+                $this->ubigeo = $resultado['ubigeo_sunat'] ?? '';
                 $this->notification()->success('DNI encontrado', 'Datos cargados correctamente');
             } else {
                 $this->errorConsulta = 'No se encontró información para este DNI';
@@ -94,6 +96,7 @@ class Edit extends Component
             if ($resultado['nombre_o_razon_social'] ?? false) {
                 $this->razon_social = $resultado['nombre_o_razon_social'];
                 $this->direccion = $resultado['direccion_completa'] ?? '';
+                $this->ubigeo = $resultado['ubigeo_sunat'] ?? '';
                 $this->notification()->success('RUC encontrado', 'Datos cargados correctamente');
             } else {
                 $this->errorConsulta = 'No se encontró información para este RUC';

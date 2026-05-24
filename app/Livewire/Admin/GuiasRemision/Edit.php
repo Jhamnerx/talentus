@@ -77,8 +77,8 @@ class Edit extends Component
         $this->code_puerto = $this->guia->code_puerto;
         $this->data_puerto = $this->guia->data_puerto;
 
-        $this->direccion_partida = $this->guia->direccion_partida;
-        $this->ubigeo_partida = $this->guia->ubigeo_partida;
+        $this->direccion_partida = $this->guia->direccion_partida ?: ($this->plantilla->direccion['direccion'] ?? '');
+        $this->ubigeo_partida = $this->guia->ubigeo_partida ?: ($this->plantilla->direccion['ubigeo'] ?? '');
         $this->direccion_llegada = $this->guia->direccion_llegada;
         $this->ubigeo_llegada = $this->guia->ubigeo_llegada;
         $this->codigo_establecimiento_partida = $this->guia->codigo_establecimiento_partida;
@@ -271,7 +271,7 @@ class Edit extends Component
                 $this->tipo_doc_chofer   = $driver->tipo_doc;
                 $this->numero_doc_chofer = $driver->numero_doc;
                 $this->chofer_nombre     = $driver->name;
-                $this->chofer_apellidos  = '';
+                $this->chofer_apellidos  = $driver->last_name ?? '';
                 $this->chofer_licencia   = $driver->licencia;
             }
         }
@@ -282,9 +282,24 @@ class Edit extends Component
         if ($id) {
             $transport = \App\Models\Transport::find($id);
             if ($transport) {
-                $this->transp_placa = $transport->placa;
+                $this->transp_placa = strtoupper(preg_replace('/[\s\-]/', '', $transport->placa));
             }
         }
+    }
+
+    public function updatedTranspPlaca(string $value): void
+    {
+        $this->transp_placa = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
+    public function updatedPlacaSemirremolque(string $value): void
+    {
+        $this->placa_semirremolque = strtoupper(preg_replace('/[\s\-]/', '', $value));
+    }
+
+    public function updatedChoferLicencia(string $value): void
+    {
+        $this->chofer_licencia = strtoupper(preg_replace('/[^A-Z0-9]/i', '', $value));
     }
 
     public function updatedDispatcherId($id): void
@@ -319,7 +334,7 @@ class Edit extends Component
     {
 
         $request = new GuiaRemisionRequest();
-        $data = $this->validate($request->rules($this->guia, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc, $this->modalidad_transporte_id), $request->messages());
+        $data = $this->validate($request->rules($this->guia, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc, $this->modalidad_transporte_id, $this->is_transport_m1l), $request->messages());
 
         try {
 
