@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\TicketCategory;
 use App\Enums\TicketStatus;
 use App\Enums\TicketPriority;
+use App\Mail\TicketCustomerMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use WireUi\Traits\WireUiActions;
 
@@ -72,7 +74,16 @@ class Create extends Component
             $data['assigned_to'] = Auth::user()->id;
         }
 
-        $ticket = Ticket::create($data);
+        $ticket = Ticket::with('customer')->find(Ticket::create($data)->id);
+
+        if ($ticket->customer?->email) {
+            try {
+                Mail::to($ticket->customer->email)->queue(
+                    new TicketCustomerMail($ticket, 'Tu ticket ha sido recibido. Nuestro equipo de soporte lo atenderá a la brevedad.', 'created')
+                );
+            } catch (\Throwable) {
+            }
+        }
 
         $this->showModal = false;
         $this->dispatch('update-table');

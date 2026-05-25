@@ -139,10 +139,7 @@ class CreateModal extends Component
         $sectores = WorkOrderNotificationService::ZONAS;
         $accesoriosDisponibles = WorkOrderNotificationService::ACCESORIOS;
 
-        return view(
-            'livewire.admin.work-orders.create-modal',
-            compact('tipos', 'tecnicos', 'ciudades', 'mantenimientosPendientes', 'sectores', 'accesoriosDisponibles', 'planes')
-        );
+        return view('livewire.admin.work-orders.create-modal', compact('tipos', 'tecnicos', 'ciudades', 'mantenimientosPendientes', 'sectores', 'accesoriosDisponibles', 'planes'));
     }
 
     #[On('open-create-modal')]

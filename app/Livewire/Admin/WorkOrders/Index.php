@@ -32,9 +32,6 @@ class Index extends Component
     public $tecnicoConfigCiudad = '';
     public $tecnicoConfigGrupo = '';
 
-    // Dispositivo WA seleccionado para enviar notificaciones
-    public ?int $selectedWaDeviceId = null;
-
     // Modal cancelar orden
     public bool $modalCancelar = false;
     public ?int $cancelarOrdenId = null;
@@ -96,34 +93,24 @@ class Index extends Component
         // Cargar tipos de órdenes
         $tipos = WorkOrderType::withCount('workOrders')->orderBy('nombre')->get();
 
-        // Dispositivos WA conectados del usuario actual
-        $waDevices = auth()->user()->waDevices()->where('status', 'Connected')->get();
-
-        // Inicializar/validar el dispositivo seleccionado
-        if (!$this->selectedWaDeviceId || !$waDevices->contains('id', $this->selectedWaDeviceId)) {
-            $this->selectedWaDeviceId = $waDevices->first()?->id;
-        }
-        $waDevice = $waDevices->find($this->selectedWaDeviceId)
-            ?? auth()->user()->waDevices()->first();
-
-        // Técnicos con su config WA
-        // wa_conectado = si el usuario ACTUAL (quien crea la orden) tiene dispositivo conectado
-        $usuarioTieneDispositivo = $waDevices->isNotEmpty();
+        // Dispositivo interno para notificaciones WA
+        $waDevice = Device::where('interno', true)->first();
+        $waConectado = $waDevice?->status === 'Connected';
 
         $tecnicos = User::role('tecnico')
             ->with('ciudad')
             ->orderBy('name')
             ->get()
-            ->each(fn($t) => $t->wa_conectado = $usuarioTieneDispositivo);
+            ->each(fn($t) => $t->wa_conectado = $waConectado);
 
         $ciudades = Ciudades::where('is_active', true)->orderBy('nombre')->get();
 
-        // Grupos WA disponibles (del dispositivo conectado del usuario)
+        // Grupos WA disponibles (del dispositivo interno)
         $waGroups = $waDevice
-            ? WhatsappGroup::where('user_id', auth()->id())->orderBy('name')->get()
+            ? WhatsappGroup::where('user_id', $waDevice->user_id)->orderBy('name')->get()
             : collect();
 
-        return view('livewire.admin.work-orders.index', compact('stats', 'ordenes', 'tipos', 'waDevice', 'waDevices', 'tecnicos', 'ciudades', 'waGroups'));
+        return view('livewire.admin.work-orders.index', compact('stats', 'ordenes', 'tipos', 'waDevice', 'tecnicos', 'ciudades', 'waGroups'));
     }
 
     public function openCreateModal()
@@ -281,12 +268,7 @@ class Index extends Component
     {
         $orden = WorkOrder::findOrFail($ordenId);
 
-        // Usar el dispositivo seleccionado por el usuario en la UI
-        $device = $this->selectedWaDeviceId
-            ? Device::find($this->selectedWaDeviceId)
-            : auth()->user()->waDevices()->where('status', 'Connected')->first();
-
-        $messageId = app(WorkOrderNotificationService::class)->enviarAlGrupo($orden, $device);
+        $messageId = app(WorkOrderNotificationService::class)->enviarAlGrupo($orden);
 
         if ($messageId) {
             $this->notification()->success(
@@ -294,15 +276,11 @@ class Index extends Component
                 description: "Notificación enviada correctamente (ID: {$messageId})"
             );
         } else {
-            // Obtener info del device para el mensaje de error
-            $deviceInfo = $this->selectedWaDeviceId
-                ? Device::find($this->selectedWaDeviceId)?->body
-                : auth()->user()->waDevices()->where('status', 'Connected')->first()?->body;
-
+            $deviceInfo = Device::where('interno', true)->first()?->body;
             $this->notification()->error(
                 title: 'Error WA',
                 description: 'No se pudo enviar. Revisa el log de Laravel para más detalles.'
-                    . ($deviceInfo ? " (device: {$deviceInfo})" : ' — sin dispositivo conectado')
+                    . ($deviceInfo ? " (device: {$deviceInfo})" : ' — sin dispositivo interno configurado')
             );
         }
     }
