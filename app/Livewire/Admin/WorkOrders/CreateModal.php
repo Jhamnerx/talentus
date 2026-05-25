@@ -430,6 +430,16 @@ class CreateModal extends Component
 
     public function addVehiculo($placa)
     {
-        $this->dispatch('open-vehiculo-modal', placa: $placa);
+        $this->dispatch('open-vehiculo-rapido', placa: (string) $placa);
+    }
+
+    #[On('vehiculo-quick-added')]
+    public function vehiculoRegistrado(int $id, string $placa): void
+    {
+        // Auto-seleccionar el vehículo recién registrado en el selector
+        $this->vehiculo_id = $id;
+
+        // Disparar updatedVehiculoId para cargar el cliente automáticamente
+        $this->updatedVehiculoId($id);
     }
 }

@@ -119,15 +119,17 @@
             @endif
 
             {{-- ── Vehículo ────────────────────────────────────────────────── --}}
-            <x-form.select autocomplete="off" label="Vehículo *" wire:model.live="vehiculo_id"
-                placeholder="Buscar por placa" :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id"
-                option-description="option_description">
-                <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent="addVehiculo(`${search}`)" x-on:click="close" primary flat full>
-                        <span x-html="`Registrar Vehículo <b>${search}</b>`"></span>
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Vehículo <span
+                            class="text-red-500">*</span></span>
+                    <x-form.button flat xs icon="plus" wire:click="addVehiculo('')">
+                        Nuevo vehículo
                     </x-form.button>
-                </x-slot>
-            </x-form.select>
+                </div>
+                <x-form.select autocomplete="off" wire:model.live="vehiculo_id" placeholder="Buscar por placa"
+                    :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id" option-description="option_description" />
+            </div>
 
             {{-- ── Cliente (autocompleta) ──────────────────────────────────── --}}
             <x-form.input label="Cliente *" wire:model="cliente_nombre" disabled />
