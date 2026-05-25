@@ -286,7 +286,7 @@
                                         "\nPuede revisar y verificar el servicio realizado en el siguiente enlace:\n🔗 {$verificationUrl}"
                                     : '';
                             @endphp
-                            <div class="flex items-center gap-1" x-data="{ copiadoWA: false, copiadoLink: false }">
+                            <div class="flex items-center gap-1" x-data="{ copiadoWA: false, showVerifModal: false }">
 
                                 {{-- Ver detalle --}}
                                 <x-form.button xs icon="eye" wire:click="verDetalle({{ $orden->id }})" flat
@@ -403,35 +403,93 @@
                                     </a>
                                 @endif
 
-                                {{-- Copiar enlace de verificación para el cliente --}}
-                                @if ($verificationMsg)
-                                    <button
-                                        @click="
-                                            const copiar = (t) => {
-                                                if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
-                                                const ta = document.createElement('textarea');
-                                                ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
-                                                document.body.appendChild(ta); ta.focus(); ta.select();
-                                                document.execCommand('copy'); document.body.removeChild(ta);
-                                                return Promise.resolve();
-                                            };
-                                            copiar(@js($verificationMsg)).then(() => { copiadoLink = true; setTimeout(() => copiadoLink = false, 2500); });
-                                        "
-                                        :title="copiadoLink ? '¡Copiado!' : 'Copiar enlace de verificación para el cliente'"
-                                        :class="copiadoLink ? 'text-emerald-600 bg-emerald-50' :
-                                            'text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/20'"
-                                        class="inline-flex items-center justify-center w-7 h-7 rounded transition cursor-pointer">
-                                        <svg x-show="!copiadoLink" class="w-4 h-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
+                                {{-- Enlace de verificación: abre modal para copiar --}}
+                                @if ($verificationUrl)
+                                    <button @click="showVerifModal = true"
+                                        title="Ver enlace de verificación para el cliente"
+                                        class="inline-flex items-center justify-center w-7 h-7 rounded text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition cursor-pointer">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                         </svg>
-                                        <svg x-show="copiadoLink" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
                                     </button>
+
+                                    {{-- Mini-modal con el enlace (sin depender de clipboard API) --}}
+                                    <div x-show="showVerifModal" x-cloak
+                                        class="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+                                        @keydown.escape.window="showVerifModal = false">
+                                        <div class="absolute inset-0 bg-black/50" @click="showVerifModal = false">
+                                        </div>
+                                        <div
+                                            class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg p-6 space-y-4">
+
+                                            <div class="flex items-start justify-between">
+                                                <div>
+                                                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                                                        Enlace de verificación</h3>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Comparte
+                                                        con el cliente para que revise y apruebe el servicio.</p>
+                                                </div>
+                                                <button @click="showVerifModal = false"
+                                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
+                                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            {{-- URL sola --}}
+                                            <div>
+                                                <label
+                                                    class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">URL
+                                                    directa</label>
+                                                <div class="flex gap-2">
+                                                    <input id="verifUrl-{{ $orden->id }}" type="text" readonly
+                                                        value="{{ $verificationUrl }}" @click="$el.select()"
+                                                        class="flex-1 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400" />
+                                                    <button
+                                                        @click="
+                                                            const el = document.getElementById('verifUrl-{{ $orden->id }}');
+                                                            el.select();
+                                                            document.execCommand('copy');
+                                                            $el.textContent = '¡Copiado!';
+                                                            setTimeout(() => $el.textContent = 'Copiar', 2000);
+                                                        "
+                                                        class="shrink-0 px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-medium hover:bg-violet-700 transition">
+                                                        Copiar
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            @if ($verificationMsg)
+                                                {{-- Mensaje WA completo --}}
+                                                <div>
+                                                    <label
+                                                        class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Mensaje
+                                                        para WhatsApp</label>
+                                                    <div class="flex gap-2 items-start">
+                                                        <textarea id="verifMsg-{{ $orden->id }}" readonly rows="5" @click="$el.select()"
+                                                            class="flex-1 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400 resize-none">{{ $verificationMsg }}</textarea>
+                                                        <button
+                                                            @click="
+                                                            const el = document.getElementById('verifMsg-{{ $orden->id }}');
+                                                            el.select();
+                                                            document.execCommand('copy');
+                                                            $el.textContent = '¡Copiado!';
+                                                            setTimeout(() => $el.textContent = 'Copiar', 2000);
+                                                        "
+                                                            class="shrink-0 px-3 py-2 rounded-lg bg-teal-600 text-white text-xs font-medium hover:bg-teal-700 transition">
+                                                            Copiar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                        </div>
+                                    </div>
                                 @endif
 
                             </div>
