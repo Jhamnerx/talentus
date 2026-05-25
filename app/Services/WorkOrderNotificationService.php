@@ -52,9 +52,12 @@ class WorkOrderNotificationService
             return null;
         }
 
-        // Usar el dispositivo recibido; si no, el del creador; si no, cualquiera conectado
+        // Cascade de dispositivo:
+        // 1. Parámetro explícito (Connected)
+        // 2. Dispositivo interno reservado para notificaciones (interno = 1, Connected)
+        // 3. Cualquier dispositivo conectado del sistema (último recurso)
         if (!$device || $device->status !== 'Connected') {
-            $device = $orden->creador?->waDevices()->where('status', 'Connected')->first()
+            $device = Device::where('interno', true)->where('status', 'Connected')->first()
                 ?? Device::where('status', 'Connected')->first();
         }
 

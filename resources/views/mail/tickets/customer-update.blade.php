@@ -82,18 +82,6 @@
             white-space: pre-wrap;
         }
 
-        .btn {
-            display: inline-block;
-            background: #4f46e5;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 22px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-
         .footer {
             background: #f9fafb;
             padding: 16px 32px;
@@ -152,8 +140,29 @@
             </p>
             <div class="message-box">{{ $messageBody }}</div>
 
-            @if (config('app.url'))
-                <a href="{{ route('admin.tickets.show', $ticket) }}" class="btn">Ver ticket completo</a>
+            @if ($eventType === 'closed' && $history->isNotEmpty())
+                <hr class="divider">
+                <p
+                    style="font-size:13px;color:#6b7280;margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                    Historial del ticket
+                </p>
+                @foreach ($history as $item)
+                    <div style="display:flex;gap:12px;margin-bottom:14px;font-size:13px;color:#374151;">
+                        <div style="min-width:90px;color:#9ca3af;white-space:nowrap;padding-top:2px;">
+                            {{ $item['timestamp']->setTimezone('America/Lima')->format('d/m H:i') }}
+                        </div>
+                        <div style="flex:1;">
+                            <span style="font-weight:600;">{{ $item['actor'] }}</span>
+                            —
+                            {{ $item['description'] }}
+                            @if ($item['body'])
+                                <div
+                                    style="margin-top:4px;background:#f3f4f6;border-radius:4px;padding:8px 10px;color:#4b5563;line-height:1.5;white-space:pre-wrap;">
+                                    {{ $item['body'] }}</div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
             @endif
         </div>
 

@@ -185,10 +185,9 @@ class Show extends Component
         } catch (\Throwable) {
         }
 
-        // Email al cliente en cambios relevantes
-        if (in_array($this->newStatus, ['resolved', 'closed', 'open', 'in_progress'])) {
-            $statusLabel = TicketStatus::from($this->newStatus)->label();
-            $this->sendCustomerEmail("El estado de tu ticket ha cambiado a: {$statusLabel}.", $this->newStatus);
+        // Email al cliente solo al cerrar (con resumen + historial)
+        if ($this->newStatus === 'closed') {
+            $this->sendCustomerEmail('Tu ticket ha sido cerrado. A continuación encontrarás el resumen completo y el historial de la atención.', 'closed');
         }
 
         // CSAT al cerrar/resolver

@@ -4,17 +4,8 @@
         <div class="mb-4 sm:mb-0">
             <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">Órdenes de Trabajo</h1>
         </div>
-        {{-- Estado dispositivo WhatsApp del usuario actual --}}
+        {{-- Estado dispositivo interno WhatsApp para notificaciones --}}
         <div class="flex items-center gap-2">
-            {{-- Selector de dispositivo si hay más de uno conectado --}}
-            @if ($waDevices->count() > 1)
-                <select wire:model.live="selectedWaDeviceId"
-                    class="text-xs border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                    @foreach ($waDevices as $dev)
-                        <option value="{{ $dev->id }}">{{ $dev->body }}</option>
-                    @endforeach
-                </select>
-            @endif
             <div
                 class="flex items-center gap-2 px-3 py-2 rounded-lg
                 {{ $waDevice && $waDevice->status === 'Connected'
