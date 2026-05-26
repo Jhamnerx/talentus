@@ -21,6 +21,34 @@ class WorkOrderNotificationService
         'OTROS'          => 'OTROS',
     ];
 
+    /** Alertas GPS disponibles para configurar en una orden */
+    public const ALERTAS = [
+        'exceso_velocidad'           => 'Exceso de velocidad',
+        'duracion_estacionado'       => 'Duración de estacionado',
+        'duracion_tiempo'            => 'Duración de tiempo',
+        'duracion_fuera_linea'       => 'Duración fuera de línea',
+        'duracion_movimiento'        => 'Duración de movimiento',
+        'duracion_encendido'         => 'Duración de encendido',
+        'duracion_inactividad'       => 'Duración de inactividad',
+        'encendido_onoff'            => 'Encendido ON/OFF',
+        'comienzo_movimiento'        => 'Comienzo del movimiento',
+        'comienzo_movimiento_filter' => 'Comienzo del movimiento (Filter)',
+        'cambio_controlador'         => 'Cambio de controlador',
+        'autorizacion_conductor'     => 'Autorización de cambio de conductor',
+        'geocerca_entrada'           => 'Geocerca de Entrada',
+        'geocerca_salida'            => 'Geocerca de Salida',
+        'geocerca_entrada_salida'    => 'Geocerca de Entrada/Salida',
+        'exceso_vel_geocerca'        => 'Exceso de velocidad en geocerca',
+        'eventos_personalizados'     => 'Eventos personalizados',
+        'sos'                        => 'SOS',
+        'combustible'                => 'Combustible (Relleno / Robo)',
+        'distancia'                  => 'Distancia',
+        'pdi_duracion_parada'        => 'PDI - Duración de la parada',
+        'pdi_duracion_inactiva'      => 'PDI - Duración inactiva',
+        'desenchufado'               => 'Desenchufado',
+        'estado_tarea'               => 'Estado de la tarea',
+    ];
+
     /** Accesorios disponibles para una orden */
     public const ACCESORIOS = [
         'buzzer'            => 'Buzzer - Alerta Sonora',
@@ -133,12 +161,19 @@ class WorkOrderNotificationService
         $tipo    = $orden->tipo;
 
         // Accesorios de metadata
-        $meta       = $orden->metadata ?? [];
-        $accesorios = $meta['accesorios'] ?? [];
-        $listaAcc   = array_values(array_filter(
+        $meta          = $orden->metadata ?? [];
+        $accesorios    = $meta['accesorios'] ?? [];
+        $alertas       = $meta['alertas'] ?? [];
+        $listaAcc      = array_values(array_filter(
             array_map(
                 fn($key) => isset(self::ACCESORIOS[$key]) ? strtoupper(self::ACCESORIOS[$key]) : null,
                 $accesorios
+            )
+        ));
+        $listaAlertas  = array_values(array_filter(
+            array_map(
+                fn($key) => isset(self::ALERTAS[$key]) ? strtoupper(self::ALERTAS[$key]) : null,
+                $alertas
             )
         ));
 
@@ -177,6 +212,10 @@ class WorkOrderNotificationService
             $lineas[] = '👷 *TÉCNICO:* '       . strtoupper($tecnico->name ?? '-');
             $lineas[] = '📅 *LUGAR Y FECHA:* ' . strtoupper($fecha);
 
+            if (!empty($orden->direccion)) {
+                $lineas[] = '📍 *DIRECCIÓN:* ' . strtoupper($orden->direccion);
+            }
+
             if (!empty($orden->observaciones_inicial)) {
                 $lineas[] = '📝 *CONSIDERACIONES:* ' . strtoupper($orden->observaciones_inicial);
             }
@@ -190,6 +229,14 @@ class WorkOrderNotificationService
                 $lineas[] = '🔩 *ACCESORIOS:*';
                 foreach ($listaAcc as $acc) {
                     $lineas[] = '   • ' . $acc;
+                }
+            }
+
+            if (!empty($listaAlertas)) {
+                $lineas[] = $sep;
+                $lineas[] = '🔔 *ALERTAS GPS:*';
+                foreach ($listaAlertas as $alerta) {
+                    $lineas[] = '   • ' . $alerta;
                 }
             }
 
@@ -244,6 +291,10 @@ class WorkOrderNotificationService
         $lineas[] = '👷 *TÉCNICO:* '       . strtoupper($tecnico->name ?? '-');
         $lineas[] = '📅 *LUGAR Y FECHA:* ' . strtoupper($fecha);
 
+        if (!empty($orden->direccion)) {
+            $lineas[] = '📍 *DIRECCIÓN:* ' . strtoupper($orden->direccion);
+        }
+
         if (!empty($orden->observaciones_inicial)) {
             $lineas[] = '📝 *CONSIDERACIONES:* ' . strtoupper($orden->observaciones_inicial);
         }
@@ -258,6 +309,14 @@ class WorkOrderNotificationService
             $lineas[] = '🔩 *ACCESORIOS:*';
             foreach ($listaAcc as $acc) {
                 $lineas[] = '   • ' . $acc;
+            }
+        }
+
+        if (!empty($listaAlertas)) {
+            $lineas[] = $sep;
+            $lineas[] = '🔔 *ALERTAS GPS:*';
+            foreach ($listaAlertas as $alerta) {
+                $lineas[] = '   • ' . $alerta;
             }
         }
 

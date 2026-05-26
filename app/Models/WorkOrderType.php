@@ -36,6 +36,7 @@ class WorkOrderType extends Model
         'muestra_sector' => 'boolean',
         'muestra_plan' => 'boolean',
         'muestra_accesorios_instalar' => 'boolean',
+        'muestra_alertas' => 'boolean',
         'costo_base' => 'decimal:2',
     ];
 

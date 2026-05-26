@@ -32,7 +32,7 @@ class CreateModal extends Component
 
     // Nuevos campos de integración WA
     public ?int $ciudad_filter = null;   // filtro visual, no se guarda
-    public string $sector = '';
+    public array  $sector = [];
     public string $sector_especifico = ''; // cuando sector === 'OTROS'
     public ?int $plan_id = null;         // se resuelve al guardar → columna plan (string)
     public ?int $contacto_id = null;     // se resuelve al guardar → columna contacto (string)
@@ -43,7 +43,7 @@ class CreateModal extends Component
     public bool $tipoMuestraSector = true;
     public bool $tipoMuestraPlan = true;
     public bool $tipoMuestraAccesorios = true;
-
+    public bool $tipoMuestraAlertas = true;
     // Flags de requisitos del tipo
     public bool $tipoRequiereAccesorios = false;
 
@@ -52,6 +52,7 @@ class CreateModal extends Component
     public bool $costoPersonalizado = false;
 
     // Ubicación del servicio
+    public string $direccion = '';       // dirección de texto libre
     public ?float $ubicacion_lat = null;
     public ?float $ubicacion_lng = null;
     public string $ubicacion_direccion = '';
@@ -71,13 +72,17 @@ class CreateModal extends Component
             'tecnico_id'          => 'required|exists:users,id',
             'fecha_programada'    => 'required|date|after_or_equal:today',
             'observaciones_inicial' => 'nullable|string|max:1000',
+            'direccion'             => 'nullable|string|max:500',
             'mantenimiento_id'    => 'nullable|exists:mantenimientos,id',
-            'sector'              => 'nullable|string|max:100',
+            'sector'              => 'nullable|array',
+            'sector.*'            => 'nullable|string|max:100',
             'sector_especifico'   => 'nullable|string|max:200',
             'plan_id'             => 'nullable|exists:plans,id',
             'contacto_id'         => 'nullable|exists:contactos,id',
             'accesorios'          => ($this->tipoRequiereAccesorios ? 'required|array|min:1' : 'nullable|array'),
             'accesorios.*'        => 'in:buzzer,corte_motor,apertura_puertas,telemetria,combustible,temperatura,horas_motor,rpm,acelerometro,camara',
+            'alertas'             => 'nullable|array',
+            'alertas.*'           => 'nullable|string|max:100',
             'tituloProyecto'      => $this->esProyecto ? 'required|string|max:255' : 'nullable',
             'placasTexto'         => $this->esProyecto ? 'nullable|string' : 'nullable',
         ];
@@ -138,8 +143,9 @@ class CreateModal extends Component
 
         $sectores = WorkOrderNotificationService::ZONAS;
         $accesoriosDisponibles = WorkOrderNotificationService::ACCESORIOS;
+        $alertasDisponibles = WorkOrderNotificationService::ALERTAS;
 
-        return view('livewire.admin.work-orders.create-modal', compact('tipos', 'tecnicos', 'ciudades', 'mantenimientosPendientes', 'sectores', 'accesoriosDisponibles', 'planes'));
+        return view('livewire.admin.work-orders.create-modal', compact('tipos', 'tecnicos', 'ciudades', 'mantenimientosPendientes', 'sectores', 'accesoriosDisponibles', 'alertasDisponibles', 'planes'));
     }
 
     #[On('open-create-modal')]
@@ -192,6 +198,7 @@ class CreateModal extends Component
             $this->tipoMuestraSector = true;
             $this->tipoMuestraPlan = true;
             $this->tipoMuestraAccesorios = true;
+            $this->tipoMuestraAlertas = true;
             $this->mantenimiento_id = null;
             $this->costoEstimado = null;
             $this->costoPersonalizado = false;
@@ -203,6 +210,7 @@ class CreateModal extends Component
         $this->tipoMuestraSector = $tipo?->muestra_sector ?? true;
         $this->tipoMuestraPlan = $tipo?->muestra_plan ?? true;
         $this->tipoMuestraAccesorios = $tipo?->muestra_accesorios_instalar ?? true;
+        $this->tipoMuestraAlertas = $tipo?->muestra_alertas ?? true;
 
         $this->tipoRequiereAccesorios = $tipo?->requiere_accesorios ?? false;
 
@@ -212,7 +220,7 @@ class CreateModal extends Component
             $this->mantenimiento_id = null;
         }
         if (!$this->tipoMuestraSector) {
-            $this->sector = '';
+            $this->sector = [];
             $this->sector_especifico = '';
         }
         if (!$this->tipoMuestraPlan) {
@@ -220,6 +228,9 @@ class CreateModal extends Component
         }
         if (!$this->tipoMuestraAccesorios) {
             $this->accesorios = [];
+        }
+        if (!$this->tipoMuestraAlertas) {
+            $this->alertas = [];
         }
     }
 
@@ -267,9 +278,18 @@ class CreateModal extends Component
                 unset($data['mantenimiento_id']);
             }
 
-            // Sector: si es "OTROS" usar la descripción específica
-            if ($this->sector === 'OTROS' && $this->sector_especifico) {
-                $data['sector'] = 'OTROS: ' . strtoupper(trim($this->sector_especifico));
+            // Sector: construir string desde selección múltiple
+            if (!empty($this->sector)) {
+                $sectoresTexto = $this->sector;
+                if (in_array('OTROS', $sectoresTexto) && $this->sector_especifico) {
+                    $sectoresTexto = array_map(
+                        fn($s) => $s === 'OTROS' ? 'OTROS: ' . strtoupper(trim($this->sector_especifico)) : $s,
+                        $sectoresTexto
+                    );
+                }
+                $data['sector'] = implode(', ', $sectoresTexto);
+            } else {
+                $data['sector'] = null;
             }
 
             // Resolver plan desde ID → nombre (string)
@@ -301,9 +321,13 @@ class CreateModal extends Component
             if (!empty($this->accesorios)) {
                 $metadata['accesorios'] = $this->accesorios;
             }
+            if (!empty($this->alertas)) {
+                $metadata['alertas'] = $this->alertas;
+            }
             $data['metadata'] = !empty($metadata) ? $metadata : null;
 
             // Ubicación del servicio
+            $data['direccion']           = $this->direccion ?: null;
             $data['ubicacion_lat']       = $this->ubicacion_lat ?: null;
             $data['ubicacion_lng']       = $this->ubicacion_lng ?: null;
             $data['ubicacion_direccion'] = $this->ubicacion_direccion ?: null;
@@ -320,6 +344,7 @@ class CreateModal extends Component
                 $data['ciudad_filter'],
                 $data['sector_especifico'],
                 $data['accesorios'],
+                $data['alertas'],
                 $data['tituloProyecto'],
                 $data['placasTexto'],
                 $data['itemsTipoTrabajo']
@@ -392,15 +417,18 @@ class CreateModal extends Component
         $this->mantenimiento_id    = null;
         $this->tipoRequiereMantenimiento = false;
         $this->ciudad_filter       = null;
-        $this->sector              = '';
+        $this->sector              = [];
         $this->sector_especifico   = '';
         $this->plan_id             = null;
         $this->contacto_id         = null;
         $this->accesorios          = [];
+        $this->alertas             = [];
         $this->contactos           = [];
+        $this->direccion           = '';
         $this->tipoMuestraSector   = true;
         $this->tipoMuestraPlan     = true;
         $this->tipoMuestraAccesorios = true;
+        $this->tipoMuestraAlertas  = true;
         $this->tipoRequiereAccesorios = false;
         $this->ubicacion_lat       = null;
         $this->ubicacion_lng       = null;

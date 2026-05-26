@@ -37,12 +37,18 @@ class Dashboard extends Component
         $inicio = Carbon::parse($this->fechaInicio)->startOfDay();
         $fin    = Carbon::parse($this->fechaFin)->endOfDay();
 
-        // Ventas (facturas)
+        // Ventas activas: excluye borradores, anuladas (id_baja) y con nota de crédito
         $ventasPen = Ventas::whereBetween('fecha_emision', [$inicio, $fin])
+            ->where('estado', '!=', 'BORRADOR')
+            ->whereNull('id_baja')
+            ->whereDoesntHave('notaCredito')
             ->where('divisa', 'PEN')
             ->sum('total');
 
         $ventasUsd = Ventas::whereBetween('fecha_emision', [$inicio, $fin])
+            ->where('estado', '!=', 'BORRADOR')
+            ->whereNull('id_baja')
+            ->whereDoesntHave('notaCredito')
             ->where('divisa', 'USD')
             ->sum('total');
 

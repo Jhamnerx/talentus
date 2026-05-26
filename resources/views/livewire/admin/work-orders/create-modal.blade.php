@@ -1,4 +1,4 @@
-<x-form.modal.card title="Nueva Orden de Trabajo" wire:model.live="modalSave" width="4xl">
+<x-form.modal.card title="Nueva Orden de Trabajo" wire:model.live="modalSave" width="5xl">
     <div class="space-y-4">
 
         {{-- ── Tipo de Orden ──────────────────────────────────────────────── --}}
@@ -139,14 +139,15 @@
         @if ($tipoMuestraSector || $tipoMuestraPlan)
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 @if ($tipoMuestraSector)
-                    <x-form.select label="Sector" wire:model.live="sector" placeholder="Seleccionar sector">
+                    <x-form.select multiselect label="Sector" wire:model.live="sector"
+                        placeholder="Seleccionar sectores">
                         @foreach ($sectores as $key => $label)
                             <x-select.option value="{{ $key }}">{{ $label }}</x-select.option>
                         @endforeach
                     </x-form.select>
                 @endif
 
-                @if ($tipoMuestraSector && $sector === 'OTROS')
+                @if ($tipoMuestraSector && in_array('OTROS', $sector))
                     <x-form.input label="Especificar sector" wire:model="sector_especifico"
                         placeholder="Describir sector..." />
                 @elseif ($tipoMuestraPlan)
@@ -155,7 +156,7 @@
                 @endif
             </div>
 
-            @if ($tipoMuestraSector && $sector === 'OTROS' && $tipoMuestraPlan)
+            @if ($tipoMuestraSector && in_array('OTROS', $sector) && $tipoMuestraPlan)
                 <x-form.select label="Plan de servicio" wire:model="plan_id" placeholder="Seleccionar plan"
                     :options="$planes" option-label="name" option-value="id" :clearable="true" />
             @endif
@@ -178,6 +179,10 @@
         {{-- ── Fecha Programada ────────────────────────────────────────────── --}}
         <x-form.datetime.picker label="Fecha Programada *" wire:model.live="fecha_programada"
             parse-format="YYYY-MM-DD HH:mm" display-format="DD-MM-YYYY HH:mm" :clearable="false" :interval="30" />
+
+        {{-- ── Dirección del servicio (texto libre) ───────────────────────── --}}
+        <x-form.input label="Dirección del servicio" wire:model="direccion"
+            placeholder="Ej: Av. Los Álamos 456, Surco" />
 
         {{-- ── Vincular Mantenimiento Programado ──────────────────────────── --}}
         @if ($tipoRequiereMantenimiento)
@@ -222,6 +227,23 @@
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" wire:model="accesorios" value="{{ $value }}"
                                 class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        {{-- ── Alertas GPS ─────────────────────────────────────────────────── --}}
+        @if ($tipoMuestraAlertas)
+            <div class="rounded-lg border border-blue-200 dark:border-blue-700/40 p-3">
+                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide mb-3">
+                    🔔 Alertas GPS a configurar</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
+                    @foreach ($alertasDisponibles as $value => $label)
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" wire:model="alertas" value="{{ $value }}"
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                             <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>
                         </label>
                     @endforeach
