@@ -31,13 +31,14 @@ class CreateModal extends Component
     public bool $tipoRequiereMantenimiento = false;
 
     // Nuevos campos de integración WA
-    public ?int $ciudad_filter = null;   // filtro visual, no se guarda
-    public array  $sector = [];
-    public string $sector_especifico = ''; // cuando sector === 'OTROS'
-    public ?int $plan_id = null;         // se resuelve al guardar → columna plan (string)
-    public ?int $contacto_id = null;     // se resuelve al guardar → columna contacto (string)
-    public array $accesorios = [];       // ['buzzer', 'corte_motor']
-    public array $contactos = [];        // se puebla cuando cambia vehiculo_id
+    public ?int $ciudad_filter = null;
+    public $sector = [];
+    public string $sector_especifico = '';
+    public ?int $plan_id = null;
+    public ?int $contacto_id = null;
+    public $accesorios = [];
+    public $alertas = [];
+    public $contactos = [];
 
     // Flags del tipo de orden (controlan visibilidad de campos)
     public bool $tipoMuestraSector = true;
