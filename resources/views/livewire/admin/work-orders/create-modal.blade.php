@@ -218,7 +218,8 @@
 
         {{-- ── Accesorios ─────────────────────────────────────────────────── --}}
         @if ($tipoMuestraAccesorios)
-            <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+            <div
+                class="rounded-lg border border-gray-200 dark:border-gray-700 p-3 @error('accesorios') border-red-400 dark:border-red-500 @enderror">
                 <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
                     Accesorios a
                     instalar</p>
@@ -231,6 +232,9 @@
                         </label>
                     @endforeach
                 </div>
+                @error('accesorios')
+                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
             </div>
         @endif
 
