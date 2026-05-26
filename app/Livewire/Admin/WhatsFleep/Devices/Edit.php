@@ -51,7 +51,7 @@ class Edit extends Component
         $this->resetValidation();
     }
 
-    public function update(): void
+    public function save(): void
     {
         $this->validate();
 
