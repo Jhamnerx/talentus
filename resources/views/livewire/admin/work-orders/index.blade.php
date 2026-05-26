@@ -1,4 +1,4 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-full mx-auto">
     {{-- Header --}}
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
         <div class="mb-4 sm:mb-0">
@@ -174,7 +174,7 @@
     </div>
 
     {{-- Tabla --}}
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead class="bg-gray-50 dark:bg-gray-700">
                 <tr>
