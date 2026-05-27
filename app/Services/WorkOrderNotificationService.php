@@ -49,6 +49,20 @@ class WorkOrderNotificationService
         'estado_tarea'               => 'Estado de la tarea',
     ];
 
+    /** Alertas disponibles para sensores ADAS */
+    public const ALERTAS_ADAS = [
+        'colision_frontal'       => 'Colisión Frontal',
+        'desvio_carril'          => 'Desvío de Carril',
+        'deteccion_peatones'     => 'Detección de Peatones',
+        'fatiga_conductor'       => 'Fatiga del Conductor',
+        'distancia_seguimiento'  => 'Distancia de Seguimiento',
+        'conduccion_distraida'   => 'Conducción Distraída',
+        'freno_brusco'           => 'Frenado Brusco',
+        'aceleracion_brusca'     => 'Aceleración Brusca',
+        'giro_brusco'            => 'Giro Brusco',
+        'exceso_velocidad'       => 'Exceso de Velocidad',
+    ];
+
     /** Accesorios disponibles para una orden */
     public const ACCESORIOS = [
         'buzzer'            => 'Buzzer - Alerta Sonora',
