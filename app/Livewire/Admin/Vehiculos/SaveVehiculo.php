@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin\Vehiculos;
 
-use App\Models\Flotas;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Vehiculos;
@@ -52,6 +51,10 @@ class SaveVehiculo extends Component
     }
     public function save()
     {
+        $this->dispositivos_id = isset($this->dispositivos[$this->dispositivo_principal]['id'])
+            ? $this->dispositivos[$this->dispositivo_principal]['id']
+            : null;
+
         $requestVehiculo = new VehiculosRequest();
 
         $data = $this->validate($requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());

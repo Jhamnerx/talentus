@@ -206,13 +206,29 @@ class Vehiculos extends Model
                 $dispositivo_principal = 0;
             }
 
+            $principalId = null;
+
             // Procesar cada dispositivo de la lista
             foreach ($dispositivos as $index => $dispositivo) {
                 $es_principal = $dispositivo_principal == $index;
 
-                // Buscar el modelo del dispositivo
-                $modeloDispositivo = Dispositivos::where('imei', $dispositivo['imei'])->first();
+                // Resolver el dispositivo por ID (preferido) o por IMEI
+                $modeloDispositivo = null;
+
+                if (!empty($dispositivo['id'])) {
+                    $modeloDispositivo = Dispositivos::find($dispositivo['id']);
+                }
+
+                if (!$modeloDispositivo && !empty($dispositivo['imei'])) {
+                    $modeloDispositivo = Dispositivos::where('imei', $dispositivo['imei'])->first();
+                }
+
                 if (!$modeloDispositivo) continue;
+
+                $imeiAsignado = $dispositivo['imei'] ?? null;
+                if (!$imeiAsignado) {
+                    $imeiAsignado = $modeloDispositivo->imei;
+                }
 
                 // Verificar si es un dispositivo nuevo
                 if (!$dispositivos_actuales->has($modeloDispositivo->id)) {
@@ -226,7 +242,7 @@ class Vehiculos extends Model
                     // Crear nuevo registro
                     VehiculoDispositivos::create([
                         'vehiculo_id' => $this->id,
-                        'imei' => $dispositivo['imei'],
+                        'imei' => $imeiAsignado,
                         'dispositivo_id' => $modeloDispositivo->id,
                         'fecha_instalacion' => now(),
                         'is_principal' => $es_principal
@@ -235,8 +251,16 @@ class Vehiculos extends Model
                     // Si ya existía, actualizar solo si cambió la condición de principal
                     $dispositivo_actual = $dispositivos_actuales[$modeloDispositivo->id];
 
+                    // Autocorregir IMEI histórico si estaba nulo o desactualizado
+                    if ($imeiAsignado && $dispositivo_actual->imei !== $imeiAsignado) {
+                        $dispositivo_actual->imei = $imeiAsignado;
+                    }
+
                     if ($dispositivo_actual->is_principal != $es_principal) {
                         $dispositivo_actual->is_principal = $es_principal;
+                    }
+
+                    if ($dispositivo_actual->isDirty()) {
                         $dispositivo_actual->save();
                     }
                 }
@@ -246,9 +270,7 @@ class Vehiculos extends Model
 
                 // Si es principal, actualizar el campo directo
                 if ($es_principal) {
-                    $this->update([
-                        'dispositivos_id' => $modeloDispositivo->id
-                    ]);
+                    $principalId = $modeloDispositivo->id;
                 }
             }
 
@@ -260,6 +282,19 @@ class Vehiculos extends Model
                     $dispositivo_actual->save();
                 }
             }
+
+            // Garantizar que siempre exista principal cuando haya dispositivos activos
+            if ($principalId === null && !empty($dispositivos_que_permanecen)) {
+                $principalId = $dispositivos_que_permanecen[0];
+                $this->dispositivos()
+                    ->whereNull('fecha_desinstalacion')
+                    ->where('dispositivo_id', $principalId)
+                    ->update(['is_principal' => true]);
+            }
+
+            $this->update([
+                'dispositivos_id' => $principalId
+            ]);
 
             return [true, 'Dispositivos sincronizados correctamente'];
         } catch (\Exception $e) {

@@ -22,7 +22,6 @@ class VehiculosRequest extends FormRequest
      */
     public function rules($dispositivo_id, $numero, $vehicle = null)
     {
-        $this->vehiculo = Vehiculos::where('dispositivos_id', $dispositivo_id)->withTrashed()->first();
         $this->vehiculo2 = Vehiculos::where('numero', $numero)->withTrashed()->first();
 
         $ignoreId = $vehicle ? ',' . $vehicle->id : '';
@@ -39,7 +38,8 @@ class VehiculosRequest extends FormRequest
             'clientes_id'     => 'required',
             'sim_card_id'     => 'required',
             'numero'          => 'required|unique:vehiculos,numero' . $ignoreId,
-            'dispositivos_id' => 'nullable|unique:vehiculos,dispositivos_id' . $ignoreId,
+            // Compatibilidad: el dispositivo principal se maneja desde vehiculos_dispositivos
+            'dispositivos_id' => 'nullable',
             'modelo_gps'      => 'nullable',
             'operador'        => 'nullable',
             'sim_card'        => 'nullable',
@@ -68,7 +68,6 @@ class VehiculosRequest extends FormRequest
             'sim_card_id.required' => 'Debe seleccionas un numero asignado',
             'numero.required' => 'El numero es requerido',
             'numero.unique' => 'ya estas registrando este sim en la placa ' . $numero . '',
-            'dispositivos_id.unique' => 'Este imei ya esta registrado en la placa ' . $placa . '',
 
         ];
 

@@ -64,7 +64,7 @@ class Activar extends Component
         foreach ($dispositivosInstalados as $vd) {
             if (!$vd->dispositivo) continue;
             $this->dispositivos[] = [
-                'imei'   => $vd->imei,
+                'imei'   => $vd->imei ?: $vd->dispositivo->imei,
                 'modelo' => $vd->dispositivo->modelo->modelo ?? 'Sin modelo',
                 'id'     => $vd->dispositivo->id,
             ];

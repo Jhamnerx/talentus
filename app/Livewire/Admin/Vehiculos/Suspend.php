@@ -22,20 +22,18 @@ class Suspend extends Component
             $this->vehiculo->setAttribute('old_sim_card', $this->vehiculo->sim_card->sim_card);
         }
 
-        // Desinstalar TODOS los dispositivos activos del vehículo
-        $vehiculoDispositivos = \App\Models\VehiculoDispositivos::where('vehiculo_id', $this->vehiculo->id)
-            ->whereNull('fecha_desinstalacion')
-            ->get();
-
-        foreach ($vehiculoDispositivos as $vd) {
-            $vd->fecha_desinstalacion = now();
-            if ($this->remove) {
-                $vd->is_principal = false;
-            }
-            $vd->save();
-        }
-
         if ($this->remove) {
+            // Si se remueve IMEI, desinstalar todos los dispositivos activos
+            $vehiculoDispositivos = \App\Models\VehiculoDispositivos::where('vehiculo_id', $this->vehiculo->id)
+                ->whereNull('fecha_desinstalacion')
+                ->get();
+
+            foreach ($vehiculoDispositivos as $vd) {
+                $vd->fecha_desinstalacion = now();
+                $vd->is_principal = false;
+                $vd->save();
+            }
+
             $this->vehiculo->setAttribute('dispositivos_id', null);
         }
 
