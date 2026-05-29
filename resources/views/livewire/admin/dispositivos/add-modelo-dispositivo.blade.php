@@ -36,6 +36,17 @@
                     @enderror
                 </div>
                 <div class="col-span-12 sm:col-span-6">
+                    <label class="block text-sm font-medium mb-1" for="tecnologia">Tecnologia:
+                    </label>
+                    <input wire:model.live='tecnologia' id="tecnologia" class="form-input w-full" type="text"
+                        placeholder="Ej: 2G, 3G, 4G, LTE, CAT-M1..." />
+                    @error('tecnologia')
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+                <div class="col-span-12 sm:col-span-6">
                     <label class="block text-sm font-medium mb-1" for="certificado">Certificado:
                     </label>
                     <input wire:model.live='certificado' id="certificado" class="form-input w-full" type="text"

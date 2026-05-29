@@ -261,8 +261,19 @@
                     <td>: {{ \Carbon\Carbon::parse($certificado->fecha_instalacion)->format('d-m-Y') }}</td>
                 </tr>
                 <tr>
-                    <td>Modelo</td>
-                    <td>: HERO ME40 02 ADAS y DMS</td>
+                    <td>Dispositivo</td>
+                    <td>:
+                        @php
+                            $modeloCertificado = $certificado->dispositivo?->modelo;
+                        @endphp
+                        {{ $modeloCertificado
+                            ? trim(
+                                ($modeloCertificado->marca ? $modeloCertificado->marca . ' - ' : '') .
+                                    $modeloCertificado->modelo .
+                                    ($modeloCertificado->tecnologia ? ' ' . $modeloCertificado->tecnologia : ''),
+                            )
+                            : 'No disponible' }}
+                    </td>
                 </tr>
                 <tr>
                     <td>IMEI</td>

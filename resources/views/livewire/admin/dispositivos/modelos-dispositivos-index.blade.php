@@ -79,7 +79,7 @@
 
         </header>
         <div>
-            <div class="overflow-x-auto min-h-screen">
+            <div class="overflow-x-auto">
 
                 <table class="table-auto w-full">
                     <thead
@@ -91,6 +91,9 @@
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">MARCA</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">TECNOLOGIA</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Certificado</div>
@@ -125,6 +128,10 @@
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left text-slate-800 dark:text-gray-200">{{ $modelo->marca }}</div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left text-slate-800 dark:text-gray-200">{{ $modelo->tecnologia }}
+                                    </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left text-slate-800 dark:text-gray-200">{{ $modelo->certificado }}
@@ -216,6 +223,7 @@
     <script>
         $('#modelo').caseEnforcer('uppercase');
         $('#marca').caseEnforcer('uppercase');
+        $('#tecnologia').caseEnforcer('uppercase');
         $('#certificado').caseEnforcer('uppercase');
     </script>
 @endpush

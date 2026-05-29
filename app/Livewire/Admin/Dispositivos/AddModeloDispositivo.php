@@ -8,13 +8,14 @@ use Livewire\Component;
 
 class AddModeloDispositivo extends Component
 {
-    public $modelo, $marca, $certificado;
+    public $modelo, $marca, $certificado, $tecnologia;
     public $modalOpen = false;
     public Collection $caracteristicas;
 
     protected  $rules = [
         'modelo' => 'required|unique:modelos_dispositivos',
         "marca" => 'nullable',
+        "tecnologia" => 'nullable|string|max:50',
         "certificado" => 'nullable',
         "caracteristicas.*.text" => 'required',
     ];
@@ -39,7 +40,7 @@ class AddModeloDispositivo extends Component
         $this->modalOpen = false;
         $this->resetErrorBag();
         $this->resetValidation();
-        $this->reset('modelo', 'marca', 'certificado');
+        $this->reset('modelo', 'marca', 'tecnologia', 'certificado');
     }
 
     public function save()
@@ -69,6 +70,10 @@ class AddModeloDispositivo extends Component
     public function updatedMarca($value)
     {
         $this->marca = strtoupper($value);
+    }
+    public function updatedTecnologia($value)
+    {
+        $this->tecnologia = strtoupper($value);
     }
     public function updatedCertificado($value)
     {

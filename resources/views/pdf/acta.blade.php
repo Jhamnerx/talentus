@@ -280,9 +280,18 @@
                     <td>: {{ $acta->fecha_instalacion ? $acta->fecha_instalacion->format('d-m-Y') : 'Pendiente' }}</td>
                 </tr>
                 <tr>
-                    <td>Modelo GPS</td>
+                    <td>Dispositivo</td>
                     <td>:
-                        {{ $acta->vehiculo->dispositivoPrincipal ? $acta->vehiculo->dispositivoPrincipal->dispositivo->modelo->modelo : 'Pendiente' }}
+                        @php
+                            $modeloGps = $acta->vehiculo->dispositivoPrincipal?->dispositivo?->modelo;
+                        @endphp
+                        {{ $modeloGps
+                            ? trim(
+                                ($modeloGps->marca ? $modeloGps->marca . ' - ' : '') .
+                                    $modeloGps->modelo .
+                                    ($modeloGps->tecnologia ? ' ' . $modeloGps->tecnologia : ''),
+                            )
+                            : 'Pendiente' }}
                     </td>
                 </tr>
                 <tr>
