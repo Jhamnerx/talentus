@@ -286,10 +286,18 @@
                 @php
                     // Obtenemos el dispositivo principal (is_principal = 1)
                     $dispositivoPrincipal = $certificado->vehiculo->dispositivos->where('is_principal', 1)->first();
+                    $modeloPrincipal =
+                        $dispositivoPrincipal && $dispositivoPrincipal->dispositivo
+                            ? $dispositivoPrincipal->dispositivo->modelo
+                            : null;
                 @endphp
 
-                {{ $dispositivoPrincipal && $dispositivoPrincipal->dispositivo && $dispositivoPrincipal->dispositivo->modelo
-                    ? $dispositivoPrincipal->dispositivo->modelo->modelo
+                {{ $modeloPrincipal
+                    ? trim(
+                        ($modeloPrincipal->marca ? $modeloPrincipal->marca . ' - ' : '') .
+                            $modeloPrincipal->modelo .
+                            ($modeloPrincipal->tecnologia ? ' ' . $modeloPrincipal->tecnologia : ''),
+                    )
                     : 'Registrar dispositivo' }}
             </p>
 

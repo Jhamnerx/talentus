@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\WorkOrders\Types;
 
+use App\Models\Operador;
 use App\Models\User;
 use App\Models\WorkOrderType;
 use App\Models\WorkOrderTypeCost;
@@ -27,6 +28,13 @@ class Create extends Component
     public $muestra_sector = true;
     public $muestra_plan = true;
     public $muestra_accesorios_instalar = true;
+    public bool $muestra_alertas = true;
+
+    // Campos de configuración de equipo
+    public string $tipo_equipo = '';
+    public bool $requiere_modelo_dispositivo = false;
+    public string $operador_sim = '';
+    public bool $requiere_alertas = false;
 
     // Costos por técnico: [tecnico_id => costo]
     public array $costosPorTecnico = [];
@@ -71,6 +79,11 @@ class Create extends Component
             $this->muestra_sector = $tipo->muestra_sector;
             $this->muestra_plan = $tipo->muestra_plan;
             $this->muestra_accesorios_instalar = $tipo->muestra_accesorios_instalar;
+            $this->muestra_alertas = $tipo->muestra_alertas ?? true;
+            $this->tipo_equipo = $tipo->tipo_equipo ?? '';
+            $this->requiere_modelo_dispositivo = $tipo->requiere_modelo_dispositivo ?? false;
+            $this->operador_sim = $tipo->operador_sim ?? '';
+            $this->requiere_alertas = $tipo->requiere_alertas ?? false;
 
             // Cargar costos existentes por técnico
             $this->costosPorTecnico = $tipo->costs->pluck('costo', 'tecnico_id')->map(fn($c) => (string) $c)->toArray();
@@ -89,6 +102,11 @@ class Create extends Component
                 'muestra_sector',
                 'muestra_plan',
                 'muestra_accesorios_instalar',
+                'muestra_alertas',
+                'tipo_equipo',
+                'requiere_modelo_dispositivo',
+                'operador_sim',
+                'requiere_alertas',
                 'costosPorTecnico',
             ]);
             $this->requiere_checklist = true;
@@ -96,6 +114,7 @@ class Create extends Component
             $this->muestra_sector = true;
             $this->muestra_plan = true;
             $this->muestra_accesorios_instalar = true;
+            $this->muestra_alertas = true;
         }
 
         $this->showModal = true;
@@ -121,6 +140,11 @@ class Create extends Component
             'muestra_sector' => 'boolean',
             'muestra_plan' => 'boolean',
             'muestra_accesorios_instalar' => 'boolean',
+            'muestra_alertas' => 'boolean',
+            'tipo_equipo' => 'nullable|string|in:gps,sensor_adas,velocimetro',
+            'requiere_modelo_dispositivo' => 'boolean',
+            'operador_sim' => 'nullable|string|max:100',
+            'requiere_alertas' => 'boolean',
             'costosPorTecnico' => 'nullable|array',
             'costosPorTecnico.*' => 'nullable|numeric|min:0',
         ]);
@@ -138,6 +162,11 @@ class Create extends Component
             'muestra_sector' => $this->muestra_sector,
             'muestra_plan' => $this->muestra_plan,
             'muestra_accesorios_instalar' => $this->muestra_accesorios_instalar,
+            'muestra_alertas' => $this->muestra_alertas,
+            'tipo_equipo' => $this->tipo_equipo ?: null,
+            'requiere_modelo_dispositivo' => $this->requiere_modelo_dispositivo,
+            'operador_sim' => $this->operador_sim ?: null,
+            'requiere_alertas' => $this->requiere_alertas,
             'empresa_id' => session('empresa'),
         ];
 
@@ -181,6 +210,8 @@ class Create extends Component
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        return view('livewire.admin.work-orders.types.create', compact('tecnicos'));
+        $operadores = Operador::orderBy('name')->get(['id', 'name']);
+
+        return view('livewire.admin.work-orders.types.create', compact('tecnicos', 'operadores'));
     }
 }

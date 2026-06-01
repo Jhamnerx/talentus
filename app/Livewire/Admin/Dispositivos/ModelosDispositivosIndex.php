@@ -20,6 +20,7 @@ class ModelosDispositivosIndex extends Component
     {
         $modelos = ModelosDispositivo::where('modelo', 'like', '%' . $this->search . '%')
             ->orwhere('marca', 'like', '%' . $this->search . '%')
+            ->orwhere('tecnologia', 'like', '%' . $this->search . '%')
             ->orwhere(
                 function ($query) {
                     return $query

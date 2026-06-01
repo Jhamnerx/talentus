@@ -4,14 +4,13 @@ namespace App\Livewire\Admin\Dispositivos;
 
 use App\Http\Requests\ModelosDispositivosRequest;
 use App\Models\ModelosDispositivo;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class EditModeloDispositivo extends Component
 {
     public $modalEditOpen = false;
 
-    public $modelo, $marca, $certificado;
+    public $modelo, $marca, $certificado, $tecnologia;
     public $caracteristicas;
 
     public $model;
@@ -41,6 +40,7 @@ class EditModeloDispositivo extends Component
         $this->model->update([
             'modelo' => $this->modelo,
             'marca' => $this->marca,
+            'tecnologia' => $this->tecnologia,
             'certificado' => $this->certificado,
             'caracteristicas' => $this->caracteristicas,
         ]);
@@ -56,6 +56,7 @@ class EditModeloDispositivo extends Component
         $this->model = $model;
         $this->modelo = $model->modelo;
         $this->marca = $model->marca;
+        $this->tecnologia = $model->tecnologia;
         $this->certificado = $model->certificado;
         $this->caracteristicas = collect($model->caracteristicas);
         $this->modalEditOpen = true;
@@ -76,5 +77,10 @@ class EditModeloDispositivo extends Component
     {
         $requestModelo = new ModelosDispositivosRequest();
         $this->validateOnly($label, $requestModelo->rules($this->model), $requestModelo->messages());
+    }
+
+    public function updatedTecnologia($value)
+    {
+        $this->tecnologia = strtoupper($value);
     }
 }

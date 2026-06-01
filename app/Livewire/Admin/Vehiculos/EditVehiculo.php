@@ -76,7 +76,7 @@ class EditVehiculo extends Component
             if (!$dispositivo) continue;
 
             $this->dispositivos[] = [
-                'imei' => $disp->imei,
+                'imei' => $disp->imei ?: $dispositivo->imei,
                 'modelo' => $dispositivo->modelo->modelo ?? 'Sin modelo',
                 'id' => $dispositivo->id
             ];
@@ -86,9 +86,17 @@ class EditVehiculo extends Component
                 $this->dispositivo_principal = count($this->dispositivos) - 1;
             }
         }
+
+        if ($this->dispositivo_principal !== null && isset($this->dispositivos[$this->dispositivo_principal])) {
+            $this->dispositivos_id = $this->dispositivos[$this->dispositivo_principal]['id'];
+        }
     }
     public function save()
     {
+        $this->dispositivos_id = isset($this->dispositivos[$this->dispositivo_principal]['id'])
+            ? $this->dispositivos[$this->dispositivo_principal]['id']
+            : null;
+
         $requestVehiculo = new VehiculosRequest();
         $data = $this->validate($requestVehiculo->rules($this->dispositivos_id, $this->numero, $this->vehiculo), $requestVehiculo->messages());
 
@@ -239,7 +247,7 @@ class EditVehiculo extends Component
     public function updated($label)
     {
         $requestVehiculo = new VehiculosRequest();
-        $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
+        $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero, $this->vehiculo), $requestVehiculo->messages());
     }
 
 

@@ -26,6 +26,7 @@ class ModelosDispositivosRequest extends FormRequest
         $rules = [
             'modelo' => 'required|unique:modelos_dispositivos,modelo,' . $model->id . '',
             "marca" => 'nullable',
+            "tecnologia" => 'nullable|string|max:50',
             "certificado" => 'nullable',
         ];
 

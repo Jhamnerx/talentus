@@ -162,6 +162,23 @@
             @endif
         @endif
 
+        {{-- ── Operador SIM / Modelo de dispositivo ───────────────────────── --}}
+        @if ($tipoRequiereSim || $tipoRequiereModeloDispositivo)
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                @if ($tipoRequiereSim)
+                    <x-form.select label="Operador SIM" wire:model="operador_sim_orden"
+                        placeholder="Seleccionar operador" :options="$operadores" option-label="name" option-value="name"
+                        :clearable="true" />
+                @endif
+                @if ($tipoRequiereModeloDispositivo)
+                    <x-form.select label="Modelo del dispositivo *" wire:model="modelo_dispositivo_id"
+                        placeholder="Seleccionar modelo" :options="$modelosDispositivo" option-label="name" option-value="id"
+                        :clearable="true"
+                        hint="{{ $tipoEquipo === 'sensor_adas' ? 'Sensor ADAS' : ($tipoEquipo === 'velocimetro' ? 'Velocímetro' : 'Dispositivo GPS') }}" />
+                @endif
+            </div>
+        @endif
+
 
         {{-- ── Técnico — filtrable por ciudad ────────────────────────────── --}}
         <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-3 space-y-3">
@@ -238,11 +255,16 @@
             </div>
         @endif
 
-        {{-- ── Alertas GPS ─────────────────────────────────────────────────── --}}
+        {{-- ── Alertas GPS / ADAS ───────────────────────────────────────── --}}
         @if ($tipoMuestraAlertas)
-            <div class="rounded-lg border border-blue-200 dark:border-blue-700/40 p-3">
+            <div
+                class="rounded-lg border border-blue-200 dark:border-blue-700/40 p-3 @error('alertas') border-red-400 dark:border-red-500 @enderror">
                 <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide mb-3">
-                    🔔 Alertas GPS a configurar</p>
+                    🔔 {{ $tipoEquipo === 'sensor_adas' ? 'Alertas ADAS a configurar' : 'Alertas GPS a configurar' }}
+                    @if ($tipoRequiereAlertas)
+                        <span class="text-red-500 ml-1">*</span>
+                    @endif
+                </p>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
                     @foreach ($alertasDisponibles as $value => $label)
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -252,6 +274,9 @@
                         </label>
                     @endforeach
                 </div>
+                @error('alertas')
+                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
             </div>
         @endif
 

@@ -36,6 +36,34 @@
             </p>
         </div>
 
+        {{-- ── Fila 2b: Tipo de equipo + Operador SIM ──────────────────────── --}}
+        <div class="px-6 py-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <x-form.select wire:model="tipo_equipo" label="Tipo de equipo"
+                        placeholder="Sin especificar (general)" :options="[
+                            ['id' => 'gps', 'name' => 'GPS Tracker'],
+                            ['id' => 'sensor_adas', 'name' => 'Sensor ADAS'],
+                            ['id' => 'velocimetro', 'name' => 'Velocímetro'],
+                        ]" option-label="name" option-value="id"
+                        :clearable="false" />
+                    <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                        Determina las alertas disponibles al crear la orden
+                    </p>
+                </div>
+                @if ($requiere_sim)
+                    <div>
+                        <x-form.select wire:model="operador_sim" label="Operador SIM predeterminado"
+                            placeholder="Sin especificar" :options="$operadores" option-label="name" option-value="name"
+                            :clearable="true" />
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                            Se mostrará como sugerencia al crear la orden
+                        </p>
+                    </div>
+                @endif
+            </div>
+        </div>
+
         {{-- ── Fila 3: Requisitos · Campos visibles · Comportamiento (3 col) ── --}}
         <div class="px-6 py-5">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -66,6 +94,16 @@
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 ml-6">Se debe completar el
                                 checklist</p>
                         </div>
+                        <div>
+                            <x-form.checkbox wire:model="requiere_modelo_dispositivo" label="Modelo del dispositivo" />
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 ml-6">Requiere seleccionar el
+                                modelo de equipo</p>
+                        </div>
+                        <div>
+                            <x-form.checkbox wire:model="requiere_alertas" label="Alertas obligatorias" />
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 ml-6">Al menos una alerta debe ser
+                                seleccionada</p>
+                        </div>
                     </div>
                 </div>
 
@@ -81,6 +119,8 @@
                             description="Plan GPS asociado a la orden" />
                         <x-form.toggle wire:model="muestra_accesorios_instalar" label="Accesorios a instalar"
                             description="Buzzer, corte motor, cámara, etc." />
+                        <x-form.toggle wire:model="muestra_alertas" label="Alertas a configurar"
+                            description="Selector de alertas GPS o ADAS" />
                     </div>
                 </div>
 
@@ -174,8 +214,8 @@
             </span>
             <div class="flex gap-3">
                 <x-form.button flat label="Cancelar" wire:click="$set('showModal', false)" />
-                <x-form.button primary label="{{ $editingId ? 'Actualizar tipo' : 'Crear tipo' }}" wire:click="guardar"
-                    spinner="guardar" />
+                <x-form.button primary label="{{ $editingId ? 'Actualizar tipo' : 'Crear tipo' }}"
+                    wire:click="guardar" spinner="guardar" />
             </div>
         </div>
     </x-slot>

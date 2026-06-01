@@ -15,6 +15,8 @@ use Livewire\Attributes\On;
 use App\Models\WorkOrderType;
 use App\Enums\WorkOrderStatus;
 use App\Models\Mantenimiento;
+use App\Models\ModelosDispositivo;
+use App\Models\Operador;
 use App\Services\WorkOrderNotificationService;
 use Illuminate\Support\Facades\Auth;
 use WireUi\Traits\WireUiActions;
@@ -47,6 +49,16 @@ class CreateModal extends Component
     public bool $tipoMuestraAlertas = true;
     // Flags de requisitos del tipo
     public bool $tipoRequiereAccesorios = false;
+    public bool $tipoRequiereAlertas = false;
+    // Configuración de equipo del tipo
+    public ?string $tipoEquipo = null;
+    public bool $tipoRequiereModeloDispositivo = false;
+    public ?string $tipoOperadorSim = null;
+    public bool $tipoRequiereSim = false;
+
+    // Campos de equipo/SIM en la orden
+    public ?int $modelo_dispositivo_id = null;
+    public string $operador_sim_orden = '';
 
     // Costo estimado según tipo + técnico seleccionados
     public ?float $costoEstimado = null;
@@ -82,8 +94,10 @@ class CreateModal extends Component
             'contacto_id'         => 'nullable|exists:contactos,id',
             'accesorios'          => ($this->tipoRequiereAccesorios ? 'required|array|min:1' : 'nullable|array'),
             'accesorios.*'        => 'in:buzzer,corte_motor,apertura_puertas,telemetria,combustible,temperatura,horas_motor,rpm,acelerometro,camara',
-            'alertas'             => 'nullable|array',
+            'alertas'             => ($this->tipoRequiereAlertas ? 'required|array|min:1' : 'nullable|array'),
             'alertas.*'           => 'nullable|string|max:100',
+            'modelo_dispositivo_id' => ($this->tipoRequiereModeloDispositivo ? 'required|exists:modelos_dispositivos,id' : 'nullable|exists:modelos_dispositivos,id'),
+            'operador_sim_orden'  => 'nullable|string|max:100',
             'tituloProyecto'      => $this->esProyecto ? 'required|string|max:255' : 'nullable',
             'placasTexto'         => $this->esProyecto ? 'nullable|string' : 'nullable',
         ];
@@ -100,6 +114,9 @@ class CreateModal extends Component
             'fecha_programada.after_or_equal' => 'La fecha no puede ser anterior a hoy',
             'accesorios.required'  => 'Seleccione al menos un accesorio para este tipo de orden',
             'accesorios.min'       => 'Seleccione al menos un accesorio',
+            'alertas.required'     => 'Seleccione al menos una alerta para este tipo de orden',
+            'alertas.min'          => 'Seleccione al menos una alerta',
+            'modelo_dispositivo_id.required' => 'Seleccione el modelo del dispositivo',
             'tituloProyecto.required' => 'El título del proyecto es obligatorio',
         ];
     }
@@ -144,9 +161,18 @@ class CreateModal extends Component
 
         $sectores = WorkOrderNotificationService::ZONAS;
         $accesoriosDisponibles = WorkOrderNotificationService::ACCESORIOS;
-        $alertasDisponibles = WorkOrderNotificationService::ALERTAS;
+        $alertasDisponibles = $this->tipoEquipo === 'sensor_adas'
+            ? WorkOrderNotificationService::ALERTAS_ADAS
+            : WorkOrderNotificationService::ALERTAS;
 
-        return view('livewire.admin.work-orders.create-modal', compact('tipos', 'tecnicos', 'ciudades', 'mantenimientosPendientes', 'sectores', 'accesoriosDisponibles', 'alertasDisponibles', 'planes'));
+        $modelosDispositivo = $this->tipoRequiereModeloDispositivo
+            ? ModelosDispositivo::orderBy('marca')->orderBy('modelo')->get()
+            ->map(fn($m) => ['id' => $m->id, 'name' => ($m->marca ? $m->marca . ' — ' : '') . $m->modelo])
+            : collect();
+
+        $operadores = Operador::orderBy('name')->get(['id', 'name']);
+
+        return view('livewire.admin.work-orders.create-modal', compact('tipos', 'tecnicos', 'ciudades', 'mantenimientosPendientes', 'sectores', 'accesoriosDisponibles', 'alertasDisponibles', 'planes', 'modelosDispositivo', 'operadores'));
     }
 
     #[On('open-create-modal')]
@@ -212,8 +238,14 @@ class CreateModal extends Component
         $this->tipoMuestraPlan = $tipo?->muestra_plan ?? true;
         $this->tipoMuestraAccesorios = $tipo?->muestra_accesorios_instalar ?? true;
         $this->tipoMuestraAlertas = $tipo?->muestra_alertas ?? true;
-
         $this->tipoRequiereAccesorios = $tipo?->requiere_accesorios ?? false;
+        $this->tipoRequiereAlertas = $tipo?->requiere_alertas ?? false;
+        $this->tipoEquipo = $tipo?->tipo_equipo;
+        $this->tipoRequiereModeloDispositivo = $tipo?->requiere_modelo_dispositivo ?? false;
+        $this->tipoOperadorSim = $tipo?->operador_sim;
+        $this->tipoRequiereSim = $tipo?->requiere_sim ?? false;
+        $this->operador_sim_orden = $tipo?->operador_sim ?? '';
+        $this->modelo_dispositivo_id = null;
 
         $this->recalcularCosto();
 
@@ -325,6 +357,12 @@ class CreateModal extends Component
             if (!empty($this->alertas)) {
                 $metadata['alertas'] = $this->alertas;
             }
+            if ($this->operador_sim_orden) {
+                $metadata['operador_sim'] = $this->operador_sim_orden;
+            }
+            if ($this->modelo_dispositivo_id) {
+                $metadata['modelo_dispositivo_id'] = $this->modelo_dispositivo_id;
+            }
             $data['metadata'] = !empty($metadata) ? $metadata : null;
 
             // Ubicación del servicio
@@ -348,7 +386,9 @@ class CreateModal extends Component
                 $data['alertas'],
                 $data['tituloProyecto'],
                 $data['placasTexto'],
-                $data['itemsTipoTrabajo']
+                $data['itemsTipoTrabajo'],
+                $data['operador_sim_orden'],
+                $data['modelo_dispositivo_id']
             );
 
             $workOrder = WorkOrder::create($data);
@@ -431,6 +471,13 @@ class CreateModal extends Component
         $this->tipoMuestraAccesorios = true;
         $this->tipoMuestraAlertas  = true;
         $this->tipoRequiereAccesorios = false;
+        $this->tipoRequiereAlertas = false;
+        $this->tipoEquipo          = null;
+        $this->tipoRequiereModeloDispositivo = false;
+        $this->tipoOperadorSim     = null;
+        $this->tipoRequiereSim     = false;
+        $this->modelo_dispositivo_id = null;
+        $this->operador_sim_orden  = '';
         $this->ubicacion_lat       = null;
         $this->ubicacion_lng       = null;
         $this->ubicacion_direccion = '';
