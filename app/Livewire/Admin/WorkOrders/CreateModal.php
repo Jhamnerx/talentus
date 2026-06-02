@@ -160,7 +160,10 @@ class CreateModal extends Component
                 'name' => is_array($p->name) ? ($p->name['es'] ?? ($p->name['en'] ?? 'Sin nombre')) : $p->name,
             ]);
 
-        $sectores = WorkOrderNotificationService::ZONAS;
+        $sectores = collect(WorkOrderNotificationService::ZONAS)
+            ->map(fn($label, $key) => ['value' => $key, 'label' => $label])
+            ->values()
+            ->all();
         $accesoriosDisponibles = WorkOrderNotificationService::ACCESORIOS;
         $alertasDisponibles = $this->tipoEquipo === 'sensor_adas'
             ? WorkOrderNotificationService::ALERTAS_ADAS

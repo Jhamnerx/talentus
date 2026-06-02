@@ -125,7 +125,7 @@ class Index extends Component
 
     public function editarOrden(WorkOrder $orden)
     {
-        $this->redirect(route('admin.work-orders.show', $orden));
+        $this->dispatch('open-edit-modal', workOrderId: $orden->id);
     }
 
     public function iniciarOrden(WorkOrder $orden)

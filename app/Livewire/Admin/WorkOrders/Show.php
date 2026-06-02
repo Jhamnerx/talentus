@@ -256,6 +256,11 @@ class Show extends Component
         return redirect()->route('admin.work-orders.pdf', $this->workOrder);
     }
 
+    public function abrirEdicion(): void
+    {
+        $this->dispatch('open-edit-modal', workOrderId: $this->workOrder->id);
+    }
+
     public function abrirModalDispositivo(string $tipo, string $accion = 'instalado')
     {
         $this->modalDispositivo = true;

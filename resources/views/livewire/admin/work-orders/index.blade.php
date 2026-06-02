@@ -292,6 +292,12 @@
                                 <x-form.button xs icon="eye" wire:click="verDetalle({{ $orden->id }})" flat
                                     title="Ver detalle" />
 
+                                {{-- Editar (admin, si no está bloqueada) --}}
+                                @if (auth()->user()->hasRole('admin') && !$orden->bloqueado)
+                                    <x-form.button xs icon="pencil" wire:click="editarOrden({{ $orden->id }})"
+                                        flat title="Editar orden" />
+                                @endif
+
                                 {{-- Iniciar (solo pendiente) --}}
                                 @if ($orden->estado->value === 'pendiente')
                                     <x-form.button xs icon="play" wire:click="iniciarOrden({{ $orden->id }})"
@@ -523,7 +529,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
@@ -659,7 +665,7 @@
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-700">
                         <tr>

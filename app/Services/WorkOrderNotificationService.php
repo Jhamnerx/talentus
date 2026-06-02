@@ -165,6 +165,57 @@ class WorkOrderNotificationService
     }
 
     /**
+     * Edita el mensaje WA previamente enviado para la orden.
+     * Reconstruye el messageKey a partir de wa_group_id + wa_message_id guardados.
+     * Retorna true si se editó correctamente, false en caso contrario.
+     */
+    public function editarMensaje(WorkOrder $orden, ?Device $device = null): bool
+    {
+        if (empty($orden->wa_message_id) || empty($orden->wa_group_id)) {
+            Log::info("WorkOrder #{$orden->id}: sin wa_message_id/wa_group_id, no se edita el mensaje WA.");
+            return false;
+        }
+
+        if (!$device || $device->status !== 'Connected') {
+            $device = Device::where('interno', true)->where('status', 'Connected')->first()
+                ?? Device::where('status', 'Connected')->first();
+        }
+
+        if (!$device) {
+            Log::warning("WorkOrder #{$orden->id}: no hay dispositivo WA conectado para editar mensaje.");
+            return false;
+        }
+
+        $messageKey = [
+            'remoteJid' => $orden->wa_group_id,
+            'fromMe'    => true,
+            'id'        => $orden->wa_message_id,
+        ];
+
+        $mensaje   = $this->formatMensaje($orden);
+        $serverUrl = config('whatsapp.node_server_url', 'http://localhost:3000');
+
+        try {
+            $response = Http::timeout(30)->post("{$serverUrl}/api/edit-message", [
+                'token'      => $device->body,
+                'messageKey' => $messageKey,
+                'newText'    => $mensaje,
+            ]);
+
+            if ($response->successful() && $response->json('status')) {
+                Log::info("WorkOrder #{$orden->id}: mensaje WA editado. MsgId: {$orden->wa_message_id}");
+                return true;
+            }
+
+            Log::warning("WorkOrder #{$orden->id}: edición WA falló. HTTP {$response->status()}. Body: " . $response->body());
+            return false;
+        } catch (\Throwable $e) {
+            Log::error("WorkOrder #{$orden->id}: excepción editando WA: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Formatea el mensaje de WhatsApp con los datos de la orden.
      */
     public function formatMensaje(WorkOrder $orden): string

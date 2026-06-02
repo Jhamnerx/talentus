@@ -523,6 +523,12 @@
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Acciones</h2>
 
             <div class="flex flex-wrap gap-3">
+                @if (!$workOrder->bloqueado)
+                    <x-form.button outline secondary icon="pencil" wire:click="abrirEdicion" spinner="abrirEdicion">
+                        Editar Orden
+                    </x-form.button>
+                @endif
+
                 @if ($workOrder->estado->value === 'pendiente')
                     <x-form.button primary icon="play" wire:click="iniciar" spinner="iniciar">
                         Iniciar Trabajo
