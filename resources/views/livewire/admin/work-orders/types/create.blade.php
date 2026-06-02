@@ -51,16 +51,6 @@
                         Determina las alertas disponibles al crear la orden
                     </p>
                 </div>
-                @if ($requiere_sim)
-                    <div>
-                        <x-form.select wire:model="operador_sim" label="Operador SIM predeterminado"
-                            placeholder="Sin especificar" :options="$operadores" option-label="name" option-value="name"
-                            :clearable="true" />
-                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                            Se mostrará como sugerencia al crear la orden
-                        </p>
-                    </div>
-                @endif
             </div>
         </div>
 
@@ -98,6 +88,11 @@
                             <x-form.checkbox wire:model="requiere_modelo_dispositivo" label="Modelo del dispositivo" />
                             <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 ml-6">Requiere seleccionar el
                                 modelo de equipo</p>
+                        </div>
+                        <div>
+                            <x-form.checkbox wire:model="requiere_operador_sim" label="Operador SIM" />
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 ml-6">El técnico debe
+                                especificar el operador de la SIM</p>
                         </div>
                         <div>
                             <x-form.checkbox wire:model="requiere_alertas" label="Alertas obligatorias" />

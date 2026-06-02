@@ -35,7 +35,7 @@ class Show extends Component
 
     // ── Gestión de ítems del proyecto ────────────────────────────────────
     public string $nuevoItemPlaca = '';
-    public string $nuevoItemTipoTrabajo = 'mantenimiento';
+    public ?int $nuevoItemTipoTrabajo = null;
     public string $nuevoItemNotas = '';
     public bool $mostrarAddItem = false;
 
@@ -123,7 +123,7 @@ class Show extends Component
             'placa'               => $placa,
             'cliente_nombre'      => $vehiculo?->cliente?->razon_social,
             'work_order_type_id'  => $this->nuevoItemTipoTrabajo,
-            'tipo_trabajo'        => $this->nuevoItemTipoTrabajo, // FK id stored as fallback
+            'tipo_trabajo'        => null,
             'notas'               => trim($this->nuevoItemNotas) ?: null,
             'estado'              => 'pendiente',
             'orden'               => $this->workOrder->items()->count(),
@@ -131,7 +131,7 @@ class Show extends Component
 
         $this->nuevoItemPlaca       = '';
         $this->nuevoItemNotas       = '';
-        $this->nuevoItemTipoTrabajo = '';
+        $this->nuevoItemTipoTrabajo = null;
         $this->mostrarAddItem       = false;
         $this->refreshWorkOrder();
         $this->notification()->success('ÍTEM AGREGADO', "Unidad {$placa} registrada en la orden");
@@ -475,12 +475,12 @@ class Show extends Component
         }
 
         // Finalización
-        if ($this->workOrder->fecha_finalizado) {
+        if ($this->workOrder->fecha_finalizacion) {
             $timeline->push([
                 'tipo' => 'finalizacion',
                 'titulo' => 'Trabajo Finalizado',
                 'descripcion' => 'Trabajo completado exitosamente',
-                'fecha' => $this->workOrder->fecha_finalizado,
+                'fecha' => $this->workOrder->fecha_finalizacion,
                 'icono' => 'check-circle',
                 'color' => 'green',
             ]);

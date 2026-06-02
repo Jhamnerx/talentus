@@ -162,21 +162,18 @@
             @endif
         @endif
 
-        {{-- ── Operador SIM / Modelo de dispositivo ───────────────────────── --}}
-        @if ($tipoRequiereSim || $tipoRequiereModeloDispositivo)
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                @if ($tipoRequiereSim)
-                    <x-form.select label="Operador SIM" wire:model="operador_sim_orden"
-                        placeholder="Seleccionar operador" :options="$operadores" option-label="name" option-value="name"
-                        :clearable="true" />
-                @endif
-                @if ($tipoRequiereModeloDispositivo)
-                    <x-form.select label="Modelo del dispositivo *" wire:model="modelo_dispositivo_id"
-                        placeholder="Seleccionar modelo" :options="$modelosDispositivo" option-label="name" option-value="id"
-                        :clearable="true"
-                        hint="{{ $tipoEquipo === 'sensor_adas' ? 'Sensor ADAS' : ($tipoEquipo === 'velocimetro' ? 'Velocímetro' : 'Dispositivo GPS') }}" />
-                @endif
-            </div>
+        {{-- ── Operador SIM (independiente) ───────────────────────────────── --}}
+        @if ($tipoRequiereOperadorSim)
+            <x-form.select label="Operador SIM *" wire:model="operador_sim_orden" placeholder="Seleccionar operador"
+                :options="$operadores" option-label="name" option-value="name" :clearable="true" />
+        @endif
+
+        {{-- ── Modelo de dispositivo ────────────────────────────────────── --}}
+        @if ($tipoRequiereModeloDispositivo)
+            <x-form.select label="Modelo del dispositivo *" wire:model="modelo_dispositivo_id"
+                placeholder="Seleccionar modelo" :options="$modelosDispositivo" option-label="name" option-value="id"
+                :clearable="true"
+                hint="{{ $tipoEquipo === 'sensor_adas' ? 'Sensor ADAS' : ($tipoEquipo === 'velocimetro' ? 'Velocímetro' : 'Dispositivo GPS') }}" />
         @endif
 
 
