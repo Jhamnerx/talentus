@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ContactoApiController;
 use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\WorkOrderTrackingController;
 use App\Http\Controllers\Api\PublicWorkOrderController;
+use App\Http\Controllers\Api\TrackingWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('public')->name('api.public.')->group(function () {
     Route::get('work-orders/{hash}', [PublicWorkOrderController::class, 'show'])->name('work-orders.show');
     Route::post('work-orders/{hash}/verify', [PublicWorkOrderController::class, 'verify'])->name('work-orders.verify');
+});
+
+/*
+|--------------------------------------------------------------------------
+| TRACKING WEBHOOK — Plataforma GPSWox → Talentus
+|--------------------------------------------------------------------------
+| La plataforma de rastreo notifica a Talentus cuando se guarda/actualiza
+| un dispositivo. Solo se permite desde TRACKING_ALLOWED_IP.
+*/
+
+Route::middleware('tracking.ip')->prefix('tracking')->name('api.tracking.')->group(function () {
+    Route::post('device-sync', [TrackingWebhookController::class, 'deviceSync'])->name('device-sync');
 });
 
 /*

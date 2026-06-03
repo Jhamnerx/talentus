@@ -10,6 +10,7 @@ use Livewire\Attributes\On;
 use App\Models\Dispositivos;
 use App\Http\Requests\VehiculosRequest;
 use App\Services\FactilizaService;
+use App\Services\GpsWoxService;
 
 class EditVehiculo extends Component
 {
@@ -236,6 +237,28 @@ class EditVehiculo extends Component
         );
         $this->closeModal();
         $this->reset();
+    }
+
+    /**
+     * Sincronización manual: busca el vehículo en la plataforma por placa y
+     * actualiza gpswox_id, gpswox_active, numero (SIM) y gpswox_sincronizado_at.
+     */
+    public function sincronizarDesdePlataforma(): void
+    {
+        try {
+            $result = app(GpsWoxService::class)->sincronizarVehiculoDesdePlataforma($this->vehiculo);
+
+            if (($result['status'] ?? 0) === 1) {
+                $this->vehiculo->refresh();
+                $this->numero = $this->vehiculo->numero ?? $this->numero;
+                $this->dispatch('update-table');
+                $this->dispatch('notify-toast', icon: 'success', title: 'PLATAFORMA GPS', mensaje: $result['message']);
+            } else {
+                $this->dispatch('notify-toast', icon: 'warning', title: 'PLATAFORMA GPS', mensaje: $result['message'] ?? 'No encontrado en la plataforma');
+            }
+        } catch (\Throwable $e) {
+            $this->dispatch('notify-toast', icon: 'error', title: 'PLATAFORMA GPS', mensaje: $e->getMessage());
+        }
     }
 
     public function closeModal()

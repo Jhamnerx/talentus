@@ -178,7 +178,20 @@
     </div>
 
     <x-slot name="footer">
-        <div class="flex justify-end gap-x-4">
+        <div class="flex justify-between gap-x-4">
+            {{-- Botón sync plataforma GPS (lado izquierdo) --}}
+            <div class="flex items-center gap-2">
+                @if(isset($vehiculo) && $vehiculo->exists)
+                    @if($vehiculo->gpswox_id)
+                        <span class="text-xs text-green-700 bg-green-100 px-2 py-1 rounded">
+                            GPS #{{ $vehiculo->gpswox_id }}
+                        </span>
+                    @endif
+                    <x-form.button flat wire:click="sincronizarDesdePlataforma" spinner="sincronizarDesdePlataforma"
+                        icon="arrow-path"
+                        label="{{ $vehiculo->gpswox_id ? 'Re-sincronizar GPS' : 'Sincronizar desde plataforma' }}" />
+                @endif
+            </div>
             <div class="flex">
                 <x-form.button flat label="Cancelar" wire:click="close" />
                 <x-form.button primary label="Guardar" wire:click="save" spinner="save" />
