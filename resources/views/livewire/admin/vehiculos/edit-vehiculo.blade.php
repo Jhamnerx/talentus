@@ -3,7 +3,16 @@
     <div class="grid grid-cols-12 gap-6">
 
         <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.live.change="placa" label="Placa Unidad:" placeholder="ABC-780" />
+            <x-form.input wire:model.live.change="placa" label="Placa Unidad:" placeholder="ABC-780" class="uppercase"
+                x-on:input="$event.target.value = $event.target.value.toUpperCase()">
+                <x-slot name="append">
+                    <x-form.button class="h-full" icon="magnifying-glass" rounded="rounded-r-md" primary flat
+                        wire:click="buscarPlaca" wire:loading.attr="disabled" spinner="buscarPlaca" />
+                </x-slot>
+            </x-form.input>
+            @if ($errorConsultaPlaca)
+                <p class="mt-1 text-sm text-red-600">{{ $errorConsultaPlaca }}</p>
+            @endif
         </div>
 
         <div class="col-span-6 sm:col-span-6">
@@ -89,11 +98,7 @@
         <div class="col-span-12 sm:col-span-6">
             <x-form.input wire:model.live="sim_card" name="sim_card" readonly placeholder="3189219220212"
                 label="Sim Card:" />
-            @error('sim_card_id')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
-            @enderror
+            <x-form.errors :only="['sim_card_id']" />
         </div> <!-- Sección para agregar dispositivos -->
         <div class="col-span-12 sm:col-span-12">
             <h4 class="font-semibold text-lg mb-3">Dispositivos GPS</h4>
@@ -105,7 +110,8 @@
             <div class="col-span-12 sm:col-span-6 mb-4">
                 <x-form.select autocomplete='off' label="Seleccionar dispositivo GPS:" id="dispositivo_imei"
                     name="dispositivo_imei" wire:model.live="dispositivo_imei" placeholder="357073292893290"
-                    option-description="option_description" :async-data="route('api.dispositivos.index')" option-label="imei" option-value="imei">
+                    option-description="option_description" :async-data="route('api.dispositivos.index')" option-label="imei"
+                    option-value="imei">
 
                     <x-slot name="beforeOptions" class="p-2 flex justify-center">
                         <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat
