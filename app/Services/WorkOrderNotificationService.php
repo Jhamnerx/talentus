@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\WorkOrder;
+use App\Models\ModelosDispositivo;
 use App\Models\WhatsFleep\Device;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -229,6 +230,18 @@ class WorkOrderNotificationService
         $meta          = $orden->metadata ?? [];
         $accesorios    = $meta['accesorios'] ?? [];
         $alertas       = $meta['alertas'] ?? [];
+
+        // Operador SIM y modelo de dispositivo (tipo de equipo)
+        $operadorSim = !empty($meta['operador_sim']) ? strtoupper($meta['operador_sim']) : null;
+        $modeloDisp  = !empty($meta['modelo_dispositivo_id'])
+            ? ModelosDispositivo::find((int) $meta['modelo_dispositivo_id'])
+            : null;
+        $equipoTexto = null;
+        if ($modeloDisp) {
+            $equipoTexto = trim(
+                ($modeloDisp->marca ? strtoupper($modeloDisp->marca) . ' ' : '') . strtoupper($modeloDisp->modelo)
+            );
+        }
         $listaAcc      = array_values(array_filter(
             array_map(
                 fn($key) => isset(self::ACCESORIOS[$key]) ? strtoupper(self::ACCESORIOS[$key]) : null,
@@ -271,6 +284,12 @@ class WorkOrderNotificationService
             }
             if (!empty($orden->plan) && $orden->plan !== '-') {
                 $lineas[] = '💳 *PLAN:* ' . strtoupper($orden->plan);
+            }
+            if ($operadorSim) {
+                $lineas[] = '📶 *OPERADOR SIM:* ' . $operadorSim;
+            }
+            if ($equipoTexto) {
+                $lineas[] = '📡 *EQUIPO GPS:* ' . $equipoTexto;
             }
 
             $lineas[] = $sep;
@@ -350,6 +369,12 @@ class WorkOrderNotificationService
         }
         if (!empty($orden->plan) && $orden->plan !== '-') {
             $lineas[] = '💳 *PLAN:* ' . strtoupper($orden->plan);
+        }
+        if ($operadorSim) {
+            $lineas[] = '📶 *OPERADOR SIM:* ' . $operadorSim;
+        }
+        if ($equipoTexto) {
+            $lineas[] = '📡 *EQUIPO GPS:* ' . $equipoTexto;
         }
 
         $lineas[] = $sep;

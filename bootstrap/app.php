@@ -30,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
+            'tracking.auth' => \App\Http\Middleware\AllowedTrackingIp::class,
         ]);
     })->withSchedule(function (Schedule $schedule) {
         $schedule->command('backup:clean')->daily()->at('01:00');

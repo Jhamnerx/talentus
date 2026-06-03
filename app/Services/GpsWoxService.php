@@ -315,4 +315,221 @@ class GpsWoxService
 
         return true;
     }
+
+    // =========================================================================
+    // CRUD DE DISPOSITIVOS EN LA PLATAFORMA GPSWox
+    // =========================================================================
+
+    /**
+     * Wrapper genérico de petición HTTP a la API de GPSWox.
+     * Centraliza autenticación, logging y manejo de errores.
+     *
+     * @param string $method  GET|POST
+     * @param string $uri     Ruta sin slash inicial (ej. 'add_device')
+     * @param array  $query   Query string (se agrega user_api_hash automáticamente)
+     * @param array  $body    Cuerpo (form_params para POST)
+     * @return array          ['status' => 1|0, 'data' => array, 'http_code' => int, 'message' => ?string]
+     */
+    protected function request(string $method, string $uri, array $query = [], array $body = []): array
+    {
+        $options = [
+            'query'   => array_merge(['user_api_hash' => $this->apiHash], $query),
+            'headers' => ['Accept' => 'application/json'],
+        ];
+
+        if (!empty($body)) {
+            $options['form_params'] = $body;
+        }
+
+        try {
+            $response = $this->client->request($method, $uri, $options);
+            $statusCode = $response->getStatusCode();
+            $payload    = json_decode($response->getBody()->getContents(), true) ?? [];
+
+            if ($statusCode >= 400) {
+                Log::channel('daily')->error("[GpsWox] HTTP {$statusCode} en {$method} {$uri}", [
+                    'query'   => $query,
+                    'body'    => $body,
+                    'payload' => $payload,
+                ]);
+                return [
+                    'status'    => 0,
+                    'http_code' => $statusCode,
+                    'message'   => $payload['message'] ?? "Error HTTP {$statusCode}",
+                    'data'      => $payload,
+                ];
+            }
+
+            return [
+                'status'    => $payload['status'] ?? 1,
+                'http_code' => $statusCode,
+                'data'      => $payload,
+            ];
+        } catch (GuzzleException $e) {
+            Log::channel('daily')->error("[GpsWox] Exception {$method} {$uri}", [
+                'error' => $e->getMessage(),
+            ]);
+            return [
+                'status'    => 0,
+                'http_code' => 0,
+                'message'   => 'Error de comunicación con la API de GPS: ' . $e->getMessage(),
+                'data'      => [],
+            ];
+        }
+    }
+
+    /**
+     * Obtiene los catálogos necesarios para crear un dispositivo
+     * (grupos, iconos, usuarios, timezones, etc.).
+     *
+     * @return array Respuesta cruda de la API: device_groups, device_icons, users,
+     *               device_fuel_measurements, timezones, expiration_date_select, status
+     */
+    public function addDeviceData(): array
+    {
+        return $this->request('GET', 'add_device_data')['data'];
+    }
+
+    /**
+     * Obtiene los datos completos del dispositivo para editarlo
+     * (extiende add_device_data con `item`, `sensors`, `services`, etc.).
+     *
+     * @param int $deviceId ID del dispositivo en la plataforma
+     */
+    public function editDeviceData(int $deviceId): array
+    {
+        return $this->request('GET', 'edit_device_data', ['device_id' => $deviceId])['data'];
+    }
+
+    /**
+     * Crea un dispositivo en la plataforma GPSWox.
+     *
+     * @param array $payload Campos requeridos: name, imei, icon_id, fuel_measurement_id,
+     *                       tail_length, min_moving_speed, min_fuel_fillings, min_fuel_thefts.
+     *                       Opcionales: group_id, sim_number, plate_number, device_model,
+     *                       user_id[], icon_moving, icon_stopped, etc.
+     * @return array ['status' => 1|0, 'id' => int|null, 'message' => string|null]
+     */
+    public function addDevice(array $payload): array
+    {
+        $result = $this->request('POST', 'add_device', [], $payload);
+
+        return [
+            'status'  => $result['status'] ?? 0,
+            'id'      => $result['data']['id'] ?? null,
+            'message' => $result['data']['message'] ?? ($result['message'] ?? null),
+            'raw'     => $result['data'] ?? [],
+        ];
+    }
+
+    /**
+     * Actualiza un dispositivo existente en la plataforma GPSWox.
+     *
+     * @param int   $deviceId
+     * @param array $payload  Mismos campos que addDevice()
+     */
+    public function editDevice(int $deviceId, array $payload): array
+    {
+        $result = $this->request('POST', 'edit_device', ['device_id' => $deviceId], $payload);
+
+        return [
+            'status'  => $result['status'] ?? 0,
+            'message' => $result['data']['message'] ?? ($result['message'] ?? null),
+            'raw'     => $result['data'] ?? [],
+        ];
+    }
+
+    /**
+     * Elimina un dispositivo de la plataforma GPSWox.
+     */
+    public function destroyDevice(int $deviceId): array
+    {
+        $result = $this->request('GET', 'destroy_device', ['device_id' => $deviceId]);
+
+        return [
+            'status'  => $result['status'] ?? 0,
+            'message' => $result['data']['message'] ?? ($result['message'] ?? null),
+        ];
+    }
+
+    /**
+     * Cambia el estado activo/inactivo de uno o varios dispositivos.
+     *
+     * @param int|array $id      ID o arreglo de IDs
+     * @param bool      $active
+     */
+    public function changeActiveDevice(int|array $id, bool $active): array
+    {
+        $result = $this->request('POST', 'change_active_device', [], [
+            'id'     => $id,
+            'active' => $active ? 1 : 0,
+        ]);
+
+        return [
+            'status'  => $result['status'] ?? 0,
+            'message' => $result['data']['message'] ?? ($result['message'] ?? null),
+        ];
+    }
+
+    /**
+     * Sincroniza un vehículo local con la plataforma:
+     * - Busca el dispositivo por placa
+     * - Si lo encuentra, guarda gpswox_id (y opcionalmente importa SIM)
+     *
+     * Útil para vehículos preexistentes que aún no tienen gpswox_id.
+     *
+     * @return array ['status' => 1|0, 'message' => string, 'gpswox_id' => ?int]
+     */
+    public function sincronizarVehiculoDesdePlataforma(Vehiculos $vehiculo): array
+    {
+        if (blank($vehiculo->placa)) {
+            return ['status' => 0, 'message' => 'El vehículo no tiene placa', 'gpswox_id' => null];
+        }
+
+        try {
+            $response = $this->getDeviceByPlate($vehiculo->placa);
+
+            if (($response['status'] ?? 0) !== 1) {
+                return [
+                    'status'    => 0,
+                    'message'   => $response['message'] ?? 'Dispositivo no encontrado en la plataforma',
+                    'gpswox_id' => null,
+                ];
+            }
+
+            $device = $response['device'] ?? [];
+            $gpswoxId = isset($device['id']) ? (int) $device['id'] : null;
+
+            if (!$gpswoxId) {
+                return ['status' => 0, 'message' => 'La plataforma no devolvió un id válido', 'gpswox_id' => null];
+            }
+
+            $vehiculo->gpswox_id              = $gpswoxId;
+            $vehiculo->gpswox_sincronizado_at = now();
+
+            // Importar SIM si la plataforma tiene una y localmente no
+            if (blank($vehiculo->numero) && !blank($device['sim_number'] ?? null)) {
+                $vehiculo->numero = $device['sim_number'];
+            }
+
+            $vehiculo->save();
+
+            Log::channel('daily')->info('[GpsWox] Vehículo sincronizado desde plataforma', [
+                'placa'     => $vehiculo->placa,
+                'gpswox_id' => $gpswoxId,
+            ]);
+
+            return [
+                'status'    => 1,
+                'message'   => "Vinculado con dispositivo #{$gpswoxId} de la plataforma",
+                'gpswox_id' => $gpswoxId,
+            ];
+        } catch (\Throwable $e) {
+            Log::channel('daily')->error('[GpsWox] Error al sincronizar vehículo desde plataforma', [
+                'placa' => $vehiculo->placa,
+                'error' => $e->getMessage(),
+            ]);
+            return ['status' => 0, 'message' => $e->getMessage(), 'gpswox_id' => null];
+        }
+    }
 }

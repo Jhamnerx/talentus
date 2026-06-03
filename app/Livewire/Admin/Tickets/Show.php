@@ -437,7 +437,8 @@ class Show extends Component
 
     public function render()
     {
-        $users      = User::whereHas('roles', fn($q) => $q->whereIn('name', ['admin', 'agente']))->orderBy('name')->get();
+        $users = User::whereHas('roles', fn($q) => $q->whereNotIn('name', ['finanzas', 'tecnico']))
+            ->orderBy('name')->get();
         $categories = TicketCategory::active()->orderBy('name')->get();
         $templates  = TicketTemplate::active()->orderBy('name')->get(['id', 'name', 'body']);
 

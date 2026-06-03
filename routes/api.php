@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ContactoApiController;
 use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\WorkOrderTrackingController;
 use App\Http\Controllers\Api\PublicWorkOrderController;
+use App\Http\Controllers\Api\TrackingWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,42 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('public')->name('api.public.')->group(function () {
     Route::get('work-orders/{hash}', [PublicWorkOrderController::class, 'show'])->name('work-orders.show');
     Route::post('work-orders/{hash}/verify', [PublicWorkOrderController::class, 'verify'])->name('work-orders.verify');
+});
+
+/*
+|--------------------------------------------------------------------------
+| TRACKING WEBHOOK — Plataforma GPSWox → Talentus
+|--------------------------------------------------------------------------
+| La plataforma de rastreo notifica a Talentus cuando se guarda/actualiza
+| un dispositivo. Solo se permite desde TRACKING_ALLOWED_IP.
+*/
+
+/*
+|--------------------------------------------------------------------------
+| TRACKING SYSTEM API
+|--------------------------------------------------------------------------
+| Autenticación: IP coincide con TRACKING_ALLOWED_IP  o  header X-API-KEY.
+|
+| Endpoints:
+|   POST  /api/tracking/device-sync              — webhook desde plataforma GPSWox
+|   POST  /api/tracking/device-maintenances/sync — sync desde talentus-pro-tracking
+|   GET   /api/tracking/device-maintenances      — listado (requiere además auth:sanctum)
+*/
+
+Route::middleware('tracking.auth')->prefix('tracking')->name('api.tracking.')->group(function () {
+
+    // Webhook: GPSWox → Talentus (actualiza gpswox_id, SIM, dispositivo principal)
+    Route::post('device-sync', [TrackingWebhookController::class, 'deviceSync'])
+        ->name('device-sync');
+
+    // Sync: talentus-pro-tracking → Talentus (mantenimientos, suspensiones)
+    Route::post('device-maintenances/sync', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'sync'])
+        ->name('device-maintenances.sync');
+
+    // Listado de mantenimientos (uso interno — requiere también sanctum)
+    Route::get('device-maintenances', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'index'])
+        ->name('device-maintenances.index')
+        ->middleware('auth:sanctum');
 });
 
 /*
@@ -345,25 +382,3 @@ Route::prefix('consultas')->name('api.consultas.')->group(function () {
 // Body: { "name": "...", "email": "...", "phone": "...", "company": "...", "message": "...", "g-recaptcha-response": "..." }
 // Respuesta: { "success": true, "message": "Mensaje enviado correctamente" }
 Route::post('/contacto', [ContactoApiController::class, 'store'])->name('api.contacto.store');
-
-/*
-|--------------------------------------------------------------------------
-| TRACKING SYSTEM API — Integración con talentus-pro-tracking
-|--------------------------------------------------------------------------
-| Recibe registros de mantenimiento/suspensión/reactivación desde
-| el sistema de tracking GPS. Autenticación via X-API-KEY header.
-*/
-
-Route::prefix('tracking')->name('api.tracking.')->group(function () {
-    // POST /api/tracking/device-maintenances/sync
-    // Recibe un lote de registros desde talentus-pro-tracking
-    // Header: X-API-KEY: {TRACKING_API_KEY}
-    Route::post('/device-maintenances/sync', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'sync'])
-        ->name('device-maintenances.sync');
-
-    // GET /api/tracking/device-maintenances
-    // Lista paginada (uso interno)
-    Route::get('/device-maintenances', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'index'])
-        ->name('device-maintenances.index')
-        ->middleware('auth:sanctum');
-});

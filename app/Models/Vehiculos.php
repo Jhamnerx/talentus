@@ -35,7 +35,9 @@ class Vehiculos extends Model
     protected $primaryKey = 'id';
 
     protected $casts = [
-        'gpswox_id' => 'integer',
+        'gpswox_id'              => 'integer',
+        'gpswox_active'          => 'boolean',
+        'gpswox_sincronizado_at' => 'datetime',
     ];
 
     //GLOBAL SCOPE EMPRESA
