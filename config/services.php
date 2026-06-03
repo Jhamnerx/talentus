@@ -40,17 +40,13 @@ return [
     ],
 
     'tracking' => [
-        'allowed_ip' => env('TRACKING_ALLOWED_IP', ''),
+        'allowed_ip' => env('TRACKING_ALLOWED_IP', ''),   // IP del servidor talentus-pro-tracking
+        'api_key'    => env('TRACKING_API_KEY', ''),       // API key para autenticación del servidor de tracking
     ],
 
     'm2m' => [
         'base_url' => env('M2M_BASE_URL', 'https://m2mcenter.app/apiclient/v1'),
         'token'    => env('M2M_TOKEN', ''),
-    ],
-
-    'tracking' => [
-        'allowed_ip' => env('TRACKING_ALLOWED_IP', ''),   // IP del servidor talentus-pro-tracking (legacy)
-        'api_key'    => env('TRACKING_API_KEY', ''),       // API key para autenticación del servidor de tracking
     ],
 
 ];

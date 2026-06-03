@@ -4,29 +4,33 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Permite el acceso solo desde la IP configurada en TRACKING_ALLOWED_IP.
- * Usado por los webhooks que la plataforma de rastreo envía a Talentus.
+ * Autentica requests de sistemas externos de tracking (plataforma GPSWox
+ * y talentus-pro-tracking). Acepta la request si cumple AL MENOS una de:
+ *
+ *  1. La IP del cliente coincide con TRACKING_ALLOWED_IP.
+ *  2. El header X-API-KEY coincide con TRACKING_API_KEY.
+ *
+ * Si ninguna de las dos condiciones se cumple, responde 403.
  */
 class AllowedTrackingIp
 {
     public function handle(Request $request, Closure $next): Response
     {
         $allowedIp = config('services.tracking.allowed_ip');
+        $apiKey    = config('services.tracking.api_key');
 
-        if (blank($allowedIp)) {
-            // Sin IP configurada → bloquear por defecto
-            abort(403, 'Tracking webhook: IP no configurada.');
-        }
+        $ipOk  = filled($allowedIp) && $request->ip() === $allowedIp;
+        $keyOk = filled($apiKey)    && $request->header('X-API-KEY') === $apiKey;
 
-        $clientIp = $request->ip();
-
-        if ($clientIp !== $allowedIp) {
-            \Illuminate\Support\Facades\Log::channel('daily')->warning('[TrackingWebhook] IP no permitida', [
-                'client_ip'  => $clientIp,
-                'allowed_ip' => $allowedIp,
+        if (!$ipOk && !$keyOk) {
+            Log::channel('daily')->warning('[Tracking] Acceso denegado', [
+                'ip'         => $request->ip(),
+                'has_apikey' => $request->hasHeader('X-API-KEY'),
+                'path'       => $request->path(),
             ]);
             abort(403, 'Acceso denegado.');
         }

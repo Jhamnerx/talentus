@@ -38,12 +38,6 @@ class DeviceMaintenanceController extends Controller
      */
     public function sync(Request $request): JsonResponse
     {
-        // Validar API key de origen
-        $apiKey = config('services.tracking.api_key');
-        if ($apiKey && $request->header('X-API-KEY') !== $apiKey) {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
-
         $validated = $request->validate([
             'action'               => 'required|in:upsert,delete',
             'empresa_id'           => 'required|integer|exists:empresas,id',
