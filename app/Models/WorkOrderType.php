@@ -39,6 +39,7 @@ class WorkOrderType extends Model
         'muestra_alertas' => 'boolean',
         'requiere_modelo_dispositivo' => 'boolean',
         'requiere_alertas' => 'boolean',
+        'requiere_operador_sim' => 'boolean',
         'costo_base' => 'decimal:2',
     ];
 

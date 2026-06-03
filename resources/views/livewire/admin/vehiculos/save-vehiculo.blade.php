@@ -97,11 +97,7 @@
         <div class="col-span-12 sm:col-span-6">
             <x-form.input wire:model.live="sim_card" name="sim_card" readonly placeholder="3189219220212"
                 label="Sim Card:" />
-            @error('sim_card_id')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
-            @enderror
+            <x-form.errors :only="['sim_card_id']" />
         </div> <!-- Sección para agregar dispositivos -->
         <div class="col-span-12 sm:col-span-12">
             <h4 class="font-semibold text-lg mb-3">Dispositivos GPS</h4>

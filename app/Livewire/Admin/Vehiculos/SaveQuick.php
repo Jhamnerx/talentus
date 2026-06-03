@@ -14,7 +14,7 @@ class SaveQuick extends Component
     public $modalOpen = false;
     public $flotas;
     public $flotas_selected = [];
-    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $clientes_id;
+    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $clientes_id, $descripcion;
     public $errorConsultaPlaca = null;
 
 
@@ -30,6 +30,7 @@ class SaveQuick extends Component
             "motor" => 'nullable',
             "serie" => 'nullable',
             "clientes_id"  => "required",
+            'descripcion' => 'nullable|string|max:500',
         ];
     }
     protected function messages()
@@ -76,15 +77,16 @@ class SaveQuick extends Component
         $this->validate();
 
         $vehiculo = Vehiculos::create([
-            'placa' => $this->placa,
-            'marca' => $this->marca,
-            'modelo' => $this->modelo,
-            'tipo' => $this->tipo,
-            'year' => $this->year,
-            'color' => $this->color,
-            'motor' => $this->motor,
-            'serie' => $this->serie,
+            'placa'       => $this->placa,
+            'marca'       => $this->marca,
+            'modelo'      => $this->modelo,
+            'tipo'        => $this->tipo,
+            'year'        => $this->year,
+            'color'       => $this->color,
+            'motor'       => $this->motor,
+            'serie'       => $this->serie,
             'clientes_id' => $this->clientes_id,
+            'descripcion' => $this->descripcion,
         ]);
 
 

@@ -53,7 +53,7 @@ class CreateModal extends Component
     // Configuración de equipo del tipo
     public ?string $tipoEquipo = null;
     public bool $tipoRequiereModeloDispositivo = false;
-    public ?string $tipoOperadorSim = null;
+    public bool $tipoRequiereOperadorSim = false;
     public bool $tipoRequiereSim = false;
 
     // Campos de equipo/SIM en la orden
@@ -97,7 +97,7 @@ class CreateModal extends Component
             'alertas'             => ($this->tipoRequiereAlertas ? 'required|array|min:1' : 'nullable|array'),
             'alertas.*'           => 'nullable|string|max:100',
             'modelo_dispositivo_id' => ($this->tipoRequiereModeloDispositivo ? 'required|exists:modelos_dispositivos,id' : 'nullable|exists:modelos_dispositivos,id'),
-            'operador_sim_orden'  => 'nullable|string|max:100',
+            'operador_sim_orden'  => ($this->tipoRequiereOperadorSim ? 'required|string|max:100' : 'nullable|string|max:100'),
             'tituloProyecto'      => $this->esProyecto ? 'required|string|max:255' : 'nullable',
             'placasTexto'         => $this->esProyecto ? 'nullable|string' : 'nullable',
         ];
@@ -117,6 +117,7 @@ class CreateModal extends Component
             'alertas.required'     => 'Seleccione al menos una alerta para este tipo de orden',
             'alertas.min'          => 'Seleccione al menos una alerta',
             'modelo_dispositivo_id.required' => 'Seleccione el modelo del dispositivo',
+            'operador_sim_orden.required'    => 'Seleccione el operador SIM para esta orden',
             'tituloProyecto.required' => 'El título del proyecto es obligatorio',
         ];
     }
@@ -159,7 +160,10 @@ class CreateModal extends Component
                 'name' => is_array($p->name) ? ($p->name['es'] ?? ($p->name['en'] ?? 'Sin nombre')) : $p->name,
             ]);
 
-        $sectores = WorkOrderNotificationService::ZONAS;
+        $sectores = collect(WorkOrderNotificationService::ZONAS)
+            ->map(fn($label, $key) => ['value' => $key, 'label' => $label])
+            ->values()
+            ->all();
         $accesoriosDisponibles = WorkOrderNotificationService::ACCESORIOS;
         $alertasDisponibles = $this->tipoEquipo === 'sensor_adas'
             ? WorkOrderNotificationService::ALERTAS_ADAS
@@ -242,9 +246,9 @@ class CreateModal extends Component
         $this->tipoRequiereAlertas = $tipo?->requiere_alertas ?? false;
         $this->tipoEquipo = $tipo?->tipo_equipo;
         $this->tipoRequiereModeloDispositivo = $tipo?->requiere_modelo_dispositivo ?? false;
-        $this->tipoOperadorSim = $tipo?->operador_sim;
+        $this->tipoRequiereOperadorSim = $tipo?->requiere_operador_sim ?? false;
         $this->tipoRequiereSim = $tipo?->requiere_sim ?? false;
-        $this->operador_sim_orden = $tipo?->operador_sim ?? '';
+        $this->operador_sim_orden = '';
         $this->modelo_dispositivo_id = null;
 
         $this->recalcularCosto();
@@ -474,7 +478,7 @@ class CreateModal extends Component
         $this->tipoRequiereAlertas = false;
         $this->tipoEquipo          = null;
         $this->tipoRequiereModeloDispositivo = false;
-        $this->tipoOperadorSim     = null;
+        $this->tipoRequiereOperadorSim = false;
         $this->tipoRequiereSim     = false;
         $this->modelo_dispositivo_id = null;
         $this->operador_sim_orden  = '';

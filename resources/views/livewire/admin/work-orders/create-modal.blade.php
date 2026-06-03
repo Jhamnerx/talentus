@@ -118,21 +118,24 @@
                 </div>
             @endif
 
-            {{-- ── Vehículo ────────────────────────────────────────────────── --}}
-            <div>
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Vehículo <span
-                            class="text-red-500">*</span></span>
-                    <x-form.button flat xs icon="plus" wire:click="addVehiculo('')">
-                        Nuevo vehículo
-                    </x-form.button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {{-- ── Vehículo ─────────────────────────────────────────────── --}}
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Vehículo <span
+                                class="text-red-500">*</span></span>
+                        <x-form.button flat xs icon="plus" wire:click="addVehiculo('')">
+                            Nuevo vehículo
+                        </x-form.button>
+                    </div>
+                    <x-form.select autocomplete="off" wire:model.live="vehiculo_id" placeholder="Buscar por placa"
+                        :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id"
+                        option-description="option_description" />
                 </div>
-                <x-form.select autocomplete="off" wire:model.live="vehiculo_id" placeholder="Buscar por placa"
-                    :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id" option-description="option_description" />
-            </div>
 
-            {{-- ── Cliente (autocompleta) ──────────────────────────────────── --}}
-            <x-form.input label="Cliente *" wire:model="cliente_nombre" disabled />
+                {{-- ── Cliente (autocompleta) ──────────────────────────────── --}}
+                <x-form.input label="Cliente *" wire:model="cliente_nombre" disabled />
+            </div>
         @endif{{-- /esProyecto --}}
 
         {{-- ── Sector de operación ─────────────────────────────────────────── --}}
@@ -140,11 +143,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 @if ($tipoMuestraSector)
                     <x-form.select multiselect label="Sector" wire:model.live="sector"
-                        placeholder="Seleccionar sectores">
-                        @foreach ($sectores as $key => $label)
-                            <x-select.option value="{{ $key }}">{{ $label }}</x-select.option>
-                        @endforeach
-                    </x-form.select>
+                        placeholder="Seleccionar sectores" :options="$sectores" option-label="label"
+                        option-value="value" />
                 @endif
 
                 @if ($tipoMuestraSector && in_array('OTROS', $sector))
@@ -162,21 +162,18 @@
             @endif
         @endif
 
-        {{-- ── Operador SIM / Modelo de dispositivo ───────────────────────── --}}
-        @if ($tipoRequiereSim || $tipoRequiereModeloDispositivo)
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                @if ($tipoRequiereSim)
-                    <x-form.select label="Operador SIM" wire:model="operador_sim_orden"
-                        placeholder="Seleccionar operador" :options="$operadores" option-label="name" option-value="name"
-                        :clearable="true" />
-                @endif
-                @if ($tipoRequiereModeloDispositivo)
-                    <x-form.select label="Modelo del dispositivo *" wire:model="modelo_dispositivo_id"
-                        placeholder="Seleccionar modelo" :options="$modelosDispositivo" option-label="name" option-value="id"
-                        :clearable="true"
-                        hint="{{ $tipoEquipo === 'sensor_adas' ? 'Sensor ADAS' : ($tipoEquipo === 'velocimetro' ? 'Velocímetro' : 'Dispositivo GPS') }}" />
-                @endif
-            </div>
+        {{-- ── Operador SIM (independiente) ──────────────────────────────────── --}}
+        @if ($tipoRequiereOperadorSim)
+            <x-form.select label="Operador SIM *" wire:model="operador_sim_orden" placeholder="Seleccionar operador"
+                :options="$operadores" option-label="name" option-value="name" :clearable="true" />
+        @endif
+
+        {{-- ── Modelo de dispositivo (independiente) ──────────────────────────── --}}
+        @if ($tipoRequiereModeloDispositivo)
+            <x-form.select label="Modelo del dispositivo *" wire:model="modelo_dispositivo_id"
+                placeholder="Seleccionar modelo" :options="$modelosDispositivo" option-label="name" option-value="id"
+                :clearable="true"
+                hint="{{ $tipoEquipo === 'sensor_adas' ? 'Sensor ADAS' : ($tipoEquipo === 'velocimetro' ? 'Velocímetro' : 'Dispositivo GPS') }}" />
         @endif
 
 
@@ -185,21 +182,25 @@
             <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Asignación de
                 Técnico</p>
 
-            <x-form.select label="Filtrar por ciudad" wire:model.live="ciudad_filter"
-                placeholder="Todas las ciudades" option-label="nombre" option-value="id" :options="$ciudades"
-                :clearable="false" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <x-form.select label="Filtrar por ciudad" wire:model.live="ciudad_filter"
+                    placeholder="Todas las ciudades" option-label="nombre" option-value="id" :options="$ciudades"
+                    :clearable="false" />
 
-            <x-form.select label="Técnico Asignado *" wire:model.live="tecnico_id" placeholder="Seleccionar técnico"
-                :options="$tecnicos" option-label="name" option-value="id" />
+                <x-form.select label="Técnico Asignado *" wire:model.live="tecnico_id"
+                    placeholder="Seleccionar técnico" :options="$tecnicos" option-label="name" option-value="id" />
+            </div>
         </div>
 
-        {{-- ── Fecha Programada ────────────────────────────────────────────── --}}
-        <x-form.datetime.picker label="Fecha Programada *" wire:model.live="fecha_programada"
-            parse-format="YYYY-MM-DD HH:mm" display-format="DD-MM-YYYY HH:mm" :clearable="false" :interval="30" />
+        {{-- ── Fecha Programada + Dirección ──────────────────────────────── --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <x-form.datetime.picker label="Fecha Programada *" wire:model.live="fecha_programada"
+                parse-format="YYYY-MM-DD HH:mm" display-format="DD-MM-YYYY HH:mm" :clearable="false"
+                :interval="30" />
 
-        {{-- ── Dirección del servicio (texto libre) ───────────────────────── --}}
-        <x-form.input label="Dirección del servicio" wire:model="direccion"
-            placeholder="Ej: Av. Los Álamos 456, Surco" />
+            <x-form.input label="Dirección del servicio" wire:model="direccion"
+                placeholder="Ej: Av. Los Álamos 456, Surco" />
+        </div>
 
         {{-- ── Vincular Mantenimiento Programado ──────────────────────────── --}}
         @if ($tipoRequiereMantenimiento)

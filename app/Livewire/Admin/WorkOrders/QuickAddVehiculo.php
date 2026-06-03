@@ -20,7 +20,12 @@ class QuickAddVehiculo extends Component
     public ?int    $clientes_id = null;
     public string  $marca       = '';
     public string  $modelo      = '';
+    public string  $tipo        = '';
+    public string  $year        = '';
     public string  $color       = '';
+    public string  $motor       = '';
+    public string  $serie       = '';
+    public string  $descripcion = '';
 
     public ?string $errorConsultaPlaca = null;
 
@@ -31,7 +36,12 @@ class QuickAddVehiculo extends Component
             'clientes_id' => ['required', 'exists:clientes,id'],
             'marca'       => ['nullable', 'string', 'max:100'],
             'modelo'      => ['nullable', 'string', 'max:100'],
+            'tipo'        => ['nullable', 'string', 'max:100'],
+            'year'        => ['nullable', 'string', 'max:4'],
             'color'       => ['nullable', 'string', 'max:50'],
+            'motor'       => ['nullable', 'string', 'max:100'],
+            'serie'       => ['nullable', 'string', 'max:100'],
+            'descripcion' => ['nullable', 'string', 'max:500'],
         ];
     }
 
@@ -54,7 +64,7 @@ class QuickAddVehiculo extends Component
     #[On('open-vehiculo-rapido')]
     public function openModal(string $placa = ''): void
     {
-        $this->reset(['placa', 'clientes_id', 'marca', 'modelo', 'color', 'errorConsultaPlaca']);
+        $this->reset(['placa', 'clientes_id', 'marca', 'modelo', 'tipo', 'year', 'color', 'motor', 'serie', 'descripcion', 'errorConsultaPlaca']);
         $this->resetValidation();
 
         // Pre-rellenar con la placa buscada (sin espacios ni guiones)
@@ -65,7 +75,7 @@ class QuickAddVehiculo extends Component
 
     public function closeModal(): void
     {
-        $this->reset(['placa', 'clientes_id', 'marca', 'modelo', 'color', 'errorConsultaPlaca']);
+        $this->reset(['placa', 'clientes_id', 'marca', 'modelo', 'tipo', 'year', 'color', 'motor', 'serie', 'descripcion', 'errorConsultaPlaca']);
         $this->resetValidation();
         $this->modalOpen = false;
     }
@@ -97,6 +107,8 @@ class QuickAddVehiculo extends Component
                 $this->marca  = $resultado['marca']  ?? $this->marca;
                 $this->modelo = $resultado['modelo'] ?? $this->modelo;
                 $this->color  = $resultado['color']  ?? $this->color;
+                $this->motor  = $resultado['motor']  ?? $this->motor;
+                $this->serie  = $resultado['serie']  ?? $this->serie;
 
                 $this->notification()->success(
                     title: 'Datos encontrados',
@@ -117,9 +129,14 @@ class QuickAddVehiculo extends Component
         $vehiculo = Vehiculos::create([
             'placa'       => $this->placa,
             'clientes_id' => $this->clientes_id,
-            'marca'       => $this->marca  ?: null,
-            'modelo'      => $this->modelo ?: null,
-            'color'       => $this->color  ?: null,
+            'marca'       => $this->marca       ?: null,
+            'modelo'      => $this->modelo      ?: null,
+            'tipo'        => $this->tipo        ?: null,
+            'year'        => $this->year        ?: null,
+            'color'       => $this->color       ?: null,
+            'motor'       => $this->motor       ?: null,
+            'serie'       => $this->serie       ?: null,
+            'descripcion' => $this->descripcion ?: null,
         ]);
 
         // Notificar al CreateModal para que seleccione automáticamente el vehículo

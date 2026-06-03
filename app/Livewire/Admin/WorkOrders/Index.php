@@ -240,8 +240,9 @@ class Index extends Component
 
     public function toggleActivoTipo(WorkOrderType $tipo)
     {
-        $tipo->update(['is_active' => !$tipo->is_active]);
-        $this->notification()->success('ACTUALIZADO', "Tipo '{$tipo->nombre}' " . ($tipo->is_active ? 'activado' : 'desactivado'));
+        $nuevoEstado = !$tipo->active;
+        $tipo->update(['active' => $nuevoEstado]);
+        $this->notification()->success('ACTUALIZADO', "Tipo '{$tipo->nombre}' " . ($nuevoEstado ? 'activado' : 'desactivado'));
     }
 
     public function eliminarTipo(WorkOrderType $tipo)

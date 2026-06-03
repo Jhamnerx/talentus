@@ -23,16 +23,20 @@
                 placeholder="Buscar cliente por razón social o RUC" :async-data="route('api.clientes.index')" option-label="razon_social"
                 option-value="id" option-description="numero_documento" />
 
-            {{-- Marca / Modelo / Color --}}
-            <div class="grid grid-cols-3 gap-3">
+            {{-- Marca / Modelo / Tipo / Año / Color / Motor / Serie --}}
+            <div class="grid grid-cols-2 gap-3">
                 <x-form.input wire:model="marca" label="Marca" placeholder="TOYOTA" />
                 <x-form.input wire:model="modelo" label="Modelo" placeholder="HILUX" />
+                <x-form.input wire:model="tipo" label="Tipo" placeholder="PICK UP" />
+                <x-form.input wire:model="year" label="Año" placeholder="2024" />
                 <x-form.input wire:model="color" label="Color" placeholder="BLANCO" />
+                <x-form.input wire:model="motor" label="Motor" placeholder="1GDG066086" />
             </div>
+            <x-form.input wire:model="serie" label="Serie" placeholder="8AJHA8CD9K2629775" />
 
-            <p class="text-xs text-gray-400 dark:text-gray-500">
-                Solo se requiere la placa y el cliente. Los demás datos pueden completarse después.
-            </p>
+            {{-- Descripción --}}
+            <x-form.textarea wire:model="descripcion" label="Descripción" rows="2"
+                placeholder="Observaciones adicionales del vehículo..." />
 
         </div>
 

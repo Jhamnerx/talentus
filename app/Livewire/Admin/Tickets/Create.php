@@ -51,7 +51,7 @@ class Create extends Component
     public function render()
     {
         $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
-        $users = User::whereHas('roles', fn($q) => $q->whereIn('name', ['admin', 'agente']))
+        $users = User::whereHas('roles', fn($q) => $q->whereNotIn('name', ['finanzas', 'tecnico']))
             ->orderBy('name')->get();
 
         return view('livewire.admin.tickets.create', compact('categories', 'users'));

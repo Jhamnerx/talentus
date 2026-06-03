@@ -77,6 +77,11 @@
             </div>
         @endif
 
+        <div class="col-span-12">
+            <x-form.textarea wire:model="descripcion" label="Descripción:" rows="3"
+                placeholder="Observaciones adicionales del vehículo..." />
+        </div>
+
     </div>
 
     <x-slot name="footer">
