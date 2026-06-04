@@ -17,6 +17,7 @@ use App\Enums\WorkOrderStatus;
 use App\Models\Mantenimiento;
 use App\Models\ModelosDispositivo;
 use App\Models\Operador;
+use App\Models\Sector;
 use App\Services\WorkOrderNotificationService;
 use Illuminate\Support\Facades\Auth;
 use WireUi\Traits\WireUiActions;
@@ -160,7 +161,10 @@ class CreateModal extends Component
                 'name' => is_array($p->name) ? ($p->name['es'] ?? ($p->name['en'] ?? 'Sin nombre')) : $p->name,
             ]);
 
-        $sectores = collect(WorkOrderNotificationService::ZONAS)
+        $sectoresDb = Sector::activos()->get(['id', 'nombre']);
+        $sectores = $sectoresDb->isNotEmpty()
+            ? $sectoresDb->map(fn($s) => ['value' => $s->nombre, 'label' => $s->nombre])->all()
+            : collect(WorkOrderNotificationService::ZONAS)
             ->map(fn($label, $key) => ['value' => $key, 'label' => $label])
             ->values()
             ->all();

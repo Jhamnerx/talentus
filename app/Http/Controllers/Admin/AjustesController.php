@@ -23,6 +23,16 @@ class AjustesController extends Controller
         return view('admin.ajustes.ciudades');
     }
 
+    public function sectores()
+    {
+        return view('admin.ajustes.sectores');
+    }
+
+    public function rubros()
+    {
+        return view('admin.ajustes.rubros');
+    }
+
     public function operadores()
     {
         return view('admin.ajustes.operadores');

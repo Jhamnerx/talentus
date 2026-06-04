@@ -4,6 +4,8 @@ namespace App\Livewire\Admin\Vehiculos;
 
 use Carbon\Carbon;
 use Livewire\Component;
+use App\Models\Plan;
+use App\Models\Sector;
 use App\Models\Vehiculos;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
@@ -14,10 +16,12 @@ class VehiculosIndex extends Component
 {
     use WithPagination;
     public $search;
-    public $from = '';
-    public $to = '';
-    public $clientes_id = null;
-    public $marca_filter = null;
+    public $from          = '';
+    public $to            = '';
+    public $clientes_id   = null;
+    public $marca_filter  = null;
+    public ?int $plan_filter   = null;
+    public ?int $sector_filter = null;
 
     protected $listeners = [
         'update-table' => 'render',
@@ -36,12 +40,20 @@ class VehiculosIndex extends Component
         $hasta = $this->to;
 
         $vehiculos = Vehiculos::query()
-            ->with(['planSubscriptions', 'cobro'])
+            ->with(['planSubscriptions', 'cobro', 'sectores'])
             ->when($this->clientes_id, function ($query) {
                 $query->where('clientes_id', $this->clientes_id);
             })
             ->when($this->marca_filter, function ($query) {
                 $query->where('marca', $this->marca_filter);
+            })
+            ->when($this->sector_filter, function ($query) {
+                $query->whereHas('sectores', fn($q) => $q->where('sectores.id', $this->sector_filter));
+            })
+            ->when($this->plan_filter, function ($query) {
+                $query->whereHas('planSubscriptions', fn($q) =>
+                    $q->where('plan_id', $this->plan_filter)->whereNull('canceled_at')
+                );
             })
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
@@ -88,7 +100,17 @@ class VehiculosIndex extends Component
             ->orderBy('marca')
             ->pluck('marca');
 
-        return view('livewire.admin.vehiculos.vehiculos-index', compact('vehiculos', 'total', 'marcas'));
+        $planes = Plan::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn($p) => [
+                'id'   => $p->id,
+                'name' => is_array($p->name) ? ($p->name['es'] ?? ($p->name['en'] ?? 'Sin nombre')) : $p->name,
+            ]);
+
+        $sectores = Sector::activos()->get(['id', 'nombre']);
+
+        return view('livewire.admin.vehiculos.vehiculos-index', compact('vehiculos', 'total', 'marcas', 'planes', 'sectores'));
     }
 
     public function updatingSearch()
@@ -98,11 +120,13 @@ class VehiculosIndex extends Component
 
     public function clearFilters()
     {
-        $this->clientes_id = null;
-        $this->marca_filter = null;
-        $this->search = '';
-        $this->from = '';
-        $this->to = '';
+        $this->clientes_id   = null;
+        $this->marca_filter  = null;
+        $this->plan_filter   = null;
+        $this->sector_filter = null;
+        $this->search        = '';
+        $this->from          = '';
+        $this->to            = '';
         $this->resetPage();
     }
 

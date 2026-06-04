@@ -62,12 +62,32 @@
                     </x-form.select>
                 </div>
 
+                <!-- Sector Filter -->
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <x-form.select label="Sector" wire:model.live="sector_filter" placeholder="Todos los sectores">
+                        <x-select.option label="Todos los sectores" value="" />
+                        @foreach ($sectores as $sector)
+                            <x-select.option :label="$sector->nombre" :value="$sector->id" />
+                        @endforeach
+                    </x-form.select>
+                </div>
+
+                <!-- Plan Filter -->
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <x-form.select label="Plan activo" wire:model.live="plan_filter" placeholder="Todos los planes">
+                        <x-select.option label="Todos los planes" value="" />
+                        @foreach ($planes as $plan)
+                            <x-select.option :label="$plan['name']" :value="$plan['id']" />
+                        @endforeach
+                    </x-form.select>
+                </div>
+
             </div>
 
             <!-- Filter Actions -->
             <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/60">
                 <div class="flex items-center gap-2">
-                    @if ($clientes_id || $marca_filter || $search)
+                    @if ($clientes_id || $marca_filter || $plan_filter || $sector_filter || $search)
                         <x-form.button wire:click="clearFilters" flat negative sm icon="x-mark">
                             Limpiar Filtros
                         </x-form.button>
@@ -232,8 +252,17 @@
                         <!-- Row -->
                         @foreach ($vehiculos as $vehiculo)
                             <tr wire:key='vehi-{{ $vehiculo->id }}'>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3">
                                     <div class="font-medium text-sky-600">{{ $vehiculo->placa }}</div>
+                                    @if ($vehiculo->sectores->isNotEmpty())
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            @foreach ($vehiculo->sectores as $sector)
+                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 leading-tight">
+                                                    {{ $sector->nombre }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-medium text-gray-800 dark:text-gray-100">{{ $vehiculo->marca }}

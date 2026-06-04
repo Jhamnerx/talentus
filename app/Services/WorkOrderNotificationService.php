@@ -48,6 +48,7 @@ class WorkOrderNotificationService
         'pdi_duracion_inactiva'      => 'PDI - Duración inactiva',
         'desenchufado'               => 'Desenchufado',
         'estado_tarea'               => 'Estado de la tarea',
+        'boton_panico' => 'Boton de panico',
     ];
 
     /** Alertas disponibles para sensores ADAS */
@@ -76,6 +77,7 @@ class WorkOrderNotificationService
         'rpm'               => 'RPM',
         'acelerometro'      => 'Acelerómetro',
         'camara'            => 'Cámara',
+        'boton_panico' => 'Boton de panicó'
     ];
 
     /**

@@ -6,6 +6,8 @@ use App\Enums\WorkOrderStatus;
 use App\Scopes\EmpresaScope;
 use App\Observers\WorkOrderObserver;
 use App\Models\Presupuestos;
+use App\Models\Sector;
+use App\Models\Vehiculos;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -208,6 +210,22 @@ class WorkOrder extends Model
         // Marcar el mantenimiento vinculado como completado
         if ($this->mantenimiento_id) {
             $this->mantenimiento()->update(['estado' => 'COMPLETADA']);
+        }
+
+        // Vincular los sectores de la orden al vehículo (sin quitar los que ya tenía)
+        if ($this->vehiculo_id && $this->sector) {
+            $vehiculo = Vehiculos::withoutGlobalScopes()->find($this->vehiculo_id);
+            if ($vehiculo) {
+                $nombresOrden = array_map('trim', explode(',', $this->sector));
+                $sectoresIds = Sector::withoutGlobalScopes()
+                    ->where('empresa_id', $this->empresa_id)
+                    ->whereIn('nombre', $nombresOrden)
+                    ->pluck('id')
+                    ->toArray();
+                if ($sectoresIds) {
+                    $vehiculo->sectores()->syncWithoutDetaching($sectoresIds);
+                }
+            }
         }
     }
 
