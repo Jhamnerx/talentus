@@ -6,6 +6,7 @@ use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
 use App\Exports\TicketsExport;
 use App\Models\Ticket;
+use App\Models\TicketCategory;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -18,17 +19,19 @@ class Index extends Component
 {
     use WithPagination, WireUiActions;
 
-    public $search = '';
-    public $statusFilter = '';
-    public $priorityFilter = '';
-    public $assignedFilter = '';
-    public $from = '';
-    public $to = '';
+    public string  $search          = '';
+    public ?string $statusFilter    = null;
+    public ?string $priorityFilter  = null;
+    public ?string $assignedFilter  = null;
+    public ?string $categoryFilter  = null;
+    public ?string $from            = null;
+    public ?string $to              = null;
+    public int     $perPage         = 15;
 
     // Acciones masivas
-    public array $selectedTickets = [];
-    public bool $selectAll = false;
-    public string $bulkStatus = '';
+    public array  $selectedTickets = [];
+    public bool   $selectAll       = false;
+    public string $bulkStatus      = '';
 
     public function mount(): void
     {
@@ -62,6 +65,7 @@ class Index extends Component
             })
             ->when($this->statusFilter, fn($q) => $q->where('status', $this->statusFilter))
             ->when($this->priorityFilter, fn($q) => $q->where('priority', $this->priorityFilter))
+            ->when($this->categoryFilter, fn($q) => $q->where('category_id', $this->categoryFilter))
             ->when($this->assignedFilter === 'mine', fn($q) => $q->where('assigned_to', Auth::id()))
             ->when($this->assignedFilter && $this->assignedFilter !== 'mine', fn($q) => $q->where('assigned_to', $this->assignedFilter))
             ->when($this->from && $this->to, fn($q) => $q->whereBetween('created_at', [
@@ -70,27 +74,36 @@ class Index extends Component
             ]))
             ->latest('last_activity_at');
 
-        $tickets = $query->paginate(10);
+        $tickets = $query->paginate($this->perPage);
 
         $agents = User::whereHas('roles', fn($q) => $q->whereIn('name', ['admin', 'agente']))
             ->orderBy('name')->get(['id', 'name']);
+
+        $categories = TicketCategory::active()->orderBy('name')->get(['id', 'name']);
 
         return view('livewire.admin.tickets.index', [
             'tickets'    => $tickets,
             'statuses'   => TicketStatus::options(),
             'priorities' => TicketPriority::options(),
             'agents'     => $agents,
+            'categories' => $categories,
         ]);
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
     }
 
     public function limpiarFiltros(): void
     {
         $this->search          = '';
-        $this->statusFilter    = '';
-        $this->priorityFilter  = '';
-        $this->assignedFilter  = '';
-        $this->from            = '';
-        $this->to              = '';
+        $this->statusFilter    = null;
+        $this->priorityFilter  = null;
+        $this->assignedFilter  = null;
+        $this->categoryFilter  = null;
+        $this->from            = null;
+        $this->to              = null;
         $this->resetPage();
     }
 
@@ -185,6 +198,7 @@ class Index extends Component
             })
             ->when($this->statusFilter, fn($q) => $q->where('status', $this->statusFilter))
             ->when($this->priorityFilter, fn($q) => $q->where('priority', $this->priorityFilter))
+            ->when($this->categoryFilter, fn($q) => $q->where('category_id', $this->categoryFilter))
             ->when($this->assignedFilter === 'mine', fn($q) => $q->where('assigned_to', Auth::id()))
             ->when($this->assignedFilter && $this->assignedFilter !== 'mine', fn($q) => $q->where('assigned_to', $this->assignedFilter))
             ->latest('last_activity_at')
