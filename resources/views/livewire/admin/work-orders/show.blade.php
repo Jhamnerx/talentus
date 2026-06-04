@@ -11,141 +11,446 @@
     </div>
 
     {{-- Header con Información Principal --}}
-    <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                        Orden: {{ str_pad($workOrder->id, 5, '0', STR_PAD_LEFT) }}
-                    </h1>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        Creada: {{ $workOrder->created_at->format('d/m/Y H:i') }}
-                    </p>
-                </div>
+    @php
+        $cliente = $workOrder->cliente ?? $workOrder->vehiculo?->cliente;
+        $vehiculo = $workOrder->vehiculo;
+    @endphp
 
+    <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+
+        {{-- ── Barra superior: código + estado + fechas ── --}}
+        <div class="bg-linear-to-r from-slate-800 to-slate-700 dark:from-slate-900 dark:to-slate-800 px-6 py-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <span class="px-4 py-2 rounded-full text-sm font-semibold {{ $workOrder->estado->statusColor() }}">
-                        {{ $workOrder->estado->label() }}
-                    </span>
-
-                    @if ($workOrder->bloqueado)
-                        <span
-                            class="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                            🔒 Bloqueado
-                        </span>
-                    @endif
+                    <div class="shrink-0 w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 class="text-lg font-bold text-white tracking-tight">
+                                {{ $workOrder->codigo ?? ('OT-' . str_pad($workOrder->id, 5, '0', STR_PAD_LEFT)) }}
+                            </h1>
+                            @if ($workOrder->es_proyecto)
+                                <span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
+                                    PROYECTO
+                                </span>
+                            @endif
+                            @if ($workOrder->bloqueado)
+                                <span class="px-2 py-0.5 rounded text-xs font-semibold bg-gray-500/30 text-gray-200 border border-gray-400/30">
+                                    🔒 BLOQUEADO
+                                </span>
+                            @endif
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Creada {{ $workOrder->created_at->format('d/m/Y H:i') }}
+                            · por {{ $workOrder->creador->name ?? 'Sistema' }}
+                        </p>
+                    </div>
                 </div>
+
+                <span class="self-start sm:self-auto px-4 py-1.5 rounded-full text-sm font-bold {{ $workOrder->estado->statusColor() }}">
+                    {{ $workOrder->estado->label() }}
+                </span>
             </div>
         </div>
 
-        {{-- Información del Servicio --}}
-        <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div>
-                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Tipo de
-                    Orden</h3>
-                <p class="text-sm text-gray-900 dark:text-white font-medium">
-                    {{ $workOrder->tipo->nombre ?? 'N/A' }}
-                </p>
-            </div>
+        {{-- ── Cuerpo: cuadrícula de datos ── --}}
+        @php
+            $meta            = $workOrder->metadata ?? [];
+            $metaAccesorios  = $meta['accesorios'] ?? [];
+            $metaAlertas     = $meta['alertas'] ?? [];
+            $operadorSim     = $meta['operador_sim'] ?? null;
+            $modeloDispId    = $meta['modelo_dispositivo_id'] ?? null;
+            $modeloDisp      = $modeloDispId ? \App\Models\ModelosDispositivo::find((int) $modeloDispId) : null;
+            $equipoTexto     = $modeloDisp
+                ? trim(strtoupper(($modeloDisp->marca ?? '') . ' ' . ($modeloDisp->modelo ?? '')))
+                : null;
+            $accesorioLabels = array_values(array_filter(
+                array_map(fn($k) => \App\Services\WorkOrderNotificationService::ACCESORIOS[$k] ?? null, $metaAccesorios)
+            ));
+            $alertaLabels = array_values(array_filter(
+                array_map(fn($k) => \App\Services\WorkOrderNotificationService::ALERTAS[$k] ?? null, $metaAlertas)
+            ));
+        @endphp
+        <div class="divide-y divide-gray-100 dark:divide-gray-700/60">
 
-            @if (!$workOrder->es_proyecto)
-                <div>
-                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                        Vehículo</h3>
-                    <p class="text-sm text-gray-900 dark:text-white font-medium">
-                        {{ $workOrder->vehiculo->placa ?? 'N/A' }}
-                    </p>
-                    @if ($workOrder->vehiculo)
-                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                            {{ $workOrder->vehiculo->marca ?? '' }} {{ $workOrder->vehiculo->modelo ?? '' }}
+            {{-- Fila 1: Tipo + Cliente + Vehículo --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/60">
+
+                {{-- Tipo de Orden --}}
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Tipo de Orden</p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">
+                            {{ $workOrder->tipo->nombre ?? '—' }}
                         </p>
-                    @endif
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                        Cliente
-                    </h3>
-                    <p class="text-sm text-gray-900 dark:text-white font-medium">
-                        {{ $workOrder->cliente->razon_social ?? ($workOrder->vehiculo->cliente->razon_social ?? 'N/A') }}
-                    </p>
-                </div>
-            @endif
-
-            <div>
-                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Técnico
-                    Asignado</h3>
-                <p class="text-sm text-gray-900 dark:text-white font-medium">
-                    {{ $workOrder->tecnico->name ?? 'Sin asignar' }}
-                </p>
-            </div>
-
-            <div>
-                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Fecha
-                    Programada</h3>
-                <p class="text-sm text-gray-900 dark:text-white font-medium">
-                    {{ $workOrder->fecha_programada ? $workOrder->fecha_programada->format('d/m/Y H:i') : 'No programada' }}
-                </p>
-            </div>
-
-            @if ($workOrder->imei || $workOrder->iccid)
-                <div>
-                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                        Dispositivo</h3>
-                    <div class="text-sm text-gray-900 dark:text-white">
-                        @if ($workOrder->imei)
-                            <p class="font-mono">IMEI: {{ $workOrder->imei }}</p>
-                        @endif
-                        @if ($workOrder->iccid)
-                            <p class="font-mono mt-1">ICCID: {{ $workOrder->iccid }}</p>
+                        @if ($workOrder->es_proyecto && $workOrder->titulo_proyecto)
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{{ $workOrder->titulo_proyecto }}</p>
                         @endif
                     </div>
                 </div>
-            @endif
-        </div>
 
-        @if ($workOrder->observaciones)
-            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                    Observaciones</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {{ $workOrder->observaciones }}
-                </p>
+                {{-- Cliente --}}
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Cliente</p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 truncate">
+                            {{ $cliente->razon_social ?? '—' }}
+                        </p>
+                        @if ($cliente?->ruc)
+                            <p class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-0.5">RUC: {{ $cliente->ruc }}</p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Vehículo --}}
+                @if (!$workOrder->es_proyecto)
+                    <div class="px-5 py-4 flex items-start gap-3">
+                        <div class="shrink-0 mt-0.5 w-8 h-8 bg-amber-50 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Vehículo</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white font-mono mt-0.5">
+                                {{ $vehiculo->placa ?? '—' }}
+                            </p>
+                            @if ($vehiculo)
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                    {{ implode(' · ', array_filter([$vehiculo->marca, $vehiculo->modelo, $vehiculo->anio])) ?: '—' }}
+                                </p>
+                                @if ($vehiculo->color)
+                                    <p class="text-xs text-gray-400 dark:text-gray-500">Color: {{ $vehiculo->color }}</p>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                @endif
             </div>
-        @endif
 
-        {{-- Ubicación del servicio --}}
-        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                📍 Ubicación del servicio
-            </h3>
-            @if ($workOrder->ubicacion_lat)
-                <div class="flex items-start gap-2">
-                    <svg class="mt-0.5 h-4 w-4 shrink-0 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+            {{-- Fila 2: Técnico + Fechas + Dispositivo --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/60">
+
+                {{-- Técnico --}}
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-violet-50 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Técnico Asignado</p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">
+                            {{ $workOrder->tecnico->name ?? 'Sin asignar' }}
+                        </p>
+                        @if ($workOrder->tecnico?->phone)
+                            <p class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-0.5">{{ $workOrder->tecnico->phone }}</p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Fechas --}}
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-sky-50 dark:bg-sky-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Fechas</p>
+                        <div class="mt-1 space-y-0.5">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-xs text-gray-400 dark:text-gray-500 w-20 shrink-0">Programada</span>
+                                <span class="text-xs font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $workOrder->fecha_programada?->format('d/m/Y H:i') ?? '—' }}
+                                </span>
+                            </div>
+                            @if ($workOrder->fecha_inicio)
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 w-20 shrink-0">Inicio</span>
+                                    <span class="text-xs font-medium text-green-600 dark:text-green-400">
+                                        {{ $workOrder->fecha_inicio->format('d/m/Y H:i') }}
+                                    </span>
+                                </div>
+                            @endif
+                            @if ($workOrder->fecha_finalizacion)
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 w-20 shrink-0">Finalización</span>
+                                    <span class="text-xs font-medium text-blue-600 dark:text-blue-400">
+                                        {{ $workOrder->fecha_finalizacion->format('d/m/Y H:i') }}
+                                    </span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Dispositivo GPS --}}
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-rose-50 dark:bg-rose-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Equipo GPS</p>
+                        <div class="mt-1 space-y-0.5">
+                            @if ($equipoTexto)
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 w-16 shrink-0">Modelo</span>
+                                    <span class="text-xs font-semibold text-gray-800 dark:text-gray-200">{{ $equipoTexto }}</span>
+                                </div>
+                            @endif
+                            @if ($operadorSim)
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 w-16 shrink-0">Operador</span>
+                                    <span class="text-xs font-semibold text-gray-800 dark:text-gray-200">{{ strtoupper($operadorSim) }}</span>
+                                </div>
+                            @endif
+                            @if ($workOrder->imei)
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 w-16 shrink-0">IMEI</span>
+                                    <span class="text-xs font-mono font-semibold text-gray-800 dark:text-gray-200 truncate">{{ $workOrder->imei }}</span>
+                                </div>
+                            @endif
+                            @if ($workOrder->iccid)
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 w-16 shrink-0">ICCID</span>
+                                    <span class="text-xs font-mono font-semibold text-gray-800 dark:text-gray-200 truncate">{{ $workOrder->iccid }}</span>
+                                </div>
+                            @endif
+                            @if (!$equipoTexto && !$operadorSim && !$workOrder->imei && !$workOrder->iccid)
+                                <p class="text-xs text-gray-400 dark:text-gray-500 italic">Sin dispositivo registrado</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Fila 3: Sector + Plan + Contacto --}}
+            @if ($workOrder->sector || $workOrder->plan || $workOrder->contacto)
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/60">
+
+                    {{-- Sector --}}
+                    <div class="px-5 py-4 flex items-start gap-3">
+                        <div class="shrink-0 mt-0.5 w-8 h-8 bg-orange-50 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Sector</p>
+                            @if ($workOrder->sector)
+                                <div class="mt-1 flex flex-wrap gap-1">
+                                    @foreach (explode(', ', $workOrder->sector) as $s)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
+                                            {{ $s }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 italic">No especificado</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Plan --}}
+                    <div class="px-5 py-4 flex items-start gap-3">
+                        <div class="shrink-0 mt-0.5 w-8 h-8 bg-cyan-50 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Plan</p>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">
+                                {{ $workOrder->plan ?? '—' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Contacto --}}
+                    <div class="px-5 py-4 flex items-start gap-3">
+                        <div class="shrink-0 mt-0.5 w-8 h-8 bg-pink-50 dark:bg-pink-900/30 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Contacto</p>
+                            @if ($workOrder->contacto)
+                                @foreach (explode(' — ', $workOrder->contacto) as $linea)
+                                    <p class="text-sm {{ $loop->first ? 'font-semibold text-gray-900 dark:text-white' : 'text-xs text-gray-500 dark:text-gray-400' }} mt-0.5">
+                                        {{ $linea }}
+                                    </p>
+                                @endforeach
+                            @else
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 italic">Sin contacto registrado</p>
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+            @endif
+
+            {{-- Fila 4: Ubicación --}}
+            <div class="px-5 py-4 flex items-start gap-3">
+                <div class="shrink-0 mt-0.5 w-8 h-8 bg-teal-50 dark:bg-teal-900/30 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd"
                             d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-2.007 3.96-5.07 3.96-8.827a8.25 8.25 0 00-16.5 0c0 3.756 2.017 6.82 3.96 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
                             clip-rule="evenodd" />
                     </svg>
-                    <div>
-                        @if ($workOrder->ubicacion_direccion)
-                            <p class="text-sm text-gray-700 dark:text-gray-300">{{ $workOrder->ubicacion_direccion }}
-                            </p>
-                        @endif
-                        <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-0.5">
-                            {{ number_format($workOrder->ubicacion_lat, 6) }},
-                            {{ number_format($workOrder->ubicacion_lng, 6) }}
-                        </p>
-                        <a href="https://www.google.com/maps?q={{ $workOrder->ubicacion_lat }},{{ $workOrder->ubicacion_lng }}"
-                            target="_blank" rel="noopener noreferrer"
-                            class="text-xs text-blue-500 hover:underline mt-0.5 inline-block">
-                            Ver en Google Maps →
-                        </a>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Ubicación del Servicio</p>
+                    @if ($workOrder->ubicacion_lat)
+                        <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                            @if ($workOrder->ubicacion_direccion)
+                                <p class="text-sm text-gray-800 dark:text-gray-200">{{ $workOrder->ubicacion_direccion }}</p>
+                            @endif
+                            <span class="text-xs font-mono text-gray-400 dark:text-gray-500">
+                                {{ number_format($workOrder->ubicacion_lat, 6) }}, {{ number_format($workOrder->ubicacion_lng, 6) }}
+                            </span>
+                            <a href="https://www.google.com/maps?q={{ $workOrder->ubicacion_lat }},{{ $workOrder->ubicacion_lng }}"
+                                target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1 text-xs text-blue-500 hover:text-blue-700 hover:underline font-medium">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                                Ver en Maps
+                            </a>
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-400 dark:text-gray-500 italic mt-0.5">Sin ubicación asignada</p>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Fila 5: Consideraciones (observaciones_inicial) --}}
+            @if ($workOrder->observaciones_inicial)
+                <div class="px-5 py-4 bg-amber-50/50 dark:bg-amber-900/10 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Consideraciones</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mt-1 leading-relaxed">{{ $workOrder->observaciones_inicial }}</p>
                     </div>
                 </div>
-            @else
-                <p class="text-sm text-gray-400 dark:text-gray-500 italic">Sin ubicación asignada</p>
             @endif
-        </div>
+
+            {{-- Fila 6: Accesorios a instalar (metadata) --}}
+            @if (!empty($accesorioLabels))
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1.5">
+                            Accesorios a Instalar
+                            <span class="ml-1 text-indigo-400">({{ count($accesorioLabels) }})</span>
+                        </p>
+                        <div class="flex flex-wrap gap-1.5">
+                            @foreach ($accesorioLabels as $acc)
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ $acc }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Fila 7: Alertas GPS a configurar (metadata) --}}
+            @if (!empty($alertaLabels))
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-red-50 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1.5">
+                            Alertas GPS a Configurar
+                            <span class="ml-1 text-red-400">({{ count($alertaLabels) }})</span>
+                        </p>
+                        <div class="flex flex-wrap gap-1.5">
+                            @foreach ($alertaLabels as $alerta)
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ $alerta }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Fila 9: Calificación del cliente (si existe) --}}
+            @if ($workOrder->calificacion_cliente)
+                <div class="px-5 py-4 flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5 w-8 h-8 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Calificación del Cliente</p>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <svg class="w-4 h-4 {{ $i <= $workOrder->calificacion_cliente ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600' }}"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            @endfor
+                            <span class="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                                {{ $workOrder->calificado_at?->format('d/m/Y') }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+        </div>{{-- /divide-y --}}
     </div>
 
     {{-- ══ ÍTEMS DEL PROYECTO (solo si es_proyecto = true) ══════════════ --}}
@@ -154,7 +459,7 @@
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div
-                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900">
+                        class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900">
                         <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -413,7 +718,7 @@
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3">
                 <div
-                    class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+                    class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
                     <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

@@ -755,6 +755,14 @@ class Emitir extends Component
         $datos['presupuestos_id'] = $this->presupuestos_id ?: null;
         try {
             DB::beginTransaction();
+
+            // Reservar el correlativo de forma atómica para evitar duplicados entre usuarios concurrentes.
+            // lockForUpdate bloquea la fila hasta que la transacción haga commit/rollback.
+            $serie = Series::where('serie', $this->serie)->lockForUpdate()->firstOrFail();
+            $nextCorrelativo = max($serie->correlativo + 1, (int) $this->min_correlativo);
+            $datos['correlativo'] = $nextCorrelativo;
+            $datos['serie_correlativo'] = $this->serie . '-' . $nextCorrelativo;
+
             $venta = Ventas::create($datos);
 
             //ACTUALIZAR DIRECCION
@@ -849,7 +857,7 @@ class Emitir extends Component
             }
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
-            $venta->getSerie->increment('correlativo');
+            $serie->update(['correlativo' => $nextCorrelativo]);
 
             // AUTO-UPDATE desde flujo de períodos de cobro
             if (!empty($this->notificacion_ids_array)) {

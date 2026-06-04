@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\WorkOrderStatus;
 use App\Scopes\EmpresaScope;
 use App\Observers\WorkOrderObserver;
+use App\Models\Presupuestos;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,6 +33,7 @@ class WorkOrder extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
+        'presupuesto_id'   => 'integer',
         'estado' => WorkOrderStatus::class,
         'fecha_programada' => 'datetime',
         'fecha_inicio' => 'datetime',
@@ -49,6 +51,8 @@ class WorkOrder extends Model
         'tecnico_last_seen' => 'datetime',
         'verified_at' => 'datetime',
         'es_proyecto' => 'boolean',
+        'calificacion_cliente' => 'integer',
+        'calificado_at' => 'datetime',
     ];
 
     // Global Scope - Multi-empresa
@@ -102,6 +106,12 @@ class WorkOrder extends Model
     public function mantenimiento(): BelongsTo
     {
         return $this->belongsTo(Mantenimiento::class)
+            ->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function presupuesto(): BelongsTo
+    {
+        return $this->belongsTo(Presupuestos::class, 'presupuesto_id')
             ->withoutGlobalScope(EmpresaScope::class);
     }
 

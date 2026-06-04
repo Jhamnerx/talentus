@@ -35,7 +35,7 @@ class Show extends Component
     // Adjuntos
     public $attachments = [];
 
-    // Acciones rÃ¡pidas
+    // Acciones rápidas
     public $newStatus     = '';
     public $newPriority   = '';
     public $newAssignedTo = '';
@@ -70,7 +70,7 @@ class Show extends Component
         ]);
     }
 
-    // â”€â”€ Plantilla de respuesta â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Plantilla de respuesta ──────────────────────────────────────────
     public function applyTemplate(): void
     {
         if ($this->selectedTemplate) {
@@ -81,7 +81,7 @@ class Show extends Component
         }
     }
 
-    // â”€â”€ Agregar mensaje â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Agregar mensaje ────────────────────────────────────────────────
     public function addMessage(): void
     {
         $this->validate(['newMessage' => 'required|string|max:5000']);
@@ -117,7 +117,7 @@ class Show extends Component
         $this->notification()->success('Mensaje agregado');
     }
 
-    // â”€â”€ Subir archivos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Subir archivos ─────────────────────────────────────────────────
     public function uploadAttachments(): void
     {
         $this->validate(['attachments.*' => 'required|file|max:10240']);
@@ -148,7 +148,7 @@ class Show extends Component
         $this->notification()->success('Archivos adjuntados');
     }
 
-    // â”€â”€ Cambiar estado â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Cambiar estado ─────────────────────────────────────────────────
     public function changeStatus(): void
     {
         $this->validate([
@@ -199,7 +199,7 @@ class Show extends Component
         $this->notification()->success('Estado actualizado');
     }
 
-    // â”€â”€ Cambiar prioridad â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Cambiar prioridad ──────────────────────────────────────────────
     public function changePriority(): void
     {
         $this->validate([
@@ -220,7 +220,7 @@ class Show extends Component
         $this->notification()->success('Prioridad actualizada');
     }
 
-    // â”€â”€ Asignar usuario â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Asignar usuario ────────────────────────────────────────────────
     public function assignTicket(): void
     {
         $this->validate(['newAssignedTo' => 'nullable|exists:users,id']);
@@ -253,7 +253,7 @@ class Show extends Component
         $this->notification()->success('Ticket reasignado');
     }
 
-    // â”€â”€ Cambiar categoría â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Cambiar categoría ──────────────────────────────────────────────
     public function changeCategory(): void
     {
         $this->validate(['newCategoryId' => 'nullable|exists:ticket_categories,id']);
@@ -274,7 +274,7 @@ class Show extends Component
         $this->notification()->success('Categoría actualizada');
     }
 
-    // â”€â”€ Reabrir ticket â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Reabrir ticket ─────────────────────────────────────────────────
     public function reopen(): void
     {
         if (! $this->ticket->canBeReopened()) {
@@ -300,7 +300,7 @@ class Show extends Component
         $this->notification()->success('Ticket reabierto');
     }
 
-    // â”€â”€ Tickets relacionados â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Tickets relacionados ───────────────────────────────────────────
     public function linkRelatedTicket(): void
     {
         $this->validate(['relatedTicketCode' => 'required|string']);
@@ -321,7 +321,7 @@ class Show extends Component
             ->where('related_ticket_id', $related->id)->exists();
 
         if ($exists) {
-            $this->notification()->warning('Ese ticket ya estÃ¡ vinculado.');
+            $this->notification()->warning('Ese ticket ya está vinculado.');
             return;
         }
 
@@ -346,7 +346,7 @@ class Show extends Component
         $this->notification()->success('Vínculo eliminado.');
     }
 
-    // â”€â”€ Email al cliente â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Email al cliente ───────────────────────────────────────────────
     private function sendCustomerEmail(string $body, string $eventType = 'update'): void
     {
         $email = $this->ticket->customer?->email;
@@ -360,7 +360,7 @@ class Show extends Component
         }
     }
 
-    // â”€â”€ CSAT por WhatsApp â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── CSAT por WhatsApp ──────────────────────────────────────────────
     private function sendCsatWhatsApp(): void
     {
         $phone = $this->ticket->customer?->telefonos ?? null;
@@ -382,7 +382,7 @@ class Show extends Component
         }
     }
 
-    // â”€â”€ Timeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Timeline ───────────────────────────────────────────────────────
     public function getTimelineItemsProperty()
     {
         $events = $this->ticket->events->map(fn($event) => [
