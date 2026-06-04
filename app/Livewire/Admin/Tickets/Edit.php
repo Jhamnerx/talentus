@@ -18,9 +18,9 @@ class Edit extends Component
     public $subject = '';
     public $description = '';
     public $priority = '';
-    public $customer_id = '';
-    public $category_id = '';
-    public $vehiculo_id = '';
+    public $customer_id;
+    public $category_id;
+    public $vehiculo_id;
 
     protected $listeners = ['open-modal-edit-ticket' => 'openModal'];
 

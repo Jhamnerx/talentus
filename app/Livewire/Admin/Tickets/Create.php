@@ -21,10 +21,10 @@ class Create extends Component
     public $subject = '';
     public $description = '';
     public $priority = 'medium';
-    public $customer_id = '';
-    public $category_id = '';
-    public $assigned_to = '';
-    public $vehiculo_id = '';
+    public $customer_id;
+    public $category_id;
+    public $assigned_to;
+    public $vehiculo_id;
 
     protected $listeners = ['open-modal-create-ticket' => 'openModal'];
 
