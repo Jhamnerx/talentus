@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 use App\Models\Comprobantes;
 use App\Models\NotaDebito;
 use App\Models\PeriodoCobro;
+use Illuminate\Support\Facades\DB;
 
 class Emitir extends Component
 {
@@ -451,14 +452,24 @@ class Emitir extends Component
         $datos = $this->validate($request->rules($this->tipo_comprobante_ref), $request->messages());
 
         try {
+            DB::beginTransaction();
+
+            // Reservar el correlativo de forma atómica para evitar duplicados entre usuarios concurrentes.
+            $serie = Series::where('serie', $this->serie)->lockForUpdate()->firstOrFail();
+            $nextCorrelativo = max($serie->correlativo + 1, (int) $this->min_correlativo);
+            $datos['correlativo'] = $nextCorrelativo;
+            $datos['serie_correlativo'] = $this->serie . '-' . $nextCorrelativo;
+
             $nota = Comprobantes::create($datos);
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
-            $nota->getSerie->increment('correlativo');
+            $serie->update(['correlativo' => $nextCorrelativo]);
 
             // Revertir PeriodosCobro vinculados a la venta de referencia
             PeriodoCobro::where('venta_id', $nota->invoice_id)
                 ->each(fn($p) => $p->resetFacturacion());
+
+            DB::commit();
 
             $api = new ApiFacturacion();
             $respuesta = $api->emitirNota($nota, $this->tipo_comprobante_id);
@@ -472,6 +483,7 @@ class Emitir extends Component
                 $this->redirectRoute('admin.nota.index');
             }
         } catch (\Throwable $th) {
+            DB::rollBack();
 
             $this->dispatch(
                 'error',
