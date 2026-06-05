@@ -100,6 +100,11 @@ class Clientes extends Model
         return $this->hasMany(Vehiculos::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
+    public function rubro()
+    {
+        return $this->belongsTo(RubroCliente::class, 'rubro_id');
+    }
+
 
     public function certificados()
     {

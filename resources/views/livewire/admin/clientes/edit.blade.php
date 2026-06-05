@@ -46,6 +46,17 @@
                 ]"
                 option-label="option_description" option-value="ubigeo_inei" />
         </div>
+
+        <div class="col-span-12 sm:col-span-6">
+            <x-form.select
+                label="Rubro de cliente"
+                wire:model.live="rubro_id"
+                placeholder="Sin rubro"
+                :options="$rubros->map(fn($r) => ['value' => $r->id, 'label' => $r->nombre])->toArray()"
+                option-label="label"
+                option-value="value"
+            />
+        </div>
     </div>
 
     <x-slot name="footer">

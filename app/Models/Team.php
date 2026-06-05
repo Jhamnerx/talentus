@@ -30,6 +30,16 @@ class Team extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    // Áreas KPI del MOF: comercial | operaciones | administracion | postventa | monitoreo | gerencia
+    public const KPI_AREAS = [
+        'comercial'      => 'Comercial',
+        'operaciones'    => 'Operaciones',
+        'administracion' => 'Administración',
+        'postventa'      => 'Post Venta & Reclamos',
+        'monitoreo'      => 'Monitoreo GPS',
+        'gerencia'       => 'Gerencia',
+    ];
+
     protected $casts = [
         'is_active' => 'boolean',
     ];

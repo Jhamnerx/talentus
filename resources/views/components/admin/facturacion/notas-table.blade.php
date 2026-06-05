@@ -1,6 +1,6 @@
-<div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
+<div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-600 mb-8">
     <header class="px-5 py-4">
-        <h2 class="font-semibold text-slate-800">Ventas <span class="text-slate-400 font-medium">{{ $notas->total()
+        <h2 class="font-semibold text-slate-800 dark:text-gray-100">Notas <span class="text-slate-400 dark:text-gray-400 font-medium">{{ $notas->total()
                 }}</span></h2>
     </header>
     <div>
@@ -10,7 +10,7 @@
             <table class="table-auto  w-full">
                 <!-- Table header -->
                 <thead
-                    class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                    class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-700 border-t border-b border-slate-200 dark:border-gray-600">
                     <tr>
 
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -28,6 +28,9 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">TIPO</div>
                         </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">TOTAL</div>
+                        </th>
 
                         @can('comprobantes-descargar-pdf')
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -44,6 +47,9 @@
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">SUNAT</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">ESTADO</div>
                         </th>
                         {{-- <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">ACCIONES</div>
@@ -114,6 +120,12 @@
 
                                 {{ $nota->sustento->descripcion }}
 
+                            </div>
+                        </td>
+
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-medium text-slate-700 dark:text-slate-300">
+                                {{ $nota->divisa == 'PEN' ? 'S/ ' : '$' }} {{ number_format($nota->total, 2) }}
                             </div>
                         </td>
 
@@ -419,6 +431,17 @@
                                                     <span>{{ $nota->fe_mensaje_sunat }}</span>
                                                 </div>
                                             </div>
+                                            @if($nota->nombre_cdr)
+                                            <div class="px-4 py-2 border-t border-slate-200 dark:border-gray-600">
+                                                <a href="{{ route('facturacion.nota.qver.cdr', $nota) }}"
+                                                    class="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md transition-colors">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                    </svg>
+                                                    Descargar CDR
+                                                </a>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -426,53 +449,53 @@
 
                                 {{-- RECHAZADO --}}
                                 @case('2')
-                                <button type="button" class="bg-white cursor-default">
-                                    <svg class="w-8 h-8" id="icons" enable-background="new 0 0 64 64" height="512"
-                                        viewBox="0 0 64 64" width="512" xmlns="http://www.w3.org/2000/svg">
-                                        <g>
-                                            <g>
-                                                <path
-                                                    d="m41 52c.55 0 1 .45 1 1v6.152 1.005s-.433.128-.962.278c0 0-5.519 1.566-9.038 1.566-2.06 0-5.014-.487-5.014-.487-.542-.089-.986-.613-.986-1.162v-7.352c0-.55.45-1 1-1h.01 2 9.99z"
-                                                    fill="#656d78" />
-                                            </g>
-                                            <g>
-                                                <path
-                                                    d="m43.95 20.05c-.22-1.16-1.23-2.03-2.45-2.03-1.38 0-2.5 1.12-2.5 2.5v-5.02c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v-3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v18.5l-3.89-3.41-.11-.09c-.42-.31-.94-.5-1.5-.5-1.38 0-2.5 1.12-2.5 2.5 0 .46.12.89.34 1.26l5.99 7.91 2.09 2.771c.96 1.42 2.17 2.659 3.59 3.569v3.99h11.99v-.17-3.83c2.39-1.4 4-4.01 4-7v-20.48c0-.16-.02-.32-.05-.47z"
-                                                    fill="#eac6bb" />
-                                            </g>
-                                            <g>
-                                                <path
-                                                    d="m51.8 12.2c-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.479 6.391 13.8 7.55v-7.35h2.01v-3.99c-1.42-.91-2.63-2.149-3.59-3.569l-2.09-2.771-5.99-7.91c-.22-.37-.34-.8-.34-1.26 0-1.38 1.12-2.5 2.5-2.5.56 0 1.08.19 1.5.5l.11.09 3.89 3.41v-18.5c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v-3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v5.02c0-1.38 1.12-2.5 2.5-2.5 1.22 0 2.23.87 2.45 2.03.03.15.05.31.05.47v20.48c0 2.99-1.61 5.6-4 7v3.83.17h2v6.15c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8z"
-                                                    fill="#f5f7fa" />
-                                            </g>
-                                            <g>
-                                                <path
-                                                    d="m28.998 15.259c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v18.51l-3.89-3.408-.11-.102c-.42-.309-.94-.5-1.5-.5-1.38 0-2.5 1.121-2.5 2.5 0 .441.11.861.32 1.221l8.1 10.73c.97 1.41 2.17 2.66 3.59 3.559v3.99h11.99v-3.99c2.39-1.398 4-4.01 4-7.01v-20.479c0-1.381-1.12-2.5-2.5-2.5s-2.5 1.119-2.5 2.5v-5.021c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v-3c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5z"
-                                                    fill="#eac6bb" />
-                                                <g fill="#d3b1a9">
-                                                    <path
-                                                        d="m28.981 14.272c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v13.5c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" />
-                                                    <path
-                                                        d="m38.981 20.278c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v7.494c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" />
-                                                    <path
-                                                        d="m33.998 29.769v-14.502c0-.814.396-1.531 1-1.988v15.49c0 .552-.447 1-1 1z" />
-                                                </g>
-                                            </g>
-                                            <g>
+                                <div x-data="{ open: false }" class="relative inline-block text-left">
+                                    <button class="inline-flex justify-center items-center text-sm font-medium"
+                                        aria-haspopup="true" @click="open = !open" type="button" :aria-expanded="open">
+                                        <div class="flex items-center">
+                                            <svg class="w-8 h-8" id="icons" enable-background="new 0 0 64 64" height="512"
+                                                viewBox="0 0 64 64" width="512" xmlns="http://www.w3.org/2000/svg">
                                                 <g>
-                                                    <path
-                                                        d="m12.201 52.799c-.256 0-.512-.098-.707-.293-.391-.391-.391-1.023 0-1.414l39.598-39.598c.391-.391 1.023-.391 1.414 0s.391 1.023 0 1.414l-39.598 39.598c-.195.195-.451.293-.707.293z"
-                                                        fill="#da4453" />
+                                                    <g><path d="m41 52c.55 0 1 .45 1 1v6.152 1.005s-.433.128-.962.278c0 0-5.519 1.566-9.038 1.566-2.06 0-5.014-.487-5.014-.487-.542-.089-.986-.613-.986-1.162v-7.352c0-.55.45-1 1-1h.01 2 9.99z" fill="#656d78" /></g>
+                                                    <g><path d="m43.95 20.05c-.22-1.16-1.23-2.03-2.45-2.03-1.38 0-2.5 1.12-2.5 2.5v-5.02c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v-3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v18.5l-3.89-3.41-.11-.09c-.42-.31-.94-.5-1.5-.5-1.38 0-2.5 1.12-2.5 2.5 0 .46.12.89.34 1.26l5.99 7.91 2.09 2.771c.96 1.42 2.17 2.659 3.59 3.569v3.99h11.99v-.17-3.83c2.39-1.4 4-4.01 4-7v-20.48c0-.16-.02-.32-.05-.47z" fill="#eac6bb" /></g>
+                                                    <g><path d="m51.8 12.2c-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.479 6.391 13.8 7.55v-7.35h2.01v-3.99c-1.42-.91-2.63-2.149-3.59-3.569l-2.09-2.771-5.99-7.91c-.22-.37-.34-.8-.34-1.26 0-1.38 1.12-2.5 2.5-2.5.56 0 1.08.19 1.5.5l.11.09 3.89 3.41v-18.5c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v-3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v5.02c0-1.38 1.12-2.5 2.5-2.5 1.22 0 2.23.87 2.45 2.03.03.15.05.31.05.47v20.48c0 2.99-1.61 5.6-4 7v3.83.17h2v6.15c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8z" fill="#f5f7fa" /></g>
+                                                    <g><path d="m28.998 15.259c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v18.51l-3.89-3.408-.11-.102c-.42-.309-.94-.5-1.5-.5-1.38 0-2.5 1.121-2.5 2.5 0 .441.11.861.32 1.221l8.1 10.73c.97 1.41 2.17 2.66 3.59 3.559v3.99h11.99v-3.99c2.39-1.398 4-4.01 4-7.01v-20.479c0-1.381-1.12-2.5-2.5-2.5s-2.5 1.119-2.5 2.5v-5.021c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v-3c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5z" fill="#eac6bb" /><g fill="#d3b1a9"><path d="m28.981 14.272c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v13.5c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" /><path d="m38.981 20.278c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v7.494c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" /><path d="m33.998 29.769v-14.502c0-.814.396-1.531 1-1.988v15.49c0 .552-.447 1-1 1z" /></g></g>
+                                                    <g><g><path d="m12.201 52.799c-.256 0-.512-.098-.707-.293-.391-.391-.391-1.023 0-1.414l39.598-39.598c.391-.391 1.023-.391 1.414 0s.391 1.023 0 1.414l-39.598 39.598c-.195.195-.451.293-.707.293z" fill="#da4453" /></g></g>
+                                                    <g><path d="m1 32c0-17.12 13.88-31 31-31s31 13.88 31 31-13.88 31-31 31-31-13.88-31-31zm25 27.35c1.93.43 3.94.65 6 .65 3.52 0 6.89-.65 10-1.84v-.01c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.48 6.39 13.8 7.55z" fill="#ed5565" /></g>
                                                 </g>
-                                            </g>
-                                            <g>
-                                                <path
-                                                    d="m1 32c0-17.12 13.88-31 31-31s31 13.88 31 31-13.88 31-31 31-31-13.88-31-31zm25 27.35c1.93.43 3.94.65 6 .65 3.52 0 6.89-.65 10-1.84v-.01c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.48 6.39 13.8 7.55z"
-                                                    fill="#ed5565" />
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </button>
+                                            </svg>
+                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
+                                                <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                    <div x-show="open" @click.away="open = false"
+                                        class="origin-top-right z-10 absolute top-full overflow-x-auto right-0 mt-2 w-80 rounded-md bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 shadow-2xl">
+                                        <div class="py-1" role="menu">
+                                            <div class="px-4 py-2 bg-red-50 dark:bg-red-900/30 border-b border-red-100 dark:border-red-800">
+                                                <span class="text-xs font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide">Rechazado por SUNAT</span>
+                                            </div>
+                                            <div class="flex items-start px-4 py-2 text-sm">
+                                                <span class="w-20 shrink-0 text-slate-500 dark:text-gray-400">Código:</span>
+                                                <span class="font-semibold text-red-600">{{ $nota->fe_codigo_error }}</span>
+                                            </div>
+                                            <div class="px-4 py-2 text-sm">
+                                                <div class="text-slate-500 dark:text-gray-400 mb-1">Motivo:</div>
+                                                <div class="text-red-700 dark:text-red-400 text-xs leading-relaxed">{{ $nota->fe_mensaje_error }}</div>
+                                            </div>
+                                            <div class="px-4 py-2 border-t border-slate-200 dark:border-gray-600">
+                                                <button wire:click.prevent="getCdr({{ $nota->id }})"
+                                                    wire:loading.attr="disabled"
+                                                    class="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                    </svg>
+                                                    Reenviar a SUNAT
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @break
 
                                 {{-- ACEPTADO PERO CON OBSERVACIONES --}}
@@ -560,6 +583,17 @@
                                                     {{ $nota->fe_mensaje_sunat }}
                                                 </div>
                                             </div>
+                                            @if($nota->nombre_cdr)
+                                            <div class="px-4 py-2 border-t border-slate-200 dark:border-gray-600">
+                                                <a href="{{ route('facturacion.nota.qver.cdr', $nota) }}"
+                                                    class="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md transition-colors">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                    </svg>
+                                                    Descargar CDR
+                                                </a>
+                                            </div>
+                                            @endif
                                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                                 <thead
                                                     class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -608,6 +642,35 @@
                         </td>
 
 
+                        {{-- ESTADO SUNAT badge --}}
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            @switch($nota->fe_estado)
+                            @case('0')
+                            <div class="inline-flex font-medium bg-yellow-100 text-yellow-600 rounded-full text-center px-2.5 py-0.5">
+                                Pendiente</div>
+                            @break
+                            @case('1')
+                            <div class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
+                                {{ $nota->estado_texto }}</div>
+                            @break
+                            @case('2')
+                            <div>
+                                <div class="inline-flex font-medium bg-red-100 text-red-600 rounded-full text-center px-2.5 py-0.5">
+                                    {{ $nota->estado_texto }}</div>
+                                @if($nota->fe_codigo_error)
+                                <div class="text-xs text-red-500 mt-0.5 max-w-xs truncate" title="{{ $nota->fe_mensaje_error }}">
+                                    Cód. {{ $nota->fe_codigo_error }}
+                                </div>
+                                @endif
+                            </div>
+                            @break
+                            @case('3')
+                            <div class="inline-flex font-medium bg-yellow-100 text-yellow-600 rounded-full text-center px-2.5 py-0.5">
+                                {{ $nota->estado_texto }}</div>
+                            @break
+                            @endswitch
+                        </td>
+
                         {{-- Crear nota de crédito
                         Crear nota de débito
                         Volver a crear
@@ -616,7 +679,7 @@
                     @endforeach
 
                     @if ($notas->count() < 1) <tr>
-                        <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                        <td colspan="12" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                             <div class="text-center">No hay Registros</div>
                         </td>
                         </tr>

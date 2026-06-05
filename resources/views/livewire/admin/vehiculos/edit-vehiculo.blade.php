@@ -78,6 +78,22 @@
             </div>
         @endif
 
+        @if ($sectores->isNotEmpty())
+            <div class="col-span-12">
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Sectores del vehículo:</label>
+                <div class="flex flex-wrap gap-x-6 gap-y-2">
+                    @foreach ($sectores as $sector)
+                        <x-form.checkbox
+                            wire:model.live="sectores_selected"
+                            :id="'edit-sector-' . $sector->id"
+                            :value="(string) $sector->id"
+                            left-label="{{ $sector->nombre }}"
+                        />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
         <div class="col-span-12 sm:col-span-6">
             <x-form.select autocomplete='off' label="Selecciona una linea:" id="numero" name="numero"
                 wire:model.live="numero" placeholder="945678000" option-description="operador" :async-data="route('api.lineas.index')"
@@ -181,8 +197,8 @@
         <div class="flex justify-between gap-x-4">
             {{-- Botón sync plataforma GPS (lado izquierdo) --}}
             <div class="flex items-center gap-2">
-                @if(isset($vehiculo) && $vehiculo->exists)
-                    @if($vehiculo->gpswox_id)
+                @if (isset($vehiculo) && $vehiculo->exists)
+                    @if ($vehiculo->gpswox_id)
                         <span class="text-xs text-green-700 bg-green-100 px-2 py-1 rounded">
                             GPS #{{ $vehiculo->gpswox_id }}
                         </span>

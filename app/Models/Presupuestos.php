@@ -188,6 +188,11 @@ class Presupuestos extends Model
         return $this->hasOne(Ventas::class, 'presupuestos_id');
     }
 
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class, 'presupuesto_id');
+    }
+
     public function recibo()
     {
         return $this->hasOne(Recibos::class, 'presupuestos_id');

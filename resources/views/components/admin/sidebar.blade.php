@@ -21,7 +21,7 @@
             <!-- Logo -->
             <a class="block" href="{{ route('admin.home') }}">
 
-                <img width="56" height="56" src="{{ asset('images/logo.png') }}" alt="">
+                <img width="96" height="56" src="{{ Vite::asset('resources/images/logo-sidebar.png') }}" alt="">
 
             </a>
         </div>
@@ -37,8 +37,8 @@
                 <ul class="mt-3">
                     <!-- Dashboard -->
                     @role('admin')
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(1), ['dashboard'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(1), ['dashboard']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(1), ['dashboard', 'gerencia'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['dashboard', 'gerencia']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), ['dashboard'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
                                 href="#0" @click.prevent="open = !open; sidebarExpanded = true">
@@ -92,6 +92,20 @@
                                             href="{{ route('admin.home') }}">
                                             <span
                                                 class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Información</span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.gerencia.kpi-dashboard')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.gerencia.kpi-dashboard') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">KPI Dashboard</span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.gerencia.kpi-equipos')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.gerencia.kpi-equipos') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">KPI Equipos</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -618,6 +632,15 @@
                                             href="{{ route('admin.cobros.index') }}">
                                             <span
                                                 class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.cobros.proyeccion')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.cobros.proyeccion') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">📅 Proyección
                                             </span>
                                         </a>
                                     </li>
@@ -1367,6 +1390,20 @@
                                             </a>
                                         </li>
                                     @endcanany
+
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.sectores')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.ajustes.sectores') }}">
+                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏷 Sectores</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.rubros')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.ajustes.rubros') }}">
+                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏢 Rubros de Clientes</span>
+                                        </a>
+                                    </li>
 
                                 </ul>
                             </div>

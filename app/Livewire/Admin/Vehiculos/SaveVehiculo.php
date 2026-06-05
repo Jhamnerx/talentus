@@ -9,6 +9,7 @@ use Livewire\Attributes\On;
 use App\Models\Dispositivos;
 use App\Http\Requests\VehiculosRequest;
 use App\Models\Lineas;
+use App\Models\Sector;
 use App\Services\FactilizaService;
 
 class SaveVehiculo extends Component
@@ -27,10 +28,12 @@ class SaveVehiculo extends Component
     public $dispositivo_principal = null;
 
     public $flotas_selected = [];
+    public array $sectores_selected = [];
 
     public function render()
     {
-        return view('livewire.admin.vehiculos.save-vehiculo');
+        $sectores = Sector::activos()->get(['id', 'nombre']);
+        return view('livewire.admin.vehiculos.save-vehiculo', compact('sectores'));
     }
 
 
@@ -63,6 +66,7 @@ class SaveVehiculo extends Component
             // Crear el vehículo con los datos básicos
             $vehiculo = Vehiculos::create($data);
             $this->registerFlotas($vehiculo);
+            $this->registerSectores($vehiculo);
 
             // Registrar los dispositivos seleccionados
             $this->registerDispositivos($vehiculo);
@@ -182,9 +186,14 @@ class SaveVehiculo extends Component
         // Esta función ya no se usa directamente, su lógica está en registerDispositivos
     }
 
-    public function registerFlotas(Vehiculos $vehiculo)
+    public function registerFlotas(Vehiculos $vehiculo): void
     {
         $vehiculo->flotas()->sync($this->flotas_selected);
+    }
+
+    public function registerSectores(Vehiculos $vehiculo): void
+    {
+        $vehiculo->sectores()->sync($this->sectores_selected);
     }
 
     public function updated($label)

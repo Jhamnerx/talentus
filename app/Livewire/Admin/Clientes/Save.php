@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Contactos;
+use App\Models\RubroCliente;
 use Livewire\Attributes\On;
 use WireUi\Traits\WireUiActions;
 use App\Services\FactilizaService;
@@ -19,6 +20,7 @@ class Save extends Component
 
     // Datos del cliente
     public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion, $ubigeo;
+    public ?int $rubro_id = null;
 
     // Datos del contacto principal (para RUC: se llena manualmente; para DNI: se sincroniza automáticamente)
     public $contacto_nombre;
@@ -32,7 +34,8 @@ class Save extends Component
 
     public function render()
     {
-        return view('livewire.admin.clientes.save');
+        $rubros = RubroCliente::activos()->get(['id', 'nombre']);
+        return view('livewire.admin.clientes.save', compact('rubros'));
     }
 
     // ─── Sincronización para DNI ────────────────────────────────────────────────

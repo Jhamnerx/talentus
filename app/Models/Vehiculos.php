@@ -76,6 +76,11 @@ class Vehiculos extends Model
         return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
+    public function sectores(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Sector::class, 'sector_vehiculo', 'vehiculo_id', 'sector_id');
+    }
+
     //relacion uno a muchos a modelos
     public function sim_card()
     {

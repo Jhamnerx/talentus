@@ -15,13 +15,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class TicketsExport implements FromQuery, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
 {
     public function __construct(
-        private string $search = '',
-        private string $statusFilter = '',
-        private string $priorityFilter = '',
-        private string $assignedFilter = '',
-        private string $from = '',
-        private string $to = '',
-        private int $empresaId = 0,
+        private string  $search = '',
+        private ?string $statusFilter = null,
+        private ?string $priorityFilter = null,
+        private ?string $assignedFilter = null,
+        private ?string $from = null,
+        private ?string $to = null,
+        private int     $empresaId = 0,
     ) {}
 
     public function query(): Builder
