@@ -161,6 +161,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // COBROS (dentro del módulo de pagos)
     Route::controller(CobrosController::class)->group(function () {
         Route::get('cobros', 'index')->name('admin.cobros.index');
+        Route::get('cobros/proyeccion', 'proyeccion')->name('admin.cobros.proyeccion');
     });
 
     // PLANES DE SERVICIO
@@ -291,6 +292,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
     Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
+    Route::get('ajustes/sectores', [AjustesController::class, 'sectores'])->name('admin.ajustes.sectores');
+    Route::get('ajustes/rubros-cliente', [AjustesController::class, 'rubros'])->name('admin.ajustes.rubros');
     Route::get('ajustes/operadores', [AjustesController::class, 'operadores'])->name('admin.ajustes.operadores');
     Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
     Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
@@ -368,6 +371,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         Route::get('gerencia/reportes', 'index')->name('admin.gerencia.reportes');
     });
+
+    // KPI Dashboard (MOF)
+    Route::get('gerencia/kpi-dashboard', \App\Livewire\Admin\Gerencia\KpiDashboard::class)
+        ->name('admin.gerencia.kpi-dashboard');
+    Route::get('gerencia/kpi-equipos', \App\Livewire\Admin\Gerencia\KpiEquipos::class)
+        ->name('admin.gerencia.kpi-equipos');
 
     route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
     route::get('notificaciones/importes-fallidos', [NotificacionesController::class, 'importes'])->name('notificaciones.importes');

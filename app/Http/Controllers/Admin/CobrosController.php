@@ -13,4 +13,9 @@ class CobrosController extends Controller
     {
         return view('admin.cobros.index');
     }
+
+    public function proyeccion()
+    {
+        return view('admin.cobros.proyeccion');
+    }
 }

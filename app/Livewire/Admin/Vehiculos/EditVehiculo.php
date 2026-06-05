@@ -9,6 +9,7 @@ use App\Models\Vehiculos;
 use Livewire\Attributes\On;
 use App\Models\Dispositivos;
 use App\Http\Requests\VehiculosRequest;
+use App\Models\Sector;
 use App\Services\FactilizaService;
 use App\Services\GpsWoxService;
 
@@ -28,13 +29,14 @@ class EditVehiculo extends Component
     public $modalEdit = false;
 
     public $flotas_selected = [];
-
+    public array $sectores_selected = [];
 
     public Vehiculos $vehiculo;
 
     public function render()
     {
-        return view('livewire.admin.vehiculos.edit-vehiculo');
+        $sectores = Sector::activos()->get(['id', 'nombre']);
+        return view('livewire.admin.vehiculos.edit-vehiculo', compact('sectores'));
     }
 
 
@@ -60,6 +62,7 @@ class EditVehiculo extends Component
         $this->clientes_id = $vehiculo->clientes_id;
         $this->dispositivos_id = $vehiculo->dispositivos_id;
         $this->descripcion = $vehiculo->descripcion;
+        $this->sectores_selected = $vehiculo->sectores->pluck('id')->map(fn($id) => (string) $id)->toArray();
 
         // Cargar los dispositivos asociados al vehículo
         $this->cargarDispositivos();
@@ -108,6 +111,7 @@ class EditVehiculo extends Component
             $this->vehiculo->update($data);
             $changes = $this->vehiculo->getChanges();
             $this->registerFlotas($this->vehiculo);
+            $this->registerSectores($this->vehiculo);
 
             // Actualizar los dispositivos
             $this->registerDispositivos($this->vehiculo);
@@ -220,10 +224,14 @@ class EditVehiculo extends Component
         // Esta función ya no se usa directamente, su lógica está en registerDispositivos
     }
 
-    public function registerFlotas(Vehiculos $vehiculo)
+    public function registerFlotas(Vehiculos $vehiculo): void
     {
-
         $vehiculo->flotas()->sync($this->flotas_selected);
+    }
+
+    public function registerSectores(Vehiculos $vehiculo): void
+    {
+        $vehiculo->sectores()->sync($this->sectores_selected);
     }
 
 
@@ -247,7 +255,6 @@ class EditVehiculo extends Component
     {
         try {
             $result = app(GpsWoxService::class)->sincronizarVehiculoDesdePlataforma($this->vehiculo);
-
             if (($result['status'] ?? 0) === 1) {
                 $this->vehiculo->refresh();
                 $this->numero = $this->vehiculo->numero ?? $this->numero;

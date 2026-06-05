@@ -614,6 +614,17 @@
                                                     <span>{{ $venta->fe_mensaje_sunat }}</span>
                                                 </div>
                                             </div>
+                                            @if($venta->nombre_cdr)
+                                            <div class="px-4 py-2 border-t border-slate-200">
+                                                <a href="{{ route('facturacion.ver.cdr', $venta) }}"
+                                                    class="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md transition-colors">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                    </svg>
+                                                    Descargar CDR
+                                                </a>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -770,6 +781,17 @@
                                                     {{ $venta->fe_mensaje_sunat }}
                                                 </div>
                                             </div>
+                                            @if($venta->nombre_cdr)
+                                            <div class="px-4 py-2 border-t border-slate-200">
+                                                <a href="{{ route('facturacion.ver.cdr', $venta) }}"
+                                                    class="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md transition-colors">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                    </svg>
+                                                    Descargar CDR
+                                                </a>
+                                            </div>
+                                            @endif
                                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                                 <thead
                                                     class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

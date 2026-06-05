@@ -77,6 +77,22 @@
             </div>
         @endif
 
+        @if ($sectores->isNotEmpty())
+            <div class="col-span-12">
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Sectores del vehículo:</label>
+                <div class="flex flex-wrap gap-x-6 gap-y-2">
+                    @foreach ($sectores as $sector)
+                        <x-form.checkbox
+                            wire:model.live="sectores_selected"
+                            :id="'save-sector-' . $sector->id"
+                            :value="(string) $sector->id"
+                            left-label="{{ $sector->nombre }}"
+                        />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
         <div class="col-span-12 sm:col-span-6">
             <x-form.select autocomplete='off' label="Selecciona una linea:" name="numero" id="numero"
                 wire:model.live="numero" placeholder="945678000" option-description="operador" :async-data="route('api.lineas.index')"
