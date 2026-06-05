@@ -23,10 +23,25 @@ class WorkOrderController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'estado'       => ['nullable', 'string'],
+            'tecnico_id'   => ['nullable', 'integer'],
+            'search'       => ['nullable', 'string', 'max:100'],
+            'fecha_desde'  => ['nullable', 'date'],
+            'fecha_hasta'  => ['nullable', 'date', 'after_or_equal:fecha_desde'],
+            'per_page'     => ['nullable', 'integer', 'min:5', 'max:100'],
+        ]);
+
+        // La app móvil sólo muestra las órdenes del técnico autenticado
+        // salvo que se indique otro tecnico_id explícitamente (admin override)
+        $tecnicoId = $request->tecnico_id ?? $request->user()->id;
+
         $ordenes = WorkOrder::query()
             ->with(['tipo', 'vehiculo', 'cliente', 'tecnico'])
+            ->tecnico($tecnicoId)
             ->when($request->estado, fn($q) => $q->estado($request->estado))
-            ->when($request->tecnico_id, fn($q) => $q->tecnico($request->tecnico_id))
+            ->when($request->fecha_desde, fn($q) => $q->whereDate('fecha_programada', '>=', $request->fecha_desde))
+            ->when($request->fecha_hasta, fn($q) => $q->whereDate('fecha_programada', '<=', $request->fecha_hasta))
             ->when($request->search, function ($q, $search) {
                 $q->where(function ($query) use ($search) {
                     $query->where('codigo', 'like', "%{$search}%")
@@ -34,10 +49,10 @@ class WorkOrderController extends Controller
                         ->orWhere('titulo_proyecto', 'like', "%{$search}%");
                 });
             })
+            ->orderBy('fecha_programada', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate($request->per_page ?? 15);
 
-        // Añadir items_count para órdenes tipo proyecto
         $ordenes->getCollection()->transform(function ($orden) {
             if ($orden->es_proyecto) {
                 $orden->items_count = $orden->items()->count();
@@ -47,7 +62,37 @@ class WorkOrderController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $ordenes
+            'data' => $ordenes,
+        ]);
+    }
+
+    /**
+     * GET /api/work-orders/stats
+     * Resumen de órdenes para el dashboard del técnico autenticado.
+     */
+    public function stats(Request $request)
+    {
+        $tecnicoId = $request->user()->id;
+
+        $base = WorkOrder::query()->tecnico($tecnicoId);
+
+        $pendientes = (clone $base)->pendientes()->count();
+        $enProceso  = (clone $base)->enProceso()->count();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'pendientes'      => $pendientes,
+                'en_proceso'      => $enProceso,
+                'total_activas'   => $pendientes + $enProceso,
+                'finalizadas_hoy' => (clone $base)->finalizadas()
+                    ->whereDate('fecha_finalizacion', today())
+                    ->count(),
+                'finalizadas_mes' => (clone $base)->finalizadas()
+                    ->whereMonth('fecha_finalizacion', now()->month)
+                    ->whereYear('fecha_finalizacion', now()->year)
+                    ->count(),
+            ],
         ]);
     }
 

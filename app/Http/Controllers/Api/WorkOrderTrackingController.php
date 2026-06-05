@@ -20,7 +20,7 @@ class WorkOrderTrackingController extends Controller
     {
         // Solo el técnico asignado puede actualizar su posición
         abort_if(
-            $request->user()->id !== $workOrder->user_id,
+            $request->user()->id !== $workOrder->tecnico_id,
             403,
             'No tienes permiso para actualizar esta orden.'
         );

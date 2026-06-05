@@ -134,13 +134,32 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
 
     /*
     |--------------------------------------------------------------------------
-    | Listado y Detalle de Órdenes
+    | Rutas estáticas — deben ir ANTES de las rutas con {workOrder}
     |--------------------------------------------------------------------------
     */
 
     // GET /api/work-orders
     // Listar órdenes con filtros: ?estado=pendiente&tecnico_id=1&search=OT25&per_page=15
+    // &fecha_desde=2026-01-01&fecha_hasta=2026-12-31
+    // Sin tecnico_id: auto-filtra por el técnico autenticado
     Route::get('/', [WorkOrderController::class, 'index'])->name('index');
+
+    // GET /api/work-orders/stats
+    // Resumen de órdenes del técnico autenticado (dashboard de la app)
+    // Respuesta: { pendientes, en_proceso, finalizadas_hoy, finalizadas_mes }
+    Route::get('/stats', [WorkOrderController::class, 'stats'])->name('stats');
+
+    // GET /api/work-orders/templates/checklist
+    // Obtener plantillas de checklist agrupadas por categoría
+    // Respuesta: { vehiculo: [...], tablero: [...], luces: [...] }
+    // IMPORTANTE: debe ir antes de /{workOrder} para evitar colisión de rutas
+    Route::get('/templates/checklist', [WorkOrderController::class, 'listarChecklistTemplates'])->name('templates.checklist');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Listado y Detalle de Órdenes
+    |--------------------------------------------------------------------------
+    */
 
     // GET /api/work-orders/{workOrder}
     // Ver detalle completo de una orden con todas sus relaciones cargadas
@@ -182,11 +201,6 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
     |--------------------------------------------------------------------------
     | Inspección del vehículo ANTES y DESPUÉS del trabajo
     */
-
-    // GET /api/work-orders/templates/checklist
-    // Obtener plantillas de checklist agrupadas por categoría
-    // Respuesta: { vehiculo: [...], tablero: [...], luces: [...] }
-    Route::get('/templates/checklist', [WorkOrderController::class, 'listarChecklistTemplates'])->name('templates.checklist');
 
     // GET /api/work-orders/{workOrder}/checklist
     // Listar checklist completado agrupado por fase (before/after)
