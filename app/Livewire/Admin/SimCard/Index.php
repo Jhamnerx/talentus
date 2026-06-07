@@ -18,6 +18,7 @@ class Index extends Component
     public $to = '';
     public $operador = null;
     public $modalOpenImport = false;
+    public int $perPage = 10;
 
     protected $listeners = [
         'render' => 'render',
@@ -68,7 +69,7 @@ class Index extends Component
                 ->distinct();
         }
 
-        $sim_cards = $query->orderBy('sim_card.id', 'desc')->paginate(10);
+        $sim_cards = $query->orderBy('sim_card.id', 'desc')->paginate($this->perPage);
 
         $total = SimCard::count();
         $operadoresList = Operador::orderBy('name')->get();
@@ -85,6 +86,11 @@ class Index extends Component
     public function updatedOperador($value): void
     {
         $this->operador = $value !== '' ? $value : null;
+        $this->resetPage();
+    }
+
+    public function updatedPerPage(): void
+    {
         $this->resetPage();
     }
 

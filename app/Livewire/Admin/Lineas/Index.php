@@ -20,6 +20,7 @@ class Index extends Component
     public $proximaReactivacion = false;
     public $sinVehiculo = false;
     public $modalOpenImport = false;
+    public int $perPage = 10;
 
 
 
@@ -72,7 +73,7 @@ class Index extends Component
                 ->where('date_to_suspend', '>=', Carbon::now())
                 ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
                 ->orderBy('date_to_suspend')
-                ->paginate(10);
+                ->paginate($this->perPage);
         } elseif ($this->sinVehiculo) {
             $lineas = Lineas::where('baja', false)
                 ->whereDoesntHave('sim_card.vehiculos')
@@ -81,13 +82,13 @@ class Index extends Component
                 })
                 ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
                 ->orderBy('id', 'desc')
-                ->paginate(10);
+                ->paginate($this->perPage);
         } elseif ($operador !== null) {
             $lineas = Lineas::where('operador_id', $operador)
                 ->where('numero', 'like', '%' . $search . '%')
                 ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
                 ->orderBy('id', 'desc')
-                ->paginate(10);
+                ->paginate($this->perPage);
         } elseif (!empty($search) && strlen($search) >= 3) {
             $lineas = Lineas::leftJoin('sim_card as sc', function ($join) {
                 $join->on('sc.lineas_id', '=', 'lineas.id')
@@ -108,11 +109,11 @@ class Index extends Component
                 ->distinct()
                 ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
                 ->orderBy('lineas.id', 'desc')
-                ->paginate(10);
+                ->paginate($this->perPage);
         } else {
             $lineas = Lineas::with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
                 ->orderBy('id', 'desc')
-                ->paginate(10);
+                ->paginate($this->perPage);
         }
 
 
@@ -150,6 +151,11 @@ class Index extends Component
             $this->proximaReactivacion = false;
         }
 
+        $this->resetPage();
+    }
+
+    public function updatedPerPage(): void
+    {
         $this->resetPage();
     }
 

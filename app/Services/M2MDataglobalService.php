@@ -159,6 +159,12 @@ class M2MDataglobalService
                 $linea->saveQuietly();
             }
 
+            // ── Limpia vínculo incorrecto: SIM apunta a línea que no le corresponde ──
+            if ($simCard->lineas_id !== null && $simCard->lineas_id !== $linea->id) {
+                $simCard->lineas_id = null;
+                $simCard->saveQuietly();
+            }
+
             // ── Asignación SIM ↔ Línea (solo si ambos lados están libres) ────
             $simLibre   = ! $simCard->lineas_id;
             $lineaLibre = ! SimCard::withoutGlobalScope(EmpresaScope::class)
@@ -174,8 +180,8 @@ class M2MDataglobalService
 
         Log::info(
             "[M2MDataglobal] Sincronización empresa {$empresaId}: "
-            . "+{$insertados} SIMs nuevas, {$actualizados} actualizadas, "
-            . "{$lineasCreadas} líneas creadas, {$lineasAsignadas} asignadas."
+                . "+{$insertados} SIMs nuevas, {$actualizados} actualizadas, "
+                . "{$lineasCreadas} líneas creadas, {$lineasAsignadas} asignadas."
         );
 
         return [

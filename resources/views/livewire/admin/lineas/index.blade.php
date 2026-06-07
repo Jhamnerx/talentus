@@ -157,11 +157,20 @@
     </div>
     <!-- Table -->
     <div class="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-        <header class="px-5 py-4">
+        <header class="px-5 py-4 flex items-center justify-between">
             <h2 class="font-semibold text-slate-800 dark:text-slate-100">Total lineas <span
                     class="text-slate-400 dark:text-slate-500 font-medium">{{ $lineas->total() }}</span>
             </h2>
-
+            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <span>Mostrar</span>
+                <select wire:model.live="perPage" class="form-select text-sm py-1">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <span>por página</span>
+            </div>
         </header>
         <div>
             <!-- Table -->
