@@ -18,6 +18,7 @@ class Index extends Component
     public $to = '';
     public $operador = null;
     public $proximaReactivacion = false;
+    public $sinVehiculo = false;
     public $modalOpenImport = false;
 
 
@@ -72,6 +73,15 @@ class Index extends Component
                 ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
                 ->orderBy('date_to_suspend')
                 ->paginate(10);
+        } elseif ($this->sinVehiculo) {
+            $lineas = Lineas::where('baja', false)
+                ->whereDoesntHave('sim_card.vehiculos')
+                ->when(!empty($search) && strlen($search) >= 3, function ($query) use ($search) {
+                    $query->where('numero', 'like', '%' . $search . '%');
+                })
+                ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
+                ->orderBy('id', 'desc')
+                ->paginate(10);
         } elseif ($operador !== null) {
             $lineas = Lineas::where('operador_id', $operador)
                 ->where('numero', 'like', '%' . $search . '%')
@@ -111,16 +121,35 @@ class Index extends Component
         return view('livewire.admin.lineas.index', compact('lineas', 'operadoresList'));
     }
 
-    public function SetOperador($operador = null)
+    public function updatedOperador($value): void
     {
-        $this->operador = $operador;
-        $this->proximaReactivacion = false;
+        $this->operador = $value !== '' ? $value : null;
+
+        if ($this->operador !== null) {
+            $this->proximaReactivacion = false;
+            $this->sinVehiculo = false;
+        }
+
+        $this->resetPage();
     }
 
-    public function toggleProximaReactivacion()
+    public function updatedProximaReactivacion($value): void
     {
-        $this->proximaReactivacion = ! $this->proximaReactivacion;
-        $this->operador = null;
+        if ($value) {
+            $this->operador = null;
+            $this->sinVehiculo = false;
+        }
+
+        $this->resetPage();
+    }
+
+    public function updatedSinVehiculo($value): void
+    {
+        if ($value) {
+            $this->operador = null;
+            $this->proximaReactivacion = false;
+        }
+
         $this->resetPage();
     }
 
@@ -211,8 +240,12 @@ class Index extends Component
 
     public function openModalAsign()
     {
-
         $this->dispatch('open-modal-asign');
+    }
+
+    public function openModalRegistrarAsignacion()
+    {
+        $this->dispatch('open-modal-registrar-asignacion');
     }
 
     public function openModalCambiarChip(Lineas $linea)

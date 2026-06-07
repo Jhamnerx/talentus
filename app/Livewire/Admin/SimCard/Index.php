@@ -39,7 +39,7 @@ class Index extends Component
 
         $query = SimCard::query();
 
-        if ($this->operador !== null) {
+        if (!empty($this->operador)) {
             $query->where('sim_card.operador_id', $this->operador);
         }
 
@@ -82,9 +82,9 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function setOperador($operador = null)
+    public function updatedOperador($value): void
     {
-        $this->operador = $operador;
+        $this->operador = $value !== '' ? $value : null;
         $this->resetPage();
     }
 
@@ -111,7 +111,7 @@ class Index extends Component
         $this->dispatch(
             'notify',
             type: 'success',
-            message: "Sincronización completa: {$resultado['insertados']} nuevas, {$resultado['actualizados']} actualizadas."
+            message: "Sincronización completa: {$resultado['insertados']} SIMs nuevas, {$resultado['actualizados']} actualizadas, {$resultado['lineas_creadas']} líneas creadas, {$resultado['lineas_asignadas']} asignadas."
         );
 
         $this->resetPage();

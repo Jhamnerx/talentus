@@ -59,27 +59,13 @@
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
         <!-- Left: filtro por operador -->
-        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
-            <ul class="flex flex-wrap -m-1">
-                <li class="m-1">
-                    <button wire:click.prevent="setOperador()"
-                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                        Todas
-                    </button>
-                </li>
+        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 w-full sm:w-56">
+            <x-form.select wire:model.live="operador" placeholder="Todos los operadores">
+                <x-select.option label="Todos los operadores" value="" />
                 @foreach ($operadoresList as $opBtn)
-                    <li class="m-1">
-                        <button wire:click.prevent="setOperador({{ $opBtn->id }})"
-                            :class="clickeado === {{ $opBtn->id }} && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                            @click="clickeado = {{ $opBtn->id }}"
-                            class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                            {{ strtoupper($opBtn->name) }}
-                        </button>
-                    </li>
+                    <x-select.option value="{{ $opBtn->id }}" label="{{ strtoupper($opBtn->name) }}" />
                 @endforeach
-            </ul>
+            </x-form.select>
         </div>
 
         <!-- Right side -->

@@ -2,7 +2,8 @@
 
 namespace App\Livewire\Admin\Lineas;
 
-use App\Imports\Lineas;
+use App\Imports\LineasImport;
+use App\Models\Operador;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,6 +15,8 @@ class Import extends Component
 
 
     public $file;
+    public $operadorId;
+    public $sobrescribir = false;
     public $errorInfo = null;
     public $modalOpenImport = false;
 
@@ -25,10 +28,13 @@ class Import extends Component
 
 
     protected $rules = [
+        'operadorId' => 'required|exists:operadores,id',
         'file' => 'required|file|max:10024|mimes:xlsx,xls,csv',
     ];
 
     protected $messages = [
+        'operadorId.required' => 'Selecciona el operador de las líneas a importar',
+        'operadorId.exists' => 'Selecciona un operador válido',
         'file.required' => 'Debes seleccionar un archivo',
         'file.file' => 'Debes seleccionar un archivo',
         'file.max' => 'El tamaño maximo es de 10MB',
@@ -42,7 +48,9 @@ class Import extends Component
 
     public function render()
     {
-        return view('livewire.admin.lineas.import');
+        $operadores = Operador::orderBy('name')->get();
+
+        return view('livewire.admin.lineas.import', compact('operadores'));
     }
 
     public function importExcel()
@@ -51,8 +59,20 @@ class Import extends Component
         $this->errorInfo = null;
         try {
 
-            $exit = Excel::queueImport(new Lineas, $this->file);
+            $import = new LineasImport(auth()->user(), (int) $this->operadorId, (bool) $this->sobrescribir);
 
+            Excel::import($import, $this->file);
+
+            $resumen = $import->resumen();
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'IMPORTACIÓN COMPLETADA',
+                mensaje: "Creados: {$resumen['creados']} · Asignados: {$resumen['asignados']} · Omitidos: {$resumen['omitidos']}",
+            );
+
+            $this->modalOpenImport = false;
             $this->reset();
         } catch (Exception $e) {
             // dd($e);

@@ -25,6 +25,7 @@
     @livewire('admin.lineas.save')
     @livewire('admin.lineas.edit')
     @livewire('admin.lineas.cambiar-chip')
+    @livewire('admin.lineas.registrar-asignacion')
     @livewire('admin.gerencia.reportes.modales.reporte-lineas')
 
     {{-- Modales de Sim Cards --}}
