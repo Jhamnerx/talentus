@@ -52,6 +52,26 @@
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
                 @endif
+
+                {{-- Accesorios WorkOrder --}}
+                @if ($accesoriosOcupado)
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-sm font-medium text-gray-400 dark:text-gray-500">Accesorios WorkOrder</span>
+                            <p class="text-xs text-amber-600 dark:text-amber-400">
+                                ⚠️ Ya asignado a: <strong>{{ $accesoriosOcupado->nombre }}</strong>
+                            </p>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-400">
+                            No disponible
+                        </span>
+                    </div>
+                @else
+                    <x-form.toggle wire:model.live="es_accesorios" label="Accesorios WorkOrder" md />
+                    @error('es_accesorios')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                @endif
             </div>
         </div>
 

@@ -9,6 +9,7 @@ use App\Enums\WorkOrderStatus;
 use App\Models\WorkOrderItem;
 use App\Models\WorkOrderPhoto;
 use App\Models\ChecklistTemplate;
+use App\Models\Categoria;
 use App\Models\Productos;
 use App\Models\WorkOrderAccessory;
 use App\Models\WorkOrderChecklist;
@@ -663,11 +664,27 @@ class WorkOrderController extends Controller
 
         $total = $accesorios->sum('subtotal');
 
+        $categoriaAccesorios = Categoria::withoutGlobalScope(EmpresaScope::class)
+            ->where('es_accesorios', true)
+            ->where('empresa_id', $workOrder->empresa_id)
+            ->first();
+
+        $productosDisponibles = collect();
+        if ($categoriaAccesorios) {
+            $productosDisponibles = Productos::withoutGlobalScope(EmpresaScope::class)
+                ->where('empresa_id', $workOrder->empresa_id)
+                ->where('categoria_id', $categoriaAccesorios->id)
+                ->where('tipo', 'producto')
+                ->orderBy('descripcion')
+                ->get(['id', 'descripcion', 'valor_unitario', 'stock']);
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
-                'items' => $accesorios,
-                'total' => $total
+                'items'                => $accesorios,
+                'total'                => $total,
+                'productos_disponibles' => $productosDisponibles,
             ]
         ]);
     }

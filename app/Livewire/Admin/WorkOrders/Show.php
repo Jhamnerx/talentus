@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderItem;
 use App\Models\WorkOrderType;
+use App\Models\Categoria;
 use App\Models\WorkOrderAccessory;
 use App\Models\Productos;
 use App\Models\Vehiculos;
@@ -418,9 +419,15 @@ class Show extends Component
     #[Computed]
     public function productosAlmacen()
     {
-        return Productos::where('tipo', 'producto')
-            ->orderBy('descripcion')
-            ->get(['id', 'descripcion', 'valor_unitario', 'stock']);
+        $categoriaAccesorios = Categoria::where('es_accesorios', true)->first();
+
+        $query = Productos::where('tipo', 'producto')->orderBy('descripcion');
+
+        if ($categoriaAccesorios) {
+            $query->where('categoria_id', $categoriaAccesorios->id);
+        }
+
+        return $query->get(['id', 'descripcion', 'valor_unitario', 'stock']);
     }
 
     // ── Accesorios ────────────────────────────────────────────────────────

@@ -16,6 +16,7 @@ class EditModal extends Component
     public $nombre, $descripcion;
     public bool $es_equipo_gps = false;
     public bool $es_servicio_monitoreo = false;
+    public bool $es_accesorios = false;
     public bool $tieneProductos = false;
     public ?Categoria $categoria = null;
 
@@ -30,8 +31,12 @@ class EditModal extends Component
             ->where('empresa_id', $empresaId)
             ->when($this->categoria, fn($q) => $q->where('id', '!=', $this->categoria->id))
             ->first();
+        $accesoriosOcupado = Categoria::where('es_accesorios', true)
+            ->where('empresa_id', $empresaId)
+            ->when($this->categoria, fn($q) => $q->where('id', '!=', $this->categoria->id))
+            ->first();
 
-        return view('livewire.admin.categorias.edit-modal', compact('equipoGpsOcupado', 'monitoreoOcupado'));
+        return view('livewire.admin.categorias.edit-modal', compact('equipoGpsOcupado', 'monitoreoOcupado', 'accesoriosOcupado'));
     }
 
     #[On('open-modal-edit')]
@@ -43,6 +48,7 @@ class EditModal extends Component
         $this->descripcion           = $categoria->descripcion;
         $this->es_equipo_gps         = (bool) $categoria->es_equipo_gps;
         $this->es_servicio_monitoreo = (bool) $categoria->es_servicio_monitoreo;
+        $this->es_accesorios         = (bool) $categoria->es_accesorios;
         $this->tieneProductos        = $categoria->productos()->exists();
         $this->modalEdit             = true;
     }
@@ -60,15 +66,18 @@ class EditModal extends Component
 
         // Si ya tiene productos, preservar los flags originales (no permitir modificarlos)
         if ($this->tieneProductos) {
-            unset($datos['es_equipo_gps'], $datos['es_servicio_monitoreo']);
+            unset($datos['es_equipo_gps'], $datos['es_servicio_monitoreo'], $datos['es_accesorios']);
         } else {
-            // Validar exclusividad (excluyendo la propia categoria)
             if ($this->es_equipo_gps && Categoria::where('es_equipo_gps', true)->where('id', '!=', $this->categoria->id)->exists()) {
                 $this->addError('es_equipo_gps', 'Ya existe una categoría configurada como Equipo GPS.');
                 return;
             }
             if ($this->es_servicio_monitoreo && Categoria::where('es_servicio_monitoreo', true)->where('id', '!=', $this->categoria->id)->exists()) {
                 $this->addError('es_servicio_monitoreo', 'Ya existe una categoría configurada como Servicio de Monitoreo.');
+                return;
+            }
+            if ($this->es_accesorios && Categoria::where('es_accesorios', true)->where('id', '!=', $this->categoria->id)->exists()) {
+                $this->addError('es_accesorios', 'Ya existe una categoría configurada como Accesorios WorkOrder.');
                 return;
             }
         }
@@ -93,6 +102,6 @@ class EditModal extends Component
 
     public function resetProp()
     {
-        $this->reset(['nombre', 'descripcion', 'categoria', 'es_equipo_gps', 'es_servicio_monitoreo', 'tieneProductos']);
+        $this->reset(['nombre', 'descripcion', 'categoria', 'es_equipo_gps', 'es_servicio_monitoreo', 'es_accesorios', 'tieneProductos']);
     }
 }

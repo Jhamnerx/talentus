@@ -21,18 +21,23 @@
                     {{-- Bloqueado: solo lectura --}}
                     <div class="flex items-center justify-between py-1">
                         <span class="text-sm text-gray-500 dark:text-gray-400">Equipo GPS</span>
-                        <span
-                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
                             {{ $es_equipo_gps ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-400' }}">
                             {{ $es_equipo_gps ? '📡 Activo' : 'Inactivo' }}
                         </span>
                     </div>
                     <div class="flex items-center justify-between py-1">
                         <span class="text-sm text-gray-500 dark:text-gray-400">Servicio de Monitoreo</span>
-                        <span
-                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
                             {{ $es_servicio_monitoreo ? 'bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-400' }}">
                             {{ $es_servicio_monitoreo ? '🛰️ Activo' : 'Inactivo' }}
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between py-1">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Accesorios WorkOrder</span>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
+                            {{ $es_accesorios ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-400' }}">
+                            {{ $es_accesorios ? '🔧 Activo' : 'Inactivo' }}
                         </span>
                     </div>
                 @else
@@ -41,44 +46,41 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <span class="text-sm font-medium text-gray-400 dark:text-gray-500">Equipo GPS</span>
-                                <p class="text-xs text-amber-600 dark:text-amber-400">
-                                    ⚠️ Ya asignado a: <strong>{{ $equipoGpsOcupado->nombre }}</strong>
-                                </p>
+                                <p class="text-xs text-amber-600 dark:text-amber-400">⚠️ Ya asignado a: <strong>{{ $equipoGpsOcupado->nombre }}</strong></p>
                             </div>
-                            <span
-                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-400">
-                                No disponible
-                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-400">No disponible</span>
                         </div>
                     @else
-                        <x-form.toggle name="es_equipo_gps_edit" wire:model.live="es_equipo_gps" label="Equipo GPS"
-                            md />
-                        @error('es_equipo_gps')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
+                        <x-form.toggle name="es_equipo_gps_edit" wire:model.live="es_equipo_gps" label="Equipo GPS" md />
+                        @error('es_equipo_gps') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     @endif
 
                     {{-- Servicio de Monitoreo --}}
                     @if ($monitoreoOcupado)
                         <div class="flex items-center justify-between">
                             <div>
-                                <span class="text-sm font-medium text-gray-400 dark:text-gray-500">Servicio de
-                                    Monitoreo</span>
-                                <p class="text-xs text-amber-600 dark:text-amber-400">
-                                    ⚠️ Ya asignado a: <strong>{{ $monitoreoOcupado->nombre }}</strong>
-                                </p>
+                                <span class="text-sm font-medium text-gray-400 dark:text-gray-500">Servicio de Monitoreo</span>
+                                <p class="text-xs text-amber-600 dark:text-amber-400">⚠️ Ya asignado a: <strong>{{ $monitoreoOcupado->nombre }}</strong></p>
                             </div>
-                            <span
-                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-400">
-                                No disponible
-                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-400">No disponible</span>
                         </div>
                     @else
-                        <x-form.toggle name="es_servicio_monitoreo_edit" wire:model.live="es_servicio_monitoreo"
-                            label="Servicio de Monitoreo" md />
-                        @error('es_servicio_monitoreo')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
+                        <x-form.toggle name="es_servicio_monitoreo_edit" wire:model.live="es_servicio_monitoreo" label="Servicio de Monitoreo" md />
+                        @error('es_servicio_monitoreo') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    @endif
+
+                    {{-- Accesorios WorkOrder --}}
+                    @if ($accesoriosOcupado)
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-sm font-medium text-gray-400 dark:text-gray-500">Accesorios WorkOrder</span>
+                                <p class="text-xs text-amber-600 dark:text-amber-400">⚠️ Ya asignado a: <strong>{{ $accesoriosOcupado->nombre }}</strong></p>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-400">No disponible</span>
+                        </div>
+                    @else
+                        <x-form.toggle name="es_accesorios_edit" wire:model.live="es_accesorios" label="Accesorios WorkOrder" md />
+                        @error('es_accesorios') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     @endif
                 @endif
             </div>

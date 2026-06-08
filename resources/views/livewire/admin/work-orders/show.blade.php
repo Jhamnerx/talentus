@@ -1076,7 +1076,9 @@
             @if ($workOrder->puedeEditar())
                 <button wire:click="abrirModalAccesorio"
                     class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
-                    <x-heroicon-o-plus class="w-4 h-4" />
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
                     Agregar
                 </button>
             @endif
@@ -1091,12 +1093,24 @@
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-900">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Producto / Accesorio</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Acción</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Serial</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Cant.</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Precio Unit.</th>
-                            <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Subtotal</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                Producto / Accesorio</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                Acción</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                Serial</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                Cant.</th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                Precio Unit.</th>
+                            <th
+                                class="px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                Subtotal</th>
                             @if ($workOrder->puedeEditar())
                                 <th class="px-4 py-3 w-12"></th>
                             @endif
@@ -1108,22 +1122,28 @@
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                     <div class="font-medium">{{ $accessory->nombre }}</div>
                                     @if ($accessory->descripcion)
-                                        <div class="text-xs text-gray-500 dark:text-gray-400">{{ $accessory->descripcion }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                                            {{ $accessory->descripcion }}</div>
                                     @endif
                                     @if ($accessory->producto)
-                                        <div class="text-xs text-indigo-500 dark:text-indigo-400">Stock: {{ $accessory->producto->stock }}</div>
+                                        <div class="text-xs text-indigo-500 dark:text-indigo-400">Stock:
+                                            {{ $accessory->producto->stock }}</div>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">
                                     @php
-                                        $badge = match($accessory->accion) {
-                                            'instalado'   => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-                                            'retirado'    => 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
-                                            'reemplazado' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-                                            default       => 'bg-gray-100 text-gray-600',
+                                        $badge = match ($accessory->accion) {
+                                            'instalado'
+                                                => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+                                            'retirado'
+                                                => 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
+                                            'reemplazado'
+                                                => 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+                                            default => 'bg-gray-100 text-gray-600',
                                         };
                                     @endphp
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $badge }}">
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $badge }}">
                                         {{ ucfirst($accessory->accion) }}
                                     </span>
                                 </td>
@@ -1136,7 +1156,8 @@
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-mono">
                                     S/ {{ number_format($accessory->precio_unitario, 2) }}
                                 </td>
-                                <td class="px-4 py-3 text-sm font-mono font-semibold text-right text-gray-900 dark:text-white">
+                                <td
+                                    class="px-4 py-3 text-sm font-mono font-semibold text-right text-gray-900 dark:text-white">
                                     S/ {{ number_format($accessory->subtotal, 2) }}
                                 </td>
                                 @if ($workOrder->puedeEditar())
@@ -1144,18 +1165,25 @@
                                         <button wire:click="eliminarAccesorio({{ $accessory->id }})"
                                             wire:confirm="¿Eliminar '{{ $accessory->nombre }}'? Se revertirá el stock."
                                             class="text-rose-500 hover:text-rose-700 transition-colors">
-                                            <x-heroicon-o-trash class="w-4 h-4" />
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
                                         </button>
                                     </td>
                                 @endif
                             </tr>
                         @endforeach
                         <tr class="bg-gray-50 dark:bg-gray-900 font-semibold">
-                            <td colspan="{{ $workOrder->puedeEditar() ? 5 : 5 }}" class="px-4 py-3 text-sm text-gray-900 dark:text-white text-right">Total:</td>
+                            <td colspan="{{ $workOrder->puedeEditar() ? 5 : 5 }}"
+                                class="px-4 py-3 text-sm text-gray-900 dark:text-white text-right">Total:</td>
                             <td class="px-4 py-3 text-sm font-mono font-bold text-right text-gray-900 dark:text-white">
                                 S/ {{ number_format($workOrder->accessories->sum('subtotal'), 2) }}
                             </td>
-                            @if ($workOrder->puedeEditar())<td></td>@endif
+                            @if ($workOrder->puedeEditar())
+                                <td></td>
+                            @endif
                         </tr>
                     </tbody>
                 </table>
@@ -1169,24 +1197,26 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                     <h3 class="text-base font-semibold text-gray-900 dark:text-white">Agregar Accesorio</h3>
-                    <button wire:click="$set('modalAccesorio', false)" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                        <x-heroicon-o-x-mark class="w-5 h-5" />
+                    <button wire:click="$set('modalAccesorio', false)"
+                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
 
                 <div class="px-6 py-5 space-y-4">
                     {{-- Producto del almacén (opcional) --}}
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Producto del almacén <span class="text-gray-400 font-normal">(opcional)</span>
-                        </label>
-                        <select wire:model.live="accesorioProductoId"
-                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="">— Sin vincular a inventario —</option>
-                            @foreach ($this->productosAlmacen as $prod)
-                                <option value="{{ $prod->id }}">{{ $prod->descripcion }} (stock: {{ $prod->stock }})</option>
-                            @endforeach
-                        </select>
+                        <x-form.select
+                            wire:model.live="accesorioProductoId"
+                            label="Producto del almacén (opcional)"
+                            placeholder="— Sin vincular a inventario —"
+                            :options="$this->productosAlmacen->map(fn($p) => ['value' => $p->id, 'label' => $p->descripcion . '  (stock: ' . $p->stock . ')'])->toArray()"
+                            option-label="label"
+                            option-value="value"
+                        />
                     </div>
 
                     {{-- Nombre --}}
@@ -1196,7 +1226,9 @@
                         </label>
                         <input wire:model="accesorioNombre" type="text" placeholder="Ej: Cable USB, Antena GPS..."
                             class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-                        @error('accesorioNombre') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
+                        @error('accesorioNombre')
+                            <p class="text-xs text-rose-500 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -1220,7 +1252,9 @@
                             </label>
                             <input wire:model="accesorioCantidad" type="number" min="1"
                                 class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500" />
-                            @error('accesorioCantidad') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
+                            @error('accesorioCantidad')
+                                <p class="text-xs text-rose-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -1235,12 +1269,15 @@
                                 <input wire:model="accesorioPrecio" type="number" step="0.01" min="0"
                                     class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm pl-8 pr-3 py-2 focus:ring-2 focus:ring-indigo-500" />
                             </div>
-                            @error('accesorioPrecio') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
+                            @error('accesorioPrecio')
+                                <p class="text-xs text-rose-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         {{-- Serial --}}
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Serial</label>
+                            <label
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Serial</label>
                             <input wire:model="accesorioSerial" type="text" placeholder="Opcional"
                                 class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500" />
                         </div>
@@ -1248,7 +1285,8 @@
 
                     {{-- Descripción --}}
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción adicional</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción
+                            adicional</label>
                         <textarea wire:model="accesorioDescripcion" rows="2" placeholder="Opcional..."
                             class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
                     </div>
@@ -1263,7 +1301,8 @@
                         class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
                         <span wire:loading wire:target="guardarAccesorio">
                             <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                             </svg>
                         </span>
