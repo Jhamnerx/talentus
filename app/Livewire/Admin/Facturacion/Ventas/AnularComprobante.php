@@ -10,6 +10,7 @@ use Livewire\Attributes\On;
 use App\Models\EnvioResumen;
 use App\Models\Dispositivos;
 use App\Models\PeriodoCobro;
+use App\Models\Productos;
 use App\Models\TipoComprobantes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -166,6 +167,15 @@ class AnularComprobante extends Component
         if ($dispositivosIds->isNotEmpty()) {
             Dispositivos::whereIn('id', $dispositivosIds)
                 ->update(['estado' => Dispositivos::STOCK]);
+        }
+
+        // Restaurar stock de productos físicos vendidos
+        foreach ($this->invoice->ventaDetalles as $detalle) {
+            if ($detalle->tipo === 'producto' && $detalle->producto_id) {
+                Productos::where('id', $detalle->producto_id)
+                    ->where('tipo', 'producto')
+                    ->increment('stock', $detalle->cantidad);
+            }
         }
 
         // Revertir PeriodosCobro vinculados a esta venta

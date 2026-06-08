@@ -14,6 +14,7 @@ use App\Notifications\Ventas\EnviarReciboCliente;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Models\Productos;
 
 #[ObservedBy(RecibosObserver::class)]
 class Recibos extends Model
@@ -134,10 +135,15 @@ class Recibos extends Model
     public static function createItems($recibo, $reciboItems)
     {
         foreach ($reciboItems as $reciboItem) {
-
             $reciboItem['recibos_id'] = $recibo->id;
 
             $item = $recibo->detalles()->create($reciboItem);
+
+            if (!empty($reciboItem['producto_id'])) {
+                Productos::where('id', $reciboItem['producto_id'])
+                    ->where('tipo', 'producto')
+                    ->decrement('stock', $reciboItem['cantidad'] ?? 1);
+            }
         }
     }
 
