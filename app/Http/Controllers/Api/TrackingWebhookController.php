@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Dispositivos;
+use App\Models\Lineas;
 use App\Models\Vehiculos;
 use App\Scopes\EmpresaScope;
 use Illuminate\Http\JsonResponse;
@@ -66,10 +67,23 @@ class TrackingWebhookController extends Controller
             $cambios[] = 'gpswox_active';
         }
 
-        // --- numero (SIM) ---
+        // --- numero (SIM) + sim_card_id ---
         if (!blank($simNumber) && $vehiculo->numero !== $simNumber) {
             $vehiculo->numero = $simNumber;
             $cambios[] = 'numero';
+        }
+
+        if (!blank($simNumber)) {
+            $linea = Lineas::withoutGlobalScope(EmpresaScope::class)
+                ->where('numero', $simNumber)
+                ->first();
+
+            $simCard = $linea?->sim_card;
+
+            if ($simCard && $vehiculo->sim_card_id !== $simCard->id) {
+                $vehiculo->sim_card_id = $simCard->id;
+                $cambios[] = 'sim_card_id';
+            }
         }
 
         // --- Timestamp de sincronización ---
