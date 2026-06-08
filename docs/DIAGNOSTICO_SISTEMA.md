@@ -94,17 +94,12 @@ Referencias:
 | Eliminar recibo                             | Repone stock de cada detalle producto.                                                         | **Resuelto**    |
 | Anular comprobante                          | Repone stock de cada detalle producto.                                                         | **Resuelto**    |
 | Guias de remision                           | Crea detalles sin reservar/descontar stock.                                                    | Definicion pendiente |
-| WorkOrder accesorios                        | Crea accesorio sin descontar stock.                                                            | Riesgo alto     |
+| WorkOrder accesorios                        | Observer decrementa stock al instalar/reemplazar; valida disponibilidad antes de crear.        | **Resuelto**    |
 
 ### 5.2 Pendiente prioritario
 
-**Editar recibo** — `app/Livewire/Admin/Ventas/Recibos/Edit.php:396-400`:
-- Borra y recrea detalles sin calcular diferencial de stock.
-- Mismo patron que se corrigio en `Compras\Edit`: capturar `$oldTotals`, recrear, calcular diff y aplicar `increment`/`decrement`.
-
-**WorkOrder accesorios** — `app/Http/Controllers/Api/WorkOrderController.php:473-501`:
-- `guardarAccesorio()` no descuenta `Productos.stock`.
-- Requiere decision de negocio: ¿los accesorios salen del almacen al instalar o al facturar?
+**WorkOrder proyectos** — `app/Http/Controllers/Api/WorkOrderController.php:710-724`:
+- `guardarDispositivoItem()` acepta `imei` como texto; no valida contra tabla `dispositivos`.
 
 ### 5.3 Recomendacion de diseno (a largo plazo)
 
@@ -170,9 +165,7 @@ Idealmente guardar tabla `stock_movimientos` con `producto_id`, `tipo`, `cantida
 
 ### Criticos
 
-1. **Editar recibo** no ajusta stock diferencial (`app/Livewire/Admin/Ventas/Recibos/Edit.php:396-400`).
-2. **WorkOrder accesorios** no descuentan stock (`app/Http/Controllers/Api/WorkOrderController.php:473-501`).
-3. **WorkOrder proyectos** aceptan IMEI como texto sin validar disponibilidad real.
+1. **WorkOrder proyectos** aceptan IMEI como texto sin validar disponibilidad real (`app/Http/Controllers/Api/WorkOrderController.php:710-724`).
 
 ### Altos
 
@@ -197,7 +190,7 @@ Idealmente guardar tabla `stock_movimientos` con `producto_id`, `tipo`, `cantida
 ### Inmediato
 
 1. Corregir edicion de recibo: diferencial de stock en `Recibos\Edit` (mismo patron que `Compras\Edit`).
-2. Decidir politica de stock para WorkOrder accesorios e implementar.
+2. Validar IMEIs reales en WorkOrder proyectos e implementar.
 
 ### Sprint siguiente: dispositivos y WorkOrders
 
