@@ -68,6 +68,11 @@ class LineasImport implements ToModel, WithChunkReading, SkipsOnError, SkipsOnFa
             $linea->save();
         }
 
+        if ($simCard && ! $simCard->operador_id) {
+            $simCard->operador_id = $this->operadorId;
+            $simCard->save();
+        }
+
         // Ninguno existe: crear línea y chip ya asociados entre sí
         if (! $linea && ! $simCard) {
             $linea = Lineas::create([
