@@ -354,7 +354,7 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
 | Estas rutas son públicas y no requieren autenticación.
 */
 
-Route::prefix('consultas')->name('api.consultas.')->group(function () {
+Route::prefix('consultas')->name('api.consultas.')->middleware('throttle:60,1')->group(function () {
     // GET /api/consultas/acta/{codigo}
     // Buscar acta por código
     // Respuesta: { "success": true, "data": { "acta": {...}, "vehiculo": {...}, "cliente": {...} } }
