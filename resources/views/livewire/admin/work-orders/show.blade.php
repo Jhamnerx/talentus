@@ -1189,14 +1189,16 @@
                 <div class="px-6 py-5 space-y-4">
                     {{-- Producto del almacén (opcional) --}}
                     <div>
-                        <x-form.select
-                            wire:model.live="accesorioProductoId"
-                            label="Producto del almacén (opcional)"
-                            placeholder="— Sin vincular a inventario —"
-                            :options="$this->productosAlmacen->map(fn($p) => ['value' => $p->id, 'label' => $p->descripcion . '  (stock: ' . $p->stock . ')'])->toArray()"
-                            option-label="label"
-                            option-value="value"
-                        />
+                        <x-form.select wire:model.live="accesorioProductoId" label="Producto del almacén (opcional)"
+                            placeholder="— Sin vincular a inventario —" :options="$this->productosAlmacen
+                                ->map(
+                                    fn($p) => [
+                                        'value' => $p->id,
+                                        'label' => $p->descripcion . '  (stock: ' . $p->stock . ')',
+                                    ],
+                                )
+                                ->toArray()" option-label="label"
+                            option-value="value" />
                     </div>
 
                     {{-- Nombre --}}

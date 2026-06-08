@@ -17,11 +17,8 @@ class WorkOrderAccessory extends Model
 
     protected $casts = [
         'cantidad' => 'integer',
-        'precio_unitario' => 'decimal:2',
-        'subtotal' => 'decimal:2',
     ];
 
-    // Relaciones
     public function workOrder(): BelongsTo
     {
         return $this->belongsTo(WorkOrder::class);
@@ -30,21 +27,5 @@ class WorkOrderAccessory extends Model
     public function producto(): BelongsTo
     {
         return $this->belongsTo(Productos::class, 'producto_id')->withTrashed();
-    }
-
-    // Métodos auxiliares
-    public function calcularSubtotal(): void
-    {
-        $this->subtotal = $this->cantidad * $this->precio_unitario;
-    }
-
-    // Event hooks
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($accessory) {
-            $accessory->calcularSubtotal();
-        });
     }
 }

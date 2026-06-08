@@ -483,7 +483,6 @@ class Show extends Component
             'descripcion'   => $this->accesorioDescripcion ?: null,
             'cantidad'      => $this->accesorioCantidad,
             'accion'        => $this->accesorioAccion,
-            'precio_unitario' => 0,
         ]);
 
         $this->modalAccesorio = false;

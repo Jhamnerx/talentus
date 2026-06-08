@@ -122,9 +122,23 @@ class WorkOrderController extends Controller
 
         $workOrder->load($relations);
 
+        $modeloNombre    = null;
+        $modeloTecnologia = null;
+        $modeloDispId = $workOrder->metadata['modelo_dispositivo_id'] ?? null;
+        if ($modeloDispId) {
+            $modelo = \App\Models\ModelosDispositivo::find((int) $modeloDispId);
+            if ($modelo) {
+                $modeloNombre    = trim(strtoupper(($modelo->marca ?? '') . ' ' . ($modelo->modelo ?? '')));
+                $modeloTecnologia = $modelo->tecnologia ?? null;
+            }
+        }
+
         return response()->json([
             'success' => true,
-            'data' => $workOrder
+            'data' => array_merge($workOrder->toArray(), [
+                'modelo_dispositivo_nombre'     => $modeloNombre,
+                'modelo_dispositivo_tecnologia' => $modeloTecnologia,
+            ])
         ]);
     }
 
@@ -137,11 +151,11 @@ class WorkOrderController extends Controller
         abort_if($workOrder->bloqueado, 422, 'La orden está bloqueada y no puede modificarse.');
 
         $data = $request->validate([
-            'imei_gps'    => ['sometimes', 'nullable', 'string', 'max:20'],
-            'imei_sim'    => ['sometimes', 'nullable', 'string', 'max:22'],
+            'imei'          => ['sometimes', 'nullable', 'string', 'max:20'],
+            'iccid'         => ['sometimes', 'nullable', 'string', 'max:22'],
             'observaciones' => ['sometimes', 'nullable', 'string', 'max:2000'],
-            'contacto'    => ['sometimes', 'nullable', 'string', 'max:200'],
-            'sector'      => ['sometimes', 'nullable', 'string', 'max:200'],
+            'contacto'      => ['sometimes', 'nullable', 'string', 'max:200'],
+            'sector'        => ['sometimes', 'nullable', 'string', 'max:200'],
         ]);
 
         $workOrder->update($data);
@@ -558,7 +572,6 @@ class WorkOrderController extends Controller
                 'descripcion'     => $request->descripcion,
                 'cantidad'        => $request->cantidad,
                 'accion'          => $request->accion,
-                'precio_unitario' => 0,
             ]);
 
             return response()->json([
@@ -659,8 +672,6 @@ class WorkOrderController extends Controller
             ->with('producto')
             ->get();
 
-        $total = $accesorios->sum('subtotal');
-
         $categoriaAccesorios = Categoria::withoutGlobalScope(EmpresaScope::class)
             ->where('es_accesorios', true)
             ->where('empresa_id', $workOrder->empresa_id)
@@ -676,12 +687,15 @@ class WorkOrderController extends Controller
                 ->get(['id', 'descripcion', 'valor_unitario', 'stock']);
         }
 
+        $metadata = $workOrder->metadata ?? [];
+        $accesoriosRequeridos = $metadata['accesorios'] ?? [];
+
         return response()->json([
             'success' => true,
             'data' => [
-                'items'                => $accesorios,
-                'total'                => $total,
+                'items'                 => $accesorios,
                 'productos_disponibles' => $productosDisponibles,
+                'accesorios_requeridos' => $accesoriosRequeridos,
             ]
         ]);
     }
