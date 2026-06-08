@@ -132,6 +132,9 @@ class LineasImport implements ToModel, WithChunkReading, SkipsOnError, SkipsOnFa
             ]);
 
             $simCard->lineas_id = $linea->id;
+            if (! $simCard->operador_id) {
+                $simCard->operador_id = $this->operadorId;
+            }
             $simCard->save();
 
             $this->registrarCambio($simCard, null, $linea->id);
@@ -163,6 +166,9 @@ class LineasImport implements ToModel, WithChunkReading, SkipsOnError, SkipsOnFa
         }
 
         $simCard->lineas_id = $linea->id;
+        if (! $simCard->operador_id) {
+            $simCard->operador_id = $this->operadorId;
+        }
         $simCard->save();
 
         $this->registrarCambio($simCard, null, $linea->id);
