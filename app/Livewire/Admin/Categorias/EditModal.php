@@ -12,8 +12,9 @@ class EditModal extends Component
 {
     use WireUiActions;
 
-    public $modalEdit = false;
-    public $nombre, $descripcion;
+    public bool $modalEdit = false;
+    public ?string $nombre = null;
+    public ?string $descripcion = null;
     public bool $es_equipo_gps = false;
     public bool $es_servicio_monitoreo = false;
     public bool $es_accesorios = false;
@@ -65,8 +66,9 @@ class EditModal extends Component
         $datos = $this->validate($request->rules($this->categoria), $request->messages());
 
         // Si ya tiene productos, preservar los flags originales (no permitir modificarlos)
+        // GPS y Monitoreo bloqueados si ya hay productos (afectan facturación)
         if ($this->tieneProductos) {
-            unset($datos['es_equipo_gps'], $datos['es_servicio_monitoreo'], $datos['es_accesorios']);
+            unset($datos['es_equipo_gps'], $datos['es_servicio_monitoreo']);
         } else {
             if ($this->es_equipo_gps && Categoria::where('es_equipo_gps', true)->where('id', '!=', $this->categoria->id)->exists()) {
                 $this->addError('es_equipo_gps', 'Ya existe una categoría configurada como Equipo GPS.');
@@ -76,10 +78,12 @@ class EditModal extends Component
                 $this->addError('es_servicio_monitoreo', 'Ya existe una categoría configurada como Servicio de Monitoreo.');
                 return;
             }
-            if ($this->es_accesorios && Categoria::where('es_accesorios', true)->where('id', '!=', $this->categoria->id)->exists()) {
-                $this->addError('es_accesorios', 'Ya existe una categoría configurada como Accesorios WorkOrder.');
-                return;
-            }
+        }
+
+        // es_accesorios siempre editable (solo clasifica en almacén, no afecta facturación)
+        if ($this->es_accesorios && Categoria::where('es_accesorios', true)->where('id', '!=', $this->categoria->id)->exists()) {
+            $this->addError('es_accesorios', 'Ya existe una categoría configurada como Accesorios WorkOrder.');
+            return;
         }
 
         try {
