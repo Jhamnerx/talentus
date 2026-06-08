@@ -43,9 +43,7 @@ class Show extends Component
     public string $accesorioNombre = '';
     public string $accesorioDescripcion = '';
     public int $accesorioCantidad = 1;
-    public string $accesorioSerial = '';
     public string $accesorioAccion = 'instalado';
-    public float $accesorioPrecio = 0;
 
     // ── Gestión de ítems del proyecto ────────────────────────────────────
     public string $nuevoItemPlaca = '';
@@ -434,14 +432,12 @@ class Show extends Component
 
     public function abrirModalAccesorio(): void
     {
-        $this->accesorioProductoId = null;
-        $this->accesorioNombre     = '';
+        $this->accesorioProductoId  = null;
+        $this->accesorioNombre      = '';
         $this->accesorioDescripcion = '';
-        $this->accesorioCantidad   = 1;
-        $this->accesorioSerial     = '';
-        $this->accesorioAccion     = 'instalado';
-        $this->accesorioPrecio     = 0;
-        $this->modalAccesorio      = true;
+        $this->accesorioCantidad    = 1;
+        $this->accesorioAccion      = 'instalado';
+        $this->modalAccesorio       = true;
     }
 
     public function updatedAccesorioProductoId(?int $value): void
@@ -462,11 +458,9 @@ class Show extends Component
             'accesorioNombre'   => 'required|string|max:255',
             'accesorioCantidad' => 'required|integer|min:1',
             'accesorioAccion'   => 'required|in:instalado,retirado,reemplazado',
-            'accesorioPrecio'   => 'required|numeric|min:0',
         ], [
-            'accesorioNombre.required'   => 'El nombre del accesorio es obligatorio.',
-            'accesorioCantidad.min'      => 'La cantidad debe ser al menos 1.',
-            'accesorioPrecio.required'   => 'El precio unitario es obligatorio.',
+            'accesorioNombre.required' => 'El nombre del accesorio es obligatorio.',
+            'accesorioCantidad.min'    => 'La cantidad debe ser al menos 1.',
         ]);
 
         if (!$this->workOrder->puedeEditar()) {
@@ -483,14 +477,13 @@ class Show extends Component
         }
 
         WorkOrderAccessory::create([
-            'work_order_id'   => $this->workOrder->id,
-            'producto_id'     => $this->accesorioProductoId ?: null,
-            'nombre'          => $this->accesorioNombre,
-            'descripcion'     => $this->accesorioDescripcion ?: null,
-            'cantidad'        => $this->accesorioCantidad,
-            'serial'          => $this->accesorioSerial ?: null,
-            'accion'          => $this->accesorioAccion,
-            'precio_unitario' => $this->accesorioPrecio,
+            'work_order_id' => $this->workOrder->id,
+            'producto_id'   => $this->accesorioProductoId ?: null,
+            'nombre'        => $this->accesorioNombre,
+            'descripcion'   => $this->accesorioDescripcion ?: null,
+            'cantidad'      => $this->accesorioCantidad,
+            'accion'        => $this->accesorioAccion,
+            'precio_unitario' => 0,
         ]);
 
         $this->modalAccesorio = false;

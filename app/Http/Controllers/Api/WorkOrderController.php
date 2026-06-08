@@ -521,12 +521,10 @@ class WorkOrderController extends Controller
     {
         $request->validate([
             'producto_id' => 'nullable|exists:productos,id',
-            'nombre' => 'required|string|max:255',
+            'nombre'      => 'required|string|max:255',
             'descripcion' => 'nullable|string',
-            'cantidad' => 'required|integer|min:1',
-            'serial' => 'nullable|string|max:100',
-            'accion' => 'required|in:instalado,retirado,reemplazado',
-            'precio_unitario' => 'required|numeric|min:0',
+            'cantidad'    => 'required|integer|min:1',
+            'accion'      => 'required|in:instalado,retirado,reemplazado',
         ]);
 
         if (!$workOrder->puedeEditar()) {
@@ -554,14 +552,13 @@ class WorkOrderController extends Controller
 
         try {
             $accessory = WorkOrderAccessory::create([
-                'work_order_id' => $workOrder->id,
-                'producto_id' => $request->producto_id,
-                'nombre' => $request->nombre,
-                'descripcion' => $request->descripcion,
-                'cantidad' => $request->cantidad,
-                'serial' => $request->serial,
-                'accion' => $request->accion,
-                'precio_unitario' => $request->precio_unitario,
+                'work_order_id'   => $workOrder->id,
+                'producto_id'     => $request->producto_id,
+                'nombre'          => $request->nombre,
+                'descripcion'     => $request->descripcion,
+                'cantidad'        => $request->cantidad,
+                'accion'          => $request->accion,
+                'precio_unitario' => 0,
             ]);
 
             return response()->json([

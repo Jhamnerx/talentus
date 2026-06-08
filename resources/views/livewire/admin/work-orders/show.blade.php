@@ -1101,16 +1101,7 @@
                                 Acción</th>
                             <th
                                 class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Serial</th>
-                            <th
-                                class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                                 Cant.</th>
-                            <th
-                                class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Precio Unit.</th>
-                            <th
-                                class="px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                Subtotal</th>
                             @if ($workOrder->puedeEditar())
                                 <th class="px-4 py-3 w-12"></th>
                             @endif
@@ -1147,18 +1138,8 @@
                                         {{ ucfirst($accessory->accion) }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 font-mono">
-                                    {{ $accessory->serial ?? '—' }}
-                                </td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white text-center">
                                     {{ $accessory->cantidad }}
-                                </td>
-                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-mono">
-                                    S/ {{ number_format($accessory->precio_unitario, 2) }}
-                                </td>
-                                <td
-                                    class="px-4 py-3 text-sm font-mono font-semibold text-right text-gray-900 dark:text-white">
-                                    S/ {{ number_format($accessory->subtotal, 2) }}
                                 </td>
                                 @if ($workOrder->puedeEditar())
                                     <td class="px-4 py-3 text-center">
@@ -1176,10 +1157,9 @@
                             </tr>
                         @endforeach
                         <tr class="bg-gray-50 dark:bg-gray-900 font-semibold">
-                            <td colspan="{{ $workOrder->puedeEditar() ? 5 : 5 }}"
-                                class="px-4 py-3 text-sm text-gray-900 dark:text-white text-right">Total:</td>
-                            <td class="px-4 py-3 text-sm font-mono font-bold text-right text-gray-900 dark:text-white">
-                                S/ {{ number_format($workOrder->accessories->sum('subtotal'), 2) }}
+                            <td colspan="{{ $workOrder->puedeEditar() ? 3 : 2 }}"
+                                class="px-4 py-3 text-sm text-gray-900 dark:text-white text-right">
+                                Total: {{ $workOrder->accessories->sum('cantidad') }} ítems
                             </td>
                             @if ($workOrder->puedeEditar())
                                 <td></td>
@@ -1255,31 +1235,6 @@
                             @error('accesorioCantidad')
                                 <p class="text-xs text-rose-500 mt-1">{{ $message }}</p>
                             @enderror
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        {{-- Precio --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Precio unitario <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">S/</span>
-                                <input wire:model="accesorioPrecio" type="number" step="0.01" min="0"
-                                    class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm pl-8 pr-3 py-2 focus:ring-2 focus:ring-indigo-500" />
-                            </div>
-                            @error('accesorioPrecio')
-                                <p class="text-xs text-rose-500 mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- Serial --}}
-                        <div>
-                            <label
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Serial</label>
-                            <input wire:model="accesorioSerial" type="text" placeholder="Opcional"
-                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500" />
                         </div>
                     </div>
 
