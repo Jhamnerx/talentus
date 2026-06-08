@@ -391,6 +391,9 @@ class Edit extends Component
 
             $this->compra->update($updateData);
 
+            $oldTotals = $this->compra->detalle->groupBy('producto_id')
+                ->map(fn($g) => $g->sum('cantidad'));
+
             $this->compra->detalle()->delete();
             foreach ($this->items as $item) {
                 $this->compra->detalle()->create([
@@ -399,6 +402,18 @@ class Edit extends Component
                     'precio' => $item['precio'],
                     'importe_total' => $item['importe_total'],
                 ]);
+            }
+
+            $newTotals = collect($this->items)->groupBy('producto_id')
+                ->map(fn($g) => $g->sum('cantidad'));
+            $allProductoIds = $oldTotals->keys()->merge($newTotals->keys())->unique();
+            foreach ($allProductoIds as $productoId) {
+                $diff = $newTotals->get($productoId, 0) - $oldTotals->get($productoId, 0);
+                if ($diff !== 0) {
+                    Productos::where('id', $productoId)
+                        ->where('tipo', 'producto')
+                        ->increment('stock', $diff);
+                }
             }
 
             // Actualizar payments

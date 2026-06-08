@@ -16,14 +16,16 @@ class CreateModal extends Component
     public $nombre, $descripcion;
     public bool $es_equipo_gps = false;
     public bool $es_servicio_monitoreo = false;
+    public bool $es_accesorios = false;
 
     public function render()
     {
         $empresaId = session('empresa');
         $equipoGpsOcupado   = Categoria::where('es_equipo_gps', true)->where('empresa_id', $empresaId)->first();
         $monitoreoOcupado   = Categoria::where('es_servicio_monitoreo', true)->where('empresa_id', $empresaId)->first();
+        $accesoriosOcupado  = Categoria::where('es_accesorios', true)->where('empresa_id', $empresaId)->first();
 
-        return view('livewire.admin.categorias.create-modal', compact('equipoGpsOcupado', 'monitoreoOcupado'));
+        return view('livewire.admin.categorias.create-modal', compact('equipoGpsOcupado', 'monitoreoOcupado', 'accesoriosOcupado'));
     }
 
     #[On('open-modal-create')]
@@ -55,6 +57,10 @@ class CreateModal extends Component
             $this->addError('es_servicio_monitoreo', 'Ya existe una categoría configurada como Servicio de Monitoreo.');
             return;
         }
+        if ($this->es_accesorios && Categoria::where('es_accesorios', true)->exists()) {
+            $this->addError('es_accesorios', 'Ya existe una categoría configurada como Accesorios WorkOrder.');
+            return;
+        }
 
         try {
             $categoria = Categoria::create($datos);
@@ -75,6 +81,6 @@ class CreateModal extends Component
 
     public function resetProp()
     {
-        $this->reset(['nombre', 'descripcion', 'es_equipo_gps', 'es_servicio_monitoreo']);
+        $this->reset(['nombre', 'descripcion', 'es_equipo_gps', 'es_servicio_monitoreo', 'es_accesorios']);
     }
 }

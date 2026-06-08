@@ -96,6 +96,6 @@ class Edit extends Component
     public function resetProps()
     {
         $this->imei = '';
-        $this->operador = '';
+        $this->operador_id = null;
     }
 }

@@ -48,6 +48,17 @@
                 </button>
             @endcan
 
+            @can('crear-sim_card')
+                <button wire:click.prevent="openModalRegistrarAsignacion"
+                    class="btn bg-amber-500 hover:bg-amber-600 text-white border-slate-200 hover:border-slate-300">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Registrar Asignación</span>
+                </button>
+            @endcan
+
         </div>
 
     </div>
@@ -110,50 +121,56 @@
         </div>
 
 
-        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
-            <ul class="flex flex-wrap -m-1">
-                <li class="m-1">
-                    <button wire:click.prevent="SetOperador()"
-                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                        Todas
-                    </button>
-                </li>
-                @foreach ($operadoresList as $opBtn)
-                    <li class="m-1">
-                        <button wire:click.prevent="SetOperador({{ $opBtn->id }})"
-                            :class="clickeado === {{ $opBtn->id }} && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                            @click="clickeado = {{ $opBtn->id }}"
-                            class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                            {{ strtoupper($opBtn->name) }}
-                        </button>
-                    </li>
-                @endforeach
-                <li class="m-1">
-                    <button wire:click.prevent="toggleProximaReactivacion"
-                        :class="clickeado === 6 && 'border-transparent shadow-sm bg-amber-500 text-white'"
-                        @click="clickeado = 6"
-                        class="inline-flex items-center gap-1.5 justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-amber-300 hover:border-amber-400 shadow-sm bg-white text-amber-700 duration-150 ease-in-out">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Claro — Por reactivar
-                    </button>
-                </li>
-            </ul>
+        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 flex flex-wrap items-center gap-x-5 gap-y-2">
+            <div class="w-full sm:w-56">
+                <x-form.select wire:model.live="operador" placeholder="Todos los operadores">
+                    <x-select.option label="Todos los operadores" value="" />
+                    @foreach ($operadoresList as $opBtn)
+                        <x-select.option value="{{ $opBtn->id }}" label="{{ strtoupper($opBtn->name) }}" />
+                    @endforeach
+                </x-form.select>
+            </div>
+
+            <label class="inline-flex items-center gap-2 text-sm font-medium text-amber-700 cursor-pointer">
+                <input wire:model.live="proximaReactivacion" type="checkbox"
+                    class="form-checkbox rounded text-amber-500" />
+                <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                </svg>
+                Claro — Por reactivar
+            </label>
+
+            <label class="inline-flex items-center gap-2 text-sm font-medium text-rose-700 cursor-pointer">
+                <input wire:model.live="sinVehiculo" type="checkbox"
+                    class="form-checkbox rounded text-rose-500" />
+                <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
+                        clip-rule="evenodd" />
+                </svg>
+                Sin vehículo asignado
+            </label>
         </div>
 
     </div>
     <!-- Table -->
     <div class="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-        <header class="px-5 py-4">
+        <header class="px-5 py-4 flex items-center justify-between">
             <h2 class="font-semibold text-slate-800 dark:text-slate-100">Total lineas <span
                     class="text-slate-400 dark:text-slate-500 font-medium">{{ $lineas->total() }}</span>
             </h2>
-
+            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <span>Mostrar</span>
+                <select wire:model.live="perPage" class="form-select text-sm py-1">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <span>por página</span>
+            </div>
         </header>
         <div>
             <!-- Table -->

@@ -34,11 +34,12 @@
                     </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                        <x-form.select wire:model.live="operador_id" placeholder="— Seleccionar —">
-                            @foreach ($operadores as $op)
-                                <x-select.option value="{{ $op->id }}" label="{{ strtoupper($op->name) }}" />
-                            @endforeach
-                        </x-form.select>
+                        <x-form.select wire:model.live="operador_id"
+                            placeholder="— Seleccionar —"
+                            :options="$operadores->map(fn($op) => ['value' => $op->id, 'label' => strtoupper($op->name)])->toArray()"
+                            option-label="label"
+                            option-value="value"
+                        />
                     </td>
 
                 </tr>

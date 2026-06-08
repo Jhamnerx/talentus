@@ -181,7 +181,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // COMPRAS
 
-    Route::controller(ComprasController::class)->middleware(['auth'])->group(function () {
+    Route::controller(ComprasController::class)->group(function () {
 
         Route::get('compras', 'index')->name('admin.compras.index');
         Route::get('compras/registrar', 'create')->name('admin.compras.create');

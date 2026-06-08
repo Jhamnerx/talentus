@@ -18,6 +18,7 @@ class Index extends Component
     public $to = '';
     public $operador = null;
     public $modalOpenImport = false;
+    public int $perPage = 10;
 
     protected $listeners = [
         'render' => 'render',
@@ -39,7 +40,7 @@ class Index extends Component
 
         $query = SimCard::query();
 
-        if ($this->operador !== null) {
+        if (!empty($this->operador)) {
             $query->where('sim_card.operador_id', $this->operador);
         }
 
@@ -68,7 +69,7 @@ class Index extends Component
                 ->distinct();
         }
 
-        $sim_cards = $query->orderBy('sim_card.id', 'desc')->paginate(10);
+        $sim_cards = $query->orderBy('sim_card.id', 'desc')->paginate($this->perPage);
 
         $total = SimCard::count();
         $operadoresList = Operador::orderBy('name')->get();
@@ -82,9 +83,14 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function setOperador($operador = null)
+    public function updatedOperador($value): void
     {
-        $this->operador = $operador;
+        $this->operador = $value !== '' ? $value : null;
+        $this->resetPage();
+    }
+
+    public function updatedPerPage(): void
+    {
         $this->resetPage();
     }
 
@@ -111,7 +117,7 @@ class Index extends Component
         $this->dispatch(
             'notify',
             type: 'success',
-            message: "Sincronización completa: {$resultado['insertados']} nuevas, {$resultado['actualizados']} actualizadas."
+            message: "Sincronización completa: {$resultado['insertados']} SIMs nuevas, {$resultado['actualizados']} actualizadas, {$resultado['lineas_creadas']} líneas creadas, {$resultado['lineas_asignadas']} asignadas."
         );
 
         $this->resetPage();

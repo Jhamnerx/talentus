@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
+use App\Models\Lineas;
 use App\Models\SimCard;
 use App\Models\Operador;
 use App\Scopes\EmpresaScope;
@@ -83,43 +84,49 @@ class M2MDataglobalService
      *
      * @param  Operador $operador  El operador local al que se asignarán las SIMs.
      * @param  int      $empresaId ID de la empresa (tenant).
-     * @return array{insertados: int, actualizados: int, error: string|null}
+     * @return array{insertados: int, actualizados: int, lineas_creadas: int, lineas_asignadas: int, error: string|null}
      */
     public function sincronizar(Operador $operador, int $empresaId): array
     {
         $resultado = $this->simList();
-
         if (! $resultado['status'] || empty($resultado['data'])) {
             return [
-                'insertados'  => 0,
-                'actualizados' => 0,
-                'error'       => $resultado['error'] ?? 'La API no devolvió datos.',
+                'insertados'     => 0,
+                'actualizados'   => 0,
+                'lineas_creadas' => 0,
+                'lineas_asignadas' => 0,
+                'error'          => $resultado['error'] ?? 'La API no devolvió datos.',
             ];
         }
 
-        $insertados  = 0;
-        $actualizados = 0;
+        $insertados     = 0;
+        $actualizados   = 0;
+        $lineasCreadas  = 0;
+        $lineasAsignadas = 0;
 
         foreach ($resultado['data'] as $item) {
-            $icc = trim($item['icc'] ?? '');
+            $icc    = trim($item['icc'] ?? '');
+            $msisdn = trim($item['msisdn'] ?? '');
+
             if ($icc === '') {
                 continue;
             }
 
+            // ── SIM Card ──────────────────────────────────────────────────────
             $existente = SimCard::withoutGlobalScope(EmpresaScope::class)
                 ->where('sim_card', $icc)
                 ->where('empresa_id', $empresaId)
                 ->first();
 
             if ($existente) {
-                // Solo actualiza el operador si cambió
                 if ($existente->operador_id !== $operador->id) {
                     $existente->operador_id = $operador->id;
-                    $existente->saveQuietly(); // sin disparar eventos de auditoría
+                    $existente->saveQuietly();
                     $actualizados++;
                 }
+                $simCard = $existente;
             } else {
-                SimCard::withoutGlobalScope(EmpresaScope::class)->create([
+                $simCard = SimCard::withoutGlobalScope(EmpresaScope::class)->create([
                     'sim_card'    => $icc,
                     'operador_id' => $operador->id,
                     'empresa_id'  => $empresaId,
@@ -127,14 +134,62 @@ class M2MDataglobalService
                 ]);
                 $insertados++;
             }
+
+            // ── Línea (msisdn) ────────────────────────────────────────────────
+            if ($msisdn === '') {
+                continue;
+            }
+
+            // Busca ignorando prefijos '#' y espacios que se usan en entradas manuales
+            $linea = Lineas::withoutGlobalScope(EmpresaScope::class)
+                ->where('empresa_id', $empresaId)
+                ->whereRaw("TRIM(REPLACE(numero, '#', '')) = ?", [$msisdn])
+                ->first();
+
+            if (! $linea) {
+                $linea = Lineas::withoutGlobalScope(EmpresaScope::class)->create([
+                    'numero'      => $msisdn,
+                    'operador_id' => $operador->id,
+                    'empresa_id'  => $empresaId,
+                    'estado'      => 1,
+                ]);
+                $lineasCreadas++;
+            } elseif (! $linea->operador_id) {
+                $linea->operador_id = $operador->id;
+                $linea->saveQuietly();
+            }
+
+            // ── Limpia vínculo incorrecto: SIM apunta a línea que no le corresponde ──
+            if ($simCard->lineas_id !== null && $simCard->lineas_id !== $linea->id) {
+                $simCard->lineas_id = null;
+                $simCard->saveQuietly();
+            }
+
+            // ── Asignación SIM ↔ Línea (solo si ambos lados están libres) ────
+            $simLibre   = ! $simCard->lineas_id;
+            $lineaLibre = ! SimCard::withoutGlobalScope(EmpresaScope::class)
+                ->where('lineas_id', $linea->id)
+                ->exists();
+
+            if ($simLibre && $lineaLibre) {
+                $simCard->lineas_id = $linea->id;
+                $simCard->saveQuietly();
+                $lineasAsignadas++;
+            }
         }
 
-        Log::info("[M2MDataglobal] Sincronización empresa {$empresaId}: +{$insertados} nuevas, {$actualizados} actualizadas.");
+        Log::info(
+            "[M2MDataglobal] Sincronización empresa {$empresaId}: "
+                . "+{$insertados} SIMs nuevas, {$actualizados} actualizadas, "
+                . "{$lineasCreadas} líneas creadas, {$lineasAsignadas} asignadas."
+        );
 
         return [
-            'insertados'  => $insertados,
-            'actualizados' => $actualizados,
-            'error'       => null,
+            'insertados'      => $insertados,
+            'actualizados'    => $actualizados,
+            'lineas_creadas'  => $lineasCreadas,
+            'lineas_asignadas' => $lineasAsignadas,
+            'error'           => null,
         ];
     }
 

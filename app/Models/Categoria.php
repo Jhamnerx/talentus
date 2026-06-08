@@ -19,9 +19,10 @@ class Categoria extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'estado'              => 'boolean',
-        'es_equipo_gps'       => 'boolean',
+        'estado'                => 'boolean',
+        'es_equipo_gps'         => 'boolean',
         'es_servicio_monitoreo' => 'boolean',
+        'es_accesorios'         => 'boolean',
     ];
 
     use HasFactory;

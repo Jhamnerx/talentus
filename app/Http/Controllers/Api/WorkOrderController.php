@@ -9,6 +9,8 @@ use App\Enums\WorkOrderStatus;
 use App\Models\WorkOrderItem;
 use App\Models\WorkOrderPhoto;
 use App\Models\ChecklistTemplate;
+use App\Models\Categoria;
+use App\Models\Productos;
 use App\Models\WorkOrderAccessory;
 use App\Models\WorkOrderChecklist;
 use App\Models\WorkOrderSignature;
@@ -120,9 +122,23 @@ class WorkOrderController extends Controller
 
         $workOrder->load($relations);
 
+        $modeloNombre    = null;
+        $modeloTecnologia = null;
+        $modeloDispId = $workOrder->metadata['modelo_dispositivo_id'] ?? null;
+        if ($modeloDispId) {
+            $modelo = \App\Models\ModelosDispositivo::find((int) $modeloDispId);
+            if ($modelo) {
+                $modeloNombre    = trim(strtoupper(($modelo->marca ?? '') . ' ' . ($modelo->modelo ?? '')));
+                $modeloTecnologia = $modelo->tecnologia ?? null;
+            }
+        }
+
         return response()->json([
             'success' => true,
-            'data' => $workOrder
+            'data' => array_merge($workOrder->toArray(), [
+                'modelo_dispositivo_nombre'     => $modeloNombre,
+                'modelo_dispositivo_tecnologia' => $modeloTecnologia,
+            ])
         ]);
     }
 
@@ -135,11 +151,11 @@ class WorkOrderController extends Controller
         abort_if($workOrder->bloqueado, 422, 'La orden está bloqueada y no puede modificarse.');
 
         $data = $request->validate([
-            'imei_gps'    => ['sometimes', 'nullable', 'string', 'max:20'],
-            'imei_sim'    => ['sometimes', 'nullable', 'string', 'max:22'],
+            'imei'          => ['sometimes', 'nullable', 'string', 'max:20'],
+            'iccid'         => ['sometimes', 'nullable', 'string', 'max:22'],
             'observaciones' => ['sometimes', 'nullable', 'string', 'max:2000'],
-            'contacto'    => ['sometimes', 'nullable', 'string', 'max:200'],
-            'sector'      => ['sometimes', 'nullable', 'string', 'max:200'],
+            'contacto'      => ['sometimes', 'nullable', 'string', 'max:200'],
+            'sector'        => ['sometimes', 'nullable', 'string', 'max:200'],
         ]);
 
         $workOrder->update($data);
@@ -519,12 +535,10 @@ class WorkOrderController extends Controller
     {
         $request->validate([
             'producto_id' => 'nullable|exists:productos,id',
-            'nombre' => 'required|string|max:255',
+            'nombre'      => 'required|string|max:255',
             'descripcion' => 'nullable|string',
-            'cantidad' => 'required|integer|min:1',
-            'serial' => 'nullable|string|max:100',
-            'accion' => 'required|in:instalado,retirado,reemplazado',
-            'precio_unitario' => 'required|numeric|min:0',
+            'cantidad'    => 'required|integer|min:1',
+            'accion'      => 'required|in:instalado,retirado,reemplazado',
         ]);
 
         if (!$workOrder->puedeEditar()) {
@@ -534,17 +548,30 @@ class WorkOrderController extends Controller
             ], 422);
         }
 
+        // Validar stock disponible para salidas de almacén
+        if ($request->producto_id && in_array($request->accion, ['instalado', 'reemplazado'])) {
+            $producto = Productos::withoutGlobalScope(EmpresaScope::class)
+                ->where('id', $request->producto_id)
+                ->where('empresa_id', $workOrder->empresa_id)
+                ->where('tipo', 'producto')
+                ->first();
+
+            if ($producto && $producto->stock < $request->cantidad) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Stock insuficiente. Disponible: {$producto->stock}, solicitado: {$request->cantidad}.",
+                ], 422);
+            }
+        }
+
         try {
             $accessory = WorkOrderAccessory::create([
-                'work_order_id' => $workOrder->id,
-                'producto_id' => $request->producto_id,
-                'nombre' => $request->nombre,
-                'descripcion' => $request->descripcion,
-                'cantidad' => $request->cantidad,
-                'serial' => $request->serial,
-                'accion' => $request->accion,
-                'precio_unitario' => $request->precio_unitario,
-                // El subtotal se calcula automáticamente en el Observer
+                'work_order_id'   => $workOrder->id,
+                'producto_id'     => $request->producto_id,
+                'nombre'          => $request->nombre,
+                'descripcion'     => $request->descripcion,
+                'cantidad'        => $request->cantidad,
+                'accion'          => $request->accion,
             ]);
 
             return response()->json([
@@ -645,13 +672,30 @@ class WorkOrderController extends Controller
             ->with('producto')
             ->get();
 
-        $total = $accesorios->sum('subtotal');
+        $categoriaAccesorios = Categoria::withoutGlobalScope(EmpresaScope::class)
+            ->where('es_accesorios', true)
+            ->where('empresa_id', $workOrder->empresa_id)
+            ->first();
+
+        $productosDisponibles = collect();
+        if ($categoriaAccesorios) {
+            $productosDisponibles = Productos::withoutGlobalScope(EmpresaScope::class)
+                ->where('empresa_id', $workOrder->empresa_id)
+                ->where('categoria_id', $categoriaAccesorios->id)
+                ->where('tipo', 'producto')
+                ->orderBy('descripcion')
+                ->get(['id', 'descripcion', 'valor_unitario', 'stock']);
+        }
+
+        $metadata = $workOrder->metadata ?? [];
+        $accesoriosRequeridos = $metadata['accesorios'] ?? [];
 
         return response()->json([
             'success' => true,
             'data' => [
-                'items' => $accesorios,
-                'total' => $total
+                'items'                 => $accesorios,
+                'productos_disponibles' => $productosDisponibles,
+                'accesorios_requeridos' => $accesoriosRequeridos,
             ]
         ]);
     }

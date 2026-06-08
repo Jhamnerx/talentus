@@ -1,6 +1,17 @@
 <div>
     <x-form.modal.card title="IMPORTAR SIM CARD" max-width="lg" wire:model.live="modalOpenImport">
 
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Operador de las líneas y sim cards</label>
+            <x-form.select wire:model.live="operadorId" placeholder="— Seleccionar operador —">
+                @foreach ($operadores as $op)
+                    <x-select.option value="{{ $op->id }}" label="{{ strtoupper($op->name) }}" />
+                @endforeach
+            </x-form.select>
+            @error('operadorId')
+                <p class="mt-2 text-pink-600 text-sm">{{ $message }}</p>
+            @enderror
+        </div>
 
         <label class="block text-sm font-medium text-gray-700"> Elegir Archivo </label>
 
@@ -9,7 +20,7 @@
             x-on:dragover="$el.classList.add('border-emerald-400')"
             x-on:dragleave="$el.classList.remove('border-emerald-400')">
             <input wire:model.live="file" type="file"
-                class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer" id="file"
+                class="absolute inset-0 z-0 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer" id="file"
                 x-on:change="files = $event.target.files; console.log($event.target.files);"
                 accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
             <div class="space-y-1 text-center">
@@ -75,6 +86,13 @@
             </p>
         </div>
 
+        <div class="mt-4 flex items-center gap-3">
+            <input wire:model.live="sobrescribir" id="lineas-sobrescribir" type="checkbox"
+                class="form-checkbox rounded text-indigo-500" />
+            <label for="lineas-sobrescribir" class="text-sm font-medium text-gray-700">
+                Sobrescribir asignaciones existentes (libera la línea o sim card actual y la asocia según el excel)
+            </label>
+        </div>
 
         <x-slot name="footer">
             <div class="flex justify-end gap-x-4">

@@ -5,6 +5,7 @@ namespace App\Observers;
 
 use App\Models\Compras;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class ComprasObserver
 {
@@ -33,7 +34,12 @@ class ComprasObserver
 
     public function deleted(Compras $compra)
     {
-        //
+        foreach ($compra->detalle()->withTrashed()->get() as $detalle) {
+            if ($detalle->producto) {
+                $detalle->producto->decrement('stock', $detalle->cantidad);
+                Log::info("[Stock] Compra #{$compra->id} eliminada: -{$detalle->cantidad} de producto #{$detalle->producto_id}");
+            }
+        }
     }
 
 

@@ -393,11 +393,33 @@ class Edit extends Component
                 ->flatMap(fn($d) => $d->imeis ?? [])
                 ->filter()->unique()->values();
 
+            // Capturar stock anterior por producto para calcular diferencial
+            $oldStockTotals = $this->recibo->detalles->groupBy('producto_id')
+                ->map(fn($g) => $g->sum('cantidad'));
+
             $this->recibo->update($data);
 
             $this->recibo->detalles()->delete();
 
+            // createItems ya descuenta stock de los nuevos items
             Recibos::createItems($this->recibo, $data["items"]);
+
+            // Reponer stock de los productos que existian antes pero ya no estan (o con menor cantidad)
+            $newStockTotals = collect($data["items"])
+                ->filter(fn($i) => !empty($i['producto_id']))
+                ->groupBy('producto_id')
+                ->map(fn($g) => collect($g)->sum('cantidad'));
+            $allProductoIds = $oldStockTotals->keys()->merge($newStockTotals->keys())->unique();
+            foreach ($allProductoIds as $productoId) {
+                $old = $oldStockTotals->get($productoId, 0);
+                $new = $newStockTotals->get($productoId, 0);
+                // createItems ya decrementó $new; necesitamos reponer $old
+                if ($old > 0) {
+                    Productos::where('id', $productoId)
+                        ->where('tipo', 'producto')
+                        ->increment('stock', $old);
+                }
+            }
 
             // Nuevos IMEIs del formulario
             $newImeiIds = collect($this->items)

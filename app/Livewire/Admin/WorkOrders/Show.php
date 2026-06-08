@@ -6,11 +6,15 @@ use Livewire\Component;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderItem;
 use App\Models\WorkOrderType;
+use App\Models\Categoria;
+use App\Models\WorkOrderAccessory;
+use App\Models\Productos;
 use App\Models\Vehiculos;
 use App\Scopes\EmpresaScope;
 use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Computed;
 
 class Show extends Component
 {
@@ -32,6 +36,14 @@ class Show extends Component
     public string $observacionesDispositivo = '';
     public string $ubicacionInstalacion = '';
     public string $ubicacionPersonalizada = '';
+
+    // ── Gestión de accesorios ─────────────────────────────────────────────
+    public bool $modalAccesorio = false;
+    public ?int $accesorioProductoId = null;
+    public string $accesorioNombre = '';
+    public string $accesorioDescripcion = '';
+    public int $accesorioCantidad = 1;
+    public string $accesorioAccion = 'instalado';
 
     // ── Gestión de ítems del proyecto ────────────────────────────────────
     public string $nuevoItemPlaca = '';
@@ -398,6 +410,100 @@ class Show extends Component
                 description: 'No se pudo guardar la firma: ' . $e->getMessage()
             );
         }
+    }
+
+    // ── Computed ──────────────────────────────────────────────────────────
+
+    #[Computed]
+    public function productosAlmacen()
+    {
+        $categoriaAccesorios = Categoria::where('es_accesorios', true)->first();
+
+        $query = Productos::where('tipo', 'producto')->orderBy('descripcion');
+
+        if ($categoriaAccesorios) {
+            $query->where('categoria_id', $categoriaAccesorios->id);
+        }
+
+        return $query->get(['id', 'descripcion', 'valor_unitario', 'stock']);
+    }
+
+    // ── Accesorios ────────────────────────────────────────────────────────
+
+    public function abrirModalAccesorio(): void
+    {
+        $this->accesorioProductoId  = null;
+        $this->accesorioNombre      = '';
+        $this->accesorioDescripcion = '';
+        $this->accesorioCantidad    = 1;
+        $this->accesorioAccion      = 'instalado';
+        $this->modalAccesorio       = true;
+    }
+
+    public function updatedAccesorioProductoId(?int $value): void
+    {
+        if (!$value) {
+            return;
+        }
+        $producto = Productos::find($value);
+        if ($producto) {
+            $this->accesorioNombre  = $producto->descripcion;
+            $this->accesorioPrecio  = (float) $producto->valor_unitario;
+        }
+    }
+
+    public function guardarAccesorio(): void
+    {
+        $this->validate([
+            'accesorioNombre'   => 'required|string|max:255',
+            'accesorioCantidad' => 'required|integer|min:1',
+            'accesorioAccion'   => 'required|in:instalado,retirado,reemplazado',
+        ], [
+            'accesorioNombre.required' => 'El nombre del accesorio es obligatorio.',
+            'accesorioCantidad.min'    => 'La cantidad debe ser al menos 1.',
+        ]);
+
+        if (!$this->workOrder->puedeEditar()) {
+            $this->notification()->error('ERROR', 'La orden está bloqueada.');
+            return;
+        }
+
+        if ($this->accesorioProductoId && in_array($this->accesorioAccion, ['instalado', 'reemplazado'])) {
+            $producto = Productos::find($this->accesorioProductoId);
+            if ($producto && $producto->stock < $this->accesorioCantidad) {
+                $this->addError('accesorioCantidad', "Stock insuficiente. Disponible: {$producto->stock}");
+                return;
+            }
+        }
+
+        WorkOrderAccessory::create([
+            'work_order_id' => $this->workOrder->id,
+            'producto_id'   => $this->accesorioProductoId ?: null,
+            'nombre'        => $this->accesorioNombre,
+            'descripcion'   => $this->accesorioDescripcion ?: null,
+            'cantidad'      => $this->accesorioCantidad,
+            'accion'        => $this->accesorioAccion,
+        ]);
+
+        $this->modalAccesorio = false;
+        $this->refreshWorkOrder();
+        $this->notification()->success('ACCESORIO REGISTRADO', "{$this->accesorioNombre} agregado correctamente.");
+    }
+
+    public function eliminarAccesorio(int $id): void
+    {
+        $accessory = WorkOrderAccessory::findOrFail($id);
+
+        if (!$accessory->workOrder->puedeEditar()) {
+            $this->notification()->error('ERROR', 'La orden está bloqueada.');
+            return;
+        }
+
+        $nombre = $accessory->nombre;
+        $accessory->delete();
+
+        $this->refreshWorkOrder();
+        $this->notification()->success('ELIMINADO', "{$nombre} eliminado y stock revertido.");
     }
 
     public function render()
