@@ -403,16 +403,14 @@ class WorkOrderController extends Controller
         }
 
         try {
-            // Verificar si ya existe una firma del mismo tipo
+            // Si ya existe una firma del mismo tipo, eliminarla y reemplazarla
             $existingSignature = WorkOrderSignature::where('work_order_id', $workOrder->id)
                 ->where('tipo', $request->tipo)
                 ->first();
 
             if ($existingSignature) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Ya existe una firma de ' . $request->tipo . ' para esta orden'
-                ], 422);
+                Storage::disk('private')->delete($existingSignature->path);
+                $existingSignature->delete();
             }
 
             // Decodificar base64
