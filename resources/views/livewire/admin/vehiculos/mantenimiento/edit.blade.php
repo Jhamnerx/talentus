@@ -140,6 +140,33 @@
                 </div>
 
             </div>
+
+            {{-- Orden de trabajo vinculada --}}
+            <div class="px-8 pb-5 border-t border-slate-200 dark:border-gray-700 pt-4">
+                <p class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 mb-2">Orden de Trabajo</p>
+                @if ($workOrderActivo)
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            OT #{{ str_pad($workOrderActivo->id, 5, '0', STR_PAD_LEFT) }}
+                        </span>
+                        <span class="text-sm text-slate-500 dark:text-gray-400">{{ $workOrderActivo->estado->name ?? '' }}</span>
+                    </div>
+                @else
+                    @can('crear-ordenes-trabajo')
+                        <button type="button"
+                            wire:click.prevent="$dispatch('open-create-modal-from-mantenimiento', { mantenimientoId: {{ $mantenimiento?->id ?? 0 }} })"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40 transition-colors cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Crear Orden de Trabajo
+                        </button>
+                    @endcan
+                @endif
+            </div>
         </form>
 
         <x-slot name="footer">

@@ -93,6 +93,10 @@ Route::middleware('tracking.auth')->prefix('tracking')->name('api.tracking.')->g
     Route::post('device-sync', [TrackingWebhookController::class, 'deviceSync'])
         ->name('device-sync');
 
+    // Webhook: GPSWox → Talentus (alertas: offline_duration, geofence, etc.)
+    Route::post('alert', [TrackingWebhookController::class, 'alertWebhook'])
+        ->name('alert');
+
     // Sync: talentus-pro-tracking → Talentus (mantenimientos, suspensiones)
     Route::post('device-maintenances/sync', [\App\Http\Controllers\Api\DeviceMaintenanceController::class, 'sync'])
         ->name('device-maintenances.sync');

@@ -7,6 +7,7 @@ use App\Models\Lineas;
 use App\Models\VehiculoDispositivos;
 use App\Models\Vehiculos;
 use App\Scopes\EmpresaScope;
+use App\Services\ReporteAlertaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -179,6 +180,85 @@ class TrackingWebhookController extends Controller
             'gpswox_id'         => $vehiculo->gpswox_id,
             'imei_sincronizado' => $imeiSincronizado,
             'cambios'           => $cambios,
+        ]);
+    }
+
+    /**
+     * Recibe alertas de la plataforma GPSWox (offline_duration, geofence, etc.).
+     *
+     * GPSWox envía este POST cuando se dispara una alerta configurada en la plataforma.
+     * Por ahora se procesa únicamente el tipo 'offline_duration' para crear reportes
+     * automáticos y notificar al equipo de monitoreo vía WhatsApp.
+     */
+    public function alertWebhook(Request $request, ReporteAlertaService $alertaService): JsonResponse
+    {
+        $type   = $request->input('type', '');
+        $device = $request->input('device', []);
+        $time   = $request->input('time', '');
+
+        $placa = strtoupper(trim($device['plate_number'] ?? ''));
+        $imei  = trim($device['imei'] ?? '');
+
+        if (blank($placa) && blank($imei)) {
+            return response()->json(['status' => 0, 'message' => 'Se requiere plate_number o imei'], 422);
+        }
+
+        // Buscar vehículo ignorando el scope de empresa
+        $vehiculo = Vehiculos::withoutGlobalScope(EmpresaScope::class)
+            ->when(!blank($placa), fn($q) => $q->where('placa', $placa))
+            ->when(blank($placa) && !blank($imei), fn($q) => $q->where('numero', $imei))
+            ->first();
+
+        if (!$vehiculo) {
+            Log::channel('daily')->info('[TrackingAlert] Vehículo no encontrado', [
+                'type'  => $type,
+                'placa' => $placa,
+                'imei'  => $imei,
+            ]);
+            return response()->json(['status' => 0, 'message' => 'Vehículo no encontrado'], 404);
+        }
+
+        if ($type !== 'offline_duration') {
+            Log::channel('daily')->info('[TrackingAlert] Tipo de alerta no procesado', [
+                'type'  => $type,
+                'placa' => $vehiculo->placa,
+            ]);
+            return response()->json(['status' => 1, 'message' => "Tipo '{$type}' recibido pero no procesado"]);
+        }
+
+        // offline_duration llega en minutos desde GPSWox
+        $minutosOffline = (float) ($request->input('additional.offline_duration', 0));
+        $horasOffline   = $minutosOffline > 0 ? $minutosOffline / 60 : 0.0;
+        $simNumber      = trim($device['sim_number'] ?? '');
+
+        $reporte = $alertaService->crearAlertaAuto(
+            vehiculo:            $vehiculo,
+            horasSinTransmision: $horasOffline,
+            ultimaConexion:      $time ?: now()->toDateTimeString(),
+            imei:                $imei,
+            sim:                 $simNumber,
+        );
+
+        if ($reporte === null) {
+            Log::channel('daily')->info('[TrackingAlert] Alerta omitida — ya existe reporte abierto', [
+                'placa' => $vehiculo->placa,
+            ]);
+            return response()->json(['status' => 1, 'message' => 'Ya existe un reporte abierto para este vehículo']);
+        }
+
+        $alertaService->notificarMonitoreo($reporte);
+
+        Log::channel('daily')->info('[TrackingAlert] Reporte creado y monitoreo notificado', [
+            'placa'      => $vehiculo->placa,
+            'reporte_id' => $reporte->id,
+            'horas'      => $horasOffline,
+        ]);
+
+        return response()->json([
+            'status'     => 1,
+            'message'    => 'Alerta procesada correctamente',
+            'reporte_id' => $reporte->id,
+            'placa'      => $vehiculo->placa,
         ]);
     }
 }

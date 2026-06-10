@@ -15,6 +15,7 @@ class Edit extends Component
 
     public $placa;
     public $mantenimiento;
+    public $workOrderActivo = null;
 
     protected $listeners = [
         'openModalEditMantenimiento'
@@ -55,17 +56,19 @@ class Edit extends Component
     }
 
     #[On('open-modal-edit-mantenimiento')]
-    public function openModalEditMantenimiento(Mantenimiento $mantenimiento)
+    public function openModalEditMantenimiento(Mantenimiento $mantenimiento): void
     {
-        $this->openModal();
-        $this->numero = $mantenimiento->numero;
+        $mantenimiento->load('workOrderActivo');
         $this->mantenimiento = $mantenimiento;
+        $this->workOrderActivo = $mantenimiento->workOrderActivo;
+        $this->numero = $mantenimiento->numero;
         $this->detalle_trabajo = $mantenimiento->detalle_trabajo;
-        $this->fecha_hora_mantenimiento = $mantenimiento->fecha_hora_mantenimiento->format('Y-m-d ');
+        $this->fecha_hora_mantenimiento = $mantenimiento->fecha_hora_mantenimiento->format('Y-m-d');
         $this->notify_admin = $mantenimiento->notify_admin;
         $this->notify_client = $mantenimiento->notify_client;
         $this->nota = $mantenimiento->nota;
         $this->vehiculo_id = $mantenimiento->vehiculo_id;
+        $this->openModal();
     }
 
     public function openModal()
