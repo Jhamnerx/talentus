@@ -1316,7 +1316,7 @@
                         Cancelar
                     </x-form.button>
 
-                    <x-form.button primary onclick="guardarFirmaConDatos()">
+                    <x-form.button id="btn-guardar-firma" primary onclick="guardarFirmaConDatos()">
                         Guardar Firma
                     </x-form.button>
                 </div>
@@ -1415,14 +1415,33 @@
                 }
             };
 
+            let _guardandoFirma = false;
+
             window.guardarFirmaConDatos = function() {
+                if (_guardandoFirma) return;
+
+                const btn = document.getElementById('btn-guardar-firma');
+                _guardandoFirma = true;
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<svg class="animate-spin w-4 h-4 inline mr-1" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> Guardando...';
+                }
+
+                const done = () => {
+                    _guardandoFirma = false;
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = 'Guardar Firma';
+                    }
+                };
+
                 if (signatureCanvas) {
                     const signatureData = signatureCanvas.toDataURL('image/png');
                     @this.set('signatureData', signatureData).then(() => {
-                        @this.call('guardarFirma');
-                    });
+                        @this.call('guardarFirma').then(done).catch(done);
+                    }).catch(done);
                 } else {
-                    @this.call('guardarFirma');
+                    @this.call('guardarFirma').then(done).catch(done);
                 }
             };
 

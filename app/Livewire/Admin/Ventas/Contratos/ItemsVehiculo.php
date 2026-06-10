@@ -23,11 +23,14 @@ class ItemsVehiculo extends Component
     }
 
     #[On('open-panel-vehiculos')]
-    public function openPanelVehiculos(Clientes $cliente)
+    public function openPanelVehiculos(?Clientes $cliente): void
     {
+        if (! $cliente) {
+            return;
+        }
+
         $this->reset('search');
-        sleep(1);
-        $this->cliente = $cliente;
+        $this->cliente   = $cliente;
         $this->vehiculos = $cliente->vehiculos()->get();
     }
 

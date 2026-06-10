@@ -25,8 +25,7 @@ class ContactosRequest extends FormRequest
             'email' => 'nullable|email',
             'descripcion' => 'nullable',
             'is_gerente' => 'boolean',
-
-
+            'is_cobros'  => 'boolean',
         ];
 
         return $rules;

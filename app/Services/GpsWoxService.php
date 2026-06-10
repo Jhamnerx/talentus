@@ -504,6 +504,7 @@ class GpsWoxService
             $gpswoxId  = isset($device['id']) ? (int) $device['id'] : null;
             $imei      = $device['imei'] ?? null;
             $simNumber = $device['sim_number'] ?? null;
+            $active    = isset($device['active']) ? (bool) $device['active'] : null;
 
             if (!$gpswoxId) {
                 return ['status' => 0, 'message' => 'La plataforma no devolvió un id válido', 'gpswox_id' => null];
@@ -514,6 +515,9 @@ class GpsWoxService
             // ── 1. gpswox_id ───────────────────────────────────────────────────
             $vehiculo->gpswox_id              = $gpswoxId;
             $vehiculo->gpswox_sincronizado_at = now();
+            if ($active !== null) {
+                $vehiculo->gpswox_active = $active;
+            }
 
             // ── 2. Dispositivo por IMEI en pivot vehiculos_dispositivos ──────────
             // La fuente de verdad es el IMEI almacenado en el pivot, no en dispositivos.

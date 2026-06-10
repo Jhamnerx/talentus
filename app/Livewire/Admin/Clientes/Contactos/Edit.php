@@ -16,7 +16,7 @@ class Edit extends Component
 
     public $modalEdit = false;
 
-    public $nombre, $clientes_id, $numero_documento, $cargo, $telefono, $email, $birthday, $is_gerente = false, $descripcion;
+    public $nombre, $clientes_id, $numero_documento, $cargo, $telefono, $email, $birthday, $is_gerente = false, $is_cobros = false, $descripcion;
 
 
     public function render()
@@ -35,6 +35,7 @@ class Edit extends Component
         $this->email = $contacto->email;
         $this->birthday = Carbon::parse($contacto->birthday)->format('Y-m-d');
         $this->is_gerente = $contacto->is_gerente;
+        $this->is_cobros  = $contacto->is_cobros;
         $this->descripcion = $contacto->descripcion;
         $this->contacto = $contacto;
         $this->modalEdit = true;
@@ -49,6 +50,7 @@ class Edit extends Component
         $this->email = null;
         $this->birthday = null;
         $this->is_gerente = null;
+        $this->is_cobros  = null;
         $this->descripcion = null;
     }
 

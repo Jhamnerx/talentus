@@ -172,7 +172,7 @@ class WorkOrderNotificationService
      * Reconstruye el messageKey a partir de wa_group_id + wa_message_id guardados.
      * Retorna true si se editó correctamente, false en caso contrario.
      */
-    public function editarMensaje(WorkOrder $orden, ?Device $device = null): bool
+    public function editarMensaje(WorkOrder $orden, ?Device $device = null, ?string $prefijo = null): bool
     {
         if (empty($orden->wa_message_id) || empty($orden->wa_group_id)) {
             Log::info("WorkOrder #{$orden->id}: sin wa_message_id/wa_group_id, no se edita el mensaje WA.");
@@ -195,7 +195,10 @@ class WorkOrderNotificationService
             'id'        => $orden->wa_message_id,
         ];
 
-        $mensaje   = $this->formatMensaje($orden);
+        $mensaje = $this->formatMensaje($orden);
+        if ($prefijo) {
+            $mensaje = $prefijo . "\n\n" . $mensaje;
+        }
         $serverUrl = config('whatsapp.node_server_url', 'http://localhost:3000');
 
         try {

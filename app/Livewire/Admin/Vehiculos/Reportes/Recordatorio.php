@@ -2,85 +2,79 @@
 
 namespace App\Livewire\Admin\Vehiculos\Reportes;
 
+use App\Models\Admin\Recordatorios;
 use App\Models\Reportes;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Recordatorio extends Component
 {
-    public $openModalRecordatorio = false;
+    public bool $openModalRecordatorio = false;
 
-    public $fecha_recordatorio;
-    public $nota;
-    public $reporte = null;
+    #[Validate('required', message: 'Debes ingresar una fecha.')]
+    public string $fecha_recordatorio = '';
 
-    protected $rules = [
-        'fecha_recordatorio' => 'required',
+    public string $nota = '';
 
-
-    ];
-
-    protected $messages = [
-
-        'fecha_recordatorio.required' => 'Debes Ingresar una fecha',
-
-    ];
+    public ?int $reporteId = null;
 
     public function render()
     {
         return view('livewire.admin.vehiculos.reportes.recordatorio');
     }
 
-
     #[On('crearRecordatorio')]
-    public function openModal(Reportes $reporte)
+    public function openModal(int $reporte): void
     {
+        $this->reporteId             = $reporte;
+        $this->fecha_recordatorio    = Carbon::now()->addDays(14)->format('Y-m-d');
+        $this->nota                  = '';
         $this->openModalRecordatorio = true;
-        $this->fecha_recordatorio = Carbon::now()->addDays(14)->format('Y-m-d');
-        $this->reporte = $reporte;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->openModalRecordatorio = false;
-        $this->reset('fecha_recordatorio');
-        $this->reset();
+        $this->reset(['reporteId', 'fecha_recordatorio', 'nota']);
+        $this->resetErrorBag();
     }
-    public function save()
+
+    public function save(): void
     {
         $this->validate();
 
-        $this->reporte->recordatorios()->create([
-            'tipo' => 'reporte',
-            'data' => $this->nota,
-            'fecha' => $this->fecha_recordatorio,
-            'user_id' => auth()->user()->id,
+        $reporte = Reportes::findOrFail($this->reporteId);
 
+        Recordatorios::create([
+            'tipo'        => 'reporte',
+            'data'        => $this->nota,
+            'fecha'       => $this->fecha_recordatorio,
+            'user_id'     => Auth::id(),
+            'reportes_id' => $reporte->id,
         ]);
 
-        $this->reporte->estado = '2';
-        $this->reporte->save();
-        $this->afterSave($this->reporte->vehiculos->placa);
-    }
+        if ($reporte->estado == Reportes::ESTADO_ABIERTA) {
+            $reporte->update(['estado' => Reportes::ESTADO_EN_ATENCION]);
+        }
 
-    public function updated($label)
-    {
+        $placa = $reporte->vehiculos?->placa ?? '—';
 
-        $this->validateOnly($label);
-    }
-
-
-    public function afterSave($placa)
-    {
         $this->dispatch(
             'notify-toast',
             icon: 'success',
             title: 'RECORDATORIO CREADO',
-            mensaje: 'Se registro correctamente el recordatoria para la unidad ' . $placa,
+            mensaje: "Recordatorio registrado para la unidad {$placa}",
         );
+
         $this->closeModal();
-        $this->resetErrorBag();
         $this->dispatch('update-table');
+    }
+
+    public function updated(string $label): void
+    {
+        $this->validateOnly($label);
     }
 }

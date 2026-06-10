@@ -98,8 +98,6 @@ class QuickAddVehiculo extends Component
             return;
         }
 
-        $this->placa = $placaLimpia;
-
         try {
             $resultado = app(FactilizaService::class)->consultarPlaca($placaLimpia);
 
