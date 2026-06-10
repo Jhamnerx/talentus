@@ -46,8 +46,8 @@ class Contactos extends Model
 
     protected $casts = [
         'is_gerente' => 'boolean',
-        'birthday' => 'date',
-
+        'is_cobros'  => 'boolean',
+        'birthday'   => 'date',
     ];
 
     // Scope local de activo

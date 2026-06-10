@@ -55,8 +55,11 @@
             <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
 
                 <div class="m-2 w-full mt-2">
-
                     <x-form.toggle left-label="Es Gerente?" wire:model.live="is_gerente" value="1" />
+                </div>
+
+                <div class="m-2 w-full mt-2">
+                    <x-form.toggle left-label="Responsable de Cobros?" wire:model.live="is_cobros" value="1" />
                 </div>
 
             </div>

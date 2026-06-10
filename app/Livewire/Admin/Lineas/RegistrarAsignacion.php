@@ -133,7 +133,10 @@ class RegistrarAsignacion extends Component
                 'operador_id' => $this->operadorId,
             ]);
 
-            $simCard->lineas_id = $linea->id;
+            $simCard->lineas_id   = $linea->id;
+            if (! $simCard->operador_id) {
+                $simCard->operador_id = $this->operadorId;
+            }
             $simCard->save();
 
             CambiosLineas::create([

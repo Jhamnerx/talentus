@@ -181,7 +181,14 @@ class Index extends Component
 
         try {
             $orden = WorkOrder::findOrFail($this->cancelarOrdenId);
+            $orden->loadMissing(['tipo', 'vehiculo.cliente', 'cliente', 'tecnico']);
             $orden->cancelar($this->motivoCancelacion);
+
+            if ($orden->wa_message_id) {
+                $prefijo = "❌ *ORDEN #{$orden->id} CANCELADA*\n📝 *MOTIVO:* " . strtoupper($this->motivoCancelacion);
+                app(WorkOrderNotificationService::class)->editarMensaje($orden, null, $prefijo);
+            }
+
             $this->modalCancelar = false;
             $this->notification()->success('ORDEN CANCELADA', "Orden #{$orden->id} cancelada correctamente");
         } catch (\Exception $e) {
@@ -211,6 +218,13 @@ class Index extends Component
         }
 
         $id = $orden->id;
+
+        if ($orden->wa_message_id) {
+            $orden->loadMissing(['tipo', 'vehiculo.cliente', 'cliente', 'tecnico']);
+            $prefijo = "🗑️ *ORDEN #{$id} ELIMINADA*";
+            app(WorkOrderNotificationService::class)->editarMensaje($orden, null, $prefijo);
+        }
+
         $orden->delete();
         $this->eliminarOrdenId = null;
         $this->notification()->success('ELIMINADO', "Orden #{$id} eliminada correctamente");
