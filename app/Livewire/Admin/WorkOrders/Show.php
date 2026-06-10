@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\WorkOrders;
 
 use Livewire\Component;
 use App\Models\WorkOrder;
+use App\Models\WorkOrderSignature;
 use App\Models\WorkOrderItem;
 use App\Models\WorkOrderType;
 use App\Models\Categoria;
@@ -379,23 +380,27 @@ class Show extends Component
             // Calcular hash
             $hash = hash('sha256', $signatureData);
 
-            // Crear registro en la base de datos
-            $this->workOrder->signatures()->create([
-                'tipo' => 'conformidad',
-                'filename' => $filename,
-                'path' => $path,
-                'disk' => 'private',
-                'nombre_firmante' => $this->nombreFirmante,
-                'tipo_firmante' => $this->tipoFirmante,
-                'documento_firmante' => $this->documentoFirmante ?: null,
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'latitude' => null, // Puede obtenerse con JavaScript
-                'longitude' => null,
-                'firmado_at' => now(),
-                'tecnico_id' => Auth::user()->id,
-                'hash' => $hash,
-            ]);
+            WorkOrderSignature::updateOrCreate(
+                [
+                    'work_order_id' => $this->workOrder->id,
+                    'tipo'          => 'conformidad',
+                ],
+                [
+                    'filename'           => $filename,
+                    'path'               => $path,
+                    'disk'               => 'private',
+                    'nombre_firmante'    => $this->nombreFirmante,
+                    'tipo_firmante'      => $this->tipoFirmante,
+                    'documento_firmante' => $this->documentoFirmante ?: null,
+                    'ip_address'         => request()->ip(),
+                    'user_agent'         => request()->userAgent(),
+                    'latitude'           => null,
+                    'longitude'          => null,
+                    'firmado_at'         => now(),
+                    'tecnico_id'         => Auth::user()->id,
+                    'hash'               => $hash,
+                ]
+            );
 
             $this->modalFirma = false;
             $this->refreshWorkOrder();

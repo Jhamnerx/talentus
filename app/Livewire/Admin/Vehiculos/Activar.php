@@ -46,7 +46,7 @@ class Activar extends Component
         if ($this->numero) {
             $linea = Lineas::where('numero', $this->numero)->first();
             if ($linea) {
-                $this->operador = $linea->operador;
+                $this->operador = $linea->operador?->name;
                 $this->sim_card_id = $linea->sim_card?->id;
                 $this->sim_card = $linea->sim_card?->sim_card ?? $this->sim_card;
             }

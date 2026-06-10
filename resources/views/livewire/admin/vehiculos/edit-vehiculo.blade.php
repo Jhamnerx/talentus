@@ -80,15 +80,12 @@
 
         @if ($sectores->isNotEmpty())
             <div class="col-span-12">
-                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Sectores del vehículo:</label>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Sectores del
+                    vehículo:</label>
                 <div class="flex flex-wrap gap-x-6 gap-y-2">
                     @foreach ($sectores as $sector)
-                        <x-form.checkbox
-                            wire:model.live="sectores_selected"
-                            :id="'edit-sector-' . $sector->id"
-                            :value="(string) $sector->id"
-                            left-label="{{ $sector->nombre }}"
-                        />
+                        <x-form.checkbox wire:model.live="sectores_selected" :id="'edit-sector-' . $sector->id" :value="(string) $sector->id"
+                            left-label="{{ $sector->nombre }}" />
                     @endforeach
                 </div>
             </div>

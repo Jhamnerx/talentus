@@ -61,7 +61,7 @@
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 sm:col-span-6">
                     <x-form.select autocomplete="off" label="Línea telefónica" placeholder="Número de línea..."
-                        wire:model.live="numero" option-description="operador" :async-data="route('api.lineas.index')" option-label="numero"
+                        wire:model.live="numero" option-description="option_description" :async-data="route('api.lineas.index')" option-label="numero"
                         option-value="numero" />
                 </div>
                 <div class="col-span-12 sm:col-span-3">

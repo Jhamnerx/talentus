@@ -256,8 +256,12 @@ class EditVehiculo extends Component
         try {
             $result = app(GpsWoxService::class)->sincronizarVehiculoDesdePlataforma($this->vehiculo);
             if (($result['status'] ?? 0) === 1) {
-                $this->vehiculo->refresh();
-                $this->numero = $this->vehiculo->numero ?? $this->numero;
+                $this->vehiculo->refresh()->load(['sim_card.operador']);
+                $this->numero      = $this->vehiculo->numero ?? $this->numero;
+                $this->sim_card_id = $this->vehiculo->sim_card_id;
+                $this->sim_card    = $this->vehiculo->sim_card?->sim_card;
+                $this->operador    = $this->vehiculo->sim_card?->operador?->name;
+                $this->cargarDispositivos();
                 $this->dispatch('update-table');
                 $this->dispatch('notify-toast', icon: 'success', title: 'PLATAFORMA GPS', mensaje: $result['message']);
             } else {
