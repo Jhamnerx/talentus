@@ -18,7 +18,19 @@ class DispositivosIndex extends Component
 {
     use WithPagination, WireUiActions;
     #[Url(except: '')]
-    public $search = '';
+    public string $search = '';
+
+    #[Url(except: '')]
+    public int $perPage = 15;
+
+    #[Url(except: '')]
+    public string $estado_filter = '';
+
+    #[Url(except: '')]
+    public string $asignado_filter = '';
+
+    #[Url(except: null)]
+    public ?int $modelo_filter = null;
 
     // Propiedades para dispositivos no registrados
     public $showModalNoRegistrados = false;
@@ -36,24 +48,32 @@ class DispositivosIndex extends Component
 
     public function render()
     {
-
-        $dispositivos = Dispositivos::whereHas('modelo', function ($query) {
-            $query->where('marca', 'like', '%' . $this->search . '%')
-                ->orWhere('modelo', 'like', '%' . $this->search . '%');
-        })->orwhereHas('vehiculos', function ($query) {
-            $query->where('placa', 'like', '%' . $this->search . '%');
-        })->orwhereHas('user', function ($query) {
-            $query->where('name', 'like', '%' . $this->search . '%');
-        })->orWhere('imei', 'like', '%' . $this->search . '%')
-            ->orWhere('estado', 'like', $this->search === "Equipo Disponible" ? '%STOCK%' : '%' . $this->search . '%')
-            ->orWhere('in_fota', 'like', $this->search === "no fota" ? false : '%' . $this->search . '%')
-            ->orwhereDate('created_at', $this->validateDate($this->search) ? Carbon::createFromFormat('d-m-Y', $this->search)->format('Y-m-d') : '')
-            ->with('vehiculos', 'modelo')
+        $dispositivos = Dispositivos::with(['vehiculos.cliente', 'modelo.image'])
+            ->when($this->modelo_filter, fn($q) => $q->where('modelo_id', $this->modelo_filter))
+            ->when($this->estado_filter, fn($q) => $q->where('estado', $this->estado_filter))
+            ->when($this->asignado_filter === 'asignado', fn($q) => $q->whereHas('vehiculos'))
+            ->when($this->asignado_filter === 'disponible', fn($q) => $q->whereDoesntHave('vehiculos'))
+            ->when($this->search, function ($q) {
+                $q->where(function ($inner) {
+                    $inner->whereHas('modelo', fn($m) => $m
+                        ->where('marca', 'like', '%' . $this->search . '%')
+                        ->orWhere('modelo', 'like', '%' . $this->search . '%')
+                    )
+                    ->orWhereHas('vehiculos', fn($v) => $v
+                        ->where('placa', 'like', '%' . $this->search . '%')
+                    )
+                    ->orWhereHas('user', fn($u) => $u
+                        ->where('name', 'like', '%' . $this->search . '%')
+                    )
+                    ->orWhere('imei', 'like', '%' . $this->search . '%');
+                });
+            })
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate($this->perPage);
 
+        $modelos = ModelosDispositivo::orderBy('marca')->orderBy('modelo')->get(['id', 'marca', 'modelo']);
 
-        return view('livewire.admin.dispositivos.dispositivos-index', compact('dispositivos'));
+        return view('livewire.admin.dispositivos.dispositivos-index', compact('dispositivos', 'modelos'));
     }
 
     #[On('update-table')]
@@ -67,8 +87,34 @@ class DispositivosIndex extends Component
         $this->resetPage();
     }
 
-    public function updatingSearch()
+    public function updatingSearch(): void
     {
+        $this->resetPage();
+    }
+
+    public function updatingModeloFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingEstadoFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingAsignadoFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPerPage(): void
+    {
+        $this->resetPage();
+    }
+
+    public function limpiarFiltros(): void
+    {
+        $this->reset(['search', 'modelo_filter', 'estado_filter', 'asignado_filter']);
         $this->resetPage();
     }
 
