@@ -44,6 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('telescope:prune')->daily();
         $schedule->job(new CheckTicketSlaJob)->hourly();
         $schedule->command('whatsapp:reconectar')->everyFiveMinutes();
+        $schedule->command('gpswox:sincronizar-flota')->dailyAt('22:30');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

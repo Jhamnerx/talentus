@@ -204,6 +204,11 @@ class VehiculosIndex extends Component
         $this->dispatch('open-modal-add-vehiculo');
     }
 
+    public function abrirSincronizarFlota(): void
+    {
+        $this->dispatch('abrir-sincronizar-flota');
+    }
+
     //EVENTO QUE ESCUCHA DESDE LA VISTA AL CAMBIAR EL NUMERO Y ABRIR EL MODAL
     #[On('create-mantenimiento')]
     public function openModalCreateMantenimiento($placa)

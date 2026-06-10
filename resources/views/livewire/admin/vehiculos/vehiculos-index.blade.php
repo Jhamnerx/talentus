@@ -11,6 +11,15 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
+            @role('admin')
+                <x-form.button
+                    wire:click="abrirSincronizarFlota"
+                    info
+                    icon="arrow-path"
+                    label="Sincronizar GPSWox"
+                />
+            @endrole
+
             @can('crear-vehiculos-vehiculos')
                 <x-form.button wire:click="openModalSave()" dark icon="plus">
                     Añadir Vehiculo
@@ -924,5 +933,9 @@
             {{ $vehiculos->links() }}
         </div>
     </div>
+
+    @role('admin')
+        @livewire('admin.vehiculos.sincronizar-flota')
+    @endrole
 
 </div>
