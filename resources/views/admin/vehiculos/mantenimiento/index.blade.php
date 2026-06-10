@@ -7,6 +7,8 @@
     @livewire('admin.vehiculos.mantenimiento.create-task')
     @livewire('admin.vehiculos.mantenimiento.delete')
     @livewire('admin.vehiculos.mantenimiento.export')
+    @livewire('admin.work-orders.create-modal')
+    @livewire('admin.vehiculos.mantenimiento.create-siguiente-mantenimiento')
 
     <script>
         window.addEventListener('mark-as', event => {

@@ -7,95 +7,113 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Mantenimiento;
-use Illuminate\Database\Capsule\Manager;
 use Livewire\Attributes\On;
 
 class Index extends Component
 {
-
     use WithPagination;
 
-    public $search;
+    public string $search = '';
+    public string $statusFilter = '';
 
-    protected $listeners = [
-        'update-mantenimiento' => 'render'
-    ];
-
-    public function render()
+    public function render(): \Illuminate\View\View
     {
+        $query = Mantenimiento::with(['vehiculo.cliente', 'user', 'workOrderActivo'])
+            ->where(function ($q) {
+                $q->whereHas('vehiculo', function ($vehiculo) {
+                    $vehiculo->where('placa', 'LIKE', '%' . $this->search . '%')
+                        ->orWhereHas('cliente', function ($query) {
+                            $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
+                        });
+                })
+                ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
+                ->orWhere('detalle_trabajo', 'LIKE', '%' . $this->search . '%')
+                ->orWhereDate('fecha_hora_mantenimiento', $this->validateDate($this->search) ? Carbon::createFromFormat('d-m-Y', $this->search)->format('Y-m-d') : '');
+            })
+            ->when($this->statusFilter, fn($q) => $q->where('estado', $this->statusFilter))
+            ->orderBy('id', 'desc');
 
-        $mantenimientos = Mantenimiento::wherehas('vehiculo', function ($vehiculo) {
+        $mantenimientos = $query->paginate(12);
 
-            $vehiculo->where('placa', 'LIKE', '%' . $this->search . '%')
-                ->orwhereHas('cliente', function ($query) {
-                    $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
-                });
-        })->orwhere('numero', 'LIKE', '%' . $this->search . '%')
-            ->orwhere('detalle_trabajo', 'LIKE', '%' . $this->search . '%')
-            ->orwhereDate('fecha_hora_mantenimiento', $this->validateDate($this->search) ? Carbon::createFromFormat('d-m-Y', $this->search)->format('Y-m-d') : '')
-            ->orderby('id', 'desc')
-            ->with('vehiculo')
-            ->paginate(12);;
+        $counts = [
+            'todos'      => Mantenimiento::count(),
+            'PENDIENTE'  => Mantenimiento::where('estado', 'PENDIENTE')->count(),
+            'COMPLETADA' => Mantenimiento::where('estado', 'COMPLETADA')->count(),
+            'CANCELADO'  => Mantenimiento::where('estado', 'CANCELADO')->count(),
+        ];
 
-
-        return view('livewire.admin.vehiculos.mantenimiento.index', compact('mantenimientos'));
+        return view('livewire.admin.vehiculos.mantenimiento.index', compact('mantenimientos', 'counts'));
     }
 
     #[On('update-table')]
-    public function updateTable()
+    public function updateTable(): void
     {
-        $this->render();
+        // triggers re-render
     }
 
+    public function setStatusFilter(string $value): void
+    {
+        $this->statusFilter = $value;
+        $this->resetPage();
+    }
 
-    function validateDate($date, $format = 'd-m-Y')
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    private function validateDate(string $date, string $format = 'd-m-Y'): bool
     {
         $d = DateTime::createFromFormat($format, $date);
-        return $d && $d->format($format) == $date;
+        return $d && $d->format($format) === $date;
     }
 
-    public function openModalSave()
+    public function openModalSave(): void
     {
         $this->dispatch('open-modal-save-mantenimiento', 'index');
     }
 
-    public function createTask(Mantenimiento $mantenimiento)
+    public function createTask(Mantenimiento $mantenimiento): void
     {
-
         $this->dispatch('openModalCreateTask', mantenimiento: $mantenimiento);
     }
 
-    public function openModalEdit(Mantenimiento $mantenimiento)
+    public function openModalEdit(Mantenimiento $mantenimiento): void
     {
-
         $this->dispatch('open-modal-edit-mantenimiento', mantenimiento: $mantenimiento);
     }
 
-    public function markAs(Mantenimiento $mantenimiento, $value)
+    public function createWorkOrder(Mantenimiento $mantenimiento): void
     {
+        $this->dispatch('open-create-modal-from-mantenimiento', mantenimientoId: $mantenimiento->id);
+    }
 
-        if ($mantenimiento->estado->name !== $value) {
-            $mantenimiento->estado = $value;
-            $mantenimiento->save();
-            $this->dispatch('mark-as', estado: $value);
+    public function markAs(Mantenimiento $mantenimiento, string $value): void
+    {
+        if ($mantenimiento->estado->name === $value) {
+            return;
         }
 
-        if ($value = "COMPLETADA") {
+        $mantenimiento->estado = $value;
+        $mantenimiento->save();
 
+        if ($value === 'COMPLETADA') {
             if ($mantenimiento->tarea) {
                 $mantenimiento->tarea->estado = 'COMPLETE';
                 $mantenimiento->tarea->fecha_termino = Carbon::now();
                 $mantenimiento->tarea->save();
             }
+
+            $this->dispatch('open-siguiente-mantenimiento', mantenimientoId: $mantenimiento->id);
         }
     }
 
-    public function openModalDelete(Mantenimiento $mantenimiento)
+    public function openModalDelete(Mantenimiento $mantenimiento): void
     {
         $this->dispatch('EliminarMantenimiento', $mantenimiento);
     }
 
-    public function openModalExport()
+    public function openModalExport(): void
     {
         $this->dispatch('openModalExport');
     }

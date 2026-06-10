@@ -184,9 +184,25 @@ class CreateModal extends Component
     }
 
     #[On('open-create-modal')]
-    public function openModal()
+    public function openModal(): void
     {
         $this->resetProps();
+        $this->modalSave = true;
+    }
+
+    #[On('open-create-modal-from-mantenimiento')]
+    public function openFromMantenimiento(int $mantenimientoId): void
+    {
+        $this->resetProps();
+        $mantenimiento = Mantenimiento::with('vehiculo.cliente')->find($mantenimientoId);
+        if (!$mantenimiento) {
+            return;
+        }
+
+        $this->mantenimiento_id = $mantenimiento->id;
+        $this->vehiculo_id      = $mantenimiento->vehiculo_id;
+        $this->fecha_programada = $mantenimiento->fecha_hora_mantenimiento->format('Y-m-d H:i');
+        $this->updatedVehiculoId($this->vehiculo_id);
         $this->modalSave = true;
     }
 

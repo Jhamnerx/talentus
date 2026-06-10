@@ -54,13 +54,15 @@ class Index extends Component
             ))
             ->when($this->search, function ($q) {
                 $q->where(function ($inner) {
-                    $inner->whereHas('vehiculos', fn($v) => $v
-                        ->where('placa', 'like', '%' . $this->search . '%')
-                        ->orWhere('marca', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('cliente', fn($c) => $c->where('razon_social', 'like', '%' . $this->search . '%'))
+                    $inner->whereHas(
+                        'vehiculos',
+                        fn($v) => $v
+                            ->where('placa', 'like', '%' . $this->search . '%')
+                            ->orWhere('marca', 'like', '%' . $this->search . '%')
+                            ->orWhereHas('cliente', fn($c) => $c->where('razon_social', 'like', '%' . $this->search . '%'))
                     )
-                    ->orWhere('detalle', 'like', '%' . $this->search . '%')
-                    ->orWhere('fecha_t', 'like', '%' . $this->search . '%');
+                        ->orWhere('detalle', 'like', '%' . $this->search . '%')
+                        ->orWhere('fecha_t', 'like', '%' . $this->search . '%');
                 });
             })
             ->orderByRaw('FIELD(estado, 1, 2, 3)')

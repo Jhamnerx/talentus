@@ -3,7 +3,6 @@
 use App\Jobs\CheckDetalleCobros;
 use App\Jobs\CheckTicketSlaJob;
 use App\Jobs\CheckBirthdayContacts;
-use App\Jobs\CheckTransmisionAlertasJob;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Jobs\checkMantenimientoVehiculos;
@@ -46,7 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->job(new CheckTicketSlaJob)->hourly();
         $schedule->command('whatsapp:reconectar')->everyFiveMinutes();
         $schedule->command('gpswox:sincronizar-flota')->dailyAt('22:30');
-        $schedule->job(new CheckTransmisionAlertasJob)->everyFifteenMinutes();
+        // $schedule->job(new CheckTransmisionAlertasJob)->everyFifteenMinutes(); // reemplazado por webhook GPSWox
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

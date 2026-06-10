@@ -24,9 +24,17 @@ class ReporteAlertaService
         string $imei = '',
         string $sim = ''
     ): ?Reportes {
+        // No crear si ya existe un reporte abierto/en atención (cualquier edad),
+        // o uno cerrado de las últimas 24 horas (mismo incidente).
         $yaExiste = Reportes::withoutGlobalScope(\App\Scopes\EmpresaScope::class)
             ->where('vehiculos_id', $vehiculo->id)
-            ->whereIn('estado', [Reportes::ESTADO_ABIERTA, Reportes::ESTADO_EN_ATENCION])
+            ->where(function ($q) {
+                $q->whereIn('estado', [Reportes::ESTADO_ABIERTA, Reportes::ESTADO_EN_ATENCION])
+                    ->orWhere(function ($q2) {
+                        $q2->where('estado', Reportes::ESTADO_CERRADA)
+                            ->where('created_at', '>=', now()->subHours(24));
+                    });
+            })
             ->exists();
 
         if ($yaExiste) {
