@@ -48,7 +48,7 @@ class Edit extends Component
             'sector_id' => 'nullable|exists:sectores,id',
             'cuerpo'    => 'required|string|max:2000',
             'activo'    => 'boolean',
-            'archivo'   => 'nullable|file|mimes:pdf,mp4,mov,avi|max:16384',
+            'archivo'   => 'nullable|file|mimetypes:application/pdf,video/mp4,video/quicktime,video/x-msvideo|max:16384',
         ];
     }
 
@@ -63,10 +63,7 @@ class Edit extends Component
             if ($archivoUrl) {
                 Storage::disk('public')->delete(ltrim(str_replace('/storage/', '', $archivoUrl), '/'));
             }
-            $path       = $this->archivo->store('postventa', 'public');
-            $archivoUrl = '/storage/' . $path;
-            $extension  = strtolower($this->archivo->getClientOriginalExtension());
-            $archivoTipo = $extension === 'pdf' ? 'pdf' : 'video';
+            [$archivoUrl, $archivoTipo] = $this->almacenarArchivo();
         }
 
         $this->plantilla->update([
@@ -80,6 +77,15 @@ class Edit extends Component
         $this->dispatch('notify-toast', icon: 'success', title: 'PLANTILLA ACTUALIZADA', mensaje: 'La plantilla fue actualizada.');
         $this->dispatch('update-table');
         $this->close();
+    }
+
+    /** @return array{string, string} */
+    private function almacenarArchivo(): array
+    {
+        $path = $this->archivo->store('postventa', 'public');
+        $tipo = strtolower($this->archivo->getClientOriginalExtension()) === 'pdf' ? 'pdf' : 'video';
+
+        return ['/storage/' . $path, $tipo];
     }
 
     public function render()

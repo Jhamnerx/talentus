@@ -39,7 +39,7 @@ class Save extends Component
             'sector_id' => 'nullable|exists:sectores,id',
             'cuerpo'    => 'required|string|max:2000',
             'activo'    => 'boolean',
-            'archivo'   => 'nullable|file|mimes:pdf,mp4,mov,avi|max:16384',
+            'archivo'   => 'nullable|file|mimetypes:application/pdf,video/mp4,video/quicktime,video/x-msvideo|max:16384',
         ];
     }
 
@@ -47,15 +47,9 @@ class Save extends Component
     {
         $validated = $this->validate();
 
-        $archivoUrl  = null;
-        $archivoTipo = null;
-
-        if ($this->archivo) {
-            $path       = $this->archivo->store('postventa', 'public');
-            $archivoUrl = '/storage/' . $path;
-            $extension  = strtolower($this->archivo->getClientOriginalExtension());
-            $archivoTipo = $extension === 'pdf' ? 'pdf' : 'video';
-        }
+        [$archivoUrl, $archivoTipo] = $this->archivo
+            ? $this->almacenarArchivo()
+            : [null, null];
 
         PostventaPlantilla::create([
             'sector_id'    => $validated['sector_id'],
@@ -68,6 +62,15 @@ class Save extends Component
         $this->dispatch('notify-toast', icon: 'success', title: 'PLANTILLA CREADA', mensaje: 'La plantilla post-venta fue creada.');
         $this->dispatch('update-table');
         $this->close();
+    }
+
+    /** @return array{string, string} */
+    private function almacenarArchivo(): array
+    {
+        $path = $this->archivo->store('postventa', 'public');
+        $tipo = strtolower($this->archivo->getClientOriginalExtension()) === 'pdf' ? 'pdf' : 'video';
+
+        return ['/storage/' . $path, $tipo];
     }
 
     public function render()
