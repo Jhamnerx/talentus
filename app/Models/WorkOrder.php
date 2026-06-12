@@ -240,7 +240,7 @@ class WorkOrder extends Model
         $this->fecha_cerrado = now();
         $this->save();
 
-        event(new WorkOrderCerrada($this));
+        event(new WorkOrderCerrada($this->id, $this->empresa_id));
     }
 
     public function cancelar(string $motivo): void

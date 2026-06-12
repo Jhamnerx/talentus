@@ -2,15 +2,14 @@
 
 namespace App\Events;
 
-use App\Models\WorkOrder;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
 class WorkOrderCerrada
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
 
     public function __construct(
-        public WorkOrder $workOrder
+        public int $workOrderId,
+        public int $empresaId
     ) {}
 }

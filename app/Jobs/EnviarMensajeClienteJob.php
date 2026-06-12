@@ -22,16 +22,31 @@ class EnviarMensajeClienteJob implements ShouldQueue
     public array $backoff = [30, 60, 120];
 
     public function __construct(
-        public WorkOrder $workOrder,
-        public Device $device
+        public int $workOrderId,
+        public int $deviceId
     ) {}
 
     public function handle(WhatsappService $whatsapp): void
     {
-        $workOrder = $this->workOrder->load([
-            'cliente.contactos',
-            'vehiculo',
-        ]);
+        $workOrder = WorkOrder::withoutGlobalScopes()
+            ->with(['cliente.contactos', 'vehiculo'])
+            ->find($this->workOrderId);
+
+        if (!$workOrder) {
+            Log::warning('EnviarMensajeClienteJob: work order no encontrada', [
+                'work_order_id' => $this->workOrderId,
+            ]);
+            return;
+        }
+
+        $device = Device::find($this->deviceId);
+
+        if (!$device) {
+            Log::warning('EnviarMensajeClienteJob: device no encontrado', [
+                'device_id' => $this->deviceId,
+            ]);
+            return;
+        }
 
         // 1. Resolve recipient numbers
         $numeros = $workOrder->cliente?->contactos()
@@ -70,14 +85,14 @@ class EnviarMensajeClienteJob implements ShouldQueue
         foreach ($numeros as $numero) {
             if ($plantilla->archivo_url) {
                 $whatsapp->sendMedia(
-                    $this->device->body,
+                    $device->body,
                     $numero,
                     $plantilla->archivo_tipo,
                     url($plantilla->archivo_url),
                     $cuerpo
                 );
             } else {
-                $whatsapp->sendText($this->device->body, $numero, $cuerpo);
+                $whatsapp->sendText($device->body, $numero, $cuerpo);
             }
         }
     }
