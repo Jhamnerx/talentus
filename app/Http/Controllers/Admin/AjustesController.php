@@ -68,4 +68,9 @@ class AjustesController extends Controller
 
         return view('admin.ajustes.sunat', compact('plantilla'));
     }
+
+    public function postventa(): \Illuminate\View\View
+    {
+        return view('admin.ajustes.postventa');
+    }
 }

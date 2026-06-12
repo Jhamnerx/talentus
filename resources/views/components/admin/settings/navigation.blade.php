@@ -188,6 +188,23 @@
                 </a>
             </li>
 
+            @role('admin')
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.postventa') }}"
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.postventa')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.postventa')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
+                            <path
+                                d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm11.5-1.5a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h7Zm0 3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h7Z" />
+                        </svg>
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.postventa')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Post-Venta
+                        </span>
+                    </a>
+                </li>
+            @endrole
+
         </ul>
     </div>
 </div>

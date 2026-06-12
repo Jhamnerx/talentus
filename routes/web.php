@@ -306,6 +306,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Banking module routes
     Route::view('ajustes/bancos', 'admin.ajustes.bancos')->name('admin.ajustes.bancos');
     Route::view('ajustes/cuentas-bancarias', 'admin.ajustes.cuentas-bancarias')->name('admin.ajustes.cuentas-bancarias');
+    Route::get('ajustes/postventa', [AjustesController::class, 'postventa'])->name('admin.ajustes.postventa');
 
     //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
     Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
