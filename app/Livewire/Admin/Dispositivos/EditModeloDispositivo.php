@@ -5,9 +5,12 @@ namespace App\Livewire\Admin\Dispositivos;
 use App\Http\Requests\ModelosDispositivosRequest;
 use App\Models\ModelosDispositivo;
 use Livewire\Component;
+use WireUi\Traits\WireUiActions;
 
 class EditModeloDispositivo extends Component
 {
+    use WireUiActions;
+
     public $modalEditOpen = false;
 
     public $modelo, $marca, $certificado, $tecnologia;
@@ -31,7 +34,7 @@ class EditModeloDispositivo extends Component
         return view('livewire.admin.dispositivos.edit-modelo-dispositivo');
     }
 
-    public function ActualizarModelo()
+    public function ActualizarModelo(): void
     {
         $requestModelo = new ModelosDispositivosRequest();
 
@@ -46,13 +49,23 @@ class EditModeloDispositivo extends Component
         ]);
 
         $this->modalEditOpen = false;
+        $this->resetErrorBag();
 
         $this->dispatch('ActualizarTabla');
         $this->dispatch('update-modelo');
+        $this->notification()->success('MODELO ACTUALIZADO', 'Los datos del modelo GPS se actualizaron.');
     }
 
-    public function abrirModal(ModelosDispositivo $model)
+    public function closeModal(): void
     {
+        $this->modalEditOpen = false;
+        $this->resetErrorBag();
+        $this->resetValidation();
+    }
+
+    public function abrirModal(ModelosDispositivo $model): void
+    {
+        $this->resetErrorBag();
         $this->model = $model;
         $this->modelo = $model->modelo;
         $this->marca = $model->marca;

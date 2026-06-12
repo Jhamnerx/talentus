@@ -5,9 +5,12 @@ namespace App\Livewire\Admin\Dispositivos;
 use App\Models\ModelosDispositivo;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use WireUi\Traits\WireUiActions;
 
 class AddModeloDispositivo extends Component
 {
+    use WireUiActions;
+
     public $modelo, $marca, $certificado, $tecnologia;
     public $modalOpen = false;
     public Collection $caracteristicas;
@@ -43,15 +46,15 @@ class AddModeloDispositivo extends Component
         $this->reset('modelo', 'marca', 'tecnologia', 'certificado');
     }
 
-    public function save()
+    public function save(): void
     {
-        $validatedDate = $this->validate();
+        $validated = $this->validate();
 
-        ModelosDispositivo::create($validatedDate);
+        ModelosDispositivo::create($validated);
 
-        return redirect()->route('admin.almacen.modelos-dispositivos')->with('store-modelo', 'El modelo se guardo con exito');
-
-        // CODIGO PARA GUARDAR
+        $this->closeModal();
+        $this->dispatch('ActualizarTabla');
+        $this->notification()->success('MODELO REGISTRADO', 'El modelo GPS se guardó con éxito.');
     }
     public function render()
     {

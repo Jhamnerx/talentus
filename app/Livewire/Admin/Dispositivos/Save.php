@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Dispositivos;
 
 use Livewire\Component;
-use App\Models\Productos;
 use Livewire\Attributes\On;
 use App\Models\Dispositivos;
 use Illuminate\Support\Collection;
@@ -82,7 +81,7 @@ class Save extends Component
 
         try {
 
-            $this->updateStock($data['items']);
+            // El stock lo incrementa DispositivosObserver::created (solo si of_client = false).
             $this->saveItems($data['items']);
             $this->afterSave();
         } catch (\Throwable $th) {
@@ -95,33 +94,6 @@ class Save extends Component
         }
     }
 
-
-    public function updateStock($items)
-    {
-
-        $countedItems = array_count_values(array_column($items, 'modelo_id'));
-
-        $modelosWithCount = [];
-        foreach ($countedItems as $modeloId => $count) {
-            $modelosWithCount[$modeloId] = [
-                'id' => $modeloId,
-                'count' => $count
-            ];
-        }
-
-        $productos = Productos::whereIn('modelo_id', array_column($modelosWithCount, 'id'))->get();
-
-        if ($productos->isEmpty()) {
-            throw new \Exception('No se encontraron productos con los modelos seleccionados');
-        }
-
-        foreach ($productos as $producto) {
-
-            $modeloId = $producto->modelo_id;
-            $count = $modelosWithCount[$modeloId]['count'];
-            $producto->increment('stock', $count);
-        }
-    }
 
     public function resetProps()
     {

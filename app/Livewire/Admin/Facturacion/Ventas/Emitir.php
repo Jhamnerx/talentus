@@ -17,6 +17,7 @@ use App\Models\Ventas;
 use App\Models\Productos;
 use App\Models\Presupuestos;
 use App\Models\Dispositivos;
+use App\Services\StockService;
 use App\Services\FactilizaService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -775,21 +776,12 @@ class Emitir extends Component
             //CREAR ITEMS DE LA VENTA
             Ventas::createItems($venta, $datos["items"], $this->decrease_stock);
 
-            // Marcar dispositivos GPS como VENDIDO
-            $dispositivosIds = collect($this->items)
-                ->flatMap(function ($item) {
-                    if (!empty($item['imeis']) && is_array($item['imeis'])) {
-                        return $item['imeis'];
-                    }
-                    return [];
-                })
-                ->filter()
-                ->unique()
-                ->values();
-            if ($dispositivosIds->isNotEmpty()) {
-                Dispositivos::whereIn('id', $dispositivosIds)
-                    ->update(['estado' => Dispositivos::VENDIDO]);
-            }
+            // Marcar dispositivos GPS como VENDIDO (el stock ya se descontó en createItems)
+            app(StockService::class)->marcarVendidos(
+                collect($this->items)->flatMap(
+                    fn($item) => (!empty($item['imeis']) && is_array($item['imeis'])) ? $item['imeis'] : []
+                )
+            );
 
             //SI DETRACCION ES TRUE CREAR DETRACCION
             if ($this->detraccion) {

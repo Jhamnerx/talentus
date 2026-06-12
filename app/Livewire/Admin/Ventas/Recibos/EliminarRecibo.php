@@ -2,10 +2,9 @@
 
 namespace App\Livewire\Admin\Ventas\Recibos;
 
-use App\Models\Dispositivos;
 use App\Models\PeriodoCobro;
-use App\Models\Productos;
 use App\Models\Recibos;
+use App\Services\StockService;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 
@@ -63,23 +62,8 @@ class EliminarRecibo extends Component
 
     public function eliminar()
     {
-        // Revertir dispositivos GPS a STOCK
-        $dispositivosIds = $this->recibo->detalles()
-            ->whereNotNull('imeis')
-            ->get()
-            ->flatMap(fn($d) => $d->imeis ?? [])
-            ->filter()->unique()->values();
-
-        if ($dispositivosIds->isNotEmpty()) {
-            Dispositivos::whereIn('id', $dispositivosIds)->update(['estado' => Dispositivos::STOCK]);
-        }
-
-        // Restaurar stock de productos físicos del recibo
-        foreach ($this->recibo->detalles as $detalle) {
-            if ($detalle->producto_id && $detalle->producto?->tipo === 'producto') {
-                Productos::where('id', $detalle->producto_id)->increment('stock', $detalle->cantidad);
-            }
-        }
+        // Revertir dispositivos a STOCK y restaurar stock de productos del recibo
+        app(StockService::class)->revertirRecibo($this->recibo);
 
         // Revertir PeriodosCobro vinculados al recibo
         PeriodoCobro::where('recibo_id', $this->recibo->id)

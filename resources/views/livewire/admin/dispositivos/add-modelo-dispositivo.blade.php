@@ -133,7 +133,7 @@
         <x-slot name="footer">
             <div class="flex justify-end gap-x-4">
                 <x-form.button flat label="Cerrar" wire:click.prevent="closeModal" />
-                <x-form.button primary label="Guardar" wire:click.prevent="save" />
+                <x-form.button primary label="Guardar" wire:click.prevent="save" spinner="save" />
             </div>
         </x-slot>
     </x-form.modal.card>

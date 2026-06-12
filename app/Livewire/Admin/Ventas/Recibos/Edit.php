@@ -8,6 +8,7 @@ use App\Models\Clientes;
 use App\Models\Payments;
 use App\Models\Productos;
 use App\Models\Dispositivos;
+use App\Services\StockService;
 use App\Models\PaymentMethodType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -426,17 +427,10 @@ class Edit extends Component
                 ->flatMap(fn($item) => (!empty($item['imeis']) && is_array($item['imeis'])) ? $item['imeis'] : [])
                 ->filter()->unique()->values();
 
-            // Revertir a STOCK los que se eliminaron
-            $toStock = $oldImeiIds->diff($newImeiIds)->values();
-            if ($toStock->isNotEmpty()) {
-                Dispositivos::whereIn('id', $toStock)->update(['estado' => Dispositivos::STOCK]);
-            }
-
-            // Marcar como VENDIDO los que se añadieron
-            $toVendido = $newImeiIds->diff($oldImeiIds)->values();
-            if ($toVendido->isNotEmpty()) {
-                Dispositivos::whereIn('id', $toVendido)->update(['estado' => Dispositivos::VENDIDO]);
-            }
+            // Revertir a STOCK los que se eliminaron y marcar VENDIDO los que se añadieron
+            $stock = app(StockService::class);
+            $stock->devolverADisponible($oldImeiIds->diff($newImeiIds));
+            $stock->marcarVendidos($newImeiIds->diff($oldImeiIds));
 
             //ACTUALIZAR REGISTROS DE PAYMENT DESDE PAGOS_DETALLE
             if ($this->forma_pago === '009') { // CONTADO

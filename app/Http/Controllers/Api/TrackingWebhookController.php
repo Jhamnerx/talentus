@@ -148,6 +148,9 @@ class TrackingWebhookController extends Controller
                             'fecha_instalacion' => now(),
                         ]);
 
+                        // Descontar del stock y marcar VENDIDO (idempotente: solo si estaba en STOCK y es de la empresa)
+                        app(\App\Services\StockService::class)->marcarVendidoPorInstalacion($dispositivo);
+
                         $vehiculo->dispositivos_id = $dispositivo->id;
                         $vehiculo->save();
                         $imeiSincronizado = true;

@@ -10,6 +10,7 @@ use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Payments;
 use App\Models\Dispositivos;
+use App\Services\StockService;
 use App\Models\plantilla;
 use App\Models\Productos;
 use App\Models\Presupuestos;
@@ -559,21 +560,12 @@ class Create extends Component
 
         Recibos::createItems($recibo, $data["items"]);
 
-        // Marcar dispositivos GPS como VENDIDO
-        $dispositivosIds = collect($this->items)
-            ->flatMap(function ($item) {
-                if (!empty($item['imeis']) && is_array($item['imeis'])) {
-                    return $item['imeis'];
-                }
-                return [];
-            })
-            ->filter()
-            ->unique()
-            ->values();
-        if ($dispositivosIds->isNotEmpty()) {
-            Dispositivos::whereIn('id', $dispositivosIds)
-                ->update(['estado' => Dispositivos::VENDIDO]);
-        }
+        // Marcar dispositivos GPS como VENDIDO (el stock ya se descontó en createItems)
+        app(StockService::class)->marcarVendidos(
+            collect($this->items)->flatMap(
+                fn($item) => (!empty($item['imeis']) && is_array($item['imeis'])) ? $item['imeis'] : []
+            )
+        );
 
         //CREAR REGISTROS DE PAYMENT DESDE PAGOS_DETALLE
         if ($this->forma_pago === '009') { // CONTADO

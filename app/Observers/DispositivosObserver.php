@@ -3,9 +3,12 @@
 namespace App\Observers;
 
 use App\Models\Dispositivos;
+use App\Services\StockService;
 
 class DispositivosObserver
 {
+    public function __construct(protected StockService $stock) {}
+
     /**
      * Handle the Dispositivos "created" event.
      *
@@ -22,9 +25,11 @@ class DispositivosObserver
     }
 
 
-    public function created(Dispositivos $dispositivos)
+    public function created(Dispositivos $dispositivo)
     {
-        //
+        if (!\App::runningInConsole()) {
+            $this->stock->registrarIngresoDispositivo($dispositivo);
+        }
     }
 
     /**
@@ -44,9 +49,11 @@ class DispositivosObserver
      * @param  \App\Models\Dispositivos  $dispositivos
      * @return void
      */
-    public function deleted(Dispositivos $dispositivos)
+    public function deleted(Dispositivos $dispositivo)
     {
-        //
+        if (!\App::runningInConsole()) {
+            $this->stock->registrarSalidaDispositivo($dispositivo);
+        }
     }
 
     /**

@@ -55,17 +55,23 @@ class DispositivosIndex extends Component
             ->when($this->asignado_filter === 'disponible', fn($q) => $q->whereDoesntHave('vehiculos'))
             ->when($this->search, function ($q) {
                 $q->where(function ($inner) {
-                    $inner->whereHas('modelo', fn($m) => $m
-                        ->where('marca', 'like', '%' . $this->search . '%')
-                        ->orWhere('modelo', 'like', '%' . $this->search . '%')
+                    $inner->whereHas(
+                        'modelo',
+                        fn($m) => $m
+                            ->where('marca', 'like', '%' . $this->search . '%')
+                            ->orWhere('modelo', 'like', '%' . $this->search . '%')
                     )
-                    ->orWhereHas('vehiculos', fn($v) => $v
-                        ->where('placa', 'like', '%' . $this->search . '%')
-                    )
-                    ->orWhereHas('user', fn($u) => $u
-                        ->where('name', 'like', '%' . $this->search . '%')
-                    )
-                    ->orWhere('imei', 'like', '%' . $this->search . '%');
+                        ->orWhereHas(
+                            'vehiculos',
+                            fn($v) => $v
+                                ->where('placa', 'like', '%' . $this->search . '%')
+                        )
+                        ->orWhereHas(
+                            'user',
+                            fn($u) => $u
+                                ->where('name', 'like', '%' . $this->search . '%')
+                        )
+                        ->orWhere('imei', 'like', '%' . $this->search . '%');
                 });
             })
             ->orderBy('id', 'desc')

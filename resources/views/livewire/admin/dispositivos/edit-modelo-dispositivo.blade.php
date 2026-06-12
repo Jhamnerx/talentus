@@ -42,7 +42,11 @@
                     </label>
                     <input wire:model.live='certificado' id="certificado" class="form-input w-full" type="text"
                         placeholder="Escribe el Certificado..." />
-
+                    @error('certificado')
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div class="col-span-12">
@@ -105,8 +109,8 @@
 
         <x-slot name="footer">
             <div class="flex justify-end gap-x-4">
-                <x-form.button flat label="Cerrar" x-on:click="close" />
-                <x-form.button primary label="Guardar" wire:click.prevent="ActualizarModelo" />
+                <x-form.button flat label="Cerrar" wire:click.prevent="closeModal" />
+                <x-form.button primary label="Guardar" wire:click.prevent="ActualizarModelo" spinner="ActualizarModelo" />
             </div>
         </x-slot>
     </x-form.modal.card>
