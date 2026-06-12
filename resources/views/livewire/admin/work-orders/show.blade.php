@@ -527,6 +527,13 @@
         </div>{{-- /divide-y --}}
     </div>
 
+    {{-- ══ UBICACIÓN DEL TÉCNICO EN TIEMPO REAL ════════════════════════ --}}
+    @if ($workOrder->tecnico_id)
+        <div class="mb-6">
+            @livewire('admin.work-orders.tecnico-map', ['workOrder' => $workOrder], key('tecnico-map-' . $workOrder->id))
+        </div>
+    @endif
+
     {{-- ══ ÍTEMS DEL PROYECTO (solo si es_proyecto = true) ══════════════ --}}
     @if ($workOrder->es_proyecto)
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -1424,7 +1431,8 @@
                 _guardandoFirma = true;
                 if (btn) {
                     btn.disabled = true;
-                    btn.innerHTML = '<svg class="animate-spin w-4 h-4 inline mr-1" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> Guardando...';
+                    btn.innerHTML =
+                        '<svg class="animate-spin w-4 h-4 inline mr-1" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> Guardando...';
                 }
 
                 const done = () => {

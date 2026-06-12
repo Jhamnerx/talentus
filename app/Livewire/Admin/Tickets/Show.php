@@ -431,8 +431,29 @@ class Show extends Component
                 . ($event->payload['before'] ?? 'N/A') . ' a ' . ($event->payload['after'] ?? 'N/A'),
             'escalated'        => 'ticket escalado — nivel ' . ($event->payload['level'] ?? '?')
                 . ': ' . ($event->payload['reason'] ?? ''),
+            'sla_recalculated' => $this->formatSlaRecalculated($event),
             default            => 'realizó una acción',
         };
+    }
+
+    protected function formatSlaRecalculated($event): string
+    {
+        $scheduled = isset($event->payload['scheduled_at'])
+            ? \Carbon\Carbon::parse($event->payload['scheduled_at'])->format('d/m/Y H:i')
+            : null;
+        $due = isset($event->payload['due_at'])
+            ? \Carbon\Carbon::parse($event->payload['due_at'])->format('d/m/Y H:i')
+            : null;
+
+        $text = 'recalculó el SLA del ticket';
+        if ($scheduled) {
+            $text .= ' — atención programada para ' . $scheduled;
+        }
+        if ($due) {
+            $text .= ' (vence ' . $due . ')';
+        }
+
+        return $text;
     }
 
     public function render()

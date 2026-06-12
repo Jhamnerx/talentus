@@ -17,6 +17,7 @@ class EditModal extends Component
 
     // Campos del plan
     public $name, $slug, $description;
+    public $sla_tier;
     public $is_active;
     public $price, $signup_fee, $currency;
     public $trial_period, $trial_interval;
@@ -54,6 +55,7 @@ class EditModal extends Component
         // Cargar datos del plan
         $this->name = is_array($plan->name) ? ($plan->name['es'] ?? $plan->name['en'] ?? '') : ($plan->name ?? '');
         $this->slug = $plan->slug;
+        $this->sla_tier = $plan->sla_tier ?? 'basico';
         $this->description = is_array($plan->description) ? ($plan->description['es'] ?? $plan->description['en'] ?? '') : ($plan->description ?? '');
         $this->is_active = $plan->is_active;
         $this->price = $plan->price;
@@ -93,6 +95,7 @@ class EditModal extends Component
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:plans,slug,' . $this->plan->id,
             'description' => 'nullable|string',
+            'sla_tier' => 'required|in:basico,estandar,premium,mininter',
             'is_active' => 'required|boolean',
             'price' => 'required|numeric|min:0',
             'signup_fee' => 'nullable|numeric|min:0',
@@ -123,6 +126,7 @@ class EditModal extends Component
                 'name' => $this->name,
                 'slug' => $this->slug,
                 'description' => $this->description,
+                'sla_tier' => $this->sla_tier,
                 'is_active' => $this->is_active,
                 'price' => $this->price,
                 'signup_fee' => $this->signup_fee ?? 0,
@@ -162,6 +166,7 @@ class EditModal extends Component
             'name',
             'slug',
             'description',
+            'sla_tier',
             'is_active',
             'price',
             'signup_fee',

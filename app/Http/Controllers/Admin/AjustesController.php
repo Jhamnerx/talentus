@@ -46,6 +46,16 @@ class AjustesController extends Controller
         return view('admin.ajustes.series');
     }
 
+    public function sla()
+    {
+        return view('admin.ajustes.sla');
+    }
+
+    public function firebase()
+    {
+        return view('admin.ajustes.firebase');
+    }
+
     public function plantilla()
     {
         $plantilla = plantilla::first();

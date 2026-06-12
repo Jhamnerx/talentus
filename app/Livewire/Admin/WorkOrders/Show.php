@@ -452,8 +452,7 @@ class Show extends Component
         }
         $producto = Productos::find($value);
         if ($producto) {
-            $this->accesorioNombre  = $producto->descripcion;
-            $this->accesorioPrecio  = (float) $producto->valor_unitario;
+            $this->accesorioNombre = $producto->descripcion;
         }
     }
 

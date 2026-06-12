@@ -95,6 +95,36 @@
                     </a>
                 </li>
             @endcan
+            @role('admin')
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.sla') }}"
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.sla')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.sla')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
+                            <path
+                                d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm0 14A6 6 0 1 1 8 2a6 6 0 0 1 0 12Zm.5-9H7v4l3.5 2.1.5-.8-3-1.8V5Z" />
+                        </svg>
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.sla')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Perfiles SLA
+                        </span>
+                    </a>
+                </li>
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.firebase') }}"
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.firebase')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.firebase')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
+                            <path
+                                d="M3 13l2-11 3 5 2-3 3 9H3Zm5-6.5L6.5 9 8 10l1.5-1L8 6.5Z" />
+                        </svg>
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.firebase')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Credenciales Firebase
+                        </span>
+                    </a>
+                </li>
+            @endrole
             @can('admin.settings.plantilla.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.plantilla') }}"

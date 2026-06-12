@@ -16,6 +16,7 @@ class CreateModal extends Component
 
     // Campos del plan
     public $name, $slug, $description;
+    public $sla_tier = 'basico';
     public $is_active = true;
     public $price = 0, $signup_fee = 0, $currency = 'PEN';
     public $trial_period = 0, $trial_interval = 'day';
@@ -69,6 +70,7 @@ class CreateModal extends Component
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:plans,slug',
             'description' => 'nullable|string',
+            'sla_tier' => 'required|in:basico,estandar,premium,mininter',
             'is_active' => 'required|boolean',
             'price' => 'required|numeric|min:0',
             'signup_fee' => 'nullable|numeric|min:0',
@@ -99,6 +101,7 @@ class CreateModal extends Component
                 'name' => $this->name,
                 'slug' => $this->slug,
                 'description' => $this->description,
+                'sla_tier' => $this->sla_tier,
                 'is_active' => $this->is_active,
                 'price' => $this->price,
                 'signup_fee' => $this->signup_fee ?? 0,
@@ -138,6 +141,7 @@ class CreateModal extends Component
             'name',
             'slug',
             'description',
+            'sla_tier',
             'is_active',
             'price',
             'signup_fee',
@@ -154,6 +158,7 @@ class CreateModal extends Component
             'active_subscribers_limit',
             'sort_order',
         ]);
+        $this->sla_tier = 'basico';
         $this->is_active = true;
         $this->price = 0;
         $this->signup_fee = 0;

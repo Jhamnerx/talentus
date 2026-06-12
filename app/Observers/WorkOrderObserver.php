@@ -2,13 +2,17 @@
 
 namespace App\Observers;
 
+use App\Models\User;
 use App\Models\WorkOrder;
+use App\Enums\WorkOrderStatus;
 use Illuminate\Support\Str;
 use App\Events\WorkOrderCreated;
 use App\Events\WorkOrderUpdated;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NuevaOrdenAsignada;
+use App\Notifications\OrdenCambioEstado;
+use App\Notifications\OrdenEventoTecnico;
 use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class WorkOrderObserver
@@ -104,14 +108,129 @@ class WorkOrderObserver
             ];
         }
 
-        // Disparar evento de actualización si hubo cambios relevantes
+        if ($workOrder->wasChanged('fecha_programada')) {
+            $changes['fecha_programada'] = [
+                'anterior' => $workOrder->getOriginal('fecha_programada'),
+                'nuevo'    => $workOrder->fecha_programada,
+            ];
+        }
+
+        // Disparar evento de actualización (broadcasting web) si hubo cambios relevantes
         if (!empty($changes)) {
             broadcast(new WorkOrderUpdated($workOrder, $changes))->toOthers();
         }
+
+        // Notificaciones push (FCM) al app del técnico / creador
+        $this->notificarCambios($workOrder);
     }
 
     public function deleted(WorkOrder $workOrder): void
     {
-        // Eliminar archivos asociados si es necesario
+        // Avisar al técnico asignado que la orden fue eliminada
+        if ($workOrder->tecnico_id) {
+            $tecnico = User::find($workOrder->tecnico_id);
+            $this->notificarSeguro(
+                $tecnico,
+                new OrdenEventoTecnico(OrdenEventoTecnico::ELIMINADA, $this->ordenSnapshot($workOrder))
+            );
+        }
+    }
+
+    /**
+     * Despacha las notificaciones FCM según el tipo de cambio detectado.
+     */
+    protected function notificarCambios(WorkOrder $workOrder): void
+    {
+        $tecnicoCambio = $workOrder->wasChanged('tecnico_id');
+        $estadoCambio  = $workOrder->wasChanged('estado');
+        $fechaCambio   = $workOrder->wasChanged('fecha_programada');
+
+        // ── Reasignación: avisar al nuevo y al técnico anterior ──────────────
+        if ($tecnicoCambio) {
+            if ($workOrder->tecnico) {
+                $this->notificarSeguro($workOrder->tecnico, new NuevaOrdenAsignada($workOrder));
+            }
+
+            $anteriorId = $workOrder->getOriginal('tecnico_id');
+            if ($anteriorId && $anteriorId !== $workOrder->tecnico_id) {
+                $anterior = User::find($anteriorId);
+                $this->notificarSeguro(
+                    $anterior,
+                    new OrdenEventoTecnico(OrdenEventoTecnico::RETIRADA, $this->ordenSnapshot($workOrder))
+                );
+            }
+        }
+
+        // ── Cambio de estado: cancelada → técnico; iniciada/finalizada → creador ──
+        if ($estadoCambio) {
+            $anterior = $this->estadoAnterior($workOrder);
+
+            switch ($workOrder->estado) {
+                case WorkOrderStatus::CANCELADO:
+                    $this->notificarSeguro($workOrder->tecnico, new OrdenCambioEstado($workOrder, $anterior));
+                    break;
+
+                case WorkOrderStatus::FINALIZADO:
+                case WorkOrderStatus::EN_PROCESO:
+                    $this->notificarSeguro($workOrder->creador, new OrdenCambioEstado($workOrder, $anterior));
+                    break;
+            }
+        }
+
+        // ── Reprogramación: avisar al técnico (solo si no cambió de técnico, para no duplicar) ──
+        if ($fechaCambio && !$tecnicoCambio && !$estadoCambio) {
+            $this->notificarSeguro(
+                $workOrder->tecnico,
+                new OrdenEventoTecnico(OrdenEventoTecnico::REPROGRAMADA, $this->ordenSnapshot($workOrder))
+            );
+        }
+    }
+
+    /**
+     * Snapshot escalar de la orden (queue-safe, no depende de re-hidratar el modelo).
+     *
+     * @return array<string, mixed>
+     */
+    protected function ordenSnapshot(WorkOrder $workOrder): array
+    {
+        return [
+            'id'      => $workOrder->id,
+            'codigo'  => $workOrder->codigo,
+            'tipo'    => $workOrder->tipo->nombre ?? null,
+            'placa'   => $workOrder->vehiculo->placa ?? null,
+            'cliente' => $workOrder->cliente->razon_social
+                ?? $workOrder->vehiculo->cliente->razon_social
+                ?? null,
+            'fecha'   => $workOrder->fecha_programada?->format('Y-m-d H:i'),
+            'motivo'  => $workOrder->motivo_cancelacion ?? null,
+            'url'     => route('admin.work-orders.show', $workOrder),
+        ];
+    }
+
+    protected function estadoAnterior(WorkOrder $workOrder): WorkOrderStatus
+    {
+        $raw = $workOrder->getOriginal('estado');
+
+        return $raw instanceof WorkOrderStatus ? $raw : WorkOrderStatus::from($raw);
+    }
+
+    /**
+     * Notifica capturando cualquier error para que un fallo de FCM no rompa la operación.
+     */
+    protected function notificarSeguro(?User $usuario, $notification): void
+    {
+        if (!$usuario) {
+            return;
+        }
+
+        try {
+            $usuario->notify($notification);
+        } catch (\Throwable $e) {
+            Log::error('Error enviando notificación de orden de trabajo', [
+                'usuario_id'   => $usuario->id,
+                'notification' => get_class($notification),
+                'error'        => $e->getMessage(),
+            ]);
+        }
     }
 }

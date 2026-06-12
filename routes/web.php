@@ -298,6 +298,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
     Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
     Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
+    Route::get('ajustes/sla', [AjustesController::class, 'sla'])->name('admin.ajustes.sla');
+    Route::get('ajustes/firebase', [AjustesController::class, 'firebase'])->name('admin.ajustes.firebase');
     Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
     Route::get('ajustes/sunat', [AjustesController::class, 'sunat'])->name('admin.ajustes.sunat');
 
