@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('archivo_url')->nullable();
             $table->enum('archivo_tipo', ['pdf', 'video'])->nullable();
             $table->boolean('activo')->default(true);
+            $table->index(['empresa_id', 'sector_id']);
             $table->timestamps();
         });
     }
