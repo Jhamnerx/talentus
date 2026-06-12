@@ -75,11 +75,12 @@ class EnviarResumenDiarioPostventaJob implements ShouldQueue
         $lineas = ["📋 RESUMEN POST-VENTA | {$fecha->format('d/m/Y')}", "OTs cerradas: {$total}", ''];
 
         foreach ($ordenes->values() as $i => $ot) {
-            $num      = $i + 1;
-            $placa    = $ot->vehiculo?->placa ?? 'S/N';
-            $cliente  = $ot->cliente?->razon_social ?? 'S/N';
-            $contacto = $ot->cliente?->contactos?->first()?->nombre ?? '';
-            $telefono = $ot->cliente?->contactos?->first()?->telefono ?? '';
+            $num            = $i + 1;
+            $placa          = $ot->vehiculo?->placa ?? 'S/N';
+            $cliente        = $ot->cliente?->razon_social ?? 'S/N';
+            $primerContacto = $ot->cliente?->contactos?->first();
+            $contacto       = $primerContacto?->nombre ?? '';
+            $telefono       = $primerContacto?->telefono ?? '';
             $inicio   = $ot->fecha_inicio?->format('d/m/Y') ?? '—';
             $cierre   = $ot->fecha_cerrado?->format('d/m/Y') ?? '—';
 
