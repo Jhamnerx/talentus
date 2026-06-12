@@ -238,6 +238,8 @@ class WorkOrder extends Model
         $this->bloqueado = true;
         $this->fecha_cerrado = now();
         $this->save();
+
+        event(new \App\Events\WorkOrderCerrada($this));
     }
 
     public function cancelar(string $motivo): void
