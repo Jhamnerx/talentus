@@ -64,6 +64,22 @@ class Index extends Component
         );
     }
 
+    public function togglePostventa(int $deviceId): void
+    {
+        $empresaId = Auth::user()->empresa_id;
+
+        Device::whereHas('user', function ($query) use ($empresaId) {
+            $query->where('empresa_id', $empresaId);
+        })->update(['es_postventa' => false]);
+
+        Device::findOrFail($deviceId)->update(['es_postventa' => true]);
+
+        $this->notification()->success(
+            title: 'Device post-venta actualizado',
+            description: 'El número de WhatsApp para mensajes post-venta fue configurado.'
+        );
+    }
+
     public function render()
     {
         $devices = Auth::user()->waDevices()
