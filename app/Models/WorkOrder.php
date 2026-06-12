@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\WorkOrderStatus;
+use App\Events\WorkOrderCerrada;
 use App\Scopes\EmpresaScope;
 use App\Observers\WorkOrderObserver;
 use App\Models\Presupuestos;
@@ -239,7 +240,7 @@ class WorkOrder extends Model
         $this->fecha_cerrado = now();
         $this->save();
 
-        event(new \App\Events\WorkOrderCerrada($this));
+        event(new WorkOrderCerrada($this));
     }
 
     public function cancelar(string $motivo): void
