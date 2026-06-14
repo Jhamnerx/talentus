@@ -14,13 +14,13 @@ class SincronizarFlota extends Component
 {
     use WireUiActions;
 
-    public bool  $modalOpen    = false;
-    public int   $total        = 0;
-    public int   $procesados   = 0;
-    public bool  $corriendo    = false;
-    public bool  $terminado    = false;
-    public int   $lastId       = 0;
-    public array $noEncontrados = [];
+    public bool $modalOpen          = false;
+    public int  $total              = 0;
+    public int  $procesados         = 0;
+    public bool $corriendo          = false;
+    public bool $terminado          = false;
+    public int  $lastId             = 0;
+    public int  $noEncontradosCount = 0;
 
     public function render()
     {
@@ -30,16 +30,18 @@ class SincronizarFlota extends Component
     #[On('abrir-sincronizar-flota')]
     public function abrir(): void
     {
-        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontrados']);
-        $this->total    = Vehiculos::count();
+        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount']);
+        $this->total     = Vehiculos::count();
         $this->modalOpen = true;
+        $this->dispatch('reset-sync-errors');
     }
 
     public function iniciar(): void
     {
-        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontrados']);
-        $this->total    = Vehiculos::count();
+        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount']);
+        $this->total     = Vehiculos::count();
         $this->corriendo = true;
+        $this->dispatch('reset-sync-errors');
     }
 
     public function procesarSiguiente(): array
@@ -59,8 +61,10 @@ class SincronizarFlota extends Component
 
         $resultado = app(GpsWoxService::class)->sincronizarVehiculoDesdePlataforma($vehiculo);
 
+        $error = null;
         if ($resultado['status'] !== 1) {
-            $this->noEncontrados[] = [
+            $this->noEncontradosCount++;
+            $error = [
                 'placa'   => $vehiculo->placa,
                 'message' => $resultado['message'] ?? 'No encontrado en plataforma',
             ];
@@ -73,7 +77,7 @@ class SincronizarFlota extends Component
             $this->corriendo = false;
         }
 
-        return ['terminado' => $terminado];
+        return ['terminado' => $terminado, 'error' => $error];
     }
 
     public function cancelar(): void
@@ -85,6 +89,6 @@ class SincronizarFlota extends Component
     public function cerrar(): void
     {
         $this->modalOpen = false;
-        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontrados', 'total']);
+        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount', 'total']);
     }
 }
