@@ -210,9 +210,13 @@ class ModalAddProducto extends Component
         $this->selected->put('valor_unitario', $precioplan);
         $this->selected->put('precio_unitario', round(floatval($this->calcularPrecioUnitario($precioplan)), 4));
 
-        // Concatenar features a la descripción del detalle
+        // Concatenar nombre del plan y features a la descripción del detalle
+        $planNombre = is_array($plan->name) ? ($plan->name['es'] ?? reset($plan->name)) : $plan->name;
         $lineas = array_column($features, 'linea');
         $descripcionConFeatures = $this->selected['producto'];
+        if ($planNombre) {
+            $descripcionConFeatures .= "\n" . $planNombre;
+        }
         if (!empty($lineas)) {
             $descripcionConFeatures .= "\n" . implode("\n", $lineas);
         }

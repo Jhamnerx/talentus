@@ -380,22 +380,43 @@
                 <tbody>
                     @foreach ($presupuesto->detalles as $detalle)
                         @php
-                            $descLineas = $detalle->descripcion ? explode("\n", trim($detalle->descripcion)) : [];
-                            $productNombre = trim($detalle->info_producto->descripcion ?? '');
-                            // Si la primera línea de descripcion es igual al nombre del producto, omitirla
-                            $extraLineas =
-                                !empty($descLineas) && trim($descLineas[0]) === $productNombre
+                            $planNombre = null;
+
+                            if ($detalle->plan_id && $detalle->plan) {
+                                $n = $detalle->plan->name;
+                                $planNombre = is_array($n) ? ($n['es'] ?? reset($n)) : $n;
+                            }
+
+                            // Features: prefer stored plan_features JSON, fall back to descripcion text
+                            $features = null;
+                            if (!empty($detalle->plan_features)) {
+                                $features = collect($detalle->plan_features)
+                                    ->pluck('linea')
+                                    ->filter()
+                                    ->implode("\n");
+                            } else {
+                                $descLineas    = $detalle->descripcion ? explode("\n", trim($detalle->descripcion)) : [];
+                                $productNombre = trim($detalle->info_producto->descripcion ?? '');
+                                $extraLineas   = !empty($descLineas) && trim($descLineas[0]) === $productNombre
                                     ? array_slice($descLineas, 1)
                                     : $descLineas;
-                            $detalleExtra = ltrim(implode("\n", $extraLineas));
+                                // Strip plan name line if already in text
+                                if ($planNombre && !empty($extraLineas) && trim($extraLineas[0]) === trim($planNombre)) {
+                                    $extraLineas = array_slice($extraLineas, 1);
+                                }
+                                $features = ltrim(implode("\n", $extraLineas));
+                            }
                         @endphp
                         <tr>
                             <td>{{ $detalle->cantidad }}</td>
                             <td>{{ $detalle->codigo }}</td>
                             <td class="td-desc">
                                 <p class="producto-titulo">{{ $detalle->info_producto->descripcion }}</p>
-                                @if ($detalleExtra)
-                                    <p class="descripcion">{{ $detalleExtra }}</p>
+                                @if ($planNombre)
+                                    <p style="font-size:10px; color:#0e2157; font-weight:bold; margin-bottom:2px;">{{ $planNombre }}</p>
+                                @endif
+                                @if ($features)
+                                    <p class="descripcion">{{ $features }}</p>
                                 @endif
                             </td>
                             <td>{{ $simbolo }}{{ number_format($detalle->valor_unitario, 2) }}</td>

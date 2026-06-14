@@ -128,6 +128,8 @@ class Presupuestos extends Model
 
         $plantilla = plantilla::first();
 
+        $this->load('detalles.plan');
+
         view()->share([
             'presupuesto' => $this,
             'plantilla' => $plantilla,
