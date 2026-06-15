@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 class WhatsappMessage extends Model
 {
@@ -89,13 +88,17 @@ class WhatsappMessage extends Model
         return $this->belongsTo(User::class, 'sender_user_id');
     }
 
+    /**
+     * URL a la ruta autenticada que transmite el adjunto. NO es una URL pública:
+     * el archivo vive en disco privado y solo se sirve con sesión (ver WhatsappMediaController).
+     */
     public function mediaUrl(): ?string
     {
         if (empty($this->media_path)) {
             return null;
         }
 
-        return Storage::disk(config('whatsapp.media_disk', 'public'))->url($this->media_path);
+        return route('admin.whatsapp.media', $this->uuid);
     }
 
     public function scopeFromContact(Builder $query): Builder

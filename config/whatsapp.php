@@ -11,7 +11,7 @@ return [
     // Omnicanal SP#1
     'internal_token' => env('WHATSAPP_INTERNAL_TOKEN'),
     'default_empresa_id' => (int) env('WHATSAPP_DEFAULT_EMPRESA_ID', 1),
-    'media_disk' => env('WHATSAPP_MEDIA_DISK', 'public'),
+    'media_disk' => env('WHATSAPP_MEDIA_DISK', 'local'),
     'media_path' => 'whatsapp',
     'country_code' => env('WHATSAPP_COUNTRY_CODE', '51'),
 ];

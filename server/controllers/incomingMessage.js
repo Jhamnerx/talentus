@@ -12,7 +12,7 @@ import path from "path";
 
 const LARAVEL_URL = process.env.LARAVEL_URL || "http://localhost";
 const INTERNAL_TOKEN = process.env.INTERNAL_TOKEN || "";
-const MEDIA_ROOT = process.env.WA_MEDIA_ROOT || "./storage/app/public/whatsapp";
+const MEDIA_ROOT = process.env.WA_MEDIA_ROOT || "./storage/app/whatsapp";
 
 const MEDIA_EXT = {
     image: "jpg",
