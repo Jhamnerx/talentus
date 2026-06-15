@@ -98,7 +98,7 @@ class WhatsappMessage extends Model
             return null;
         }
 
-        return route('admin.whatsapp.media', $this->uuid);
+        return route('whatsapp.media', $this->uuid);
     }
 
     public function scopeFromContact(Builder $query): Builder

@@ -159,7 +159,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // WHATSAPP OMNICANAL — adjuntos privados (solo con sesión; rol fino en SP#3)
     Route::get('whatsapp/media/{message:uuid}', [\App\Http\Controllers\Admin\WhatsFleep\WhatsappMediaController::class, 'show'])
-        ->name('admin.whatsapp.media');
+        ->name('whatsapp.media');
 
     // PAGOS (Mantener por compatibilidad pero redireccionar)
     Route::controller(PaymentsController::class)->group(function () {
