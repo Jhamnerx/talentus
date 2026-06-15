@@ -16,3 +16,14 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('whatsapp.empresa.{empresaId}', function ($user, $empresaId) {
+    return (int) session('empresa', 1) === (int) $empresaId;
+});
+
+Broadcast::channel('whatsapp.conversation.{uuid}', function ($user, $uuid) {
+    $conversation = \App\Models\WhatsFleep\WhatsappConversation::where('uuid', $uuid)->first();
+
+    return $conversation !== null
+        && (int) $conversation->empresa_id === (int) session('empresa', 1);
+});
