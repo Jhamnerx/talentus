@@ -7,4 +7,11 @@ return [
     'node_server_url' => env('NODE_SERVER_URL', 'http://localhost:3000'),
     'socket_url' => env('SOCKET_URL', 'http://localhost:3000'),
     'server_url' => env('WA_URL_SERVER', 'http://localhost:3000'),
+
+    // Omnicanal SP#1
+    'internal_token' => env('WHATSAPP_INTERNAL_TOKEN'),
+    'default_empresa_id' => (int) env('WHATSAPP_DEFAULT_EMPRESA_ID', 1),
+    'media_disk' => env('WHATSAPP_MEDIA_DISK', 'public'),
+    'media_path' => 'whatsapp',
+    'country_code' => env('WHATSAPP_COUNTRY_CODE', '51'),
 ];
