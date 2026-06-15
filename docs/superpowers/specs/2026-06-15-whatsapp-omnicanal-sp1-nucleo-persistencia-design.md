@@ -43,7 +43,7 @@ ningún navegador tenga el inbox abierto. Sobre esta base se construyen los SP#2
 | D2 | **Threading (1 contacto → N conversaciones)** | Como máximo **una** conversación abierta por `(contacto, dispositivo)`. El entrante se pega a ella; si todas están cerradas, se crea una nueva. Las múltiples conversaciones nacen al cerrar una y abrir otra (o creación manual desde ticket en SP#4). |
 | D3 | **Contacto ↔ Cliente** | Auto-match por teléfono normalizado contra `clientes.telefono` y `contactos.telefono`. Con match → `cliente_id` + `empresa_id` del cliente. Sin match → contacto sin cliente, empresa por defecto; vinculación manual posterior. |
 | D4 | **Identidad de contacto** | **Reutilizar la tabla `contacts`** como identidad única (campañas + conversaciones). NO crear `whatsapp_contacts`. Se extiende `contacts` con columnas de WhatsApp. |
-| D5 | **Adjuntos** | Node descarga el binario con `downloadMediaMessage`, lo escribe en `storage/app/public/whatsapp/...` (mismo servidor) y manda la **ruta** + metadatos en el POST. Laravel solo registra metadatos. |
+| D5 | **Adjuntos** | Node descarga el binario con `downloadMediaMessage`, lo escribe en `storage/app/whatsapp/...` (disco **privado** `local`, mismo servidor) y manda la **ruta** + metadatos en el POST. Laravel solo registra metadatos. Los adjuntos **no** se sirven por URL pública: `mediaUrl()` devuelve una ruta autenticada (`admin.whatsapp.media`) que transmite el archivo solo con sesión (`auth:sanctum`+`verified`); el rol fino por conversación es SP#3. |
 | D6 | **Multi-tenancy del Job** | Los modelos WhatsApp **no** dependen de `session('empresa')` (no existe en un worker de cola). Se setea `empresa_id` explícito al crear y se filtra con un scope propio activado por el Job. |
 
 ---
@@ -57,7 +57,7 @@ Node nunca decide threading, empresa ni tickets.
 
 ```
 Baileys messages.upsert  (server/controllers/incomingMessage.js)
-  → si hay media: downloadMediaMessage → escribe storage/app/public/whatsapp/{device}/{id}.ext
+  → si hay media: downloadMediaMessage → escribe storage/app/whatsapp/{device}/{id}.ext  (disco PRIVADO)
   → POST {laravel}/api/internal/whatsapp/incoming   (header X-Internal-Token)
       → VerifyInternalToken (middleware)
       → IncomingWhatsappController@store
@@ -297,13 +297,13 @@ Mínimos y acotados:
 
 - **`server/controllers/incomingMessage.js`**: tras el autoreply/webhook actual, **siempre**:
   1. Si el mensaje trae media → `downloadMediaMessage` → escribir a
-     `storage/app/public/whatsapp/{device}/{wa_message_id}.{ext}` (ruta del proyecto Laravel).
+     `storage/app/whatsapp/{device}/{wa_message_id}.{ext}` (disco **privado** `local`).
   2. `POST {LARAVEL_URL}/api/internal/whatsapp/incoming` con header `X-Internal-Token` y payload
      (device token, wa_message_id, from, push_name, type, body, media_path/mime/file_name/file_size,
      wa_jid, timestamp, is_group). Reutiliza `cleanPhoneNumber` existente.
 - **`server/whatsapp.js`** (`messages.update`): además del log actual, `POST .../status` con
   `wa_message_id` + estado mapeado (delivered/read).
-- Nueva config Node: `LARAVEL_URL` y `INTERNAL_TOKEN` desde `.env` (ya carga `dotenv`).
+- Nueva config Node: `LARAVEL_URL`, `INTERNAL_TOKEN` y `WA_MEDIA_ROOT` desde `.env` (ya carga `dotenv`).
 
 ---
 
@@ -313,18 +313,25 @@ Mínimos y acotados:
 ```php
 'internal_token'      => env('WHATSAPP_INTERNAL_TOKEN'),
 'default_empresa_id'  => env('WHATSAPP_DEFAULT_EMPRESA_ID', 1),
-'media_disk'          => env('WHATSAPP_MEDIA_DISK', 'public'),
+'media_disk'          => env('WHATSAPP_MEDIA_DISK', 'local'),  // PRIVADO
 'media_path'          => 'whatsapp',
+'country_code'        => env('WHATSAPP_COUNTRY_CODE', '51'),
 ```
-`.env` (Laravel y Node comparten valor del token):
+`.env` (Laravel y Node comparten el mismo archivo en la raíz; el token va en ambas variables):
 ```
 WHATSAPP_INTERNAL_TOKEN=<random-largo>
 WHATSAPP_DEFAULT_EMPRESA_ID=1
-# Node:
+WHATSAPP_MEDIA_DISK=local
+WHATSAPP_COUNTRY_CODE=51
+# Bridge Node -> Laravel:
 LARAVEL_URL=http://talentus.test
-INTERNAL_TOKEN=<mismo valor>
+INTERNAL_TOKEN=<mismo valor que WHATSAPP_INTERNAL_TOKEN>
+WA_MEDIA_ROOT=./storage/app/whatsapp
 ```
-Requiere `php artisan storage:link` (si no existe) para servir media del disco `public`.
+**Seguridad de adjuntos:** el disco es `local` (`storage/app`), **privado**. NO se usa el disco
+`public` ni `storage:link` para la media de WhatsApp. Se sirven por la ruta autenticada
+`GET admin/whatsapp/media/{message:uuid}` → `WhatsappMediaController@show`, dentro del grupo
+`auth:sanctum`+`verified` (solo con sesión). El rol fino por conversación llega en SP#3.
 
 **Cola:** el Job corre en la cola dedicada `whatsapp` (`->onQueue('whatsapp')`). En producción se
 levanta un worker `php artisan queue:work --queue=whatsapp` gestionado por **supervisord** (a cargo

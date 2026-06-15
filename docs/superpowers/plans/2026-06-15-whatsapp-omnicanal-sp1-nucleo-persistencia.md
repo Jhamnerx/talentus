@@ -80,7 +80,7 @@ return [
     // Omnicanal SP#1
     'internal_token' => env('WHATSAPP_INTERNAL_TOKEN'),
     'default_empresa_id' => (int) env('WHATSAPP_DEFAULT_EMPRESA_ID', 1),
-    'media_disk' => env('WHATSAPP_MEDIA_DISK', 'public'),
+    'media_disk' => env('WHATSAPP_MEDIA_DISK', 'local'),
     'media_path' => 'whatsapp',
     'country_code' => env('WHATSAPP_COUNTRY_CODE', '51'),
 ];
@@ -94,7 +94,7 @@ Agrega al final del archivo:
 # WhatsApp Omnicanal (SP#1)
 WHATSAPP_INTERNAL_TOKEN=
 WHATSAPP_DEFAULT_EMPRESA_ID=1
-WHATSAPP_MEDIA_DISK=public
+WHATSAPP_MEDIA_DISK=local
 WHATSAPP_COUNTRY_CODE=51
 ```
 
@@ -863,7 +863,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 class WhatsappMessage extends Model
 {
@@ -941,13 +940,16 @@ class WhatsappMessage extends Model
         return $this->belongsTo(User::class, 'sender_user_id');
     }
 
+    /**
+     * URL a la ruta autenticada que transmite el adjunto (NO pública).
+     */
     public function mediaUrl(): ?string
     {
         if (empty($this->media_path)) {
             return null;
         }
 
-        return Storage::disk(config('whatsapp.media_disk', 'public'))->url($this->media_path);
+        return route('admin.whatsapp.media', $this->uuid);
     }
 
     public function scopeFromContact(Builder $query): Builder
@@ -1968,21 +1970,17 @@ git commit -m "feat(wa): internal ingestion routes (incoming + status)"
 Run: `php artisan migrate`
 Expected: corren las 6 migraciones nuevas (`add_whatsapp_fields_to_contacts_table` ... `create_whatsapp_conversation_tag_table`) con `DONE`.
 
-- [ ] **Step 2: Asegurar el symlink de storage (para servir media)**
+- [ ] **Step 2: Crear la carpeta de media PRIVADA**
 
-Run: `php artisan storage:link`
-Expected: el enlace `public/storage` existe (o "already exists").
+Run: `mkdir -p storage/app/whatsapp`
+Expected: la carpeta existe. (NO se usa `storage/app/public` ni `storage:link` para la media de
+WhatsApp — es privada y se sirve por ruta autenticada, ver Task 27.)
 
-- [ ] **Step 3: Crear la carpeta de media**
-
-Run: `mkdir -p storage/app/public/whatsapp`
-Expected: la carpeta existe.
-
-- [ ] **Step 4: Commit (gitkeep para versionar la carpeta vacía)**
+- [ ] **Step 3: Commit (gitkeep para versionar la carpeta vacía)**
 
 ```bash
-printf '' > storage/app/public/whatsapp/.gitkeep
-git add storage/app/public/whatsapp/.gitkeep
+printf '' > storage/app/whatsapp/.gitkeep
+git add -f storage/app/whatsapp/.gitkeep
 git commit -m "chore(wa): ensure whatsapp media directory exists"
 ```
 
@@ -2006,7 +2004,7 @@ import path from "path";
 
 const LARAVEL_URL = process.env.LARAVEL_URL || "http://localhost";
 const INTERNAL_TOKEN = process.env.INTERNAL_TOKEN || "";
-const MEDIA_ROOT = process.env.WA_MEDIA_ROOT || "./storage/app/public/whatsapp";
+const MEDIA_ROOT = process.env.WA_MEDIA_ROOT || "./storage/app/whatsapp";
 
 const MEDIA_EXT = {
     image: "jpg",
@@ -2136,7 +2134,7 @@ Confirma/añade en `.env`:
 ```
 LARAVEL_URL=http://talentus.test
 INTERNAL_TOKEN=<mismo valor que WHATSAPP_INTERNAL_TOKEN>
-WA_MEDIA_ROOT=./storage/app/public/whatsapp
+WA_MEDIA_ROOT=./storage/app/whatsapp
 ```
 
 - [ ] **Step 6: Commit**
@@ -2291,6 +2289,78 @@ Run: `php artisan tinker --execute="App\Models\WhatsFleep\WhatsappMessage::where
 Expected: sin error.
 
 - [ ] **Step 6: Sin commit** (esta tarea no produce archivos)
+
+---
+
+## Task 27: Servir adjuntos de forma privada (solo con sesión)
+
+**Files:**
+- Create: `app/Http/Controllers/Admin/WhatsFleep/WhatsappMediaController.php`
+- Modify: `routes/web.php`
+
+> Seguridad: la media vive en el disco privado `local` (`storage/app/whatsapp`), nunca bajo
+> `public`. `WhatsappMessage::mediaUrl()` devuelve `route('admin.whatsapp.media', $uuid)`. El rol
+> fino por conversación es SP#3; aquí se exige sesión autenticada.
+
+- [ ] **Step 1: Crear el controller**
+
+```php
+<?php
+
+namespace App\Http\Controllers\Admin\WhatsFleep;
+
+use App\Http\Controllers\Controller;
+use App\Models\WhatsFleep\WhatsappMessage;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class WhatsappMediaController extends Controller
+{
+    public function show(WhatsappMessage $message): StreamedResponse|Response
+    {
+        if (empty($message->media_path)) {
+            abort(404);
+        }
+
+        $disk = Storage::disk(config('whatsapp.media_disk', 'local'));
+
+        if (! $disk->exists($message->media_path)) {
+            abort(404);
+        }
+
+        return $disk->response(
+            $message->media_path,
+            $message->file_name,
+            ['Content-Type' => $message->mime_type ?: 'application/octet-stream']
+        );
+    }
+}
+```
+
+- [ ] **Step 2: Añadir la ruta dentro del grupo admin autenticado (`auth:sanctum`+`verified`)**
+
+En `routes/web.php`, dentro del grupo que ya protege las rutas `admin.*`, junto a la ruta de
+portal/accesos:
+```php
+    // WHATSAPP OMNICANAL — adjuntos privados (solo con sesión; rol fino en SP#3)
+    Route::get('whatsapp/media/{message:uuid}', [\App\Http\Controllers\Admin\WhatsFleep\WhatsappMediaController::class, 'show'])
+        ->name('admin.whatsapp.media');
+```
+
+- [ ] **Step 3: Verificar**
+
+Run: `php -l app/Http/Controllers/Admin/WhatsFleep/WhatsappMediaController.php && php -l routes/web.php`
+Expected: dos `No syntax errors detected`.
+Run: `php artisan route:list --name=admin.whatsapp.media -v`
+Expected: la ruta aparece con middleware `web`, `Authenticate:sanctum`, `EnsureEmailIsVerified`.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add app/Http/Controllers/Admin/WhatsFleep/WhatsappMediaController.php routes/web.php
+git commit -m "feat(wa): private authenticated media route + controller"
+```
 
 ---
 
