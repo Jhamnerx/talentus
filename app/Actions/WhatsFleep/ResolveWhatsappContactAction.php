@@ -54,9 +54,14 @@ class ResolveWhatsappContactAction
             return [null, $default];
         }
 
+        $cc = (string) config('whatsapp.country_code', '51');
+        $candidates = array_values(array_unique([$number, $cc . $number]));
+        $placeholders = implode(',', array_fill(0, count($candidates), '?'));
+        $normalized = "REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '')";
+
         $cliente = Clientes::withoutGlobalScope(EmpresaScope::class)
             ->whereNotNull('telefono')
-            ->whereRaw("REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '') LIKE ?", ['%' . $number])
+            ->whereRaw("{$normalized} IN ({$placeholders})", $candidates)
             ->first();
 
         if ($cliente) {
@@ -65,12 +70,12 @@ class ResolveWhatsappContactAction
 
         $contacto = Contactos::withoutGlobalScope(EmpresaScope::class)
             ->whereNotNull('telefono')
-            ->whereNotNull('cliente_id')
-            ->whereRaw("REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '') LIKE ?", ['%' . $number])
+            ->whereNotNull('clientes_id')
+            ->whereRaw("{$normalized} IN ({$placeholders})", $candidates)
             ->first();
 
         if ($contacto) {
-            return [(int) $contacto->cliente_id, (int) ($contacto->empresa_id ?? $default)];
+            return [(int) $contacto->clientes_id, (int) ($contacto->empresa_id ?? $default)];
         }
 
         return [null, $default];

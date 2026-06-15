@@ -29,7 +29,8 @@ class IncomingWhatsappController extends Controller
             return response()->json(['message' => 'Device not found'], 404);
         }
 
-        $message = WhatsappMessage::where('device_id', $device->id)
+        $message = WhatsappMessage::with('conversation')
+            ->where('device_id', $device->id)
             ->where('wa_message_id', $request->input('wa_message_id'))
             ->first();
 
