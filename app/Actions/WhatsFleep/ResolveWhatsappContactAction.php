@@ -55,7 +55,8 @@ class ResolveWhatsappContactAction
         }
 
         $cc = (string) config('whatsapp.country_code', '51');
-        $candidates = array_values(array_unique([$number, $cc . $number]));
+        $local = ($cc !== '' && str_starts_with($number, $cc)) ? substr($number, strlen($cc)) : $number;
+        $candidates = array_values(array_unique([$number, $local]));
         $placeholders = implode(',', array_fill(0, count($candidates), '?'));
         $normalized = "REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '')";
 

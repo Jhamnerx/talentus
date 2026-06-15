@@ -177,10 +177,11 @@ if (!function_exists('mask_email')) {
 
 if (! function_exists('normalize_wa_number')) {
     /**
-     * Normaliza un número de WhatsApp a su forma comparable:
-     * elimina todo lo que no sea dígito y, si tiene el código de país
-     * configurado como prefijo y queda más largo que un celular local,
-     * lo retira para dejar el número nacional (Perú: 9 dígitos).
+     * Normaliza un número de WhatsApp a su forma internacional canónica:
+     * elimina todo lo que no sea dígito y, si parece un celular local sin
+     * código de país, antepone el código configurado (Perú: 51 + 9 dígitos).
+     * Mantener la forma internacional es necesario para el envío saliente
+     * (formatReceipt del Node no agrega el código de país).
      */
     function normalize_wa_number(?string $raw): string
     {
@@ -192,8 +193,8 @@ if (! function_exists('normalize_wa_number')) {
 
         $cc = (string) config('whatsapp.country_code', '51');
 
-        if ($cc !== '' && str_starts_with($digits, $cc) && strlen($digits) > 9) {
-            $digits = substr($digits, strlen($cc));
+        if ($cc !== '' && ! str_starts_with($digits, $cc) && strlen($digits) <= 9) {
+            $digits = $cc . $digits;
         }
 
         return $digits;
