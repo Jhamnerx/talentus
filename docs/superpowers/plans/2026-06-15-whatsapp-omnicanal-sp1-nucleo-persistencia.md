@@ -1281,9 +1281,14 @@ class ResolveWhatsappContactAction
             return [null, $default];
         }
 
+        $cc = (string) config('whatsapp.country_code', '51');
+        $candidates = array_values(array_unique([$number, $cc . $number]));
+        $placeholders = implode(',', array_fill(0, count($candidates), '?'));
+        $normalized = "REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '')";
+
         $cliente = Clientes::withoutGlobalScope(EmpresaScope::class)
             ->whereNotNull('telefono')
-            ->whereRaw("REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '') LIKE ?", ['%' . $number])
+            ->whereRaw("{$normalized} IN ({$placeholders})", $candidates)
             ->first();
 
         if ($cliente) {
@@ -1291,14 +1296,13 @@ class ResolveWhatsappContactAction
         }
 
         $contacto = Contactos::withoutGlobalScope(EmpresaScope::class)
-            ->withoutGlobalScope(EliminadoScope::class)
             ->whereNotNull('telefono')
-            ->whereNotNull('cliente_id')
-            ->whereRaw("REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '') LIKE ?", ['%' . $number])
+            ->whereNotNull('clientes_id')
+            ->whereRaw("{$normalized} IN ({$placeholders})", $candidates)
             ->first();
 
         if ($contacto) {
-            return [(int) $contacto->cliente_id, (int) ($contacto->empresa_id ?? $default)];
+            return [(int) $contacto->clientes_id, (int) ($contacto->empresa_id ?? $default)];
         }
 
         return [null, $default];
@@ -1306,7 +1310,7 @@ class ResolveWhatsappContactAction
 }
 ```
 
-> El `whereRaw` normaliza la columna en SQL (quita espacios, guiones y `+`) y compara por sufijo, robusto ante formatos como `+51 987-654-321`. Si tu `EliminadoScope` tiene otro nombre/namespace, ajústalo; si `Contactos` no lo usa, elimina esa línea.
+> El `whereRaw` normaliza la columna en SQL (quita espacios, guiones y `+`) y compara por **igualdad exacta** contra `[number, cc+number]` (no sufijo `LIKE`), evitando enlazar a la empresa equivocada por coincidencia de cola. La columna de cliente en `contactos` es **`clientes_id`** (plural). `Contactos` aplica solo `EmpresaScope` (no `EliminadoScope`), por eso solo se omite ese scope.
 
 - [ ] **Step 2: Verificar sintaxis**
 
