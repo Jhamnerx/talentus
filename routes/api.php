@@ -478,3 +478,21 @@ Route::prefix('consultas')->name('api.consultas.')->middleware('throttle:60,1')-
 // Body: { "name": "...", "email": "...", "phone": "...", "company": "...", "message": "...", "g-recaptcha-response": "..." }
 // Respuesta: { "success": true, "message": "Mensaje enviado correctamente" }
 Route::post('/contacto', [ContactoApiController::class, 'store'])->name('api.contacto.store');
+
+/*
+|--------------------------------------------------------------------------
+| WHATSAPP OMNICANAL — INGESTA INTERNA
+|--------------------------------------------------------------------------
+| Endpoints internos consumidos por el bridge de WhatsApp. Protegidos por
+| el middleware whatsapp.internal (header X-Internal-Token).
+*/
+
+Route::prefix('internal/whatsapp')
+    ->middleware('whatsapp.internal')
+    ->name('api.internal.whatsapp.')
+    ->group(function () {
+        Route::post('incoming', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'store'])
+            ->name('incoming');
+        Route::post('status', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'status'])
+            ->name('status');
+    });
