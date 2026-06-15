@@ -174,3 +174,28 @@ if (!function_exists('mask_email')) {
         return "{$userMasked}@***{$tld}";
     }
 }
+
+if (! function_exists('normalize_wa_number')) {
+    /**
+     * Normaliza un número de WhatsApp a su forma comparable:
+     * elimina todo lo que no sea dígito y, si tiene el código de país
+     * configurado como prefijo y queda más largo que un celular local,
+     * lo retira para dejar el número nacional (Perú: 9 dígitos).
+     */
+    function normalize_wa_number(?string $raw): string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $raw);
+
+        if ($digits === '') {
+            return '';
+        }
+
+        $cc = (string) config('whatsapp.country_code', '51');
+
+        if ($cc !== '' && str_starts_with($digits, $cc) && strlen($digits) > 9) {
+            $digits = substr($digits, strlen($cc));
+        }
+
+        return $digits;
+    }
+}
