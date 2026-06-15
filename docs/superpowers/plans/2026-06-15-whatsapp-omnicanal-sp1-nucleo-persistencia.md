@@ -122,10 +122,11 @@ git commit -m "feat(wa): add omnichannel config keys (internal token, default em
 ```php
 if (! function_exists('normalize_wa_number')) {
     /**
-     * Normaliza un número de WhatsApp a su forma comparable:
-     * elimina todo lo que no sea dígito y, si tiene el código de país
-     * configurado como prefijo y queda más largo que un celular local,
-     * lo retira para dejar el número nacional (Perú: 9 dígitos).
+     * Normaliza un número de WhatsApp a su forma internacional canónica:
+     * elimina todo lo que no sea dígito y, si parece un celular local sin
+     * código de país, antepone el código configurado (Perú: 51 + 9 dígitos).
+     * Mantener la forma internacional es necesario para el envío saliente
+     * (formatReceipt del Node no agrega el código de país).
      */
     function normalize_wa_number(?string $raw): string
     {
@@ -137,8 +138,8 @@ if (! function_exists('normalize_wa_number')) {
 
         $cc = (string) config('whatsapp.country_code', '51');
 
-        if ($cc !== '' && str_starts_with($digits, $cc) && strlen($digits) > 9) {
-            $digits = substr($digits, strlen($cc));
+        if ($cc !== '' && ! str_starts_with($digits, $cc) && strlen($digits) <= 9) {
+            $digits = $cc . $digits;
         }
 
         return $digits;
@@ -1284,7 +1285,8 @@ class ResolveWhatsappContactAction
         }
 
         $cc = (string) config('whatsapp.country_code', '51');
-        $candidates = array_values(array_unique([$number, $cc . $number]));
+        $local = ($cc !== '' && str_starts_with($number, $cc)) ? substr($number, strlen($cc)) : $number;
+        $candidates = array_values(array_unique([$number, $local]));
         $placeholders = implode(',', array_fill(0, count($candidates), '?'));
         $normalized = "REPLACE(REPLACE(REPLACE(telefono, ' ', ''), '-', ''), '+', '')";
 

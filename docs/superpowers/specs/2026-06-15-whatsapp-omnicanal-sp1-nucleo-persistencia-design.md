@@ -269,8 +269,12 @@ Orquesta servicios, no contiene SQL crudo. Transaccional. Idempotente vía únic
 
 ### 6.7 Normalización de teléfono
 
-Helper `normalize_wa_number(string): string` — quita no-dígitos y prefijo país `51` (Perú) para
-dejar el celular de 9 dígitos. Usado tanto en alta de contacto como en el auto-match.
+Helper `normalize_wa_number(string): string` — quita no-dígitos y **garantiza la forma
+internacional**: si el número es local (≤ 9 dígitos sin código), antepone `51` (Perú). El número del
+contacto se **guarda internacional** (`51987654321`) porque el envío saliente lo requiere
+(`formatReceipt` del Node no agrega el código de país). El auto-match compara la columna `telefono`
+normalizada contra **ambas** formas candidatas (internacional y local sin `51`), por si en la BD
+está guardada con o sin código.
 
 ---
 
