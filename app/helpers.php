@@ -151,3 +151,26 @@ if (!function_exists('actualizar_tipo_cambio')) {
         }
     }
 }
+
+if (!function_exists('mask_email')) {
+    /**
+     * Enmascara un correo para no revelarlo por completo.
+     * Ejemplo: jhamner@empresa.com => jha*****@***.com
+     */
+    function mask_email(string $email): string
+    {
+        if (!str_contains($email, '@')) {
+            return str_repeat('*', max(strlen($email), 3));
+        }
+
+        [$user, $domain] = explode('@', $email, 2);
+
+        $visible = mb_substr($user, 0, 3);
+        $userMasked = $visible . str_repeat('*', max(mb_strlen($user) - mb_strlen($visible), 1));
+
+        $dotPos = strrpos($domain, '.');
+        $tld = $dotPos !== false ? substr($domain, $dotPos) : '';
+
+        return "{$userMasked}@***{$tld}";
+    }
+}

@@ -152,6 +152,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
     });
 
+    // PORTAL DE CLIENTE — Gestión de accesos
+    Route::view('portal/accesos', 'admin.portal.accesos.index')
+        ->name('admin.portal.accesos.index')
+        ->middleware('can:gestionar-accesos-portal');
+
     // PAGOS (Mantener por compatibilidad pero redireccionar)
     Route::controller(PaymentsController::class)->group(function () {
         Route::get('pagos', 'index')->name('admin.payments.index');
