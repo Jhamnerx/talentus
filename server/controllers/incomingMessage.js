@@ -6,6 +6,36 @@ import {
 import { parseIncomingMessage } from "../lib/helper.js";
 import axios from "axios";
 import logger from "../lib/pino.js";
+import { downloadMediaMessage } from "baileys";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
+
+const LARAVEL_URL = process.env.LARAVEL_URL || "http://localhost";
+const INTERNAL_TOKEN = process.env.INTERNAL_TOKEN || "";
+const MEDIA_ROOT = process.env.WA_MEDIA_ROOT || "./storage/app/public/whatsapp";
+
+const MEDIA_EXT = {
+    image: "jpg",
+    video: "mp4",
+    audio: "ogg",
+    document: "bin",
+    sticker: "webp",
+};
+
+function mapMessageType(messageType) {
+    const map = {
+        conversation: "text",
+        extendedTextMessage: "text",
+        imageMessage: "image",
+        videoMessage: "video",
+        audioMessage: "audio",
+        documentMessage: "document",
+        stickerMessage: "sticker",
+        locationMessage: "location",
+        contactMessage: "contact",
+    };
+    return map[messageType] || "text";
+}
 
 /**
  * Limpiar número de teléfono
@@ -147,6 +177,29 @@ export async function IncomingMessage(
             break; // Solo enviar la primera coincidencia
         }
 
+        // === Persistencia omnicanal (siempre, independiente de autoreply/webhook) ===
+        const waMessageId = message.key.id;
+        const normalizedType = mapMessageType(messageType);
+        const mediaMeta = await storeIncomingMedia(
+            message,
+            deviceNumber,
+            waMessageId,
+            normalizedType,
+        );
+
+        await persistIncomingToLaravel({
+            device: deviceNumber,
+            wa_message_id: waMessageId,
+            from: cleanFromNumber,
+            wa_jid: remoteJid,
+            push_name: senderName || null,
+            type: normalizedType,
+            body: fullBody || messageText || null,
+            timestamp: Math.floor(Date.now() / 1000),
+            is_group: isGroupMessage,
+            ...(mediaMeta || {}),
+        });
+
         // Si no hay auto-respuesta, enviar webhook
         if (!responseFound && device.webhook) {
             try {
@@ -179,5 +232,65 @@ export async function IncomingMessage(
         }
     } catch (error) {
         logger.error("Error procesando mensaje entrante:", error);
+    }
+}
+
+/**
+ * Descarga el media del mensaje y lo guarda en el disco compartido de Laravel.
+ * Devuelve metadatos o null si no hay media.
+ */
+async function storeIncomingMedia(message, deviceToken, waMessageId, type) {
+    const mediaTypes = ["image", "video", "audio", "document", "sticker"];
+    if (!mediaTypes.includes(type)) return null;
+
+    try {
+        const buffer = await downloadMediaMessage(message, "buffer", {});
+        const ext = MEDIA_EXT[type] || "bin";
+        const safeId = String(waMessageId).replace(/[^a-zA-Z0-9_-]/g, "_");
+        const dir = path.join(MEDIA_ROOT, deviceToken);
+        await mkdir(dir, { recursive: true });
+
+        const fileName = `${safeId}.${ext}`;
+        const fullPath = path.join(dir, fileName);
+        await writeFile(fullPath, buffer);
+
+        const content = message.message || {};
+        const node =
+            content.imageMessage ||
+            content.videoMessage ||
+            content.audioMessage ||
+            content.documentMessage ||
+            content.stickerMessage ||
+            {};
+
+        return {
+            media_path: `whatsapp/${deviceToken}/${fileName}`,
+            mime_type: node.mimetype || null,
+            file_name: node.fileName || fileName,
+            file_size: buffer.length,
+        };
+    } catch (error) {
+        logger.error("Error descargando media WA:", error.message);
+        return null;
+    }
+}
+
+/**
+ * Persiste el mensaje entrante en Laravel (endpoint interno).
+ */
+async function persistIncomingToLaravel(payload) {
+    try {
+        await axios.post(`${LARAVEL_URL}/api/internal/whatsapp/incoming`, payload, {
+            timeout: 10000,
+            headers: {
+                "Content-Type": "application/json",
+                "X-Internal-Token": INTERNAL_TOKEN,
+            },
+        });
+    } catch (error) {
+        logger.error(
+            "Error persistiendo mensaje en Laravel:",
+            error?.response?.status || error.message,
+        );
     }
 }
