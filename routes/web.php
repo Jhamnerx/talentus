@@ -152,6 +152,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
     });
 
+    // PORTAL DE CLIENTE — Gestión de accesos
+    Route::view('portal/accesos', 'admin.portal.accesos.index')
+        ->name('admin.portal.accesos.index')
+        ->middleware('can:gestionar-accesos-portal');
+
+    // WHATSAPP OMNICANAL — adjuntos privados (solo con sesión; rol fino en SP#3)
+    Route::get('whatsapp/media/{message:uuid}', [\App\Http\Controllers\Admin\WhatsFleep\WhatsappMediaController::class, 'show'])
+        ->name('whatsapp.media');
+
+    Route::get('whatsapp', [\App\Http\Controllers\Admin\WhatsFleep\InboxController::class, 'index'])
+        ->name('whatsapp.inbox')
+        ->middleware('can:ver-whatsapp');
+
     // PAGOS (Mantener por compatibilidad pero redireccionar)
     Route::controller(PaymentsController::class)->group(function () {
         Route::get('pagos', 'index')->name('admin.payments.index');
@@ -487,4 +500,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('tickets-dashboard/agents', 'dashboardAgentPerformance')->name('admin.tickets.dashboard.agents');
         Route::get('tickets-dashboard/teams', 'dashboardTeamLoad')->name('admin.tickets.dashboard.teams');
     });
+
+    // WHATSAPP - QUICK REPLIES
+    Route::view('ajustes/whatsapp/quick-replies', 'admin.ajustes.whatsapp.quick-replies')
+        ->name('whatsapp.quick-replies.index')
+        ->middleware('can:ver-whatsapp');
 });

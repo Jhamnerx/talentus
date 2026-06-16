@@ -141,4 +141,9 @@ class Clientes extends Model
     {
         return $this->hasMany(Ticket::class, 'customer_id')->withoutGlobalScope(EmpresaScope::class);
     }
+
+    public function clienteUsers(): HasMany
+    {
+        return $this->hasMany(ClienteUser::class, 'cliente_id');
+    }
 }

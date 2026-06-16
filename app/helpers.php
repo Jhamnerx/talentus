@@ -151,3 +151,52 @@ if (!function_exists('actualizar_tipo_cambio')) {
         }
     }
 }
+
+if (!function_exists('mask_email')) {
+    /**
+     * Enmascara un correo para no revelarlo por completo.
+     * Ejemplo: jhamner@empresa.com => jha*****@***.com
+     */
+    function mask_email(string $email): string
+    {
+        if (!str_contains($email, '@')) {
+            return str_repeat('*', max(strlen($email), 3));
+        }
+
+        [$user, $domain] = explode('@', $email, 2);
+
+        $visible = mb_substr($user, 0, 3);
+        $userMasked = $visible . str_repeat('*', max(mb_strlen($user) - mb_strlen($visible), 1));
+
+        $dotPos = strrpos($domain, '.');
+        $tld = $dotPos !== false ? substr($domain, $dotPos) : '';
+
+        return "{$userMasked}@***{$tld}";
+    }
+}
+
+if (! function_exists('normalize_wa_number')) {
+    /**
+     * Normaliza un número de WhatsApp a su forma internacional canónica:
+     * elimina todo lo que no sea dígito y, si parece un celular local sin
+     * código de país, antepone el código configurado (Perú: 51 + 9 dígitos).
+     * Mantener la forma internacional es necesario para el envío saliente
+     * (formatReceipt del Node no agrega el código de país).
+     */
+    function normalize_wa_number(?string $raw): string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $raw);
+
+        if ($digits === '') {
+            return '';
+        }
+
+        $cc = (string) config('whatsapp.country_code', '51');
+
+        if ($cc !== '' && ! str_starts_with($digits, $cc) && strlen($digits) <= 9) {
+            $digits = $cc . $digits;
+        }
+
+        return $digits;
+    }
+}
