@@ -10,6 +10,7 @@ use App\Models\TicketCategory;
 use App\Models\WhatsFleep\WhatsappConversation;
 use App\Scopes\EmpresaScope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class ContactPanel extends Component
@@ -23,6 +24,8 @@ class ContactPanel extends Component
     public string $createPriority = 'medium';
     public ?int $createCategoryId = null;
     public string $createDescription = '';
+
+    private ?WhatsappConversation $cachedConversation = null;
 
     public function mount(string $uuid): void
     {
@@ -70,17 +73,22 @@ class ContactPanel extends Component
 
     public function createAndLinkTicket(): void
     {
-        $this->validate([
-            'createSubject'     => ['required', 'string', 'max:255'],
-            'createPriority'    => ['required', 'in:low,medium,high,urgent'],
-            'createCategoryId'  => ['nullable', 'integer', 'exists:ticket_categories,id'],
-            'createDescription' => ['required', 'string', 'max:5000'],
-        ]);
-
         $conversation = $this->conversation();
         if (! $conversation) {
             return;
         }
+
+        $this->validate([
+            'createSubject'     => ['required', 'string', 'max:255'],
+            'createPriority'    => ['required', 'in:low,medium,high,urgent'],
+            'createCategoryId'  => [
+                'nullable', 'integer',
+                Rule::exists('ticket_categories', 'id')
+                    ->where('empresa_id', $conversation->empresa_id)
+                    ->whereNull('deleted_at'),
+            ],
+            'createDescription' => ['required', 'string', 'max:5000'],
+        ]);
 
         app(CreateTicketFromConversationAction::class)->execute(
             $conversation,
@@ -100,7 +108,7 @@ class ContactPanel extends Component
 
     private function conversation(): ?WhatsappConversation
     {
-        return WhatsappConversation::where('uuid', $this->uuid)->first();
+        return $this->cachedConversation ??= WhatsappConversation::where('uuid', $this->uuid)->first();
     }
 
     public function render()
