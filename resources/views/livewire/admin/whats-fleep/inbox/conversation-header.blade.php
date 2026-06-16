@@ -58,7 +58,8 @@
                     </svg>
                     {{ $conversation->assignedUser->name }}
                 </span>
-            @else
+            @elseif ($conversation)
+                @can('assignToSelf', $conversation)
                 <button
                     type="button"
                     wire:click="assignToMe"
@@ -75,9 +76,12 @@
                     </svg>
                     Asignarme
                 </button>
+                @endcan
             @endif
 
             {{-- Primary status toggle --}}
+            @if ($conversation)
+            @can('changeStatus', $conversation)
             @if ($status === 'closed')
                 <button
                     type="button"
@@ -105,6 +109,8 @@
                     Cerrar
                 </button>
             @endif
+            @endcan
+            @endif
 
             {{-- ── Kebab: reassign + priority ─────────────────── --}}
             <div x-data="{ open: false }" class="relative" x-on:keydown.escape.window="open = false">
@@ -128,6 +134,8 @@
                     class="absolute right-0 z-30 mt-2 w-64 origin-top-right rounded-xl border border-gray-200 bg-white p-3 shadow-lg ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-800 dark:ring-white/5"
                 >
                     {{-- Reassign --}}
+                    @if ($conversation)
+                    @can('reassign', $conversation)
                     <p class="px-1 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Reasignar agente</p>
                     <div class="mt-1.5 flex items-center gap-1.5">
                         <select
@@ -155,8 +163,12 @@
                     </div>
 
                     <div class="my-3 h-px bg-gray-100 dark:bg-gray-700"></div>
+                    @endcan
+                    @endif
 
                     {{-- Priority --}}
+                    @if ($conversation)
+                    @can('setPriority', $conversation)
                     <p class="px-1 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Prioridad</p>
                     <div class="mt-1.5 grid grid-cols-2 gap-1.5">
                         @foreach (['low', 'normal', 'high', 'emergency'] as $p)
@@ -174,6 +186,8 @@
                             </button>
                         @endforeach
                     </div>
+                    @endcan
+                    @endif
                 </div>
             </div>
         </div>
