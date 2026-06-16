@@ -57,6 +57,7 @@ class ConversationList extends Component
 
         $query = WhatsappConversation::query()
             ->forTenant($empresaId)
+            ->visibleTo(Auth::user())
             ->with(['contact', 'cliente', 'lastMessage', 'assignedUser'])
             ->where('status', $this->estado);
 
