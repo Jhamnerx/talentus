@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class WhatsappConversation extends Model
 {
@@ -131,5 +132,45 @@ class WhatsappConversation extends Model
     public function scopeAssignedTo(Builder $query, int $userId): Builder
     {
         return $query->where('assigned_user_id', $userId);
+    }
+
+    /**
+     * Filtra conversaciones según el nivel de acceso del usuario.
+     * Requiere que forTenant() se haya aplicado antes (empresa_id ya filtrado).
+     *
+     * Gerente (ver-whatsapp-todos): todo.
+     * Supervisor (ver-whatsapp-area): miembros de sus Teams liderados + propias + sin asignar.
+     * Agente (ver-whatsapp): propias + sin asignar.
+     */
+    public function scopeVisibleTo(Builder $query, User $user): Builder
+    {
+        if ($user->can('ver-whatsapp-todos')) {
+            return $query;
+        }
+
+        if ($user->can('ver-whatsapp-area')) {
+            $leaderTeamIds = DB::table('team_user')
+                ->where('user_id', $user->id)
+                ->where('role_in_team', 'lider')
+                ->pluck('team_id');
+
+            $memberIds = DB::table('team_user')
+                ->whereIn('team_id', $leaderTeamIds)
+                ->pluck('user_id')
+                ->unique()
+                ->all();
+
+            return $query->where(function (Builder $q) use ($user, $memberIds) {
+                $q->whereIn('assigned_user_id', $memberIds)
+                  ->orWhere('assigned_user_id', $user->id)
+                  ->orWhereNull('assigned_user_id');
+            });
+        }
+
+        // Agente: solo sus conversaciones + el pool sin asignar
+        return $query->where(function (Builder $q) use ($user) {
+            $q->where('assigned_user_id', $user->id)
+              ->orWhereNull('assigned_user_id');
+        });
     }
 }
