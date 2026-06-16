@@ -24,6 +24,13 @@ Broadcast::channel('whatsapp.empresa.{empresaId}', function ($user, $empresaId) 
 Broadcast::channel('whatsapp.conversation.{uuid}', function ($user, $uuid) {
     $conversation = \App\Models\WhatsFleep\WhatsappConversation::where('uuid', $uuid)->first();
 
-    return $conversation !== null
-        && (int) $conversation->empresa_id === (int) session('empresa', 1);
+    if ($conversation === null) {
+        return false;
+    }
+
+    if ((int) $conversation->empresa_id !== (int) session('empresa', 1)) {
+        return false;
+    }
+
+    return $user->can('view', $conversation);
 });
