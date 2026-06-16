@@ -3,6 +3,7 @@
     <!-- Table -->
     @livewire('admin.ventas.recibos.recibos-index')
     @livewire('admin.reportes.ventas')
+    @livewire('admin.reportes.detalles-items')
     @livewire('admin.ventas.recibos.send')
     @livewire('admin.ventas.recibos.eliminar-recibo')
     @livewire('admin.ventas.recibos.confirmar-estado-recibo')
