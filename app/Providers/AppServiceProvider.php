@@ -39,6 +39,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        Gate::policy(
+            \App\Models\WhatsFleep\WhatsappConversation::class,
+            \App\Policies\WhatsFleep\WhatsappConversationPolicy::class
+        );
+
         // Registro explícito para evitar problemas de case-sensitivity en Linux
         // (Livewire resuelve 'm2m-panel' → M2mPanel, pero la clase es M2MPanel)
         Livewire::component('admin.sim-card.m2m-panel', \App\Livewire\Admin\SimCard\M2MPanel::class);
