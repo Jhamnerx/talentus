@@ -101,9 +101,9 @@ class ConversationHeader extends Component
      * Supervisor: solo miembros de sus equipos liderados.
      * Agente: lista vacía (no puede reasignar).
      *
-     * @return \Illuminate\Database\Eloquent\Collection<int, User>
+     * @return \Illuminate\Support\Collection<int, User>
      */
-    private function resolveAgentsList(User $user): \Illuminate\Database\Eloquent\Collection
+    private function resolveAgentsList(User $user): \Illuminate\Support\Collection
     {
         if ($user->can('ver-whatsapp-todos')) {
             return User::permission(['ver-whatsapp', 'ver-whatsapp-area', 'ver-whatsapp-todos'])

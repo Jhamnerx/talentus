@@ -17,7 +17,9 @@ class AssignConversationAction
      */
     public function execute(WhatsappConversation $conversation, ?int $toUserId, User $actor): WhatsappConversation
     {
-        Gate::forUser($actor)->authorize('reassign', $conversation);
+        // Auto-asignación usa 'assignToSelf'; reasignar a otro usa 'reassign'
+        $ability = $toUserId === $actor->id ? 'assignToSelf' : 'reassign';
+        Gate::forUser($actor)->authorize($ability, $conversation);
 
         $fromUserId = $conversation->assigned_user_id;
 

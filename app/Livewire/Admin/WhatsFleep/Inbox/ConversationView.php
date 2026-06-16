@@ -17,9 +17,8 @@ class ConversationView extends Component
         $this->uuid = $uuid;
 
         $conversation = $this->conversation();
-        if ($conversation) {
-            Gate::authorize('view', $conversation);
-        }
+        abort_unless($conversation !== null, 404);
+        Gate::authorize('view', $conversation);
 
         $this->markRead();
     }
