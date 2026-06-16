@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\WhatsFleep\WhatsappConversation;
 use App\Models\WhatsFleep\WhatsappMessage;
 use App\Services\WhatsFleep\WhatsappService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -26,6 +27,8 @@ class SendWhatsappMediaAction
      */
     public function execute(WhatsappConversation $conversation, User $sender, MessageType $type, array $media): WhatsappMessage
     {
+        Gate::forUser($sender)->authorize('reply', $conversation);
+
         $message = WhatsappMessage::create([
             'empresa_id' => $conversation->empresa_id,
             'conversation_id' => $conversation->id,

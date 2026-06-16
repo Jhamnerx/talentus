@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\WhatsFleep\WhatsappAssignment;
 use App\Models\WhatsFleep\WhatsappConversation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class AssignConversationAction
 {
@@ -16,6 +17,8 @@ class AssignConversationAction
      */
     public function execute(WhatsappConversation $conversation, ?int $toUserId, User $actor): WhatsappConversation
     {
+        Gate::forUser($actor)->authorize('reassign', $conversation);
+
         $fromUserId = $conversation->assigned_user_id;
 
         if ($fromUserId === $toUserId) {
