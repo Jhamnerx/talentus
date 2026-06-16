@@ -500,4 +500,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('tickets-dashboard/agents', 'dashboardAgentPerformance')->name('admin.tickets.dashboard.agents');
         Route::get('tickets-dashboard/teams', 'dashboardTeamLoad')->name('admin.tickets.dashboard.teams');
     });
+
+    // WHATSAPP - QUICK REPLIES
+    Route::view('ajustes/whatsapp/quick-replies', 'admin.ajustes.whatsapp.quick-replies')
+        ->name('whatsapp.quick-replies.index')
+        ->middleware('can:ver-whatsapp');
 });
