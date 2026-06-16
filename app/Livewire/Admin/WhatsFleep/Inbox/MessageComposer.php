@@ -8,6 +8,7 @@ use App\Enums\WhatsFleep\MessageType;
 use App\Models\WhatsFleep\WhatsappConversation;
 use App\Models\WhatsFleep\WhatsappQuickReply;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -38,6 +39,8 @@ class MessageComposer extends Component
             return;
         }
 
+        Gate::authorize('reply', $conversation);
+
         app(SendWhatsappMessageAction::class)->execute($conversation, Auth::user(), $body);
 
         $this->reset('body');
@@ -54,6 +57,8 @@ class MessageComposer extends Component
         if (! $conversation) {
             return;
         }
+
+        Gate::authorize('reply', $conversation);
 
         $empresaId = $conversation->empresa_id;
         $ext = $this->attachment->getClientOriginalExtension();

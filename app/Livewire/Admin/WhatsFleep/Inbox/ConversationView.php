@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\WhatsFleep\Inbox;
 
 use App\Actions\WhatsFleep\MarkConversationReadAction;
 use App\Models\WhatsFleep\WhatsappConversation;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class ConversationView extends Component
@@ -14,6 +15,12 @@ class ConversationView extends Component
     public function mount(string $uuid): void
     {
         $this->uuid = $uuid;
+
+        $conversation = $this->conversation();
+        if ($conversation) {
+            Gate::authorize('view', $conversation);
+        }
+
         $this->markRead();
     }
 
