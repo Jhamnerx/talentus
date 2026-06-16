@@ -162,6 +162,8 @@ class ReporteDetallesItemsExport implements FromCollection, WithHeadings, WithSt
             ->map(function (DetalleRecibos $d) {
                 $recibo = $d->recibos;
 
+                // detalle_recibos.producto is a text column with the same name as the producto() relation;
+                // Eloquent resolves attributes before relations, so getAttributes()/getRelation() must be used explicitly.
                 return [
                     $recibo->fecha_emision?->format('d/m/Y'),
                     $recibo->serie . '-' . $recibo->numero,
@@ -170,7 +172,7 @@ class ReporteDetallesItemsExport implements FromCollection, WithHeadings, WithSt
                     $recibo->clientes->numero_documento ?? '',
                     $d->getAttributes()['producto'],
                     $d->descripcion,
-                    strtoupper($d->producto->tipo ?? 'N/A'),
+                    strtoupper($d->getRelation('producto')?->tipo ?? 'N/A'),
                     $d->cantidad,
                     $d->precio,
                     $d->descuento_val,
