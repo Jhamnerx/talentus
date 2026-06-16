@@ -67,15 +67,14 @@ class Index extends Component
 
     public function togglePostventa(int $deviceId): void
     {
-        $empresaId = Auth::user()->empresa_id;
+        $userId = Auth::id();
 
-        DB::transaction(function () use ($empresaId, $deviceId) {
-            Device::whereHas('user', function ($query) use ($empresaId) {
-                $query->where('empresa_id', $empresaId);
-            })->update(['es_postventa' => false]);
+        DB::transaction(function () use ($userId, $deviceId) {
+            Device::where('user_id', $userId)->update(['es_postventa' => false]);
 
-            Device::whereHas('user', fn ($q) => $q->where('empresa_id', $empresaId))
-                ->findOrFail($deviceId)
+            Device::where('id', $deviceId)
+                ->where('user_id', $userId)
+                ->firstOrFail()
                 ->update(['es_postventa' => true]);
         });
 

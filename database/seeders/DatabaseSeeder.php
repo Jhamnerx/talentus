@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Actas;
-
 use App\Models\Certificados;
 use App\Models\CertificadosVelocimetros;
 use App\Models\Clientes;
-
 use App\Models\Contactos;
 use App\Models\Contratos;
 use App\Models\Dispositivos;
@@ -21,6 +19,7 @@ use App\Models\Reportes;
 use App\Models\SimCard;
 use App\Models\Vehiculos;
 use App\Models\VentasFacturas;
+use Database\Seeders\SlaPlanRulesSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
@@ -84,9 +83,13 @@ class DatabaseSeeder extends Seeder
         // $this->call(ClientesSeeder::class);
         //$this->call(PermisosUpdateSeeder::class);
         //$this->call(SustentosSeeder::class);
-        $this->call(ChecklistTemplateSeeder::class);
-        $this->call(WorkOrderTypeSeeder::class);
-        $this->call(TicketCategorySeeder::class);
-        $this->call(PlanSeeder::class);
+        // $this->call(ChecklistTemplateSeeder::class);
+        // $this->call(WorkOrderTypeSeeder::class);
+        // $this->call(TicketCategorySeeder::class);
+        // $this->call(PlanSeeder::class);
+        $this->call(SlaPlanRulesSeeder::class);
+        $this->call(WhatsappPermissionsSeeder::class);
+        $this->call(WhatsappRolesPermissionsSeeder::class);
+        $this->call(PortalAccesosPermissionsSeeder::class);
     }
 }
