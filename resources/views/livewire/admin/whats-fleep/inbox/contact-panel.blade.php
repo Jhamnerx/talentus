@@ -111,7 +111,7 @@
 
             @if ($conversation?->ticket_id && $conversation->ticket)
                 @php $ticket = $conversation->ticket; @endphp
-                <div class="rounded-xl bg-indigo-50/70 p-3 ring-1 ring-indigo-100 dark:bg-indigo-500/6 dark:ring-indigo-500/20">
+                <div class="rounded-xl bg-indigo-50/70 p-3 ring-1 ring-indigo-100 dark:bg-indigo-500/[0.06] dark:ring-indigo-500/20">
                     <div class="mb-2 flex items-center justify-between gap-2">
                         <span class="shrink-0 rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
                             {{ $ticket->code }}
@@ -146,7 +146,7 @@
             @else
                 @can('reply', $conversation)
                     <div class="space-y-2">
-                        <div class="relative">
+                        <div class="relative" x-data @click.outside="$wire.set('ticketSearch', '')">
                             <input
                                 type="text"
                                 wire:model.live.debounce.300ms="ticketSearch"
@@ -217,7 +217,7 @@
 
     {{-- ── Modal: Crear ticket ────────────────────────────────────── --}}
     <x-form.modal.card title="Crear ticket" max-width="lg" wire:model.live="showCreateTicketModal" align="center">
-        <form autocomplete="off">
+        <form autocomplete="off" @submit.prevent>
             <div class="grid grid-cols-12 gap-4 px-5 py-4">
                 <div class="col-span-12">
                     <label class="mb-1 block text-sm font-medium">Asunto <span class="text-red-500">*</span></label>
