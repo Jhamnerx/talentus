@@ -84,7 +84,11 @@ class MessageComposer extends Component
     {
         $reply = WhatsappQuickReply::active()->find($id);
         if ($reply) {
-            $this->body = trim($this->body . ' ' . $reply->body);
+            // Si el textarea contiene el filtro "/atajo", reemplazarlo por el cuerpo;
+            // de lo contrario, anexar.
+            $this->body = str_starts_with($this->body, '/')
+                ? $reply->body
+                : trim($this->body . ' ' . $reply->body);
         }
     }
 

@@ -24,12 +24,22 @@ class ConversationView extends Component
     {
         return [
             "echo-private:whatsapp.conversation.{$this->uuid},wa.message.new" => 'onNewMessage',
+            'message-sent' => 'onSent',
         ];
     }
 
     public function onNewMessage(): void
     {
         $this->markRead();
+        $this->dispatch('messages-refreshed');
+    }
+
+    /**
+     * Mensaje saliente del agente: re-renderiza para mostrar la nueva burbuja
+     * (ya persistida por la Action) y autoscrollea.
+     */
+    public function onSent(): void
+    {
         $this->dispatch('messages-refreshed');
     }
 
