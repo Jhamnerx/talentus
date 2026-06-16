@@ -29,15 +29,19 @@ El caso de uso principal es ver cuántos servicios GPS y cuántos equipos (produ
 
 ## Archivos afectados
 
+> **Corrección post-exploración:** el proyecto ya tiene un patrón establecido para reportes compartidos entre Ventas y Recibos: `App\Livewire\Admin\Reportes\Ventas` (un único componente Livewire con propiedad `$contexto`, montado en ambas páginas padre vía `@livewire(...)`, que escucha eventos distintos para cada origen). Este reporte sigue el mismo patrón en vez de crear dos componentes separados.
+
 | Acción | Archivo |
 |--------|---------|
 | Crear | `app/Exports/ReporteDetallesItemsExport.php` |
-| Crear | `app/Livewire/Admin/Facturacion/Ventas/ReporteDetalles.php` |
-| Crear | `app/Livewire/Admin/Ventas/Recibos/ReporteDetalles.php` |
-| Crear | `resources/views/livewire/admin/facturacion/ventas/reporte-detalles.blade.php` |
-| Crear | `resources/views/livewire/admin/ventas/recibos/reporte-detalles.blade.php` |
-| Modificar | Vista del índice de Ventas (incluir `<livewire:admin.facturacion.ventas.reporte-detalles />`) |
-| Modificar | Vista del índice de Recibos (incluir `<livewire:admin.ventas.recibos.reporte-detalles />`) |
+| Crear | `app/Livewire/Admin/Reportes/DetallesItems.php` (componente único compartido) |
+| Crear | `resources/views/livewire/admin/reportes/detalles-items.blade.php` |
+| Modificar | `app/Livewire/Admin/Facturacion/Ventas/Index.php` (nuevo método que dispara evento) |
+| Modificar | `app/Livewire/Admin/Ventas/Recibos/RecibosIndex.php` (nuevo método que dispara evento) |
+| Modificar | `resources/views/livewire/admin/facturacion/ventas/index.blade.php` (botón nuevo) |
+| Modificar | `resources/views/livewire/admin/ventas/recibos/recibos-index.blade.php` (botón nuevo) |
+| Modificar | `resources/views/admin/comprobantes/index.blade.php` (incluir `@livewire('admin.reportes.detalles-items')`) |
+| Modificar | `resources/views/admin/ventas/recibos/index.blade.php` (incluir `@livewire('admin.reportes.detalles-items')`) |
 
 ---
 
@@ -170,73 +174,129 @@ DetalleRecibos::query()
 
 ---
 
-## Sección 2: Componentes Livewire
+## Sección 2: Componente Livewire compartido
 
-Ambos modales siguen el patrón de `App\Livewire\Admin\Ventas\Recibos\Reportes`.
+Sigue el patrón exacto de `App\Livewire\Admin\Reportes\Ventas` (`app/Livewire/Admin/Reportes/Ventas.php`): un único componente con `$contexto`, montado una sola vez en cada página padre, con un `#[On(...)]` por cada evento de origen.
 
-### `ReporteDetalles.php` (ventas)
+### `app/Livewire/Admin/Reportes/DetallesItems.php`
 
 **Propiedades públicas:**
 ```php
-public bool    $open                = false;
+public bool    $showModal           = false;
+public string  $contexto            = 'ventas'; // 'ventas' | 'recibos'
 public string  $fecha_inicio        = '';
 public string  $fecha_fin           = '';
-public string  $tipo_item           = 'todos';
-public string  $estado_doc          = 'todos';
+public string  $tipo_item           = 'todos';  // 'todos' | 'producto' | 'servicio'
+public string  $estado_doc          = 'todos';  // 'todos' | 'COMPLETADO' | 'BORRADOR' | 'anulado'
 public mixed   $cliente_id          = null;
-public ?string $tipo_comprobante_id = null;
+public ?string $tipo_comprobante_id = null;     // solo aplica cuando contexto = 'ventas'
 ```
 
-**Listeners:** `['open-modal-reporte-detalles-ventas' => 'openModal']`
+**`mount()`:** fija `fecha_inicio` al primer día del mes actual y `fecha_fin` a hoy (mismo criterio que `Reportes\Ventas::mount()`).
 
-**Métodos:**
-- `openModal()`: `$this->open = true`
-- `closeModal()`: `$this->open = false; $this->reset(...)`
-- `exportar()`: validación básica (fechas requeridas), llama `Excel::download(new ReporteDetallesItemsExport('ventas', ...), 'reporte-detalles-ventas.xlsx')`
+**Listeners vía atributos:**
+```php
+#[On('open-modal-reporte-detalles-ventas')]
+public function openModalVentas(): void
+{
+    $this->contexto = 'ventas';
+    $this->showModal = true;
+}
 
-### `ReporteDetalles.php` (recibos)
+#[On('open-modal-reporte-detalles-recibos')]
+public function openModalRecibos(): void
+{
+    $this->contexto = 'recibos';
+    $this->showModal = true;
+}
+```
 
-Idéntico al de ventas excepto:
-- Sin propiedad `$tipo_comprobante_id`
-- Listener: `'open-modal-reporte-detalles-recibos' => 'openModal'`
-- Export con `contexto = 'recibos'`
-- Nombre descarga: `'reporte-detalles-recibos.xlsx'`
-- Estado doc no incluye opción 'anulado'
+**`exportar()`:**
+```php
+public function exportar()
+{
+    $this->validate([
+        'fecha_inicio' => 'required',
+        'fecha_fin'    => 'required',
+    ]);
+
+    $nombre = 'reporte-detalles-' . $this->contexto . '-'
+        . $this->fecha_inicio . '_' . $this->fecha_fin . '.xlsx';
+
+    return Excel::download(
+        new ReporteDetallesItemsExport(
+            $this->contexto,
+            $this->fecha_inicio,
+            $this->fecha_fin,
+            $this->tipo_item,
+            $this->estado_doc,
+            $this->cliente_id,
+            $this->tipo_comprobante_id,
+        ),
+        $nombre
+    );
+}
+```
+
+### Disparadores en los componentes existentes
+
+`app/Livewire/Admin/Facturacion/Ventas/Index.php` — nuevo método junto a `openModalReporteVentas()`:
+```php
+public function openModalReporteDetallesVentas()
+{
+    $this->dispatch('open-modal-reporte-detalles-ventas');
+}
+```
+
+`app/Livewire/Admin/Ventas/Recibos/RecibosIndex.php` — nuevo método junto a `OpenModalReporte()`:
+```php
+public function OpenModalReporteDetalles()
+{
+    $this->dispatch('open-modal-reporte-detalles-recibos');
+}
+```
 
 ---
 
 ## Sección 3: Integración en vistas existentes
 
-### Ventas Index
+### Ventas / Comprobantes (`resources/views/admin/comprobantes/index.blade.php`)
 
-En la vista del índice de ventas, añadir un botón "Reporte por ítem" junto a los botones existentes. Al hacer clic, despacha el evento `open-modal-reporte-detalles-ventas`. Incluir el componente al final de la vista:
-
+Página padre que monta los componentes Livewire vía `@livewire(...)`. Añadir:
 ```blade
-<livewire:admin.facturacion.ventas.reporte-detalles />
+@livewire('admin.reportes.detalles-items')
 ```
 
-### Recibos Index
+En `resources/views/livewire/admin/facturacion/ventas/index.blade.php`, añadir un botón "Reporte por ítem" junto al botón "REPORTE VENTAS" existente (línea ~31), que llama `wire:click.prevent="openModalReporteDetallesVentas()"`.
 
-En la vista del índice de recibos, añadir botón "Reporte por ítem" similar. Al clic, despacha `open-modal-reporte-detalles-recibos`. Incluir:
+### Recibos (`resources/views/admin/ventas/recibos/index.blade.php`)
 
+Misma página padre que ya monta `@livewire('admin.reportes.ventas')`. Añadir junto a ese:
 ```blade
-<livewire:admin.ventas.recibos.reporte-detalles />
+@livewire('admin.reportes.detalles-items')
 ```
+
+> **Nota:** el componente `admin.reportes.detalles-items` se monta una sola vez por página padre (no dos), igual que `admin.reportes.ventas` — sirve a ambos contextos vía el evento recibido.
+
+En `resources/views/livewire/admin/ventas/recibos/recibos-index.blade.php`, añadir botón "Reporte por ítem" junto al botón "Descargar Reporte" existente (línea ~63), que llama `wire:click="OpenModalReporteDetalles"`.
 
 ---
 
 ## Sección 4: Modal blade
 
-Ambas vistas blade siguen el patrón de `resources/views/livewire/admin/ventas/recibos/reportes.blade.php`:
+### `resources/views/livewire/admin/reportes/detalles-items.blade.php`
 
-- Modal con `wire:model.live="open"`
-- Campos de fecha inicio/fin (`wire:model`)
-- Select Tipo Ítem: Todos / Producto / Servicio
-- Select Estado Doc (ventas: Todos/Completado/Borrador/Anulado; recibos: Todos/Completado/Borrador)
-- Select Cliente (buscable o simple, según patrón existente en el index)
-- Select Tipo Comprobante (solo ventas)
-- Botón "Exportar" → `wire:click="exportar"` con spinner
-- Botón "Cerrar"
+Sigue el patrón exacto de `resources/views/livewire/admin/reportes/ventas.blade.php`:
+
+- `<x-form.modal.card>` con título dinámico según `$contexto` (match 'ventas' => 'Ventas', 'recibos' => 'Recibos')
+- `wire:model.live="showModal"`
+- Campos de fecha inicio/fin (`x-form.datetime.picker`, `wire:model.live`)
+- Select Tipo Ítem: Todos / Producto / Servicio (`x-form.select` o `x-form.radio`)
+- Select/radio Estado Doc: Todos / Completado / Borrador / Anulado — la opción "Anulado" solo se muestra `@if ($contexto === 'ventas')`
+- Select Cliente (`x-form.select` con `async-data`, igual que en `ventas.blade.php`)
+- Select Tipo Comprobante — solo `@if ($contexto === 'ventas')`
+- Botón "Descargar Excel" → `wire:click.prevent="exportar"` con `spinner="exportar"`
+- Footer con botón "Cerrar"
 
 ---
 
