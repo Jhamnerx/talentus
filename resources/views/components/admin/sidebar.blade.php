@@ -466,7 +466,7 @@
                     <!-- Finanzas -->
 
                     <!-- WhatsApp -->
-                    @canany(['ver-dispositivos-wa', 'ver-contactos-wa', 'ver-campanias-wa', 'enviar-mensajes-wa', 'ver-historial-wa', 'gestionar-autoreplies-wa'])
+                    @canany(['ver-whatsapp', 'ver-dispositivos-wa', 'ver-contactos-wa', 'ver-campanias-wa', 'enviar-mensajes-wa', 'ver-historial-wa', 'gestionar-autoreplies-wa'])
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(1), ['whatsapp'])) {{ 'from-emerald-500/12 dark:from-emerald-500/24 to-emerald-500/4' }} @endif"
                         x-data="{ open: {{ in_array(Request::segment(1), ['whatsapp']) ? 1 : 0 }} }">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition hover:text-gray-900 dark:hover:text-white"
@@ -488,6 +488,14 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
+                                @can('ver-whatsapp')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('whatsapp.inbox')) text-emerald-500! @endif"
+                                        href="{{ route('whatsapp.inbox') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Bandeja</span>
+                                    </a>
+                                </li>
+                                @endcan
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.devices', 'admin.whats-fleep.devices.*')) text-emerald-500! @endif"
                                         href="{{ route('admin.whats-fleep.devices') }}">
