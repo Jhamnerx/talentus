@@ -161,6 +161,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('whatsapp/media/{message:uuid}', [\App\Http\Controllers\Admin\WhatsFleep\WhatsappMediaController::class, 'show'])
         ->name('whatsapp.media');
 
+    Route::get('whatsapp', [\App\Http\Controllers\Admin\WhatsFleep\InboxController::class, 'index'])
+        ->name('whatsapp.inbox')
+        ->middleware('can:ver-whatsapp');
+
     // PAGOS (Mantener por compatibilidad pero redireccionar)
     Route::controller(PaymentsController::class)->group(function () {
         Route::get('pagos', 'index')->name('admin.payments.index');
