@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Log;
  * Webhook recibido desde la plataforma de rastreo GPSWox.
  *
  * La plataforma envía este POST cada vez que se guarda o actualiza un dispositivo.
- * Solo se permite desde TRACKING_ALLOWED_IP (middleware AllowedTrackingIp).
+ * Solo se permite desde TRACKING_ALLOWED_IP o mediante api_key/x_api_key (middleware AllowedTrackingIp).
  *
  * Payload esperado (todos opcionales excepto plate_number):
  *   plate_number  string   Placa del vehículo — clave de búsqueda
@@ -235,11 +235,11 @@ class TrackingWebhookController extends Controller
         $simNumber      = trim($device['sim_number'] ?? '');
 
         $reporte = $alertaService->crearAlertaAuto(
-            vehiculo:            $vehiculo,
+            vehiculo: $vehiculo,
             horasSinTransmision: $horasOffline,
-            ultimaConexion:      $time ?: now()->toDateTimeString(),
-            imei:                $imei,
-            sim:                 $simNumber,
+            ultimaConexion: $time ?: now()->toDateTimeString(),
+            imei: $imei,
+            sim: $simNumber,
         );
 
         if ($reporte === null) {

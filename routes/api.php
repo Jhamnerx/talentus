@@ -157,7 +157,7 @@ Route::prefix('public')->name('api.public.')->group(function () {
 |--------------------------------------------------------------------------
 | TRACKING SYSTEM API
 |--------------------------------------------------------------------------
-| Autenticación: IP coincide con TRACKING_ALLOWED_IP  o  header X-API-KEY.
+| Autenticación: IP coincide con TRACKING_ALLOWED_IP, header X-API-KEY, o parámetro api_key/x_api_key.
 |
 | Endpoints:
 |   POST  /api/tracking/device-sync              — webhook desde plataforma GPSWox
