@@ -250,4 +250,9 @@ class Index extends Component
     {
         $this->dispatch('open-modal-reporte-ventas');
     }
+
+    public function openModalReporteDetallesVentas()
+    {
+        $this->dispatch('open-modal-reporte-detalles-ventas');
+    }
 }
