@@ -18,10 +18,10 @@ class LinkConversationToTicketAction
         $ticket = Ticket::withoutGlobalScope(EmpresaScope::class)->findOrFail($ticketId);
 
         if ((int) $ticket->empresa_id !== (int) $conversation->empresa_id) {
-            throw new \InvalidArgumentException('El ticket no pertenece a la misma empresa que la conversación.');
+            abort(403, 'El ticket no pertenece a la misma empresa que la conversación.');
         }
 
-        $conversation->forceFill(['ticket_id' => $ticketId])->save();
+        $conversation->forceFill(['ticket_id' => $ticket->id])->save();
 
         broadcast(new ConversationUpdated($conversation));
     }
