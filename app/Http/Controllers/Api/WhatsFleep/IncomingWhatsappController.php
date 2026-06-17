@@ -6,8 +6,10 @@ use App\Enums\WhatsFleep\MessageStatus;
 use App\Events\WhatsFleep\ConversationUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WhatsFleep\StoreIncomingWhatsappRequest;
+use App\Http\Requests\WhatsFleep\StoreHistoryBatchRequest;
 use App\Http\Requests\WhatsFleep\UpdateWhatsappStatusRequest;
 use App\Jobs\WhatsFleep\ProcessIncomingWhatsappMessage;
+use App\Jobs\WhatsFleep\ProcessWhatsappHistoryBatch;
 use App\Models\WhatsFleep\Device;
 use App\Models\WhatsFleep\WhatsappMessage;
 use Illuminate\Http\JsonResponse;
@@ -17,6 +19,13 @@ class IncomingWhatsappController extends Controller
     public function store(StoreIncomingWhatsappRequest $request): JsonResponse
     {
         ProcessIncomingWhatsappMessage::dispatch($request->validated());
+
+        return response()->json(['accepted' => true], 202);
+    }
+
+    public function historyBatch(StoreHistoryBatchRequest $request): JsonResponse
+    {
+        ProcessWhatsappHistoryBatch::dispatch($request->validated());
 
         return response()->json(['accepted' => true], 202);
     }

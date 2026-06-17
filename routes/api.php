@@ -493,6 +493,8 @@ Route::prefix('internal/whatsapp')
     ->group(function () {
         Route::post('incoming', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'store'])
             ->name('incoming');
+        Route::post('history-batch', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'historyBatch'])
+            ->name('history-batch');
         Route::post('status', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'status'])
             ->name('status');
     });
