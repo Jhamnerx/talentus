@@ -61,6 +61,19 @@ class WhatsappServiceImpl implements WhatsappService
         ]);
     }
 
+    public function syncHistory($token, $jid, $count, array $oldestMsgKey, $oldestMsgTimestamp): object
+    {
+        return $this->request('POST', '/api/sync-history', [
+            'token'              => $token,
+            'jid'                => $jid,
+            'count'              => $count,
+            // form_params no soporta objetos anidados con extended:false en Express;
+            // se serializa como JSON, igual que 'buttons'/'sections' en otros métodos.
+            'oldestMsgKey'       => json_encode($oldestMsgKey),
+            'oldestMsgTimestamp' => $oldestMsgTimestamp,
+        ]);
+    }
+
     public function sendMedia($token, $number, $type, $url, $caption = '', $fileName = ''): object
     {
         return $this->request('POST', '/api/send-media', [
