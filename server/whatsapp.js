@@ -16,7 +16,7 @@ import {
     MySQLGroupMetadataCache,
     MySQLLidMappingStore,
 } from "./database/authState.js";
-import { IncomingMessage } from "./controllers/incomingMessage.js";
+import { IncomingMessage, processHistoryBatch } from "./controllers/incomingMessage.js";
 import { formatReceipt } from "./lib/helper.js";
 import logger from "./lib/pino.js";
 import axios from "axios";
@@ -577,6 +577,18 @@ export async function connectToWhatsApp(token, io = null) {
             }
         });
 
+        // Sincronización de historial bajo demanda (botón "Sincronizar historial" del Inbox)
+        sock.ev.on("messaging-history.set", async ({ messages, syncType }) => {
+            if (syncType !== proto.HistorySync.HistorySyncType.ON_DEMAND) return;
+            if (!messages || messages.length === 0) return;
+
+            try {
+                await processHistoryBatch(messages, sock, token);
+            } catch (error) {
+                logger.error("Error procesando historial:", error);
+            }
+        });
+
         return {
             sock,
             qrcode: qrCodes.get(token),
@@ -600,6 +612,18 @@ async function getPpUrl(token, jid) {
     } catch (error) {
         return null;
     }
+}
+
+/**
+ * Solicitar historial de mensajes anteriores a un punto de referencia
+ * conocido (on-demand history sync). La respuesta llega de forma asíncrona
+ * vía el evento 'messaging-history.set' registrado en connectToWhatsApp().
+ */
+export async function fetchMessageHistory(token, oldestMsgKey, oldestMsgTimestamp, count) {
+    const sock = sockets.get(token);
+    if (!sock) throw new Error("Dispositivo no conectado");
+
+    return await sock.fetchMessageHistory(count, oldestMsgKey, oldestMsgTimestamp);
 }
 
 /**
