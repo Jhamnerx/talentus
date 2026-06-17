@@ -16,22 +16,32 @@ class ResolveWhatsappContactAction
      *
      * @return array{contact: Contact, empresa_id: int, cliente_id: int|null}
      */
-    public function execute(Device $device, string $rawNumber, ?string $waJid, ?string $pushName): array
+    public function execute(Device $device, string $rawNumber, ?string $waJid, ?string $pushName, ?string $profilePicUrl = null): array
     {
         $number = normalize_wa_number($rawNumber);
 
         [$clienteId, $empresaId] = $this->matchCliente($number);
 
-        $contact = Contact::firstOrNew([
-            'empresa_id' => $empresaId,
-            'number' => $number,
-        ]);
+        // Prioridad: (empresa_id, number) primero. Si solo coincidiera por wa_jid
+        // y existiera OTRO contacto ya dueño de ese number (p.ej. tras resolver un
+        // @lid a su número real por primera vez en un mensaje previo), escribir
+        // $number en el contacto hallado por wa_jid violaría el índice único
+        // (empresa_id, number). Priorizar el match por number evita esa colisión.
+        $contact = ($number !== '' ? Contact::where('empresa_id', $empresaId)->where('number', $number)->first() : null)
+            ?? ($waJid ? Contact::where('empresa_id', $empresaId)->where('wa_jid', $waJid)->first() : null)
+            ?? Contact::firstOrNew([
+                'empresa_id' => $empresaId,
+                'number' => $number,
+            ]);
 
+        $contact->empresa_id = $empresaId;
         $contact->user_id = $contact->user_id ?: $device->user_id;
         $contact->cliente_id = $clienteId ?? $contact->cliente_id;
+        $contact->number = $number ?: $contact->number;
         $contact->wa_jid = $waJid ?: $contact->wa_jid;
         $contact->push_name = $pushName ?: $contact->push_name;
         $contact->name = $contact->name ?: $pushName;
+        $contact->profile_pic_url = $profilePicUrl ?: $contact->profile_pic_url;
         $contact->save();
 
         return [
