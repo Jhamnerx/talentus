@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\WhatsFleep\Inbox;
 
 use App\Actions\WhatsFleep\MarkConversationReadAction;
+use App\Actions\WhatsFleep\SyncWhatsappHistoryAction;
 use App\Models\WhatsFleep\WhatsappConversation;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
@@ -29,7 +30,8 @@ class ConversationView extends Component
     public function getListeners(): array
     {
         return [
-            "echo-private:whatsapp.conversation.{$this->uuid},wa.message.new" => 'onNewMessage',
+            "echo-private:whatsapp.conversation.{$this->uuid},.wa.message.new" => 'onNewMessage',
+            "echo-private:whatsapp.conversation.{$this->uuid},.wa.history.synced" => 'onNewMessage',
             'message-sent' => 'onSent',
         ];
     }
@@ -52,6 +54,14 @@ class ConversationView extends Component
     public function loadMore(): void
     {
         $this->perPage += 30;
+    }
+
+    public function syncHistory(): void
+    {
+        $conversation = $this->conversation();
+        if ($conversation) {
+            app(SyncWhatsappHistoryAction::class)->execute($conversation);
+        }
     }
 
     private function markRead(): void
