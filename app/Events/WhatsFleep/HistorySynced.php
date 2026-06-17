@@ -31,7 +31,7 @@ class HistorySynced implements ShouldBroadcastNow
 
     public function broadcastAs(): string
     {
-        return 'history.synced';
+        return 'wa.history.synced';
     }
 
     /**
