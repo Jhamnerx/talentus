@@ -26,7 +26,7 @@ class PersistIncomingMessageAction
     ): WhatsappMessage {
         $type = MessageType::tryFrom($payload['type'] ?? 'text') ?? MessageType::Text;
         $sentAt = isset($payload['timestamp'])
-            ? Carbon::createFromTimestamp((int) $payload['timestamp'])
+            ? Carbon::createFromTimestamp((int) $payload['timestamp'], config('app.timezone'))
             : now();
 
         $message = WhatsappMessage::firstOrCreate(

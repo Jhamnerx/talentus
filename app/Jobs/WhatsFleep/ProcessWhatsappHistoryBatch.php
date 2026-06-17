@@ -87,7 +87,7 @@ class ProcessWhatsappHistoryBatch implements ShouldQueue
 
                 $type = MessageType::tryFrom($messagePayload['type'] ?? 'text') ?? MessageType::Text;
                 $sentAt = isset($messagePayload['timestamp'])
-                    ? Carbon::createFromTimestamp((int) $messagePayload['timestamp'])
+                    ? Carbon::createFromTimestamp((int) $messagePayload['timestamp'], config('app.timezone'))
                     : now();
                 $fromMe = (bool) ($messagePayload['from_me'] ?? false);
 
