@@ -83,9 +83,9 @@ class Clientes extends Model
 
 
     //relacion uno a muchos
-    public function contratos()
+    public function contratos(): HasMany
     {
-        return $this->hasMany(Contratos::class, 'clientes_id');
+        return $this->hasMany(Contratos::class, 'clientes_id')->withoutGlobalScope(EmpresaScope::class);
     }
 
 
