@@ -26,6 +26,12 @@ class GpswoxService
      * de propagar la excepción — el llamador debe tratar la ausencia de
      * datos como "estado no disponible", no como un fallo de la página.
      *
+     * Usa `v2/get_devices` (no `get_devices_latest`, que solo expone un
+     * timestamp sin online/speed). La API agrupa la respuesta por
+     * `group_id` con un array `items` anidado; se aplana aquí. El filtro
+     * `id` requiere enviarse como array (no como string CSV), de lo
+     * contrario la API solo devuelve el primer id de la lista.
+     *
      * @param  array<int, int>  $gpswoxIds
      * @return array<string, mixed> indexado por device id (string)
      */
@@ -37,19 +43,18 @@ class GpswoxService
 
         return Cache::remember("gpswox.latest.{$clienteId}", 60, function () use ($clienteId, $gpswoxIds) {
             try {
-                $response = $this->client->request('GET', 'get_devices_latest', [
+                $response = $this->client->request('GET', 'v2/get_devices', [
                     'query' => [
-                        'filters' => [
-                            'id' => implode(',', $gpswoxIds),
-                        ],
+                        'id' => $gpswoxIds,
                     ],
                 ]);
 
-                $items = $response['items'] ?? [];
-
-                return collect($items)->keyBy(fn ($item) => (string) ($item['id'] ?? ''))->all();
+                return collect($response)
+                    ->flatMap(fn ($group) => $group['items'] ?? [])
+                    ->keyBy(fn ($item) => (string) ($item['id'] ?? ''))
+                    ->all();
             } catch (Throwable $e) {
-                Log::warning('GpswoxService: error consultando get_devices_latest', [
+                Log::warning('GpswoxService: error consultando v2/get_devices', [
                     'cliente_id' => $clienteId,
                     'error' => $e->getMessage(),
                 ]);

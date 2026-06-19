@@ -56,7 +56,10 @@ class Client360Dashboard extends Component
 
             return [
                 'vehiculo' => $vehiculo,
-                'online' => $estado['online'] ?? null,
+                // La API de GPSWox no devuelve un booleano: el campo `online` es
+                // un estado ("true", "ack" = conectado pero inactivo, "false",
+                // "offline"...). Solo "false"/"offline" se consideran desconectado.
+                'online' => $estado === null ? null : ! in_array($estado['online'] ?? null, ['false', 'offline'], true),
                 'speed' => $estado['speed'] ?? null,
                 'time' => $estado['time'] ?? null,
             ];

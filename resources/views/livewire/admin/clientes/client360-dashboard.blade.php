@@ -51,7 +51,7 @@
                                 <td class="py-2 pr-4">
                                     @if ($row['online'] === null)
                                         <span class="text-gray-400">No disponible</span>
-                                    @elseif ($row['online'] === 'true' || $row['online'] === true)
+                                    @elseif ($row['online'])
                                         <span class="text-emerald-600">🟢 Transmitiendo</span>
                                     @else
                                         <span class="text-rose-600">🔴 Desconectado</span>
