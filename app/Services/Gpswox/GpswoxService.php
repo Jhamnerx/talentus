@@ -35,7 +35,7 @@ class GpswoxService
             return [];
         }
 
-        return Cache::remember("gpswox.latest.{$clienteId}", 60, function () use ($gpswoxIds) {
+        return Cache::remember("gpswox.latest.{$clienteId}", 60, function () use ($clienteId, $gpswoxIds) {
             try {
                 $response = $this->client->request('GET', 'api/get_devices_latest', [
                     'query' => [
