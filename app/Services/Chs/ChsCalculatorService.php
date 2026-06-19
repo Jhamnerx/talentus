@@ -64,7 +64,7 @@ class ChsCalculatorService
             $factoresDetalle[$factor] = ['subscore' => round($subscore, 1), 'peso_aplicado' => round($pesoAplicado, 1)];
         }
 
-        $scoreFinal = (int) round($scoreFinal);
+        $scoreFinal = (int) round(max(0, min(100, $scoreFinal)));
 
         return [
             'score_final' => $scoreFinal,
@@ -112,7 +112,7 @@ class ChsCalculatorService
 
     private function calcularFactorGps(Clientes $cliente): ?float
     {
-        $vehiculos = $cliente->vehiculos;
+        $vehiculos = $cliente->vehiculos()->get();
 
         if ($vehiculos->isEmpty()) {
             return null;
