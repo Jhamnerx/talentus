@@ -107,6 +107,13 @@ class Clientes extends Model
     }
 
 
+    /**
+     * Nota: a diferencia de vehiculos() (que usa withTrashed()), estas
+     * relaciones hasManyThrough excluyen automáticamente los documentos de
+     * vehículos dados de baja (Laravel aplica vehiculos.deleted_at is null
+     * al JOIN intermedio). Limitación conocida y aceptada: hoy no hay
+     * vehículos eliminados con documentos asociados en el sistema.
+     */
     public function certificados(): HasManyThrough
     {
         return $this->hasManyThrough(Certificados::class, Vehiculos::class, 'clientes_id', 'vehiculos_id');
