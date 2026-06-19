@@ -73,6 +73,7 @@
                             <th class="py-2 pr-4">Placa</th>
                             <th class="py-2 pr-4">Marca / Modelo</th>
                             <th class="py-2 pr-4">Estado GPS</th>
+                            <th class="py-2 pr-4">Activo en plataforma</th>
                             <th class="py-2 pr-4">Velocidad</th>
                             <th class="py-2 pr-4">Última señal</th>
                         </tr>
@@ -89,6 +90,15 @@
                                         <span class="text-emerald-600">🟢 Transmitiendo</span>
                                     @else
                                         <span class="text-rose-600">🔴 Desconectado</span>
+                                    @endif
+                                </td>
+                                <td class="py-2 pr-4">
+                                    @if (! $row['vehiculo']->gpswox_id)
+                                        <span class="text-gray-400">—</span>
+                                    @elseif ($row['vehiculo']->gpswox_active)
+                                        <span class="text-emerald-600">🟢 Activo</span>
+                                    @else
+                                        <span class="text-rose-600">🔴 Inactivo</span>
                                     @endif
                                 </td>
                                 <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">{{ $row['speed'] !== null ? $row['speed'].' km/h' : '—' }}</td>
