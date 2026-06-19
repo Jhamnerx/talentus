@@ -164,4 +164,9 @@ class Clientes extends Model
     {
         return $this->hasMany(ClienteUser::class, 'cliente_id');
     }
+
+    public function resenas(): HasMany
+    {
+        return $this->hasMany(Resena::class, 'cliente_id');
+    }
 }
