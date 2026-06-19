@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('team_id');
             $table->text('comentario');
-            $table->tinyInteger('calificacion')->nullable()->comment('Calificación 1-5 estrellas, opcional');
+            $table->tinyInteger('calificacion')->unsigned()->nullable()->comment('Calificación 1-5 estrellas, opcional');
             $table->timestamps();
 
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
