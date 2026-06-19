@@ -75,6 +75,7 @@ class PermisosSeeder extends Seeder
             'eliminar-cliente',
             'exportar-cliente',
             'importar-cliente',
+            'ver-cliente-360',
 
             'ver-contacto',
             'crear-contacto',
