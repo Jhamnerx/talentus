@@ -26,6 +26,40 @@
         </div>
     </div>
 
+    {{-- ── Customer Health Score ─────────────────────────────────── --}}
+    <div class="rounded-xl bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 p-5">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">Customer Health Score</h2>
+        @if ($chsActual)
+            <div class="flex flex-wrap items-end gap-6">
+                <div>
+                    <span class="text-4xl font-bold {{ $chsActual->categoria->color() }}">{{ $chsActual->score_final }}</span>
+                    <span class="text-sm text-gray-400">/100</span>
+                    <p class="mt-1">
+                        <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium {{ $chsActual->categoria->bgColor() }}">
+                            {{ $chsActual->categoria->label() }}
+                        </span>
+                    </p>
+                    <p class="text-xs text-gray-400 mt-1">Período: {{ $chsActual->periodo->format('m/Y') }}</p>
+                </div>
+                @if ($chsTendencia->count() > 1)
+                    <div class="flex items-end gap-1.5 h-20" title="Tendencia últimos {{ $chsTendencia->count() }} meses">
+                        @foreach ($chsTendencia as $snapshot)
+                            <div class="flex flex-col items-end h-full" wire:key="chs-tendencia-{{ $snapshot->id }}">
+                                <div
+                                    class="w-4 rounded-t {{ $snapshot->categoria->barColor() }}"
+                                    style="height: {{ max(4, $snapshot->score_final) }}%"
+                                    title="{{ $snapshot->periodo->format('m/Y') }}: {{ $snapshot->score_final }}"
+                                ></div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        @else
+            <p class="text-sm text-gray-400">CHS aún no calculado.</p>
+        @endif
+    </div>
+
     {{-- ── Panel de vehículos + GPS ──────────────────────────────── --}}
     <div class="rounded-xl bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 p-5">
         <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">

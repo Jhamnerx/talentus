@@ -28,6 +28,8 @@ class Client360Dashboard extends Component
             'contratos' => $this->cliente->contratos,
             'resumenComercial' => $this->resumenComercial(),
             'timeline' => $this->timeline(),
+            'chsActual' => $this->cliente->chsHistorico()->latest('periodo')->first(),
+            'chsTendencia' => $this->cliente->chsHistorico()->latest('periodo')->limit(12)->get()->reverse()->values(),
         ]);
     }
 
