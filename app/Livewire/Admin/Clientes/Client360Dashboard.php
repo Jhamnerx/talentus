@@ -5,7 +5,6 @@ namespace App\Livewire\Admin\Clientes;
 use App\Models\Clientes;
 use App\Models\User;
 use App\Services\Gpswox\GpswoxService;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
