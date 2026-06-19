@@ -39,7 +39,7 @@
     @if ($timeline->isNotEmpty())
         <ol class="relative border-l border-gray-200 dark:border-gray-800 ml-2 space-y-4">
             @foreach ($timeline as $event)
-                <li wire:key="activity-{{ $event->id }}" class="ml-4">
+                <li wire:key="activity-{{ $event->id }}" class="relative ml-4">
                     <div class="absolute w-2 h-2 bg-emerald-500 rounded-full -left-1 mt-1.5"></div>
                     <time class="text-xs text-gray-400">{{ $event->created_at->format('d/m/Y H:i') }}</time>
                     <p class="text-sm text-gray-700 dark:text-gray-200">
