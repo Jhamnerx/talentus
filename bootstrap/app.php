@@ -48,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('gpswox:sincronizar-flota')->dailyAt('22:30');
         // $schedule->job(new CheckTransmisionAlertasJob)->everyFifteenMinutes(); // reemplazado por webhook GPSWox
         $schedule->job(new EnviarResumenDiarioPostventaJob)->dailyAt('08:00');
+        $schedule->command('chs:calcular-mensual')->monthlyOn(1, '02:00');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
