@@ -13,6 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
@@ -106,9 +107,19 @@ class Clientes extends Model
     }
 
 
-    public function certificados()
+    public function certificados(): HasManyThrough
     {
-        return $this->hasMany(Certificados::class, 'certificados_id');
+        return $this->hasManyThrough(Certificados::class, Vehiculos::class, 'clientes_id', 'vehiculos_id');
+    }
+
+    public function actas(): HasManyThrough
+    {
+        return $this->hasManyThrough(Actas::class, Vehiculos::class, 'clientes_id', 'vehiculos_id');
+    }
+
+    public function certVelocimetros(): HasManyThrough
+    {
+        return $this->hasManyThrough(CertificadosVelocimetros::class, Vehiculos::class, 'clientes_id', 'vehiculos_id');
     }
 
 
