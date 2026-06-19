@@ -169,4 +169,19 @@ class Clientes extends Model
     {
         return $this->hasMany(Resena::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
     }
+
+    public function chsHistorico(): HasMany
+    {
+        return $this->hasMany(ChsHistorico::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function ordenesTrabajo(): HasMany
+    {
+        return $this->hasMany(WorkOrder::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function whatsappConversaciones(): HasMany
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\WhatsappConversation::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 }
