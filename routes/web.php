@@ -141,6 +141,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(ClientesController::class)->group(function () {
 
         Route::get('clientes', 'index')->name('admin.clientes.index');
+        Route::get('clientes/{cliente}/360', 'show360')->name('admin.clientes.show360');
         // Route::post('clientes', 'store')->name('admin.clientes.store');
         //Route::get('clientes/crear', 'create')->name('admin.clientes.create');
         //Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');

@@ -15,11 +15,17 @@ class ClientesController extends Controller
     function __construct()
     {
         $this->middleware('permission:ver-cliente', ['only' => ['index']]);
+        $this->middleware('permission:ver-cliente-360', ['only' => ['show360']]);
     }
 
     public function index()
     {
         return view('admin.clientes.index');
+    }
+
+    public function show360(Clientes $cliente)
+    {
+        return view('admin.clientes.show360', ['cliente' => $cliente]);
     }
 
 
