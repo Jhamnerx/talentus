@@ -24,7 +24,7 @@ class Resena extends Model
 
     public function cliente(): BelongsTo
     {
-        return $this->belongsTo(Clientes::class, 'cliente_id');
+        return $this->belongsTo(Clientes::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
     }
 
     public function user(): BelongsTo
@@ -34,6 +34,6 @@ class Resena extends Model
 
     public function team(): BelongsTo
     {
-        return $this->belongsTo(Team::class, 'team_id');
+        return $this->belongsTo(Team::class, 'team_id')->withoutGlobalScope(EmpresaScope::class);
     }
 }

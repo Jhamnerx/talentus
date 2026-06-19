@@ -167,6 +167,6 @@ class Clientes extends Model
 
     public function resenas(): HasMany
     {
-        return $this->hasMany(Resena::class, 'cliente_id');
+        return $this->hasMany(Resena::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
     }
 }
