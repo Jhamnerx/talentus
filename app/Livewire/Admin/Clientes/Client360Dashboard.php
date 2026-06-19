@@ -80,7 +80,6 @@ class Client360Dashboard extends Component
             'deuda_pendiente' => $deudaPendiente,
             'ticket_promedio' => $cantidadVentas > 0 ? $totalFacturado / $cantidadVentas : 0.0,
             'ultima_venta' => $ultimaVenta,
-            'total_recibos' => $this->cliente->recibos()->count(),
             'cobros_activos' => $this->cliente->cobros()->count(),
         ];
     }
