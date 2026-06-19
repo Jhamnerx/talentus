@@ -92,5 +92,7 @@
         </div>
     </div>
 
+    <livewire:admin.clientes.cliente-resenas :cliente="$cliente" />
+
     @include('livewire.admin.clientes.partials.client360-comercial-timeline')
 </div>
