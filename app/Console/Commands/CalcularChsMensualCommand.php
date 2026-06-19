@@ -50,7 +50,9 @@ class CalcularChsMensualCommand extends Command
                 $conScore++;
             } catch (Throwable $e) {
                 $conError++;
-                Log::error("CHS: error calculando cliente {$cliente->id}: {$e->getMessage()}");
+                Log::error("CHS: error calculando cliente {$cliente->id}: {$e->getMessage()}", [
+                    'trace' => $e->getTraceAsString(),
+                ]);
             }
         });
 
