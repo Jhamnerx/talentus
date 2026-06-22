@@ -64,6 +64,12 @@
                         positive md icon="arrow-down-tray" />
 
                 </div>
+                <div class="relative inline-flex">
+
+                    <x-form.button wire:click="OpenModalReporteDetalles" spinner="OpenModalReporteDetalles"
+                        label="Reporte por Ítem" positive md icon="arrow-down-tray" />
+
+                </div>
             @endcan
 
 

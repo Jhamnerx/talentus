@@ -3,6 +3,15 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WorkOrderController;
+use App\Http\Controllers\Api\Portal\PortalAuthController;
+use App\Http\Controllers\Api\Portal\PortalDashboardController;
+use App\Http\Controllers\Api\Portal\PortalVehiculoController;
+use App\Http\Controllers\Api\Portal\PortalCertificadoController;
+use App\Http\Controllers\Api\Portal\PortalFacturacionController;
+use App\Http\Controllers\Api\Portal\PortalOrdenTrabajoController;
+use App\Http\Controllers\Api\Portal\PortalTicketController;
+use App\Http\Controllers\Api\Portal\PortalContactoController;
+use App\Http\Controllers\Api\Portal\PortalPdfController;
 use App\Http\Controllers\Api\ConsultasApiController;
 use App\Http\Controllers\Api\ContactoApiController;
 use App\Http\Controllers\Api\MobileAuthController;
@@ -57,6 +66,75 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 /*
 |--------------------------------------------------------------------------
+| PORTAL DE CLIENTE
+|--------------------------------------------------------------------------
+| API consumida por el portal Next.js (subdominio aparte). Autenticación con
+| tokens Sanctum (ability "portal"). Ver docs/portal-cliente/portal-cliente-design.md
+*/
+
+Route::prefix('portal')->name('api.portal.')->group(function () {
+
+    // Autenticación pública
+    Route::prefix('auth')->name('auth.')->group(function () {
+        Route::post('register', [PortalAuthController::class, 'register'])->name('register')->middleware('throttle:6,1');
+        Route::post('login', [PortalAuthController::class, 'login'])->name('login')->middleware('throttle:6,1');
+        Route::post('forgot-password', [PortalAuthController::class, 'forgotPassword'])->name('forgot-password')->middleware('throttle:6,1');
+        Route::post('reset-password', [PortalAuthController::class, 'resetPassword'])->name('reset-password')->middleware('throttle:6,1');
+        Route::post('email/resend', [PortalAuthController::class, 'resendVerification'])->name('email.resend')->middleware('throttle:6,1');
+        Route::get('verify/{id}/{hash}', [PortalAuthController::class, 'verify'])->name('verify')->middleware('signed');
+    });
+
+    // Autenticación protegida (token con ability portal)
+    Route::prefix('auth')->name('auth.')->middleware(['auth:sanctum', 'abilities:portal', 'portal.empresa'])->group(function () {
+        Route::post('logout', [PortalAuthController::class, 'logout'])->name('logout');
+        Route::get('me', [PortalAuthController::class, 'me'])->name('me');
+        Route::put('profile', [PortalAuthController::class, 'updateProfile'])->name('profile.update');
+    });
+
+    // Recursos del portal (token con ability portal)
+    Route::middleware(['auth:sanctum', 'abilities:portal', 'portal.empresa'])->group(function () {
+
+        Route::get('dashboard', [PortalDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('vehiculos', [PortalVehiculoController::class, 'index'])->name('vehiculos.index');
+        Route::get('vehiculos/{id}', [PortalVehiculoController::class, 'show'])->name('vehiculos.show');
+
+        Route::get('actas', [PortalCertificadoController::class, 'actas'])->name('actas.index');
+        Route::get('certificados-gps', [PortalCertificadoController::class, 'gps'])->name('certificados-gps.index');
+        Route::get('certificados-velocimetro', [PortalCertificadoController::class, 'velocimetro'])->name('certificados-velocimetro.index');
+        Route::get('certificados-antifatiga', [PortalCertificadoController::class, 'antifatiga'])->name('certificados-antifatiga.index');
+
+        Route::get('comprobantes', [PortalFacturacionController::class, 'comprobantes'])->name('comprobantes.index');
+        Route::get('notas-credito', [PortalFacturacionController::class, 'notasCredito'])->name('notas-credito.index');
+        Route::get('notas-debito', [PortalFacturacionController::class, 'notasDebito'])->name('notas-debito.index');
+        Route::get('recibos', [PortalFacturacionController::class, 'recibos'])->name('recibos.index');
+        Route::get('presupuestos', [PortalFacturacionController::class, 'presupuestos'])->name('presupuestos.index');
+        Route::get('contratos', [PortalFacturacionController::class, 'contratos'])->name('contratos.index');
+
+        Route::get('ordenes-trabajo', [PortalOrdenTrabajoController::class, 'index'])->name('ordenes-trabajo.index');
+        Route::get('ordenes-trabajo/{id}', [PortalOrdenTrabajoController::class, 'show'])->name('ordenes-trabajo.show');
+
+        Route::get('tickets', [PortalTicketController::class, 'index'])->name('tickets.index');
+        Route::get('tickets/{id}', [PortalTicketController::class, 'show'])->name('tickets.show');
+
+        // Contactos de la empresa (CRUD)
+        Route::get('contactos', [PortalContactoController::class, 'index'])->name('contactos.index');
+        Route::post('contactos', [PortalContactoController::class, 'store'])->name('contactos.store');
+        Route::put('contactos/{id}', [PortalContactoController::class, 'update'])->name('contactos.update');
+        Route::delete('contactos/{id}', [PortalContactoController::class, 'destroy'])->name('contactos.destroy');
+
+        // Solicitud de URL firmada para previsualizar un PDF
+        Route::get('pdf/{tipo}/{id}', [PortalPdfController::class, 'link'])->name('pdf.link');
+    });
+
+    // Stream de PDF — ruta firmada (sin token; la firma autoriza)
+    Route::get('files/{tipo}/{id}', [PortalPdfController::class, 'stream'])
+        ->name('files.stream')
+        ->middleware('signed');
+});
+
+/*
+|--------------------------------------------------------------------------
 | ENDPOINTS PÚBLICOS (sin autenticación)
 |--------------------------------------------------------------------------
 | Usados por talentus-web para verificación de órdenes de trabajo.
@@ -79,7 +157,7 @@ Route::prefix('public')->name('api.public.')->group(function () {
 |--------------------------------------------------------------------------
 | TRACKING SYSTEM API
 |--------------------------------------------------------------------------
-| Autenticación: IP coincide con TRACKING_ALLOWED_IP  o  header X-API-KEY.
+| Autenticación: IP coincide con TRACKING_ALLOWED_IP, header X-API-KEY, o parámetro api_key/x_api_key.
 |
 | Endpoints:
 |   POST  /api/tracking/device-sync              — webhook desde plataforma GPSWox
@@ -400,3 +478,23 @@ Route::prefix('consultas')->name('api.consultas.')->middleware('throttle:60,1')-
 // Body: { "name": "...", "email": "...", "phone": "...", "company": "...", "message": "...", "g-recaptcha-response": "..." }
 // Respuesta: { "success": true, "message": "Mensaje enviado correctamente" }
 Route::post('/contacto', [ContactoApiController::class, 'store'])->name('api.contacto.store');
+
+/*
+|--------------------------------------------------------------------------
+| WHATSAPP OMNICANAL — INGESTA INTERNA
+|--------------------------------------------------------------------------
+| Endpoints internos consumidos por el bridge de WhatsApp. Protegidos por
+| el middleware whatsapp.internal (header X-Internal-Token).
+*/
+
+Route::prefix('internal/whatsapp')
+    ->middleware('whatsapp.internal')
+    ->name('api.internal.whatsapp.')
+    ->group(function () {
+        Route::post('incoming', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'store'])
+            ->name('incoming');
+        Route::post('history-batch', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'historyBatch'])
+            ->name('history-batch');
+        Route::post('status', [\App\Http\Controllers\Api\WhatsFleep\IncomingWhatsappController::class, 'status'])
+            ->name('status');
+    });

@@ -13,8 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
  *
  *  1. La IP del cliente coincide con TRACKING_ALLOWED_IP.
  *  2. El header X-API-KEY coincide con TRACKING_API_KEY.
+ *  3. El parámetro api_key o x_api_key coincide con TRACKING_API_KEY.
  *
- * Si ninguna de las dos condiciones se cumple, responde 403.
+ * Si ninguna de las condiciones se cumple, responde 403.
  */
 class AllowedTrackingIp
 {
@@ -24,7 +25,13 @@ class AllowedTrackingIp
         $apiKey    = config('services.tracking.api_key');
 
         $ipOk  = filled($allowedIp) && $request->ip() === $allowedIp;
-        $keyOk = filled($apiKey)    && $request->header('X-API-KEY') === $apiKey;
+        $keyOk = filled($apiKey) && (
+            $request->header('X-API-KEY') === $apiKey ||
+            $request->query('api_key') === $apiKey ||
+            $request->query('x_api_key') === $apiKey ||
+            $request->input('api_key') === $apiKey ||
+            $request->input('x_api_key') === $apiKey
+        );
 
         if (!$ipOk && !$keyOk) {
             Log::channel('daily')->warning('[Tracking] Acceso denegado', [

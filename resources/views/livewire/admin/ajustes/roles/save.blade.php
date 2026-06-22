@@ -2148,6 +2148,76 @@
                 @endforeach
             </div>
 
+            {{-- OTROS PERMISOS (evaluados en el código, antes no asignables) --}}
+            <div class="flex flex-col space-y-1">
+                <p class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2">
+                    Otros permisos
+                </p>
+                @foreach ([
+        'ver-vehiculos-historial-mantenimientos' => 'Ver historial de mantenimientos',
+        'eliminar-vehiculos-historial-mantenimientos' => 'Eliminar historial de mantenimientos',
+        'crear-ordenes-trabajo' => 'Crear orden de trabajo (mantenimiento)',
+        'editar-payment-methods' => 'Editar métodos de pago',
+        'admin.settings.series.index' => 'Ver series de comprobantes',
+        'admin.settings.plantilla.correo-config.edit' => 'Editar configuración de correo',
+    ] as $perm => $label)
+                    <div class="flex">
+                        <div class="relative flex items-start" variant="indigo">
+                            <div class="flex items-center h-5">
+                                <input name="permission[]" wire:model.live="permission"
+                                    value="{{ $perm }}" id="{{ $perm }}" variant="indigo"
+                                    type="checkbox"
+                                    class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ $perm }}" class="font-medium text-gray-600 cursor-pointer">
+                                    {{ $label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- ACCESOS A MÓDULOS (menú) --}}
+            <div class="flex flex-col space-y-1">
+                <p class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2">
+                    Accesos a módulos
+                </p>
+                @foreach ([
+        'admin.settings.firebase.index' => 'Ajustes: Credenciales Firebase',
+        'admin.settings.sla.index' => 'Ajustes: Perfiles SLA',
+        'admin.settings.postventa.index' => 'Ajustes: Post-Venta',
+        'admin.settings.operadores.index' => 'Ajustes: Operadores',
+        'admin.settings.sectores.index' => 'Ajustes: Sectores',
+        'admin.settings.rubros.index' => 'Ajustes: Rubros de clientes',
+        'admin.settings.sunat.index' => 'Ajustes: SUNAT',
+        'admin.settings.bancos.index' => 'Ajustes: Bancos',
+        'admin.settings.cuentas-bancarias.index' => 'Ajustes: Cuentas bancarias',
+        'admin.planes.index' => 'Planes de servicio',
+        'admin.guias.drivers.index' => 'Guías: Conductores',
+        'admin.guias.transports.index' => 'Guías: Vehículos GR',
+        'admin.guias.dispatchers.index' => 'Guías: Transportistas',
+        'admin.reviews.index' => 'Review de clientes',
+    ] as $perm => $label)
+                    <div class="flex">
+                        <div class="relative flex items-start" variant="indigo">
+                            <div class="flex items-center h-5">
+                                <input name="permission[]" wire:model.live="permission"
+                                    value="{{ $perm }}" id="{{ $perm }}" variant="indigo"
+                                    type="checkbox"
+                                    class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ $perm }}" class="font-medium text-gray-600 cursor-pointer">
+                                    {{ $label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
 
         </div>
     </div>

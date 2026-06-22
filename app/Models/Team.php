@@ -63,6 +63,11 @@ class Team extends Model
             ->withPivot('role_in_team');
     }
 
+    public function leaders(): BelongsToMany
+    {
+        return $this->users()->wherePivot('role_in_team', 'leader');
+    }
+
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'team_id')->withoutGlobalScope(EmpresaScope::class);

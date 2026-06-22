@@ -25,6 +25,7 @@ class Create extends Component
     public $category_id;
     public $assigned_to;
     public $vehiculo_id;
+    public $scheduled_at;
 
     protected $listeners = ['open-modal-create-ticket' => 'openModal'];
 
@@ -38,6 +39,7 @@ class Create extends Component
             'category_id' => 'nullable|exists:ticket_categories,id',
             'assigned_to' => 'nullable|exists:users,id',
             'vehiculo_id' => 'nullable|exists:vehiculos,id',
+            'scheduled_at' => 'nullable|date',
         ];
     }
 
@@ -60,13 +62,17 @@ class Create extends Component
     public function openModal()
     {
         $this->resetValidation();
-        $this->reset(['subject', 'description', 'priority', 'customer_id', 'category_id', 'vehiculo_id']);
+        $this->reset(['subject', 'description', 'priority', 'customer_id', 'category_id', 'vehiculo_id', 'scheduled_at']);
         $this->assigned_to = Auth::user()->id;
         $this->showModal = true;
     }
 
     public function save()
     {
+        if ($this->scheduled_at === '') {
+            $this->scheduled_at = null;
+        }
+
         $data = $this->validate();
         $data['status'] = TicketStatus::NEW->value;
         $data['created_by'] = Auth::user()->id;

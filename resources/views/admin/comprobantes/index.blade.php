@@ -6,5 +6,6 @@
 
     @livewire('admin.facturacion.utiles.consulta-cdr', [], key('consulta-comprobante'))
     @livewire('admin.reportes.ventas')
+    @livewire('admin.reportes.detalles-items')
     @livewire('admin.shared.pagos-modal')
 </x-admin-layout>

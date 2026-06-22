@@ -49,6 +49,15 @@
                 <span class="hidden xs:block ml-2 text-xs">REPORTE VENTAS</span>
             </button>
 
+            <button wire:click.prevent="openModalReporteDetallesVentas()" type="button"
+                class="btn bg-sky-500 hover:bg-sky-600 dark:bg-sky-700 dark:hover:bg-sky-800 text-white">
+                <svg class="w-5 h-5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path fill="#fff"
+                        d="M3 3a1 1 0 011-1h4a1 1 0 011 1v18a1 1 0 01-1 1H4a1 1 0 01-1-1V3zM10 9a1 1 0 011-1h4a1 1 0 011 1v12a1 1 0 01-1 1h-4a1 1 0 01-1-1V9zM17 13a1 1 0 011-1h4a1 1 0 011 1v8a1 1 0 01-1 1h-4a1 1 0 01-1-1v-8z" />
+                </svg>
+                <span class="hidden xs:block ml-2 text-xs">REPORTE POR ÍTEM</span>
+            </button>
+
             <!-- Right side -->
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 

@@ -16,6 +16,7 @@ class Plan extends BasePlan
         'empresa_id',
         'name',
         'slug',
+        'sla_tier',
         'description',
         'is_active',
         'price',
@@ -76,5 +77,20 @@ class Plan extends BasePlan
     public function empresa(): BelongsTo
     {
         return $this->belongsTo(Empresa::class, 'empresa_id');
+    }
+
+    /**
+     * Reglas SLA (TR/TS por prioridad) del perfil asignado a este plan.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, SlaPlanRule>
+     */
+    public function slaRules(): \Illuminate\Database\Eloquent\Collection
+    {
+        return SlaPlanRule::where('plan_type', $this->sla_tier ?? 'basico')->get();
+    }
+
+    public function slaTierLabel(): string
+    {
+        return SlaPlanRule::planLabel($this->sla_tier ?? 'basico');
     }
 }

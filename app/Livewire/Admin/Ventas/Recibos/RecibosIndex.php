@@ -135,6 +135,11 @@ class RecibosIndex extends Component
         $this->dispatch('openModalReporte');
     }
 
+    public function OpenModalReporteDetalles()
+    {
+        $this->dispatch('open-modal-reporte-detalles-recibos');
+    }
+
     public function modalOpenSend(Recibos $recibo)
     {
         $this->dispatch('modalOpenSend', $recibo);

@@ -48,6 +48,16 @@
                     wire:model="vehiculo_id" :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id"
                     option-description="option_description" />
             </div>
+
+            <div class="md:col-span-2">
+                <x-form.datetime.picker label="Programar atención (opcional)"
+                    wire:model.live="scheduled_at" parse-format="YYYY-MM-DD HH:mm"
+                    display-format="DD-MM-YYYY HH:mm" :interval="15"
+                    placeholder="Dejar vacío para iniciar el SLA de inmediato" />
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Si el cliente pide atención para una fecha/hora futura, el reloj del SLA (TR/TS) empezará a contar desde ese momento, no desde la creación.
+                </p>
+            </div>
         </div>
 
         <x-slot name="footer">

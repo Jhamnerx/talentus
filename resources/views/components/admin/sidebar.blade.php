@@ -301,46 +301,52 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.dispatchers.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.guias.dispatchers.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transportistas
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.drivers.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.guias.drivers.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Conductores
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.transports.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.guias.transports.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Vehículos GR
-                                            </span>
-                                        </a>
-                                    </li>
+                                    @can('admin.guias.dispatchers.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.dispatchers.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.guias.dispatchers.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transportistas
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('admin.guias.drivers.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.drivers.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.guias.drivers.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Conductores
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('admin.guias.transports.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.transports.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.guias.transports.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Vehículos GR
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </div>
                         </li>
                     @endcan
 
                     <!-- Clientes -->
-                    @canany(['ver-cliente', 'ver-contacto'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['clientes', 'contactos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(1), ['clientes', 'contactos']) ? 1 : 0 }} }">
+                    @canany(['ver-cliente', 'ver-contacto', 'gestionar-accesos-portal'])
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['clientes', 'contactos', 'portal'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['clientes', 'contactos', 'portal']) ? 1 : 0 }} }">
 
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (in_array(Request::segment(1), ['clientes', 'contactos'])) text-violet-500! @endif"
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (in_array(Request::segment(1), ['clientes', 'contactos', 'portal'])) text-violet-500! @endif"
                                 href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['clientes', 'contactos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['clientes', 'contactos', 'portal'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 64 64">
                                             <g fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
                                                 <path
@@ -385,6 +391,17 @@
                                                 href="{{ route('admin.clientes.contactos.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contactos
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('gestionar-accesos-portal')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.portal.accesos.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.portal.accesos.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Accesos al Portal
                                                 </span>
                                             </a>
                                         </li>
@@ -455,7 +472,7 @@
                     <!-- Finanzas -->
 
                     <!-- WhatsApp -->
-                    @canany(['ver-dispositivos-wa', 'ver-contactos-wa', 'ver-campanias-wa', 'enviar-mensajes-wa', 'ver-historial-wa', 'gestionar-autoreplies-wa'])
+                    @canany(['ver-whatsapp', 'ver-dispositivos-wa', 'ver-contactos-wa', 'ver-campanias-wa', 'enviar-mensajes-wa', 'ver-historial-wa', 'gestionar-autoreplies-wa'])
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if (in_array(Request::segment(1), ['whatsapp'])) {{ 'from-emerald-500/12 dark:from-emerald-500/24 to-emerald-500/4' }} @endif"
                         x-data="{ open: {{ in_array(Request::segment(1), ['whatsapp']) ? 1 : 0 }} }">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition hover:text-gray-900 dark:hover:text-white"
@@ -477,6 +494,14 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
+                                @can('ver-whatsapp')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('whatsapp.inbox')) text-emerald-500! @endif"
+                                        href="{{ route('whatsapp.inbox') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Bandeja</span>
+                                    </a>
+                                </li>
+                                @endcan
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.whats-fleep.devices', 'admin.whats-fleep.devices.*')) text-emerald-500! @endif"
                                         href="{{ route('admin.whats-fleep.devices') }}">
@@ -646,14 +671,16 @@
                                     </li>
 
                                     {{-- Planes de Servicio --}}
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.planes.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
-                                            </span>
-                                        </a>
-                                    </li>
+                                    @can('admin.planes.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.planes.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
                                 </ul>
 
@@ -1293,7 +1320,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    @role('admin')
+                                    @can('admin.reviews.index')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
                                             text-gray-800 dark:text-gray-100
@@ -1307,7 +1334,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                    @endrole
+                                    @endcan
                                     @can('admin.reportes.index')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
@@ -1391,19 +1418,23 @@
                                         </li>
                                     @endcanany
 
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.sectores')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.ajustes.sectores') }}">
-                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏷 Sectores</span>
-                                        </a>
-                                    </li>
+                                    @can('admin.settings.sectores.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.sectores')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.ajustes.sectores') }}">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏷 Sectores</span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.rubros')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.ajustes.rubros') }}">
-                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏢 Rubros de Clientes</span>
-                                        </a>
-                                    </li>
+                                    @can('admin.settings.rubros.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.rubros')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.ajustes.rubros') }}">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏢 Rubros de Clientes</span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
                                 </ul>
                             </div>

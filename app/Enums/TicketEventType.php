@@ -17,6 +17,7 @@ enum TicketEventType: string
     case RESOLVED = 'resolved';
     case CATEGORY_CHANGED = 'category_changed';
     case ESCALATED = 'escalated';
+    case SLA_RECALCULATED = 'sla_recalculated';
 
     public function label(): string
     {
@@ -34,6 +35,7 @@ enum TicketEventType: string
             self::RESOLVED => 'Ticket resuelto',
             self::CATEGORY_CHANGED => 'Categoría cambiada',
             self::ESCALATED => 'Ticket escalado',
+            self::SLA_RECALCULATED => 'SLA recalculado',
         };
     }
 
@@ -53,6 +55,7 @@ enum TicketEventType: string
             self::RESOLVED => 'check-circle',
             self::CATEGORY_CHANGED => 'tag',
             self::ESCALATED => 'arrow-up',
+            self::SLA_RECALCULATED => 'clock',
         };
     }
 
@@ -71,6 +74,7 @@ enum TicketEventType: string
             self::RESOLVED => 'text-green-600 dark:text-green-400',
             self::CATEGORY_CHANGED => 'text-pink-600 dark:text-pink-400',
             self::ESCALATED => 'text-red-600 dark:text-red-400',
+            self::SLA_RECALCULATED => 'text-amber-600 dark:text-amber-400',
         };
     }
 
@@ -89,6 +93,7 @@ enum TicketEventType: string
             self::RESOLVED => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
             self::CATEGORY_CHANGED => 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
             self::ESCALATED => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+            self::SLA_RECALCULATED => 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300',
         };
     }
 }

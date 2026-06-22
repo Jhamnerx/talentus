@@ -15,6 +15,15 @@
                         <x-form.textarea label="Descripción" wire:model.live="description"
                             placeholder="Descripción del plan" rows="2" />
                     </div>
+                    <div>
+                        <x-form.select label="Perfil SLA *" wire:model.live="sla_tier"
+                            hint="Tiempos de atención de tickets (TR/TS)">
+                            <x-select.option label="Básico — Control Mínimo" value="basico" />
+                            <x-select.option label="Estándar — Gestión Operativa" value="estandar" />
+                            <x-select.option label="Premium — Grandes Flotas" value="premium" />
+                            <x-select.option label="MININTER / SIPCOP-M" value="mininter" />
+                        </x-form.select>
+                    </div>
                     <div class="flex items-center">
                         <x-form.toggle label="Plan Activo" wire:model.live="is_active" />
                     </div>

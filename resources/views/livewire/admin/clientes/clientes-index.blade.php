@@ -370,6 +370,21 @@
                                             </button>
                                         @endcan
 
+                                        {{-- Cliente 360° --}}
+                                        @can('ver-cliente-360')
+                                            <a href="{{ route('admin.clientes.show360', $cliente) }}"
+                                                title="Cliente 360°"
+                                                class="p-1.5 rounded-lg text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors">
+                                                <span class="sr-only">Cliente 360°</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z" />
+                                                </svg>
+                                            </a>
+                                        @endcan
+
                                         {{-- Editar cliente --}}
                                         @can('editar-cliente')
                                             <button wire:click.prevent='openModalEdit({{ $cliente->id }})'

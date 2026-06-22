@@ -52,6 +52,7 @@
                             <th class="px-4 py-3 text-left">Clave API</th>
                             <th class="px-4 py-3 text-center">Mensajes enviados</th>
                             <th class="px-4 py-3 text-center">Sistema</th>
+                            <th class="px-4 py-3 text-center">Post-Venta</th>
                             <th class="px-4 py-3 text-center">Estado</th>
                             <th class="px-4 py-3 text-right">Acciones</th>
                         </tr>
@@ -119,6 +120,24 @@
                                         </span>
                                     @else
                                         <span class="text-gray-300 dark:text-gray-600 text-xs">&mdash;</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    @if ($device->es_postventa)
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Activo
+                                        </span>
+                                    @else
+                                        <button
+                                            wire:click="togglePostventa({{ $device->id }})"
+                                            class="text-xs text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition cursor-pointer underline">
+                                            Activar
+                                        </button>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-center">

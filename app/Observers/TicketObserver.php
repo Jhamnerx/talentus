@@ -9,6 +9,8 @@ use App\Models\TicketEvent;
 use App\Enums\TicketEventType;
 use App\Models\User;
 use App\Scopes\EmpresaScope;
+use App\Services\SlaCalculatorService;
+use App\Services\SlaPlanResolver;
 
 class TicketObserver
 {
@@ -27,16 +29,15 @@ class TicketObserver
             $ticket->code = $this->generateTicketCode($ticket->empresa_id);
         }
 
-        // Calcular due_at según prioridad (SLA)
+        // Calcular due_at (TR) y ts_at (TS) según el plan SLA del cliente
         if (empty($ticket->due_at) && !empty($ticket->priority)) {
-            $hours = match ($ticket->priority instanceof TicketPriority ? $ticket->priority->value : $ticket->priority) {
-                'urgent' => 2,
-                'high'   => 8,
-                'medium' => 24,
-                'low'    => 72,
-                default  => 24,
-            };
-            $ticket->due_at = now()->addHours($hours);
+            $sla       = app(SlaCalculatorService::class);
+            $priority  = $ticket->priority instanceof TicketPriority ? $ticket->priority->value : $ticket->priority;
+            $planType  = $this->resolveSlaPlan($ticket);
+            $startTime = $sla->slaStartsAt($ticket->scheduled_at, now());
+
+            $ticket->due_at = $sla->calculateDueAt($planType, $priority, $startTime);
+            $ticket->ts_at  = $sla->calculateTsAt($planType, $priority, $startTime);
         }
 
         // Auto-asignar si no hay asignado: agente con menos tickets abiertos
@@ -92,6 +93,14 @@ class TicketObserver
     }
 
     /**
+     * Resolves the SLA tier for a ticket from the plan of its vehicle/customer.
+     */
+    protected function resolveSlaPlan(Ticket $ticket): string
+    {
+        return app(SlaPlanResolver::class)->tierForTicket($ticket);
+    }
+
+    /**
      * Generate unique ticket code: TK-{YEAR}-{SEQUENCE}
      */
     protected function generateTicketCode(int $empresaId): string
@@ -129,11 +138,51 @@ class TicketObserver
     }
 
     /**
+     * Handle the Ticket "updating" event.
+     * Recalcula los plazos SLA cuando cambia la prioridad o la fecha programada.
+     */
+    public function updating(Ticket $ticket): void
+    {
+        if (!$ticket->isDirty('priority') && !$ticket->isDirty('scheduled_at')) {
+            return;
+        }
+
+        $sla       = app(SlaCalculatorService::class);
+        $priority  = $ticket->priority instanceof TicketPriority ? $ticket->priority->value : $ticket->priority;
+        $planType  = $this->resolveSlaPlan($ticket);
+        $startTime = $sla->slaStartsAt($ticket->scheduled_at, $ticket->created_at ?? now());
+
+        $ticket->due_at = $sla->calculateDueAt($planType, $priority, $startTime);
+        $ticket->ts_at  = $sla->calculateTsAt($planType, $priority, $startTime);
+
+        // Si el ticket sigue abierto y se reprograma a futuro, ya no está vencido:
+        // reiniciar el nivel de escalamiento para que el reloj corra desde cero.
+        if ($ticket->isOpen() && $startTime->isFuture()) {
+            $ticket->escalation_level = 0;
+        }
+    }
+
+    /**
      * Handle the Ticket "updated" event.
+     * Registra el recálculo de SLA para mantener la trazabilidad.
      */
     public function updated(Ticket $ticket): void
     {
-        //
+        if (!$ticket->wasChanged('due_at') && !$ticket->wasChanged('ts_at')) {
+            return;
+        }
+
+        TicketEvent::create([
+            'ticket_id' => $ticket->id,
+            'type'      => TicketEventType::SLA_RECALCULATED->value,
+            'actor_id'  => \Illuminate\Support\Facades\Auth::id(),
+            'payload'   => [
+                'scheduled_at' => $ticket->scheduled_at?->toIso8601String(),
+                'due_at'       => $ticket->due_at?->toIso8601String(),
+                'ts_at'        => $ticket->ts_at?->toIso8601String(),
+                'priority'     => $ticket->priority instanceof TicketPriority ? $ticket->priority->value : $ticket->priority,
+            ],
+        ]);
     }
 
     /**

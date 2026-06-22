@@ -241,7 +241,7 @@
                         <th class="px-3 py-3 whitespace-nowrap text-left">Dispositivo GPS</th>
                         <th class="px-3 py-3 whitespace-nowrap text-left">Plataforma</th>
                         <th class="px-3 py-3 whitespace-nowrap text-center">Suscripción</th>
-                        @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos'])
+                        @canany(['eliminar-vehiculos-vehiculos', 'editar-vehiculos-vehiculos'])
                             <th class="px-3 pr-5 py-3 whitespace-nowrap text-center">Acciones</th>
                         @endcanany
                     </tr>
@@ -614,7 +614,7 @@
                             </td>
 
                             {{-- ACCIONES --}}
-                            @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos',
+                            @canany(['eliminar-vehiculos-vehiculos', 'editar-vehiculos-vehiculos',
                                 'show-vehiculos-vehiculos'])
                                 <td class="px-3 pr-5 py-3 whitespace-nowrap text-center">
                                     <div class="relative inline-flex" x-data="{ open: false }">
@@ -669,7 +669,7 @@
                                                         </a>
                                                     </li>
                                                 @endcan
-                                                @can('eliminar-vehiculos-vehiculo')
+                                                @can('eliminar-vehiculos-vehiculos')
                                                     <li>
                                                         <a href="javascript:void(0)"
                                                             wire:click.prevent="deleteVehiculo({{ $vehiculo->id }})"

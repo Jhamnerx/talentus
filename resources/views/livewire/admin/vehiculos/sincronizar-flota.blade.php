@@ -1,16 +1,21 @@
-<div x-data="{
-    async iniciarLoop() {
-        await $wire.iniciar();
-        let done = false;
-        while (!done) {
-            const r = await $wire.procesarSiguiente();
-            done = r.terminado;
-            if (!done) {
-                await new Promise(res => setTimeout(res, 800));
+<div
+    x-data="{
+        errors: [],
+        async iniciarLoop() {
+            await $wire.iniciar();
+            let done = false;
+            while (!done) {
+                const r = await $wire.procesarSiguiente();
+                if (r.error) this.errors.push(r.error);
+                done = r.terminado;
+                if (!done) {
+                    await new Promise(res => setTimeout(res, 800));
+                }
             }
         }
-    }
-}">
+    }"
+    x-on:reset-sync-errors.window="errors = []"
+>
 
     <x-form.modal.card
         title="Sincronizar Flota con GPSWox"
@@ -76,41 +81,35 @@
                 </div>
             @endif
 
-            {{-- Placas no encontradas --}}
-            @if (count($noEncontrados) > 0)
-                <div class="border border-amber-200 dark:border-amber-800 rounded-lg overflow-hidden">
-                    <div class="bg-amber-50 dark:bg-amber-900/20 px-4 py-2 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-sm font-semibold text-amber-700 dark:text-amber-400">
-                            {{ count($noEncontrados) }} {{ count($noEncontrados) === 1 ? 'placa no encontrada' : 'placas no encontradas' }} en GPSWox
-                        </span>
-                    </div>
-                    <div class="max-h-48 overflow-y-auto divide-y divide-amber-100 dark:divide-amber-900/30">
-                        @foreach ($noEncontrados as $item)
-                            <div class="px-4 py-2 flex items-start gap-3 bg-white dark:bg-gray-800/50">
-                                <span class="font-mono font-bold text-sm text-gray-800 dark:text-gray-100 shrink-0 w-24">
-                                    {{ $item['placa'] }}
-                                </span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                    {{ $item['message'] }}
-                                </span>
-                            </div>
-                        @endforeach
-                    </div>
+            {{-- Placas no encontradas (Alpine-managed — sin pasar por Livewire state) --}}
+            <div x-show="errors.length > 0" x-cloak class="border border-amber-200 dark:border-amber-800 rounded-lg overflow-hidden">
+                <div class="bg-amber-50 dark:bg-amber-900/20 px-4 py-2 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-sm font-semibold text-amber-700 dark:text-amber-400">
+                        <span x-text="errors.length + (errors.length === 1 ? ' placa no encontrada' : ' placas no encontradas') + ' en GPSWox'"></span>
+                    </span>
                 </div>
-            @endif
+                <div class="max-h-48 overflow-y-auto divide-y divide-amber-100 dark:divide-amber-900/30">
+                    <template x-for="(item, index) in errors" :key="index">
+                        <div class="px-4 py-2 flex items-start gap-3 bg-white dark:bg-gray-800/50">
+                            <span class="font-mono font-bold text-sm text-gray-800 dark:text-gray-100 shrink-0 w-24" x-text="item.placa"></span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 truncate" x-text="item.message"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
 
             {{-- Resumen final --}}
             @if ($terminado)
                 <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg px-4 py-3 text-sm">
                     <p class="font-medium text-emerald-700 dark:text-emerald-400">
                         Proceso finalizado:
-                        <strong>{{ $procesados - count($noEncontrados) }}</strong> actualizados,
-                        <strong>{{ count($noEncontrados) }}</strong> no encontrados en plataforma.
+                        <strong>{{ $procesados - $noEncontradosCount }}</strong> actualizados,
+                        <strong>{{ $noEncontradosCount }}</strong> no encontrados en plataforma.
                     </p>
                 </div>
             @endif

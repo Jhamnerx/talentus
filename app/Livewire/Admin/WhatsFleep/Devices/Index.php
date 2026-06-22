@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\WhatsFleep\Devices;
 
 use App\Models\WhatsFleep\Device;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -61,6 +62,25 @@ class Index extends Component
         $this->notification()->success(
             title: '¡Clave API copiada!',
             description: 'La clave API ha sido copiada al portapapeles'
+        );
+    }
+
+    public function togglePostventa(int $deviceId): void
+    {
+        $userId = Auth::id();
+
+        DB::transaction(function () use ($userId, $deviceId) {
+            Device::where('user_id', $userId)->update(['es_postventa' => false]);
+
+            Device::where('id', $deviceId)
+                ->where('user_id', $userId)
+                ->firstOrFail()
+                ->update(['es_postventa' => true]);
+        });
+
+        $this->notification()->success(
+            title: 'Device post-venta actualizado',
+            description: 'El número de WhatsApp para mensajes post-venta fue configurado.'
         );
     }
 

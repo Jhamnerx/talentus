@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Plan;
 use App\Models\Productos;
 use App\Scopes\EliminadoScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DetallePresupuestos extends Model
 {
@@ -29,5 +31,10 @@ class DetallePresupuestos extends Model
     public function info_producto()
     {
         return $this->belongsTo(Productos::class, 'producto_id')->withTrashed();
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class, 'plan_id')->withoutGlobalScopes();
     }
 }

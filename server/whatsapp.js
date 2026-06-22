@@ -16,9 +16,44 @@ import {
     MySQLGroupMetadataCache,
     MySQLLidMappingStore,
 } from "./database/authState.js";
-import { IncomingMessage } from "./controllers/incomingMessage.js";
+import { IncomingMessage, processHistoryBatch } from "./controllers/incomingMessage.js";
 import { formatReceipt } from "./lib/helper.js";
 import logger from "./lib/pino.js";
+import axios from "axios";
+
+const LARAVEL_URL = process.env.LARAVEL_URL || "http://localhost";
+const INTERNAL_TOKEN = process.env.INTERNAL_TOKEN || "";
+
+const WA_STATUS_MAP = {
+    1: "sent",
+    2: "delivered",
+    3: "read",
+    4: "read",
+};
+
+async function reportStatusToLaravel(deviceToken, waMessageId, statusCode) {
+    const status = WA_STATUS_MAP[statusCode];
+    if (!status || !waMessageId) return;
+
+    try {
+        await axios.post(
+            `${LARAVEL_URL}/api/internal/whatsapp/status`,
+            { device: deviceToken, wa_message_id: waMessageId, status },
+            {
+                timeout: 8000,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Internal-Token": INTERNAL_TOKEN,
+                },
+            },
+        );
+    } catch (error) {
+        logger.error(
+            "Error reportando estado a Laravel:",
+            error?.response?.status || error.message,
+        );
+    }
+}
 
 // Almacenamiento de sockets y QR codes
 const sockets = new Map();
@@ -531,7 +566,26 @@ export async function connectToWhatsApp(token, io = null) {
                     logger.debug(
                         `Mensaje ${update.key.id} → estado ${update.update.status}`,
                     );
+                    if (update.key?.fromMe) {
+                        reportStatusToLaravel(
+                            token,
+                            update.key.id,
+                            update.update.status,
+                        );
+                    }
                 }
+            }
+        });
+
+        // Sincronización de historial bajo demanda (botón "Sincronizar historial" del Inbox)
+        sock.ev.on("messaging-history.set", async ({ messages, syncType }) => {
+            if (syncType !== proto.HistorySync.HistorySyncType.ON_DEMAND) return;
+            if (!messages || messages.length === 0) return;
+
+            try {
+                await processHistoryBatch(messages, sock, token);
+            } catch (error) {
+                logger.error("Error procesando historial:", error);
             }
         });
 
@@ -558,6 +612,18 @@ async function getPpUrl(token, jid) {
     } catch (error) {
         return null;
     }
+}
+
+/**
+ * Solicitar historial de mensajes anteriores a un punto de referencia
+ * conocido (on-demand history sync). La respuesta llega de forma asíncrona
+ * vía el evento 'messaging-history.set' registrado en connectToWhatsApp().
+ */
+export async function fetchMessageHistory(token, oldestMsgKey, oldestMsgTimestamp, count) {
+    const sock = sockets.get(token);
+    if (!sock) throw new Error("Dispositivo no conectado");
+
+    return await sock.fetchMessageHistory(count, oldestMsgKey, oldestMsgTimestamp);
 }
 
 /**

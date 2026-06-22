@@ -13,6 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
@@ -82,9 +83,9 @@ class Clientes extends Model
 
 
     //relacion uno a muchos
-    public function contratos()
+    public function contratos(): HasMany
     {
-        return $this->hasMany(Contratos::class, 'clientes_id');
+        return $this->hasMany(Contratos::class, 'clientes_id')->withoutGlobalScope(EmpresaScope::class);
     }
 
 
@@ -106,9 +107,26 @@ class Clientes extends Model
     }
 
 
-    public function certificados()
+    /**
+     * Nota: a diferencia de vehiculos() (que usa withTrashed()), estas
+     * relaciones hasManyThrough excluyen automáticamente los documentos de
+     * vehículos dados de baja (Laravel aplica vehiculos.deleted_at is null
+     * al JOIN intermedio). Limitación conocida y aceptada: hoy no hay
+     * vehículos eliminados con documentos asociados en el sistema.
+     */
+    public function certificados(): HasManyThrough
     {
-        return $this->hasMany(Certificados::class, 'certificados_id');
+        return $this->hasManyThrough(Certificados::class, Vehiculos::class, 'clientes_id', 'vehiculos_id');
+    }
+
+    public function actas(): HasManyThrough
+    {
+        return $this->hasManyThrough(Actas::class, Vehiculos::class, 'clientes_id', 'vehiculos_id');
+    }
+
+    public function certVelocimetros(): HasManyThrough
+    {
+        return $this->hasManyThrough(CertificadosVelocimetros::class, Vehiculos::class, 'clientes_id', 'vehiculos_id');
     }
 
 
@@ -140,5 +158,30 @@ class Clientes extends Model
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'customer_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function clienteUsers(): HasMany
+    {
+        return $this->hasMany(ClienteUser::class, 'cliente_id');
+    }
+
+    public function resenas(): HasMany
+    {
+        return $this->hasMany(Resena::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function chsHistorico(): HasMany
+    {
+        return $this->hasMany(ChsHistorico::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function ordenesTrabajo(): HasMany
+    {
+        return $this->hasMany(WorkOrder::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function whatsappConversaciones(): HasMany
+    {
+        return $this->hasMany(\App\Models\WhatsFleep\WhatsappConversation::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
     }
 }

@@ -3,6 +3,7 @@
 use App\Jobs\CheckDetalleCobros;
 use App\Jobs\CheckTicketSlaJob;
 use App\Jobs\CheckBirthdayContacts;
+use App\Jobs\EnviarResumenDiarioPostventaJob;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Jobs\checkMantenimientoVehiculos;
@@ -25,12 +26,19 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')->group(base_path('routes/whats-fleep.php'));
         },
     )
+    ->withBroadcasting(
+        __DIR__ . '/../routes/channels.php',
+        [
+            'middleware' => ['web', 'auth'],
+        ],
+    )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'tracking.auth' => \App\Http\Middleware\AllowedTrackingIp::class,
+            'whatsapp.internal' => \App\Http\Middleware\VerifyInternalToken::class,
         ]);
     })->withSchedule(function (Schedule $schedule) {
         $schedule->command('backup:clean')->daily()->at('01:00');
@@ -46,6 +54,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('whatsapp:reconectar')->everyFiveMinutes();
         $schedule->command('gpswox:sincronizar-flota')->dailyAt('22:30');
         // $schedule->job(new CheckTransmisionAlertasJob)->everyFifteenMinutes(); // reemplazado por webhook GPSWox
+        $schedule->job(new EnviarResumenDiarioPostventaJob)->dailyAt('08:00');
+        $schedule->command('chs:calcular-mensual')->monthlyOn(1, '02:00');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

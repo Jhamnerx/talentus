@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\WorkOrderStatus;
+use App\Events\WorkOrderCerrada;
 use App\Scopes\EmpresaScope;
 use App\Observers\WorkOrderObserver;
 use App\Models\Presupuestos;
@@ -238,6 +239,8 @@ class WorkOrder extends Model
         $this->bloqueado = true;
         $this->fecha_cerrado = now();
         $this->save();
+
+        event(new WorkOrderCerrada($this->id, $this->empresa_id));
     }
 
     public function cancelar(string $motivo): void

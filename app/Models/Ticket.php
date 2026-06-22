@@ -32,14 +32,16 @@ class Ticket extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'status' => TicketStatus::class,
-        'priority' => TicketPriority::class,
-        'last_activity_at' => 'datetime',
+        'status'            => TicketStatus::class,
+        'priority'          => TicketPriority::class,
+        'last_activity_at'  => 'datetime',
         'first_response_at' => 'datetime',
-        'resolved_at' => 'datetime',
-        'closed_at' => 'datetime',
-        'due_at' => 'datetime',
-        'escalation_level' => 'integer',
+        'resolved_at'       => 'datetime',
+        'closed_at'         => 'datetime',
+        'due_at'            => 'datetime',
+        'scheduled_at'      => 'datetime',
+        'ts_at'             => 'datetime',
+        'escalation_level'  => 'integer',
     ];
 
     // Global Scope Empresa
@@ -183,6 +185,23 @@ class Ticket extends Model
     public function isOverdue(): bool
     {
         return $this->isOpen() && $this->due_at !== null && $this->due_at->isPast();
+    }
+
+    /**
+     * Returns the effective start of the SLA clock.
+     * Scheduled tickets defer the clock until scheduled_at.
+     */
+    public function slaStartsAt(): \Carbon\Carbon
+    {
+        if ($this->scheduled_at && $this->scheduled_at->isAfter($this->created_at)) {
+            return $this->scheduled_at;
+        }
+        return $this->created_at;
+    }
+
+    public function isScheduled(): bool
+    {
+        return $this->scheduled_at !== null && $this->scheduled_at->isAfter($this->created_at ?? now());
     }
 
     public function isAssignedTo(User $user): bool

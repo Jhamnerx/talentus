@@ -18,11 +18,13 @@ class Device extends Model
         'message_sent',
         'api_key',
         'interno',
+        'es_postventa',
     ];
 
     protected $casts = [
         'message_sent' => 'integer',
         'interno'      => 'boolean',
+        'es_postventa' => 'boolean',
     ];
 
     public function user()

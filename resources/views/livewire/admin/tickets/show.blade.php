@@ -405,9 +405,18 @@
                         Tiempos</h3>
                 </div>
                 <dl class="divide-y divide-gray-100 dark:divide-gray-700 text-xs">
+                    @if ($ticket->isScheduled())
+                        <div class="px-5 py-3 flex items-start justify-between gap-2">
+                            <dt class="text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Programada</dt>
+                            <dd class="font-medium text-right text-indigo-600 dark:text-indigo-400">
+                                📅 {{ $ticket->scheduled_at->format('d/m/Y H:i') }}
+                                <span class="block text-gray-400">El SLA inicia {{ $ticket->scheduled_at->diffForHumans() }}</span>
+                            </dd>
+                        </div>
+                    @endif
                     @if ($ticket->due_at)
                         <div class="px-5 py-3 flex items-start justify-between gap-2">
-                            <dt class="text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Vence SLA</dt>
+                            <dt class="text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Vence TR</dt>
                             <dd
                                 class="font-medium text-right {{ $ticket->isOverdue() ? 'text-red-600 dark:text-red-400' : 'text-gray-800 dark:text-gray-200' }}">
                                 @if ($ticket->isOverdue())
@@ -416,6 +425,16 @@
                                     {{ $ticket->due_at->format('d/m/Y H:i') }}
                                     <span class="block text-gray-400">{{ $ticket->due_at->diffForHumans() }}</span>
                                 @endif
+                            </dd>
+                        </div>
+                    @endif
+                    @if ($ticket->ts_at)
+                        <div class="px-5 py-3 flex items-start justify-between gap-2">
+                            <dt class="text-gray-400 dark:text-gray-500 pt-0.5 whitespace-nowrap">Vence TS</dt>
+                            <dd
+                                class="font-medium text-right {{ $ticket->isOpen() && $ticket->ts_at->isPast() ? 'text-red-600 dark:text-red-400' : 'text-gray-800 dark:text-gray-200' }}">
+                                {{ $ticket->ts_at->format('d/m/Y H:i') }}
+                                <span class="block text-gray-400">{{ $ticket->ts_at->diffForHumans() }}</span>
                             </dd>
                         </div>
                     @endif

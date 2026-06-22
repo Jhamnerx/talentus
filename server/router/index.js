@@ -82,6 +82,45 @@ router.post("/api/send-message", checkIpWhitelist, async (req, res) => {
 });
 
 /**
+ * @route POST /api/sync-history
+ * @desc Solicitar historial de mensajes anteriores (on-demand history sync)
+ */
+router.post("/api/sync-history", checkIpWhitelist, async (req, res) => {
+    try {
+        const { token, jid, count, oldestMsgTimestamp } = req.body;
+        const oldestMsgKey = req.body.oldestMsgKey
+            ? JSON.parse(req.body.oldestMsgKey)
+            : null;
+
+        if (!token || !jid || !count || !oldestMsgKey || !oldestMsgTimestamp) {
+            return res.status(400).json({
+                status: false,
+                message:
+                    "token, jid, count, oldestMsgKey y oldestMsgTimestamp son requeridos",
+            });
+        }
+
+        if (!wa.isConnected(token)) {
+            return res.status(400).json({
+                status: false,
+                message: "Dispositivo no conectado",
+            });
+        }
+
+        await wa.fetchMessageHistory(token, oldestMsgKey, Number(oldestMsgTimestamp), Number(count));
+
+        res.status(202).json({ status: true, message: "Sincronización iniciada" });
+    } catch (error) {
+        logger.error("Error solicitando historial:", error);
+        res.status(500).json({
+            status: false,
+            message: "Error solicitando historial",
+            error: error.message,
+        });
+    }
+});
+
+/**
  * @route POST /api/send-media
  * @desc Enviar multimedia
  */

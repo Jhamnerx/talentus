@@ -141,6 +141,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(ClientesController::class)->group(function () {
 
         Route::get('clientes', 'index')->name('admin.clientes.index');
+        Route::get('clientes/{cliente}/360', 'show360')->name('admin.clientes.show360');
         // Route::post('clientes', 'store')->name('admin.clientes.store');
         //Route::get('clientes/crear', 'create')->name('admin.clientes.create');
         //Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');
@@ -151,6 +152,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(ContactosController::class)->group(function () {
         Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
     });
+
+    // PORTAL DE CLIENTE — Gestión de accesos
+    Route::view('portal/accesos', 'admin.portal.accesos.index')
+        ->name('admin.portal.accesos.index')
+        ->middleware('can:gestionar-accesos-portal');
+
+    // WHATSAPP OMNICANAL — adjuntos privados (solo con sesión; rol fino en SP#3)
+    Route::get('whatsapp/media/{message:uuid}', [\App\Http\Controllers\Admin\WhatsFleep\WhatsappMediaController::class, 'show'])
+        ->name('whatsapp.media');
+
+    Route::get('whatsapp', [\App\Http\Controllers\Admin\WhatsFleep\InboxController::class, 'index'])
+        ->name('whatsapp.inbox')
+        ->middleware('can:ver-whatsapp');
 
     // PAGOS (Mantener por compatibilidad pero redireccionar)
     Route::controller(PaymentsController::class)->group(function () {
@@ -298,12 +312,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
     Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
     Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
+    Route::get('ajustes/sla', [AjustesController::class, 'sla'])->name('admin.ajustes.sla');
+    Route::get('ajustes/firebase', [AjustesController::class, 'firebase'])->name('admin.ajustes.firebase');
     Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
     Route::get('ajustes/sunat', [AjustesController::class, 'sunat'])->name('admin.ajustes.sunat');
 
     // Banking module routes
     Route::view('ajustes/bancos', 'admin.ajustes.bancos')->name('admin.ajustes.bancos');
     Route::view('ajustes/cuentas-bancarias', 'admin.ajustes.cuentas-bancarias')->name('admin.ajustes.cuentas-bancarias');
+    Route::get('ajustes/postventa', [AjustesController::class, 'postventa'])->name('admin.ajustes.postventa');
 
     //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
     Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
@@ -484,4 +501,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('tickets-dashboard/agents', 'dashboardAgentPerformance')->name('admin.tickets.dashboard.agents');
         Route::get('tickets-dashboard/teams', 'dashboardTeamLoad')->name('admin.tickets.dashboard.teams');
     });
+
+    // WHATSAPP - QUICK REPLIES
+    Route::view('ajustes/whatsapp/quick-replies', 'admin.ajustes.whatsapp.quick-replies')
+        ->name('whatsapp.quick-replies.index')
+        ->middleware('can:ver-whatsapp');
 });

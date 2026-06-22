@@ -852,15 +852,17 @@ Envía la posición actual del técnico. Llamar cada 60 segundos durante el trab
 
 ## 11. Notificaciones Push (Firebase FCM)
 
-### `POST /api/fcm/token`
+### Registro del token
 
-Registra o actualiza el token FCM del dispositivo para recibir notificaciones push.
+#### `POST /api/fcm/token`
+
+Registra o actualiza el token FCM del dispositivo. **Llamar inmediatamente después del login y cada vez que Firebase genere un nuevo token.**
 
 **Body (JSON):**
 
 ```json
 {
-    "token": "f7Jk2...lmno"
+    "token": "f7Jk2XmRpQb3...lmnoABC"
 }
 ```
 
@@ -873,13 +875,293 @@ Registra o actualiza el token FCM del dispositivo para recibir notificaciones pu
 }
 ```
 
-> Llamar este endpoint después del login y cada vez que Firebase genere un nuevo token.
+---
+
+#### `DELETE /api/fcm/token`
+
+Elimina el token FCM. Llamar al hacer logout para dejar de recibir notificaciones.
 
 ---
 
-### `DELETE /api/fcm/token`
+### Estructura de un mensaje FCM
 
-Elimina el token FCM (llamar al hacer logout para dejar de recibir notificaciones).
+Todos los mensajes tienen dos partes:
+
+- **`notification`** — título y cuerpo visibles en la bandeja del sistema operativo.
+- **`data`** — payload de datos que la app recibe (incluso en segundo plano). Todos los valores son `string`.
+
+La app debe escuchar el campo **`action`** para identificar qué tipo de evento ocurrió y navegar a la pantalla correspondiente.
+
+---
+
+### Casos cubiertos
+
+| # | Evento | `action` | Quién recibe |
+|---|--------|----------|-------------|
+| 1 | Orden asignada (nueva o reasignación) | `work_order_assigned` | Técnico nuevo |
+| 2 | Orden reprogramada (cambio de fecha) | `work_order_reprogramada` | Técnico asignado |
+| 3 | Orden retirada (reasignada a otro) | `work_order_retirada` | Técnico anterior |
+| 4 | Orden eliminada | `work_order_eliminada` | Técnico asignado |
+| 5 | Orden cancelada | `work_order_status_changed` | Técnico asignado |
+| 6 | Técnico inició la orden | `work_order_status_changed` | Creador/Admin |
+| 7 | Técnico finalizó la orden | `work_order_status_changed` | Creador/Admin |
+| 8 | Push de prueba (desde Ajustes) | `test` | Usuario seleccionado |
+
+---
+
+### Caso 1 — Orden asignada (`work_order_assigned`)
+
+Enviada cuando se crea una orden con técnico asignado, **o** cuando se reasigna a un nuevo técnico.
+
+**Notification:**
+
+```
+Título: 🔧 Nueva Orden de Trabajo Asignada
+Cuerpo:  Orden OT00042 - Instalación GPS | Vehículo: ABC-123
+```
+
+**Data:**
+
+```json
+{
+    "work_order_id":     "42",
+    "work_order_codigo": "OT00042",
+    "tipo":              "Instalación GPS",
+    "vehiculo_placa":    "ABC-123",
+    "vehiculo_id":       "10",
+    "cliente_nombre":    "Empresa Transportes SAC",
+    "fecha_programada":  "2026-06-12 08:00",
+    "observaciones":     "Instalar en tablero central, traer buzzer",
+    "action":            "work_order_assigned",
+    "url":               "https://talentus.test/admin/work-orders/42"
+}
+```
+
+> Para órdenes de tipo proyecto `vehiculo_placa` y `cliente_nombre` serán cadena vacía.
+
+---
+
+### Caso 2 — Orden reprogramada (`work_order_reprogramada`)
+
+El administrador cambia la `fecha_programada` sin cambiar el técnico ni el estado.
+
+**Notification:**
+
+```
+Título: 📅 Orden reprogramada
+Cuerpo:  La orden OT00042 se reprogramó para 2026-06-15 10:00.
+```
+
+**Data:**
+
+```json
+{
+    "work_order_id":     "42",
+    "work_order_codigo": "OT00042",
+    "evento":            "reprogramada",
+    "action":            "work_order_reprogramada",
+    "vehiculo_placa":    "ABC-123",
+    "fecha_programada":  "2026-06-15 10:00",
+    "motivo":            "",
+    "url":               "https://talentus.test/admin/work-orders/42"
+}
+```
+
+---
+
+### Caso 3 — Orden retirada (`work_order_retirada`)
+
+La orden se reasignó a un técnico diferente. El técnico **anterior** recibe este aviso; el técnico **nuevo** recibe el caso 1.
+
+**Notification:**
+
+```
+Título: ↩️ Orden reasignada
+Cuerpo:  La orden OT00042 ya no está asignada a ti; fue reasignada a otro técnico.
+```
+
+**Data:**
+
+```json
+{
+    "work_order_id":     "42",
+    "work_order_codigo": "OT00042",
+    "evento":            "retirada",
+    "action":            "work_order_retirada",
+    "vehiculo_placa":    "ABC-123",
+    "fecha_programada":  "2026-06-12 08:00",
+    "motivo":            "",
+    "url":               "https://talentus.test/admin/work-orders/42"
+}
+```
+
+---
+
+### Caso 4 — Orden eliminada (`work_order_eliminada`)
+
+El administrador elimina la orden (soft delete). Se envía desde la cola usando un **snapshot** de los datos, por lo que el payload es válido aunque el registro ya no exista en la base de datos.
+
+**Notification:**
+
+```
+Título: 🗑️ Orden eliminada
+Cuerpo:  La orden OT00042 (ABC-123) fue eliminada.
+```
+
+**Data:**
+
+```json
+{
+    "work_order_id":     "42",
+    "work_order_codigo": "OT00042",
+    "evento":            "eliminada",
+    "action":            "work_order_eliminada",
+    "vehiculo_placa":    "ABC-123",
+    "fecha_programada":  "2026-06-12 08:00",
+    "motivo":            "",
+    "url":               "https://talentus.test/admin/work-orders/42"
+}
+```
+
+> Como la orden ya no existe, no intentes hacer `GET /api/work-orders/42` al recibir este push — simplemente retira la tarjeta de la lista local.
+
+---
+
+### Caso 5 — Orden cancelada (`work_order_status_changed`) → técnico
+
+El administrador cancela una orden. El técnico asignado recibe la notificación.
+
+**Notification:**
+
+```
+Título: ❌ Orden OT00042
+Cuerpo:  Estado: en_proceso → cancelado
+```
+
+**Data:**
+
+```json
+{
+    "work_order_id":     "42",
+    "work_order_codigo": "OT00042",
+    "estado_anterior":   "en_proceso",
+    "estado_actual":     "cancelado",
+    "vehiculo_placa":    "ABC-123",
+    "action":            "work_order_status_changed",
+    "url":               "https://talentus.test/admin/work-orders/42"
+}
+```
+
+---
+
+### Caso 6 — Técnico inició la orden (`work_order_status_changed`) → creador
+
+El técnico llama a `POST /api/work-orders/{id}/iniciar`. El creador/admin de la orden recibe el aviso.
+
+**Notification:**
+
+```
+Título: 🚀 Orden OT00042
+Cuerpo:  Estado: pendiente → en_proceso
+```
+
+**Data:**
+
+```json
+{
+    "work_order_id":     "42",
+    "work_order_codigo": "OT00042",
+    "estado_anterior":   "pendiente",
+    "estado_actual":     "en_proceso",
+    "vehiculo_placa":    "ABC-123",
+    "action":            "work_order_status_changed",
+    "url":               "https://talentus.test/admin/work-orders/42"
+}
+```
+
+---
+
+### Caso 7 — Técnico finalizó la orden (`work_order_status_changed`) → creador
+
+El técnico llama a `POST /api/work-orders/{id}/finalizar`. El creador/admin recibe el aviso.
+
+**Notification:**
+
+```
+Título: ✅ Orden OT00042
+Cuerpo:  Estado: en_proceso → finalizado
+```
+
+**Data:**
+
+```json
+{
+    "work_order_id":     "42",
+    "work_order_codigo": "OT00042",
+    "estado_anterior":   "en_proceso",
+    "estado_actual":     "finalizado",
+    "vehiculo_placa":    "ABC-123",
+    "action":            "work_order_status_changed",
+    "url":               "https://talentus.test/admin/work-orders/42"
+}
+```
+
+---
+
+### Caso 8 — Push de prueba (`test`)
+
+Enviado manualmente desde **Ajustes → Credenciales Firebase** en el panel web.
+
+**Notification:**
+
+```
+Título: 🔔 Prueba de Notificación
+Cuerpo:  Esta es una notificación de prueba desde Talentus.
+```
+
+**Data:**
+
+```json
+{
+    "action":      "test",
+    "enviado_por": "Jhamner Sifuentes"
+}
+```
+
+---
+
+### Configuración Android requerida
+
+Para que las notificaciones lleguen correctamente en Android, la app debe tener registrado el canal de notificaciones:
+
+```
+channel_id: "work_orders"   → órdenes de trabajo
+channel_id: "general"       → notificaciones generales y de prueba
+```
+
+El campo `click_action` en todos los mensajes es `FLUTTER_NOTIFICATION_CLICK` (para Flutter). Para apps nativas Android, puede ignorarse o mapearse al `Intent` correspondiente.
+
+---
+
+### Flujo recomendado en la app
+
+```
+1. Al iniciar sesión:
+   POST /api/fcm/token  ← registrar el token del dispositivo
+
+2. Al recibir un push (foreground/background):
+   Leer data.action y navegar según el caso:
+
+   "work_order_assigned"      → abrir/refrescar la orden (data.work_order_id)
+   "work_order_reprogramada"  → mostrar alerta con nueva fecha, refrescar orden
+   "work_order_retirada"      → remover la orden de la lista del técnico
+   "work_order_eliminada"     → remover la orden de la lista (NO llamar a la API)
+   "work_order_status_changed"→ refrescar la orden (data.work_order_id)
+   "test"                     → mostrar snackbar de confirmación
+
+3. Al cerrar sesión:
+   DELETE /api/fcm/token  ← revocar el token para no seguir recibiendo pushes
+```
 
 ---
 
