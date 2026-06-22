@@ -1,22 +1,22 @@
 <x-form.modal.card title="Registrar Usuario" wire:model.live="showModal" align="center" width="2xl">
     <div class="grid grid-cols-12 gap-6 p-4 bg-white rounded-lg shadow-md">
         <div class="col-span-12 sm:col-span-6">
-            <x-form.input wire:model.live.change="name" label="Nombre (*):" class="mb-2" />
+            <x-form.input wire:model.blur="name" label="Nombre (*):" class="mb-2" autocomplete="off" />
         </div>
         <div class="col-span-12 sm:col-span-6">
-            <x-form.input wire:model.live="email" type="email" label="Correo Electrónico (*):" class="mb-2"
+            <x-form.input wire:model.blur="email" type="email" label="Correo Electrónico (*):" class="mb-2"
                 autocomplete="off" autocorrect="off" spellcheck="false" />
         </div>
         <div class="col-span-12 sm:col-span-6">
-            <x-form.password label="Contraseña 🙈 (*):" wire:model.live="password" placeholder="Ingresa tu contraseña"
-                class="mb-2" />
+            <x-form.password label="Contraseña 🙈 (*):" wire:model.blur="password" placeholder="Mínimo 8 caracteres"
+                autocomplete="new-password" class="mb-2" />
         </div>
         <div class="col-span-12 sm:col-span-6">
-            <x-form.password label="Confirma tu Contraseña (*):" wire:model.live="password_confirmation"
-                placeholder="Confirma tu contraseña" class="mb-2" />
+            <x-form.password label="Confirma tu Contraseña (*):" wire:model.blur="password_confirmation"
+                placeholder="Repite la contraseña" autocomplete="new-password" class="mb-2" />
         </div>
         <div class="col-span-12 sm:col-span-6">
-            <x-form.input label="Teléfonos:" wire:model.live="telefonos" placeholder="Ej: 51987654321"
+            <x-form.input label="Teléfonos:" wire:model.blur="telefonos" placeholder="Ej: 51987654321"
                 description="Incluir código de país sin '+'. Ej: 51987654321" class="mb-2" />
         </div>
         <div class="col-span-12 md:col-span-6">

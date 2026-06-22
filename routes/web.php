@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CertificadosGpsController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\ClientesController;
 use App\Http\Controllers\Admin\CobrosController;
+use App\Http\Controllers\Admin\ImpersonationController;
 use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\ContactosController;
 use App\Http\Controllers\Admin\ContratosController;
@@ -299,6 +300,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     //ADMINISTRACION
+
+    // Impersonación ("Ingresar como"). Antes del resource para no colisionar con usuarios/{user}.
+    Route::get('usuarios/impersonate-leave', [ImpersonationController::class, 'leave'])
+        ->name('admin.usuarios.impersonate.leave');
+    Route::get('usuarios/impersonate/{user}', [ImpersonationController::class, 'start'])
+        ->name('admin.usuarios.impersonate');
 
     Route::resource('usuarios', UsersController::class)->names('admin.users')->parameters([
         'usuarios' => 'user'

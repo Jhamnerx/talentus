@@ -32,7 +32,8 @@ class Index extends Component
             });
         }
         $usuarios = $usuariosQuery
-            ->excludeEmail('jhamnerx1x@gmail.com')
+            ->with('roles')
+            ->excludeEmail(User::PROTECTED_EMAIL)
             ->orderBy('id', 'desc')
             ->paginate(10);
         $total = User::count() - 1;
