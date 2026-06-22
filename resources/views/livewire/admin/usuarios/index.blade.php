@@ -5,7 +5,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">USUARIOS ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">USUARIOS ✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -15,7 +15,8 @@
             <form class="relative" @submit.prevent>
                 <label for="action-search" class="sr-only">Buscar</label>
                 <input wire:model.live.debounce.300ms='search' id="action-search"
-                    class="form-input pl-9 focus:border-slate-300" type="search" placeholder="Buscar Usuario" />
+                    class="form-input pl-9 bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-200 focus:border-slate-300"
+                    type="search" placeholder="Buscar Usuario" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +45,8 @@
 
     <!-- Filtro por Rol -->
     <div class="mb-4">
-        <select wire:model.live="roleFilter" class="form-select border-slate-300 rounded shadow-sm">
+        <select wire:model.live="roleFilter"
+            class="form-select bg-white dark:bg-gray-800 border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-200 rounded shadow-sm">
             <option value="">Todos los roles</option>
             @foreach ($roles as $rol)
                 <option value="{{ $rol->id }}">{{ $rol->name }}</option>
@@ -53,21 +55,23 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-lg border border-slate-200 mb-8 overflow-x-auto">
-        <header class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-            <h2 class="font-semibold text-slate-800 flex items-center gap-2">
+    <div
+        class="bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-slate-200 dark:border-gray-700 mb-8 overflow-x-auto">
+        <header
+            class="px-5 py-4 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between">
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Usuarios <span class="text-slate-400 font-medium">{{ $usuarios->total() }}</span>
+                Usuarios <span class="text-slate-400 dark:text-slate-500 font-medium">{{ $usuarios->total() }}</span>
             </h2>
         </header>
         <div>
             <table class="table-auto w-full text-sm">
                 <thead
-                    class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                    class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-gray-700/40 border-t border-b border-slate-200 dark:border-gray-700">
                     <tr>
                         <th class="px-2 py-3 whitespace-nowrap text-left">ID</th>
                         <th class="px-2 py-3 whitespace-nowrap text-left">Nombre</th>
@@ -79,35 +83,40 @@
                         <th class="px-2 py-3 whitespace-nowrap text-left">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200">
+                <tbody class="divide-y divide-slate-200 dark:divide-gray-700">
                     @forelse ($usuarios as $usuario)
-                        <tr wire:key='u-{{ $usuario->id }}' class="hover:bg-slate-50 transition">
-                            <td class="px-2 py-3 whitespace-nowrap text-slate-600">{{ $usuario->id }}</td>
-                            <td class="px-2 py-3 whitespace-nowrap text-blue-500 font-semibold">
+                        <tr wire:key='u-{{ $usuario->id }}'
+                            class="hover:bg-slate-50 dark:hover:bg-gray-700/40 transition">
+                            <td class="px-2 py-3 whitespace-nowrap text-slate-600 dark:text-slate-300">
+                                {{ $usuario->id }}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-blue-500 dark:text-blue-400 font-semibold">
                                 {{ $usuario->name }}</td>
-                            <td class="px-2 py-3 whitespace-nowrap">{{ $usuario->email }}</td>
-                            <td class="px-2 py-3 whitespace-nowrap">{{ $usuario->telefonos }}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-slate-600 dark:text-slate-300">
+                                {{ $usuario->email }}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-slate-600 dark:text-slate-300">
+                                {{ $usuario->telefonos }}</td>
                             <td class="px-2 py-3 whitespace-nowrap">
                                 @forelse ($usuario->roles as $rol)
                                     <span
-                                        class="inline-block px-2 py-0.5 rounded-full text-xs bg-indigo-100 text-indigo-700 mr-1 mb-1">{{ $rol->name }}</span>
+                                        class="inline-block px-2 py-0.5 rounded-full text-xs bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 mr-1 mb-1">{{ $rol->name }}</span>
                                 @empty
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400 dark:text-slate-500">—</span>
                                 @endforelse
                             </td>
-                            <td class="px-2 py-3 whitespace-nowrap">{{ optional($usuario->series)->serie }}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-slate-600 dark:text-slate-300">
+                                {{ optional($usuario->series)->serie }}</td>
                             <td class="px-2 py-3 whitespace-nowrap">
                                 <div class="flex items-center" x-data="{ checked: {{ $usuario->is_active ? 'true' : 'false' }} }">
                                     <div class="form-switch">
                                         <input wire:click="toggleStatus({{ $usuario->id }})" type="checkbox"
                                             id="switch-e{{ $usuario->id }}" class="sr-only" x-model="checked"
                                             {{ $usuario->is_active ? 'checked' : '' }} />
-                                        <label class="bg-slate-400" for="switch-e{{ $usuario->id }}">
+                                        <label class="bg-slate-400 dark:bg-gray-600" for="switch-e{{ $usuario->id }}">
                                             <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                             <span class="sr-only">Estado</span>
                                         </label>
                                     </div>
-                                    <div class="text-sm text-slate-400 italic ml-2"
+                                    <div class="text-sm text-slate-400 dark:text-slate-500 italic ml-2"
                                         x-text="checked ? 'Activo' : 'Inactivo'"></div>
                                 </div>
                             </td>
@@ -126,7 +135,7 @@
                                     @endif
                                     @can('admin.usuarios.edit')
                                         <button wire:click.prevent="openModalEdit({{ $usuario->id }})"
-                                            class="text-slate-400 hover:text-indigo-600 rounded-full p-1"
+                                            class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full p-1"
                                             title="Editar">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                                 viewBox="0 0 24 24">
@@ -151,7 +160,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-2 py-3 text-center text-slate-400">No hay Registros</td>
+                            <td colspan="8" class="px-2 py-3 text-center text-slate-400 dark:text-slate-500">No hay
+                                Registros</td>
                         </tr>
                     @endforelse
                 </tbody>
