@@ -12,9 +12,9 @@ class ImpersonationController extends Controller
     public function start(User $user): RedirectResponse
     {
         /** @var \App\Models\User $impersonator */
-        $impersonator = Auth::user();
+        $impersonator = Auth::guard('web')->user();
 
-        abort_unless($impersonator->can('admin.usuarios.impersonate'), 403);
+        abort_unless($impersonator && $impersonator->can('admin.usuarios.impersonate'), 403);
 
         $reason = $impersonator->cannotImpersonateReason($user);
         if ($reason !== null) {
@@ -22,7 +22,7 @@ class ImpersonationController extends Controller
         }
 
         session(['impersonator_id' => $impersonator->id]);
-        Auth::login($user);
+        Auth::guard('web')->login($user);
         session()->put('empresa', 1);
 
         activity()
@@ -40,7 +40,7 @@ class ImpersonationController extends Controller
         abort_unless(session()->has('impersonator_id'), 403);
 
         $originalId = session('impersonator_id');
-        Auth::loginUsingId($originalId);
+        Auth::guard('web')->loginUsingId($originalId);
         session()->forget('impersonator_id');
         session()->put('empresa', 1);
 
