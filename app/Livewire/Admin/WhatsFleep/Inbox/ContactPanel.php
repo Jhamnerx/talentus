@@ -113,7 +113,7 @@ class ContactPanel extends Component
 
     public function render()
     {
-        $conversation = WhatsappConversation::with(['contact.cliente', 'ticket'])
+        $conversation = WhatsappConversation::with(['contact.cliente', 'ticket', 'device'])
             ->where('uuid', $this->uuid)
             ->first();
 

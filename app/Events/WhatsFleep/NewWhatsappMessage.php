@@ -5,11 +5,11 @@ namespace App\Events\WhatsFleep;
 use App\Models\WhatsFleep\WhatsappMessage;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewWhatsappMessage implements ShouldBroadcast
+class NewWhatsappMessage implements ShouldBroadcastNow
 {
     use Dispatchable;
     use InteractsWithSockets;

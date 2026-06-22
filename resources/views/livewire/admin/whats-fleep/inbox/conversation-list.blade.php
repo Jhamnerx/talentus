@@ -78,7 +78,7 @@
     <div class="min-h-0 flex-1 overflow-y-auto">
         @forelse ($conversations as $c)
             @php
-                $displayName = $c->cliente?->razon_social ?? $c->contact?->name ?? $c->contact?->number ?? 'Sin nombre';
+                $displayName = $c->cliente?->razon_social ?? $c->contact?->push_name ?? $c->contact?->name ?? $c->contact?->number ?? 'Sin nombre';
                 $initial = mb_strtoupper(mb_substr(trim($displayName), 0, 1)) ?: '?';
                 $priority = $c->priority?->value;
                 $hasPriority = $priority && $priority !== 'normal';
@@ -101,9 +101,14 @@
 
                 {{-- Avatar --}}
                 <div class="relative shrink-0">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-sm font-semibold text-white shadow-sm dark:from-emerald-500 dark:to-teal-600">
-                        {{ $initial }}
-                    </div>
+                    @if ($c->contact?->profile_pic_url)
+                        <img src="{{ $c->contact->profile_pic_url }}" alt="{{ $displayName }}"
+                            class="h-11 w-11 rounded-full object-cover shadow-sm">
+                    @else
+                        <div class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-sm font-semibold text-white shadow-sm dark:from-emerald-500 dark:to-teal-600">
+                            {{ $initial }}
+                        </div>
+                    @endif
                     @if ($hasPriority)
                         <span
                             @class(['absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-900', $priorityStyles[$priority]['dot'] ?? 'bg-gray-400'])

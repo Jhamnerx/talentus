@@ -23,6 +23,7 @@ class StoreIncomingWhatsappRequest extends FormRequest
             'from' => ['required', 'string'],
             'wa_jid' => ['nullable', 'string'],
             'push_name' => ['nullable', 'string'],
+            'profile_pic_url' => ['nullable', 'string'],
             'type' => ['required', Rule::in(['text', 'image', 'audio', 'video', 'document', 'location', 'contact', 'sticker'])],
             'body' => ['nullable', 'string'],
             'media_path' => ['nullable', 'string'],

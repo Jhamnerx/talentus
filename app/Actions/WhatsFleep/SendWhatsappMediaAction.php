@@ -47,7 +47,7 @@ class SendWhatsappMediaAction
 
         try {
             $device = $conversation->device;
-            $number = $conversation->contact->number;
+            $number = $conversation->contact->wa_jid ?: $conversation->contact->number;
             $absolutePath = Storage::disk(config('whatsapp.media_disk', 'local'))->path($media['media_path']);
 
             $response = $this->whatsapp->sendMedia(

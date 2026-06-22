@@ -40,11 +40,16 @@ class SendWhatsappMessageAction
 
         try {
             $device = $conversation->device;
-            $number = $conversation->contact->number;
+            $number = $conversation->contact->wa_jid ?: $conversation->contact->number;
             $response = $this->whatsapp->sendText($device->body, $number, $body);
 
-            $waMessageId = data_get((array) $response, 'key.id')
-                ?? data_get((array) $response, 'messageId');
+            if (! data_get($response, 'status')) {
+                throw new \RuntimeException(data_get($response, 'message', 'Error enviando mensaje'));
+            }
+
+            $waMessageId = data_get($response, 'data.key.id')
+                ?? data_get($response, 'key.id')
+                ?? data_get($response, 'messageId');
 
             $message->forceFill([
                 'wa_message_id' => $waMessageId,

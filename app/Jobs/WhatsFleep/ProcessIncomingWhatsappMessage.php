@@ -60,7 +60,8 @@ class ProcessIncomingWhatsappMessage implements ShouldQueue
                 $device,
                 $this->payload['from'],
                 $this->payload['wa_jid'] ?? null,
-                $this->payload['push_name'] ?? null
+                $this->payload['push_name'] ?? null,
+                $this->payload['profile_pic_url'] ?? null
             );
 
             $conversation = $resolveConversation->execute(

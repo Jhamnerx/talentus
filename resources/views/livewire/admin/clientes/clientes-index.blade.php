@@ -372,7 +372,7 @@
 
                                         {{-- Cliente 360° --}}
                                         @can('ver-cliente-360')
-                                            <a href="{{ route('admin.clientes.show360', $cliente) }}" wire:navigate
+                                            <a href="{{ route('admin.clientes.show360', $cliente) }}"
                                                 title="Cliente 360°"
                                                 class="p-1.5 rounded-lg text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors">
                                                 <span class="sr-only">Cliente 360°</span>

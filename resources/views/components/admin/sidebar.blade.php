@@ -301,30 +301,36 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.dispatchers.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.guias.dispatchers.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transportistas
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.drivers.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.guias.drivers.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Conductores
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.transports.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.guias.transports.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Vehículos GR
-                                            </span>
-                                        </a>
-                                    </li>
+                                    @can('admin.guias.dispatchers.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.dispatchers.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.guias.dispatchers.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Transportistas
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('admin.guias.drivers.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.drivers.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.guias.drivers.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Conductores
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('admin.guias.transports.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.guias.transports.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.guias.transports.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Vehículos GR
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </div>
                         </li>
@@ -665,14 +671,16 @@
                                     </li>
 
                                     {{-- Planes de Servicio --}}
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.planes.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
-                                            </span>
-                                        </a>
-                                    </li>
+                                    @can('admin.planes.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.planes.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
                                 </ul>
 
@@ -1312,7 +1320,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    @role('admin')
+                                    @can('admin.reviews.index')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
                                             text-gray-800 dark:text-gray-100
@@ -1326,7 +1334,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                    @endrole
+                                    @endcan
                                     @can('admin.reportes.index')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
@@ -1410,19 +1418,23 @@
                                         </li>
                                     @endcanany
 
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.sectores')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.ajustes.sectores') }}">
-                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏷 Sectores</span>
-                                        </a>
-                                    </li>
+                                    @can('admin.settings.sectores.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.sectores')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.ajustes.sectores') }}">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏷 Sectores</span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.rubros')) {{ 'text-violet-500!' }} @endif"
-                                            href="{{ route('admin.ajustes.rubros') }}">
-                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏢 Rubros de Clientes</span>
-                                        </a>
-                                    </li>
+                                    @can('admin.settings.rubros.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.ajustes.rubros')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.ajustes.rubros') }}">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">🏢 Rubros de Clientes</span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
                                 </ul>
                             </div>

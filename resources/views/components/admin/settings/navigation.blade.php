@@ -48,21 +48,23 @@
                 </li>
             @endcan
 
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.operadores')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif"
-                    href="{{ route('admin.ajustes.operadores') }}">
-                    <svg class="w-4 h-4 shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.operadores')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M1.5 8.322a10.5 10.5 0 0 1 21 0l-1.497.089a9 9 0 0 0-18.006 0L1.5 8.322Z" />
-                        <path d="M4.5 11.322a7.5 7.5 0 0 1 15 0l-1.498.089a6 6 0 0 0-12.004 0L4.5 11.322Z" />
-                        <path d="M7.5 14.322a4.5 4.5 0 0 1 9 0l-1.5.088a3 3 0 0 0-6 0l-1.5-.088Z" />
-                        <path d="M10.5 17.322a1.5 1.5 0 0 1 3 0h-3Z" />
-                    </svg>
-                    <span class="text-sm font-medium @if (Route::is('admin.ajustes.operadores')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
-                        Operadores
-                    </span>
-                </a>
-            </li>
+            @can('admin.settings.operadores.index')
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.operadores')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif"
+                        href="{{ route('admin.ajustes.operadores') }}">
+                        <svg class="w-4 h-4 shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.operadores')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1.5 8.322a10.5 10.5 0 0 1 21 0l-1.497.089a9 9 0 0 0-18.006 0L1.5 8.322Z" />
+                            <path d="M4.5 11.322a7.5 7.5 0 0 1 15 0l-1.498.089a6 6 0 0 0-12.004 0L4.5 11.322Z" />
+                            <path d="M7.5 14.322a4.5 4.5 0 0 1 9 0l-1.5.088a3 3 0 0 0-6 0l-1.5-.088Z" />
+                            <path d="M10.5 17.322a1.5 1.5 0 0 1 3 0h-3Z" />
+                        </svg>
+                        <span class="text-sm font-medium @if (Route::is('admin.ajustes.operadores')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Operadores
+                        </span>
+                    </a>
+                </li>
+            @endcan
 
             @can('admin.settings.roles.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
@@ -95,7 +97,7 @@
                     </a>
                 </li>
             @endcan
-            @role('admin')
+            @can('admin.settings.sla.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.sla') }}"
                         class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.sla')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
@@ -110,6 +112,8 @@
                         </span>
                     </a>
                 </li>
+            @endcan
+            @can('admin.settings.firebase.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.firebase') }}"
                         class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.firebase')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
@@ -124,7 +128,7 @@
                         </span>
                     </a>
                 </li>
-            @endrole
+            @endcan
             @can('admin.settings.plantilla.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.plantilla') }}"
@@ -141,7 +145,7 @@
                     </a>
                 </li>
             @endcan
-            @can('admin.settings.plantilla.index')
+            @can('admin.settings.sunat.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.sunat') }}"
                         class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.sunat')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
@@ -159,36 +163,40 @@
             @endcan
             
             <!-- Bancos y Cuentas Bancarias -->
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a href="{{ route('admin.ajustes.bancos') }}"
-                    class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.bancos')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
-                    <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.bancos')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
-                        width="16" height="16" viewBox="0 0 16 16">
-                        <path
-                            d="M8 0 0 3v1h16V3L8 0ZM2 6h2v6H2V6Zm4 0h2v6H6V6Zm4 0h2v6h-2V6ZM0 14h16v2H0v-2Z" />
-                    </svg>
-                    <span
-                        class="text-sm font-medium @if (Route::is('admin.ajustes.bancos')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
-                        Bancos
-                    </span>
-                </a>
-            </li>
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a href="{{ route('admin.ajustes.cuentas-bancarias') }}"
-                    class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
-                    <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
-                        width="16" height="16" viewBox="0 0 16 16">
-                        <path
-                            d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1H2V4Zm0 3v5a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H2Zm3 3a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
-                    </svg>
-                    <span
-                        class="text-sm font-medium @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
-                        Cuentas Bancarias
-                    </span>
-                </a>
-            </li>
+            @can('admin.settings.bancos.index')
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.bancos') }}"
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.bancos')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.bancos')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
+                            <path
+                                d="M8 0 0 3v1h16V3L8 0ZM2 6h2v6H2V6Zm4 0h2v6H6V6Zm4 0h2v6h-2V6ZM0 14h16v2H0v-2Z" />
+                        </svg>
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.bancos')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Bancos
+                        </span>
+                    </a>
+                </li>
+            @endcan
+            @can('admin.settings.cuentas-bancarias.index')
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.cuentas-bancarias') }}"
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
+                            <path
+                                d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1H2V4Zm0 3v5a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H2Zm3 3a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Cuentas Bancarias
+                        </span>
+                    </a>
+                </li>
+            @endcan
 
-            @role('admin')
+            @can('admin.settings.postventa.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.postventa') }}"
                         class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.postventa')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
@@ -203,7 +211,7 @@
                         </span>
                     </a>
                 </li>
-            @endrole
+            @endcan
 
         </ul>
     </div>

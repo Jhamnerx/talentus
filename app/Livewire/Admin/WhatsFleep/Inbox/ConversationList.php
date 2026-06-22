@@ -33,7 +33,7 @@ class ConversationList extends Component
         $empresaId = (int) session('empresa', 1);
 
         return [
-            "echo-private:whatsapp.empresa.{$empresaId},wa.conversation.updated" => '$refresh',
+            "echo-private:whatsapp.empresa.{$empresaId},.wa.conversation.updated" => '$refresh',
             'conversation-updated' => '$refresh',
         ];
     }

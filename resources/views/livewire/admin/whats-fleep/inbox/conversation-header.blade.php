@@ -24,9 +24,14 @@
     <div class="flex items-center justify-between gap-3">
         {{-- ── Identity ───────────────────────────────────────── --}}
         <div class="flex min-w-0 items-center gap-3">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-sm font-semibold text-white shadow-sm dark:from-emerald-500 dark:to-teal-600">
-                {{ $initial }}
-            </div>
+            @if ($conversation?->contact?->profile_pic_url)
+                <img src="{{ $conversation->contact->profile_pic_url }}" alt="{{ $displayName }}"
+                    class="h-10 w-10 shrink-0 rounded-full object-cover shadow-sm">
+            @else
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-sm font-semibold text-white shadow-sm dark:from-emerald-500 dark:to-teal-600">
+                    {{ $initial }}
+                </div>
+            @endif
             <div class="min-w-0">
                 <p class="truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $displayName }}</p>
                 <div class="mt-0.5 flex flex-wrap items-center gap-1.5">

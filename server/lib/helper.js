@@ -14,7 +14,11 @@ export function formatReceipt(receipt) {
         }
 
         // Si ya está formateado, retornar tal cual
-        if (receipt.endsWith("@c.us") || receipt.endsWith("@s.whatsapp.net")) {
+        if (
+            receipt.endsWith("@c.us") ||
+            receipt.endsWith("@s.whatsapp.net") ||
+            receipt.endsWith("@lid")
+        ) {
             return receipt;
         }
 

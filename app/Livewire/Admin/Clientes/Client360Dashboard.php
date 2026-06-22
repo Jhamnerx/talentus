@@ -12,6 +12,8 @@ class Client360Dashboard extends Component
 {
     public Clientes $cliente;
 
+    public bool $mostrarInfoChs = false;
+
     public function render()
     {
         $this->cliente->loadMissing([
@@ -22,10 +24,10 @@ class Client360Dashboard extends Component
         return view('livewire.admin.clientes.client360-dashboard', [
             'ejecutivo' => $this->ejecutivoAsignado(),
             'vehiculosConGps' => $this->vehiculosConEstadoGps(),
-            'certificados' => $this->cliente->certificados()->latest('fecha_instalacion')->limit(20)->get(),
-            'actas' => $this->cliente->actas()->latest('fecha_instalacion')->limit(20)->get(),
-            'certVelocimetros' => $this->cliente->certVelocimetros()->limit(20)->get(),
-            'contratos' => $this->cliente->contratos,
+            'certificados' => $this->cliente->certificados()->with('vehiculo')->latest('fecha_instalacion')->limit(20)->get(),
+            'actas' => $this->cliente->actas()->with('vehiculo')->latest('fecha_instalacion')->limit(20)->get(),
+            'certVelocimetros' => $this->cliente->certVelocimetros()->with('vehiculo')->limit(20)->get(),
+            'contratos' => $this->cliente->contratos()->latest('fecha_emision')->get(),
             'resumenComercial' => $this->resumenComercial(),
             'timeline' => $this->timeline(),
             'chsActual' => $this->cliente->chsHistorico()->latest('periodo')->first(),

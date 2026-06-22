@@ -15,9 +15,14 @@
 <aside class="flex h-full w-80 shrink-0 flex-col border-l border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
     {{-- ── Header ─────────────────────────────────────────────── --}}
     <div class="shrink-0 border-b border-gray-200 px-5 py-6 text-center dark:border-gray-800">
-        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-xl font-semibold text-white shadow-sm dark:from-emerald-500 dark:to-teal-600">
-            {{ $initial }}
-        </div>
+        @if ($conversation?->contact?->profile_pic_url)
+            <img src="{{ $conversation->contact->profile_pic_url }}" alt="{{ $contactName }}"
+                class="mx-auto h-16 w-16 rounded-full object-cover shadow-sm">
+        @else
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-xl font-semibold text-white shadow-sm dark:from-emerald-500 dark:to-teal-600">
+                {{ $initial }}
+            </div>
+        @endif
         <p class="mt-3 truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $contactName }}</p>
         @if ($conversation?->contact?->number)
             <p class="mt-0.5 text-xs tabular-nums text-gray-500 dark:text-gray-400">{{ $conversation->contact->number }}</p>
@@ -37,6 +42,10 @@
                 <div class="flex items-start justify-between gap-3">
                     <dt class="shrink-0 text-xs text-gray-500 dark:text-gray-400">Nombre WhatsApp</dt>
                     <dd class="min-w-0 truncate text-right text-xs font-medium text-gray-800 dark:text-gray-100">{{ $conversation?->contact?->push_name ?? '—' }}</dd>
+                </div>
+                <div class="flex items-start justify-between gap-3">
+                    <dt class="shrink-0 text-xs text-gray-500 dark:text-gray-400">Dispositivo</dt>
+                    <dd class="min-w-0 truncate text-right text-xs font-medium text-gray-800 dark:text-gray-100">{{ $conversation?->device?->body ?? '—' }}</dd>
                 </div>
             </dl>
         </section>

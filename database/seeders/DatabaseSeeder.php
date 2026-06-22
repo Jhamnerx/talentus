@@ -88,8 +88,5 @@ class DatabaseSeeder extends Seeder
         // $this->call(TicketCategorySeeder::class);
         // $this->call(PlanSeeder::class);
         $this->call(SlaPlanRulesSeeder::class);
-        $this->call(WhatsappPermissionsSeeder::class);
-        $this->call(WhatsappRolesPermissionsSeeder::class);
-        $this->call(PortalAccesosPermissionsSeeder::class);
     }
 }

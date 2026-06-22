@@ -26,12 +26,19 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')->group(base_path('routes/whats-fleep.php'));
         },
     )
+    ->withBroadcasting(
+        __DIR__ . '/../routes/channels.php',
+        [
+            'middleware' => ['web', 'auth'],
+        ],
+    )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'tracking.auth' => \App\Http\Middleware\AllowedTrackingIp::class,
+            'whatsapp.internal' => \App\Http\Middleware\VerifyInternalToken::class,
         ]);
     })->withSchedule(function (Schedule $schedule) {
         $schedule->command('backup:clean')->daily()->at('01:00');
