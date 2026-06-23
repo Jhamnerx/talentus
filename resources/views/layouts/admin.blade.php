@@ -46,6 +46,14 @@
 
     <x-form.notifications />
     <x-form.dialog />
+
+    @if (session()->has('impersonator_id'))
+        <div class="fixed top-0 inset-x-0 z-60 bg-amber-500 text-white text-sm font-medium px-4 py-2 flex items-center justify-center gap-3 shadow">
+            <span>⚠ Estás viendo el sistema como <strong>{{ Auth::user()->name }}</strong>.</span>
+            <a href="{{ route('admin.usuarios.impersonate.leave') }}"
+                class="underline font-semibold hover:text-amber-100">Volver a mi cuenta</a>
+        </div>
+    @endif
     <script>
         if (localStorage.getItem('sidebar-expanded') == 'true') {
             document.querySelector('body').classList.add('sidebar-expanded');

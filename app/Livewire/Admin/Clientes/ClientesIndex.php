@@ -26,7 +26,8 @@ class ClientesIndex extends Component
     {
         $desde = $this->from;
         $hasta = $this->to;
-        $clientes = Clientes::where('razon_social', 'like', '%' . $this->search . '%')
+        $clientes = Clientes::with('sector')
+            ->where('razon_social', 'like', '%' . $this->search . '%')
             ->orwhere('numero_documento', 'like', '%' . $this->search . '%')
             ->orwhere(
                 function ($query) {
@@ -45,7 +46,7 @@ class ClientesIndex extends Component
         if (!empty($desde)) {
 
 
-            $clientes = Clientes::whereRaw(
+            $clientes = Clientes::with('sector')->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $desde . " 00:00:00",

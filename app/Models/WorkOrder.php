@@ -47,6 +47,7 @@ class WorkOrder extends Model
         'bloqueado' => 'boolean',
         'wa_message_id' => 'string',
         'wa_group_id' => 'string',
+        'wa_sent_at' => 'datetime',
         'ubicacion_lat' => 'float',
         'ubicacion_lng' => 'float',
         'tecnico_lat' => 'float',
@@ -258,5 +259,23 @@ class WorkOrder extends Model
     public function puedeEditar(): bool
     {
         return !$this->bloqueado && $this->estado->canEdit();
+    }
+
+    /**
+     * ¿Se puede editar el mensaje de WhatsApp ya enviado para esta orden?
+     * Requiere wa_message_id/wa_group_id/wa_sent_at presentes, estado editable
+     * y estar dentro de la ventana de edición de WhatsApp (whatsapp.edit_window_minutes).
+     */
+    public function puedeEditarMensaje(): bool
+    {
+        if (empty($this->wa_message_id) || empty($this->wa_group_id) || $this->wa_sent_at === null) {
+            return false;
+        }
+
+        if (! $this->estado->canEdit()) {
+            return false;
+        }
+
+        return $this->wa_sent_at->diffInMinutes(now()) < (int) config('whatsapp.edit_window_minutes', 14);
     }
 }

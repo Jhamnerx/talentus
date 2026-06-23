@@ -32,7 +32,7 @@ class Edit extends Component
         $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $this->usuario->id,
-            'password' => 'confirmed',
+            'password' => 'nullable|min:8|confirmed',
             'roles_id' => 'required',
         ];
         if (!is_null($this->document_id)) {
@@ -48,6 +48,7 @@ class Edit extends Component
             'email.required' => 'El campo email es requerido',
             'email.email' => 'El campo email debe ser un correo válido',
             'email.unique' => 'El campo email ya está en uso',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
             'password.confirmed' => 'Las contraseñas no coinciden',
             'roles_id.required' => 'Selecciona los roles del usuario',
             'series_id.required' => 'Selecciona una serie para el usuario',

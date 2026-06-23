@@ -81,9 +81,47 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    /**
+     * Cuenta maestra que nunca puede ser impersonada.
+     */
+    public const PROTECTED_EMAIL = 'jhamnerx1x@gmail.com';
+
     public function scopeExcludeEmail($query, $email)
     {
         return $query->where('email', '!=', $email);
+    }
+
+    /**
+     * Motivo por el que este usuario NO puede impersonar al objetivo, o null si sí puede.
+     */
+    public function cannotImpersonateReason(User $target): ?string
+    {
+        if (session()->has('impersonator_id')) {
+            return 'Ya estás impersonando a un usuario.';
+        }
+
+        if ($target->id === $this->id) {
+            return 'No puedes ingresar como tú mismo.';
+        }
+
+        if ($target->email === self::PROTECTED_EMAIL) {
+            return 'No puedes ingresar como esta cuenta protegida.';
+        }
+
+        if ($target->hasRole('admin')) {
+            return 'No puedes ingresar como un administrador.';
+        }
+
+        return null;
+    }
+
+    /**
+     * ¿Este usuario puede ingresar como (impersonar) al objetivo?
+     */
+    public function canImpersonate(User $target): bool
+    {
+        return $this->can('admin.usuarios.impersonate')
+            && $this->cannotImpersonateReason($target) === null;
     }
 
     public function cambios()

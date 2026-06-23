@@ -25,7 +25,7 @@
         <ul class="">
             @foreach ($notificaciones as $notificacion)
 
-            @if ($notificacion->data['tipo'] == 'error_import')
+            @if (($notificacion->data['tipo'] ?? null) == 'error_import')
             <li x-show="open" x-data="{ open: true }" class="border-b border-slate-200 last:border-0 mt-0 shadow-lg">
                 <div
                     class="inline-flex flex-col max-w-lg px-2 py-2 rounded-sm text-sm bg-white {{$notificacion->read_at ? 'opacity-50' : '' }}  shadow-lg w-full hover:bg-slate-50">
@@ -38,10 +38,11 @@
                                     d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z" />
                             </svg>
                             <div>
-                                <div class="font-medium text-slate-800 mb-1">{{ $notificacion->data['asunto'] }}
+                                <div class="font-medium text-slate-800 mb-1">
+                                    {{ $notificacion->data['asunto'] ?? ($notificacion->data['title'] ?? 'Notificación') }}
                                 </div>
                                 <div>
-                                    {{ $notificacion->data['mensaje'] }}
+                                    {{ $notificacion->data['mensaje'] ?? ($notificacion->data['message'] ?? '') }}
                                 </div>
                             </div>
                         </div>
@@ -85,10 +86,11 @@
                                     d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z" />
                             </svg>
                             <div>
-                                <div class="font-medium text-slate-800 mb-1">{{ $notificacion->data['asunto'] }}
+                                <div class="font-medium text-slate-800 mb-1">
+                                    {{ $notificacion->data['asunto'] ?? ($notificacion->data['title'] ?? 'Notificación') }}
                                 </div>
                                 <div>
-                                    {{ $notificacion->data['mensaje'] }}
+                                    {{ $notificacion->data['mensaje'] ?? ($notificacion->data['message'] ?? '') }}
                                 </div>
                             </div>
                         </div>
@@ -107,7 +109,7 @@
                         </div>
                         <div class="text-right mt-1">
                             <a class="text-md font-medium text-indigo-500 hover:text-indigo-600"
-                                href="{{ $notificacion->data['url'] }}">
+                                href="{{ $notificacion->data['url'] ?? '#' }}">
                                 Ver
                                 -&gt;</a>
                         </div>

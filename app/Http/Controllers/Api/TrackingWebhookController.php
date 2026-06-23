@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Dispositivos;
-use App\Models\Lineas;
-use App\Models\VehiculoDispositivos;
 use App\Models\Vehiculos;
 use App\Scopes\EmpresaScope;
+use App\Services\PlataformaVehiculoSyncService;
 use App\Services\ReporteAlertaService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
@@ -81,92 +80,31 @@ class TrackingWebhookController extends Controller
             $cambios[] = 'gpswox_active';
         }
 
-        // --- numero (SIM) + sim_card_id ---
-        if (!blank($simNumber) && $vehiculo->numero !== $simNumber) {
-            $vehiculo->numero = $simNumber;
-            $cambios[] = 'numero';
-        }
-
-        if (!blank($simNumber)) {
-            $linea = Lineas::withoutGlobalScope(EmpresaScope::class)
-                ->where('numero', $simNumber)
-                ->first();
-
-            $simCard = $linea?->sim_card;
-
-            if ($simCard && $vehiculo->sim_card_id !== $simCard->id) {
-                $vehiculo->sim_card_id = $simCard->id;
-                $cambios[] = 'sim_card_id';
-            }
-        }
-
-        // --- Timestamp de sincronización ---
-        $vehiculo->gpswox_sincronizado_at = now();
-
-        $vehiculo->save();
-
-        // --- Dispositivo principal por IMEI ---
-        // Se manipula el pivot directamente para NO desinstalar otros dispositivos del vehículo.
+        // --- Asignación de número/SIM e IMEI respetando la plataforma (atómico) ---
+        $svc = app(PlataformaVehiculoSyncService::class);
         $imeiSincronizado = false;
-        if (!blank($imei)) {
-            $dispositivo = Dispositivos::where('imei', $imei)->first();
 
-            if ($dispositivo) {
-                $pivotActivo = VehiculoDispositivos::where('vehiculo_id', $vehiculo->id)
-                    ->where('imei', $imei)
-                    ->whereNull('fecha_desinstalacion')
-                    ->first();
-
-                if ($pivotActivo) {
-                    // Ya está instalado — solo asegurar que sea el principal
-                    VehiculoDispositivos::where('vehiculo_id', $vehiculo->id)
-                        ->whereNull('fecha_desinstalacion')
-                        ->where('id', '!=', $pivotActivo->id)
-                        ->update(['is_principal' => false]);
-
-                    $pivotActivo->update(['is_principal' => true]);
-                    $vehiculo->dispositivos_id = $dispositivo->id;
-                    $vehiculo->save();
-                    $imeiSincronizado = true;
-                } else {
-                    // IMEI nuevo para este vehículo — verificar que no esté asignado a otro
-                    $asignadoAOtro = VehiculoDispositivos::where('dispositivo_id', $dispositivo->id)
-                        ->where('vehiculo_id', '!=', $vehiculo->id)
-                        ->whereNull('fecha_desinstalacion')
-                        ->exists();
-
-                    if (!$asignadoAOtro) {
-                        VehiculoDispositivos::where('vehiculo_id', $vehiculo->id)
-                            ->whereNull('fecha_desinstalacion')
-                            ->update(['is_principal' => false]);
-
-                        VehiculoDispositivos::create([
-                            'vehiculo_id'       => $vehiculo->id,
-                            'dispositivo_id'    => $dispositivo->id,
-                            'imei'              => $imei,
-                            'is_principal'      => true,
-                            'fecha_instalacion' => now(),
-                        ]);
-
-                        // Descontar del stock y marcar VENDIDO (idempotente: solo si estaba en STOCK y es de la empresa)
-                        app(\App\Services\StockService::class)->marcarVendidoPorInstalacion($dispositivo);
-
-                        $vehiculo->dispositivos_id = $dispositivo->id;
-                        $vehiculo->save();
-                        $imeiSincronizado = true;
-                    } else {
-                        Log::channel('daily')->warning('[TrackingWebhook] IMEI ya asignado a otro vehículo', [
-                            'placa' => $plateNumber,
-                            'imei'  => $imei,
-                        ]);
-                    }
+        try {
+            $imeiSincronizado = DB::transaction(function () use ($svc, $vehiculo, $simNumber, $imei, &$cambios) {
+                if (!blank($simNumber) && $vehiculo->numero !== $simNumber) {
+                    $svc->aplicarNumero($vehiculo, $simNumber);
+                    $cambios[] = 'numero';
                 }
-            } else {
-                Log::channel('daily')->info('[TrackingWebhook] IMEI no registrado en Talentus', [
-                    'placa' => $plateNumber,
-                    'imei'  => $imei,
-                ]);
-            }
+
+                $vehiculo->gpswox_sincronizado_at = now();
+                $vehiculo->save();
+
+                return !blank($imei) ? $svc->aplicarImei($vehiculo, $imei) : false;
+            });
+        } catch (\Throwable $e) {
+            Log::channel('daily')->error('[TrackingWebhook] Error al sincronizar', [
+                'placa' => $plateNumber,
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json([
+                'status'  => 0,
+                'message' => 'Conflicto al sincronizar: ' . $e->getMessage(),
+            ], 409);
         }
 
         Log::channel('daily')->info('[TrackingWebhook] Vehículo sincronizado', [

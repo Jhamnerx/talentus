@@ -83,6 +83,7 @@ class VehiculosIndex extends Component
             ->when($this->estado_filter !== '', fn($q) => $q->where('estado', $this->estado_filter))
             ->when($this->gpswox_filter === 'activo', fn($q) => $q->where('gpswox_active', true))
             ->when($this->gpswox_filter === 'inactivo', fn($q) => $q->where('gpswox_active', false))
+            ->when($this->gpswox_filter === 'sin_sincronizar', fn($q) => $q->sinSincronizarGpswox())
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->whereHas('sim_card', function ($sq) {

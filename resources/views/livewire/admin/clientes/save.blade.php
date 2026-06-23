@@ -76,6 +76,17 @@
                     option-value="value"
                 />
             </div>
+
+            <div class="col-span-12 sm:col-span-6">
+                <x-form.select
+                    label="Sector del cliente"
+                    wire:model.live="sector_id"
+                    placeholder="Sin sector"
+                    :options="$sectores->map(fn($s) => ['value' => $s->id, 'label' => $s->nombre])->toArray()"
+                    option-label="label"
+                    option-value="value"
+                />
+            </div>
         </div>
     </div>
 

@@ -35,6 +35,7 @@ class ClientesRequest extends FormRequest
                 'telefono' => 'nullable|digits_between:6,9|numeric',
                 'email' => 'email|nullable',
                 'rubro_id' => 'nullable|exists:rubros_cliente,id',
+                'sector_id' => 'nullable|exists:sectores,id',
                 'numero_documento' => [
                     'required',
                     'min:6',
@@ -62,6 +63,7 @@ class ClientesRequest extends FormRequest
                     'telefono' => 'nullable|digits_between:6,9|numeric',
                     'email' => 'email|nullable',
                     'rubro_id' => 'nullable|exists:rubros_cliente,id',
+                'sector_id' => 'nullable|exists:sectores,id',
                     'numero_documento' => [
                         'required',
                         'min:6',

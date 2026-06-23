@@ -21,6 +21,18 @@ class SincronizarFlota extends Component
     public bool $terminado          = false;
     public int  $lastId             = 0;
     public int  $noEncontradosCount = 0;
+    public bool $soloNoSincronizados = false;
+
+    private function baseQuery()
+    {
+        return Vehiculos::query()
+            ->when($this->soloNoSincronizados, fn ($q) => $q->sinSincronizarGpswox());
+    }
+
+    public function updatedSoloNoSincronizados(): void
+    {
+        $this->total = $this->baseQuery()->count();
+    }
 
     public function render()
     {
@@ -30,8 +42,8 @@ class SincronizarFlota extends Component
     #[On('abrir-sincronizar-flota')]
     public function abrir(): void
     {
-        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount']);
-        $this->total     = Vehiculos::count();
+        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount', 'soloNoSincronizados']);
+        $this->total     = $this->baseQuery()->count();
         $this->modalOpen = true;
         $this->dispatch('reset-sync-errors');
     }
@@ -39,14 +51,15 @@ class SincronizarFlota extends Component
     public function iniciar(): void
     {
         $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount']);
-        $this->total     = Vehiculos::count();
+        $this->total     = $this->baseQuery()->count();
         $this->corriendo = true;
         $this->dispatch('reset-sync-errors');
     }
 
     public function procesarSiguiente(): array
     {
-        $vehiculo = Vehiculos::where('id', '>', $this->lastId)
+        $vehiculo = $this->baseQuery()
+            ->where('id', '>', $this->lastId)
             ->orderBy('id')
             ->first();
 
@@ -89,6 +102,6 @@ class SincronizarFlota extends Component
     public function cerrar(): void
     {
         $this->modalOpen = false;
-        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount', 'total']);
+        $this->reset(['procesados', 'corriendo', 'terminado', 'lastId', 'noEncontradosCount', 'total', 'soloNoSincronizados']);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sector extends Model
 {
@@ -42,5 +43,10 @@ class Sector extends Model
     public function vehiculos(): BelongsToMany
     {
         return $this->belongsToMany(Vehiculos::class, 'sector_vehiculo', 'sector_id', 'vehiculo_id');
+    }
+
+    public function clientes(): HasMany
+    {
+        return $this->hasMany(Clientes::class, 'sector_id');
     }
 }

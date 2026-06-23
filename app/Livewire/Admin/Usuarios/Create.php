@@ -32,7 +32,7 @@ class Create extends Component
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|string|max:255',
-            'password' => 'required|confirmed',
+            'password' => 'required|min:8|confirmed',
             'roles_id' => 'required',
         ];
 
@@ -51,6 +51,7 @@ class Create extends Component
             'email.email' => 'El campo email debe ser un correo válido',
             'email.unique' => 'El campo email ya está en uso',
             'password.required' => 'El campo contraseña es requerido',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
             'password.confirmed' => 'Las contraseñas no coinciden',
             'roles_id.required' => 'Selecciona los roles del usuario',
             'series_id.required' => 'Selecciona una serie para el usuario',

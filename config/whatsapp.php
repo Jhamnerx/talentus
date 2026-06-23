@@ -14,4 +14,8 @@ return [
     'media_disk' => env('WHATSAPP_MEDIA_DISK', 'local'),
     'media_path' => 'whatsapp',
     'country_code' => env('WHATSAPP_COUNTRY_CODE', '51'),
+
+    // Minutos durante los que WhatsApp permite editar un mensaje (real ~15 min).
+    // Se usa 14 por margen ante latencia/relojes. Pasado el umbral se envía mensaje nuevo.
+    'edit_window_minutes' => (int) env('WA_EDIT_WINDOW_MINUTES', 14),
 ];

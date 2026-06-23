@@ -229,6 +229,9 @@
                                 <div class="font-semibold text-left">Razon Social</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Sector</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">TIPO DOC.</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -282,6 +285,18 @@
                                         <div class="font-medium text-gray-800 dark:text-gray-100">
                                             {{ $cliente->razon_social }}
                                         </div>
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">
+                                        @if ($cliente->sector)
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                                                {{ $cliente->sector->nombre }}
+                                            </span>
+                                        @else
+                                            <span class="text-gray-400 dark:text-gray-500">—</span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -423,7 +438,7 @@
                         @endforeach
                         @if ($clientes->count() < 1)
                             <tr>
-                                <td colspan="10"
+                                <td colspan="11"
                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                     <div class="text-center text-gray-500 dark:text-gray-400">No hay Registros</div>
                                 </td>

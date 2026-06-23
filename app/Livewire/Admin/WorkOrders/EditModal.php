@@ -238,25 +238,45 @@ class EditModal extends Component
             'metadata'            => !empty($metadata) ? $metadata : null,
         ]);
 
-        // Editar el mensaje WA si hubo cambios relevantes
+        // Notificar al grupo si hubo cambios relevantes
         $hayCAmbiosWA = $hayTecnicoCambio || $hayFechaCambio || $hayVehiculoCambio
             || $hayDireccionCambio || $haySectorCambio || $hayPlanCambio;
 
         if ($this->waEnviado && $hayCAmbiosWA) {
             $orden->refresh();
             $orden->loadMissing(['tipo', 'vehiculo.cliente', 'cliente', 'tecnico', 'items']);
-            $editado = app(WorkOrderNotificationService::class)->editarMensaje($orden);
 
-            if ($editado) {
-                $this->notification()->success(
-                    'ACTUALIZADO',
-                    "Orden #{$this->workOrderId} actualizada y mensaje WhatsApp editado"
-                );
+            $banner   = $hayFechaCambio ? '🔄 *OT REPROGRAMADA*' : '✏️ *OT ACTUALIZADA*';
+            $servicio = app(WorkOrderNotificationService::class);
+
+            if ($orden->puedeEditarMensaje()) {
+                $editado = $servicio->editarMensaje($orden, prefijo: $banner);
+
+                if ($editado) {
+                    $this->notification()->success(
+                        'ACTUALIZADO',
+                        "Orden #{$this->workOrderId} actualizada y mensaje WhatsApp editado"
+                    );
+                } else {
+                    $this->notification()->warning(
+                        'ACTUALIZADO PARCIALMENTE',
+                        "Orden #{$this->workOrderId} actualizada, pero no se pudo editar el mensaje WA"
+                    );
+                }
             } else {
-                $this->notification()->warning(
-                    'ACTUALIZADO PARCIALMENTE',
-                    "Orden #{$this->workOrderId} actualizada, pero no se pudo editar el mensaje WA"
-                );
+                $nuevoId = $servicio->enviarAlGrupo($orden, prefijo: $banner);
+
+                if ($nuevoId) {
+                    $this->notification()->success(
+                        'ACTUALIZADO',
+                        "Orden #{$this->workOrderId} actualizada y se envió un aviso nuevo al grupo"
+                    );
+                } else {
+                    $this->notification()->warning(
+                        'ACTUALIZADO PARCIALMENTE',
+                        "Orden #{$this->workOrderId} actualizada, pero no se pudo enviar el aviso al grupo"
+                    );
+                }
             }
         } else {
             $this->notification()->success('ACTUALIZADO', "Orden #{$this->workOrderId} actualizada correctamente");
