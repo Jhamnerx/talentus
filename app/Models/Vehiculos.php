@@ -64,6 +64,13 @@ class Vehiculos extends Model
         return $query->where('vehiculos.empresa_id', session('empresa'));
     }
 
+    public function scopeSinSincronizarGpswox($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('gpswox_id')->orWhereNull('gpswox_sincronizado_at');
+        });
+    }
+
     // Scope local de activo
     public function order($query, $order)
     {
