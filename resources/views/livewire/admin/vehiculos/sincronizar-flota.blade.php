@@ -27,7 +27,7 @@
         <div class="space-y-5">
 
             {{-- Estado: Listo para iniciar --}}
-            @if (! $corriendo && ! $terminado && $total > 0)
+            @if (! $corriendo && ! $terminado)
                 <div class="flex flex-col items-center gap-3 py-4">
                     <svg class="w-16 h-16 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -37,12 +37,25 @@
                         Se consultará la plataforma GPSWox placa por placa para actualizar
                         <strong>IMEI, SIM y ID</strong> de cada vehículo.
                     </p>
-                    <p class="text-sm text-gray-400 dark:text-gray-500">
-                        Total de vehículos a procesar: <strong class="text-gray-700 dark:text-gray-200">{{ $total }}</strong>
-                    </p>
-                    <p class="text-xs text-amber-500 dark:text-amber-400">
-                        Este proceso puede tardar varios minutos. No cierre esta ventana.
-                    </p>
+
+                    <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                        <input type="checkbox" wire:model.live="soloNoSincronizados"
+                            class="rounded border-gray-300 text-violet-500 focus:ring-violet-400">
+                        Solo verificar los que no están en GPSWox / nunca sincronizados
+                    </label>
+
+                    @if ($total > 0)
+                        <p class="text-sm text-gray-400 dark:text-gray-500">
+                            Total de vehículos a procesar: <strong class="text-gray-700 dark:text-gray-200">{{ $total }}</strong>
+                        </p>
+                        <p class="text-xs text-amber-500 dark:text-amber-400">
+                            Este proceso puede tardar varios minutos. No cierre esta ventana.
+                        </p>
+                    @else
+                        <p class="text-sm text-emerald-600 dark:text-emerald-400">
+                            No hay vehículos pendientes de sincronizar.
+                        </p>
+                    @endif
                 </div>
             @endif
 
@@ -124,6 +137,7 @@
                         primary
                         icon="arrow-path"
                         label="Iniciar Sincronización"
+                        :disabled="$total === 0"
                         @click="iniciarLoop()"
                     />
                 @elseif ($corriendo)
