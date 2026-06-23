@@ -47,6 +47,7 @@ class WorkOrder extends Model
         'bloqueado' => 'boolean',
         'wa_message_id' => 'string',
         'wa_group_id' => 'string',
+        'wa_sent_at' => 'datetime',
         'ubicacion_lat' => 'float',
         'ubicacion_lng' => 'float',
         'tecnico_lat' => 'float',
@@ -258,5 +259,18 @@ class WorkOrder extends Model
     public function puedeEditar(): bool
     {
         return !$this->bloqueado && $this->estado->canEdit();
+    }
+
+    public function puedeEditarMensaje(): bool
+    {
+        if (empty($this->wa_message_id) || empty($this->wa_group_id) || $this->wa_sent_at === null) {
+            return false;
+        }
+
+        if (! $this->estado->canEdit()) {
+            return false;
+        }
+
+        return $this->wa_sent_at->diffInMinutes(now()) < (int) config('whatsapp.edit_window_minutes', 14);
     }
 }
