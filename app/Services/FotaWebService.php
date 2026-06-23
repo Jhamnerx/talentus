@@ -20,7 +20,7 @@ class FotaWebService
     /**
      * @return object|false
      */
-    public function getDevice(string $imei)
+    public function getDevice(?string $imei)
     {
         $token = config('app.token_fota_web');
 
