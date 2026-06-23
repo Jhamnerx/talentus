@@ -58,8 +58,7 @@ class SincronizarFlota extends Component
 
     public function procesarSiguiente(): array
     {
-        $vehiculo = Vehiculos::query()
-            ->when($this->soloNoSincronizados, fn ($q) => $q->sinSincronizarGpswox())
+        $vehiculo = $this->baseQuery()
             ->where('id', '>', $this->lastId)
             ->orderBy('id')
             ->first();
