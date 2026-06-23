@@ -56,6 +56,26 @@ class PlataformaVehiculoSyncServiceTest extends TestCase
         $this->assertSame($sim->id, $b->sim_card_id);
     }
 
+    public function test_transfiere_numero_aunque_el_destino_ya_tenga_otro(): void
+    {
+        // Escenario clave: el destino ya tiene un número distinto y el número
+        // entrante pertenece a otro vehículo. Liberar-primero debe evitar la
+        // colisión del índice unique de 'numero'.
+        $empresa = $this->seedEmpresa();
+        $a = Vehiculos::create(['placa' => 'AAA-111', 'empresa_id' => $empresa->id, 'numero' => '999111']);
+        $b = Vehiculos::create(['placa' => 'BBB-222', 'empresa_id' => $empresa->id, 'numero' => '888000']);
+
+        $this->svc()->aplicarNumero($b, '999111');
+        $b->save();
+
+        $a->refresh();
+        $b->refresh();
+
+        $this->assertNull($a->numero);
+        $this->assertSame('999111', $a->old_numero);
+        $this->assertSame('999111', $b->numero);
+    }
+
     public function test_aplicar_numero_es_idempotente_si_ya_lo_tiene(): void
     {
         $empresa = $this->seedEmpresa();
