@@ -99,11 +99,6 @@ class Save extends Component
         }
     }
 
-    public function updatedItems($value)
-    {
-        // sin transformación de texto ya que ahora es ID
-    }
-
     public function render()
     {
         $operadores = \App\Models\Operador::orderBy('name')->get();

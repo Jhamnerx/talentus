@@ -33,7 +33,5 @@ class GpsController extends Controller
     public function exportExcel()
     {
         return Excel::download(new DispositivosExport, 'dispositivos.xls');
-
-        redirect()->route('admin.dispositivos.index');
     }
 }

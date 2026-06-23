@@ -6,7 +6,6 @@ use App\Services\FotaWebService;
 use App\Models\Dispositivos;
 use App\Models\ModelosDispositivo;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
@@ -124,13 +123,6 @@ class DispositivosIndex extends Component
         $this->resetPage();
     }
 
-    function validateDate($date, $format = 'd-m-Y')
-    {
-        $d = DateTime::createFromFormat($format, $date);
-        return $d && $d->format($format) == $date;
-    }
-
-
     public function verInfoDispositivo(Dispositivos $dispositivo)
     {
 
@@ -208,8 +200,6 @@ class DispositivosIndex extends Component
                 mensaje: 'Ocurrió un error: ' . $e->getMessage()
             );
         }
-
-        $this->render();
     }
 
     /**
