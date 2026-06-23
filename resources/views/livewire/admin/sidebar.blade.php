@@ -1086,6 +1086,7 @@
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                                 <ul class="pl-9 mt-1" :class="{ 'hidden': !open }" x-cloak>
+                                    {{-- Modulo Tareas reemplazado por Work Orders
                                     <li class="mb-1 last:mb-0">
                                         <a class="block
                                             {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
@@ -1099,6 +1100,7 @@
                                             </span>
                                         </a>
                                     </li>
+                                    --}}
                                     <li class="mb-1 last:mb-0">
                                         <a class="block
                                             {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}

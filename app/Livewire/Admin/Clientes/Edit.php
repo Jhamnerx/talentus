@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Clientes;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\RubroCliente;
+use App\Models\Sector;
 use Livewire\Attributes\On;
 use App\Http\Requests\ClientesRequest;
 use App\Services\FactilizaService;
@@ -16,6 +17,7 @@ class Edit extends Component
     public $modalEdit = false;
     public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
     public ?int $rubro_id = null;
+    public ?int $sector_id = null;
 
     public $errorConsulta;
     public $ubigeo;
@@ -24,7 +26,8 @@ class Edit extends Component
     public function render()
     {
         $rubros = RubroCliente::activos()->get(['id', 'nombre']);
-        return view('livewire.admin.clientes.edit', compact('rubros'));
+        $sectores = Sector::activos()->get(['id', 'nombre']);
+        return view('livewire.admin.clientes.edit', compact('rubros', 'sectores'));
     }
 
     #[On('open-modal-edit')]
@@ -41,6 +44,7 @@ class Edit extends Component
         $this->direccion = $cliente->direccion;
         $this->ubigeo = $cliente->ubigeo;
         $this->rubro_id = $cliente->rubro_id;
+        $this->sector_id = $cliente->sector_id;
     }
 
     public function buscarDocumento()
@@ -145,7 +149,7 @@ class Edit extends Component
 
     public function resetProp()
     {
-        $this->reset('tipo_documento_id', 'numero_documento', 'razon_social', 'telefono', 'email', 'web_site', 'direccion', 'rubro_id');
+        $this->reset('tipo_documento_id', 'numero_documento', 'razon_social', 'telefono', 'email', 'web_site', 'direccion', 'rubro_id', 'sector_id');
     }
 
     public function closeModal()

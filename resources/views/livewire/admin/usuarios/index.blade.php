@@ -57,8 +57,7 @@
     <!-- Table -->
     <div
         class="bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-slate-200 dark:border-gray-700 mb-8 overflow-x-auto">
-        <header
-            class="px-5 py-4 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between">
+        <header class="px-5 py-4 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between">
             <h2 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24">
@@ -146,8 +145,7 @@
                                     @endcan
                                     @can('admin.usuarios.delete')
                                         <button wire:click.prevent="confirmDelete({{ $usuario->id }})"
-                                            class="text-rose-500 hover:text-rose-600 rounded-full p-1"
-                                            title="Eliminar">
+                                            class="text-rose-500 hover:text-rose-600 rounded-full p-1" title="Eliminar">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round"

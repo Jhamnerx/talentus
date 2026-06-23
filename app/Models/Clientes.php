@@ -13,6 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -104,6 +105,11 @@ class Clientes extends Model
     public function rubro()
     {
         return $this->belongsTo(RubroCliente::class, 'rubro_id');
+    }
+
+    public function sector(): BelongsTo
+    {
+        return $this->belongsTo(Sector::class, 'sector_id');
     }
 
 

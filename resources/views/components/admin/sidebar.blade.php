@@ -1524,6 +1524,7 @@
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                                 <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
+                                    {{-- Modulo Tareas reemplazado por Work Orders
                                     <li class="mb-1 last:mb-0">
                                         <a class="block
                                             text-gray-800 dark:text-gray-100
@@ -1537,6 +1538,7 @@
                                             </span>
                                         </a>
                                     </li>
+                                    --}}
                                     <li class="mb-1 last:mb-0">
                                         <a class="block
                                             text-gray-800 dark:text-gray-100

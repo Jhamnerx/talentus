@@ -20,7 +20,7 @@ class PermisosSeeder extends Seeder
         $role = Role::create(['name' => 'cliente', 'route_redirect' => 'web.home']);
         $admin = Role::create(['name' => 'admin', 'route_redirect' => 'admin.home']);
         $monitoreo = Role::create(['name' => 'monitoreo', 'route_redirect' => 'admin.vehiculos.reportes.index']);
-        $tecnico = Role::create(['name' => 'tecnico', 'route_redirect' => 'admin.tecnico.tareas.index']);
+        $tecnico = Role::create(['name' => 'tecnico', 'route_redirect' => 'admin.work-orders.index']);
 
         $permisos = [
             'admin.home',

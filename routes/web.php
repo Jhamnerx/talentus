@@ -335,7 +335,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(function () {
 
-        Route::get('tareas', 'index')->name('admin.tecnico.tareas.index');
+        // Modulo Tareas reemplazado por Work Orders
+        // Route::get('tareas', 'index')->name('admin.tecnico.tareas.index');
         Route::get('index', 'tecnicos')->name('admin.tecnico.tecnico.index');
     });
 

@@ -29,7 +29,7 @@ class NotificacionTarea extends Notification implements ShouldQueue, ShouldBroad
     public function toDatabase($notifiable)
     {
         return [
-            'url' => route('admin.tecnico.tareas.index'),
+            'url' => route('admin.work-orders.index'),
             'asunto' => 'TAREA CREADA ' . $this->tarea->token,
             'mensaje' => 'Se ha creado la tarea con ID ' . $this->tarea->token . ' por favor revisar',
             'accion' => 'tarea_creada',

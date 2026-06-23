@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Contactos;
 use App\Models\RubroCliente;
+use App\Models\Sector;
 use Livewire\Attributes\On;
 use WireUi\Traits\WireUiActions;
 use App\Services\FactilizaService;
@@ -21,6 +22,7 @@ class Save extends Component
     // Datos del cliente
     public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion, $ubigeo;
     public ?int $rubro_id = null;
+    public ?int $sector_id = null;
 
     // Datos del contacto principal (para RUC: se llena manualmente; para DNI: se sincroniza automáticamente)
     public $contacto_nombre;
@@ -35,7 +37,8 @@ class Save extends Component
     public function render()
     {
         $rubros = RubroCliente::activos()->get(['id', 'nombre']);
-        return view('livewire.admin.clientes.save', compact('rubros'));
+        $sectores = Sector::activos()->get(['id', 'nombre']);
+        return view('livewire.admin.clientes.save', compact('rubros', 'sectores'));
     }
 
     // ─── Sincronización para DNI ────────────────────────────────────────────────
@@ -317,6 +320,8 @@ class Save extends Component
             'contacto_cargo',
             'contacto_telefono',
             'contacto_email',
+            'rubro_id',
+            'sector_id',
             'errorConsulta',
             'errorContacto'
         );
