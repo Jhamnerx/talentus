@@ -469,7 +469,7 @@ class DispositivosIndex extends Component
     }
 
     /**
-     * Exportar dispositivos no registrados a CSV
+     * Exportar dispositivos no registrados a CSV (descarga directa, sin dejar archivo en disco).
      */
     public function exportarNoRegistrados()
     {
@@ -484,41 +484,31 @@ class DispositivosIndex extends Component
         }
 
         $filename = 'dispositivos_no_registrados_' . date('Y-m-d_His') . '.csv';
-        $filepath = storage_path('app/public/' . $filename);
+        $dispositivos = $this->dispositivosNoRegistrados;
 
-        $file = fopen($filepath, 'w');
+        return response()->streamDownload(function () use ($dispositivos) {
+            $file = fopen('php://output', 'w');
 
-        // Encabezados con BOM para Excel
-        fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            // BOM para que Excel respete UTF-8
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-        // Encabezados
-        fputcsv($file, ['IMEI', 'Serial', 'Modelo', 'Descripción', 'Compañía', 'Última Conexión', 'Firmware', 'Estado']);
+            fputcsv($file, ['IMEI', 'Serial', 'Modelo', 'Descripción', 'Compañía', 'Última Conexión', 'Firmware', 'Estado']);
 
-        // Datos
-        foreach ($this->dispositivosNoRegistrados as $dispositivo) {
-            fputcsv($file, [
-                $dispositivo['imei'],
-                $dispositivo['serial'],
-                $dispositivo['modelo'],
-                $dispositivo['descripcion'],
-                $dispositivo['company_name'],
-                $dispositivo['seen_at'],
-                $dispositivo['current_firmware'],
-                $dispositivo['activity_status']
-            ]);
-        }
+            foreach ($dispositivos as $dispositivo) {
+                fputcsv($file, [
+                    $dispositivo['imei'],
+                    $dispositivo['serial'],
+                    $dispositivo['modelo'],
+                    $dispositivo['descripcion'],
+                    $dispositivo['company_name'],
+                    $dispositivo['seen_at'],
+                    $dispositivo['current_firmware'],
+                    $dispositivo['activity_status'],
+                ]);
+            }
 
-        fclose($file);
-
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'Exportado',
-            mensaje: 'Archivo CSV generado exitosamente'
-        );
-
-        // Descargar archivo
-        return redirect()->to(asset('storage/' . $filename));
+            fclose($file);
+        }, $filename, ['Content-Type' => 'text/csv']);
     }
 
     public function openModalCreate()
