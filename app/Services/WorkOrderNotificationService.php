@@ -86,7 +86,7 @@ class WorkOrderNotificationService
      * Guarda el wa_message_id y wa_group_id en la orden al enviar correctamente.
      * Retorna el ID del mensaje WA o null si falló.
      */
-    public function enviarAlGrupo(WorkOrder $orden, ?Device $device = null): ?string
+    public function enviarAlGrupo(WorkOrder $orden, ?Device $device = null, ?string $prefijo = null): ?string
     {
         $orden->loadMissing(['tipo', 'vehiculo.cliente', 'tecnico', 'creador']);
 
@@ -112,6 +112,9 @@ class WorkOrderNotificationService
         }
 
         $mensaje = $this->formatMensaje($orden);
+        if ($prefijo) {
+            $mensaje = $prefijo . "\n\n" . $mensaje;
+        }
         $serverUrl = config('whatsapp.node_server_url', 'http://localhost:3000');
 
         Log::info("WorkOrder #{$orden->id}: intentando enviar WA.", [
@@ -143,6 +146,7 @@ class WorkOrderNotificationService
                     ->update([
                         'wa_message_id' => $messageId,
                         'wa_group_id'   => $tecnico->wa_group_id,
+                        'wa_sent_at'    => now(),
                     ]);
 
                 Log::info("WorkOrder #{$orden->id}: WA enviado al grupo {$tecnico->wa_group_id}. MsgId: {$messageId}");
