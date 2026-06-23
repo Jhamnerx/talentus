@@ -110,6 +110,7 @@
                     <option value="">Todos</option>
                     <option value="activo">Activo en plataforma</option>
                     <option value="inactivo">Inactivo en plataforma</option>
+                    <option value="sin_sincronizar">No está en plataforma</option>
                 </select>
             </div>
 
