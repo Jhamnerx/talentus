@@ -43,6 +43,14 @@ class WorkOrderPuedeEditarMensajeTest extends TestCase
         $this->assertFalse($orden->puedeEditarMensaje());
     }
 
+    public function test_no_editable_en_el_limite_exacto_de_la_ventana(): void
+    {
+        config(['whatsapp.edit_window_minutes' => 14]);
+        $orden = $this->orden(['wa_sent_at' => now()->subMinutes(14)]);
+
+        $this->assertFalse($orden->puedeEditarMensaje());
+    }
+
     public function test_no_editable_si_wa_sent_at_es_null(): void
     {
         $orden = $this->orden(['wa_sent_at' => null]);
