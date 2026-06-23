@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Dispositivos;
 
-use App\Http\Controllers\Admin\FotaWebApiController;
+use App\Services\FotaWebService;
 use App\Models\Dispositivos;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -38,7 +38,7 @@ class ShowInfo extends Component
     {
         $this->openModal();
 
-        $api = new FotaWebApiController();
+        $api = app(FotaWebService::class);
         $info = $api->getDevice($dispositivo->imei);
 
         if ($info) {

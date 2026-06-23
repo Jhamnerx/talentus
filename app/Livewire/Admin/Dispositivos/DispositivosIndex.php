@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Dispositivos;
 
-use App\Http\Controllers\Admin\FotaWebApiController;
+use App\Services\FotaWebService;
 use App\Models\Dispositivos;
 use App\Models\ModelosDispositivo;
 use Carbon\Carbon;
@@ -163,7 +163,7 @@ class DispositivosIndex extends Component
                 return;
             }
 
-            $api = new FotaWebApiController();
+            $api = app(FotaWebService::class);
 
             // Obtener todos los IMEIs para consulta en lote
             $imeis = $dispositivos->pluck('imei')->toArray();
@@ -221,7 +221,7 @@ class DispositivosIndex extends Component
             $this->cargandoFotaWeb = true;
             $this->dispositivosNoRegistrados = [];
 
-            $api = new FotaWebApiController();
+            $api = app(FotaWebService::class);
 
             // Obtener todos los IMEIs locales de TELTONIKA
             $imeisLocales = Dispositivos::whereHas('modelo', function ($query) {
