@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Dispositivos;
-use App\Models\Lineas;
 use App\Models\Vehiculos;
-use App\Models\VehiculoDispositivos;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -511,84 +509,29 @@ class GpsWoxService
             }
 
             $acciones = [];
+            $svc = app(\App\Services\PlataformaVehiculoSyncService::class);
 
-            // ── 1. gpswox_id ───────────────────────────────────────────────────
-            $vehiculo->gpswox_id              = $gpswoxId;
-            $vehiculo->gpswox_sincronizado_at = now();
-            if ($active !== null) {
-                $vehiculo->gpswox_active = $active;
-            }
-
-            // ── 2. Dispositivo por IMEI en pivot vehiculos_dispositivos ──────────
-            // La fuente de verdad es el IMEI almacenado en el pivot, no en dispositivos.
-            if (!blank($imei)) {
-                $pivotConEseImei = VehiculoDispositivos::where('vehiculo_id', $vehiculo->id)
-                    ->where('imei', $imei)
-                    ->whereNull('fecha_desinstalacion')
-                    ->first();
-
-                if ($pivotConEseImei) {
-                    // Desmarcar cualquier otro principal activo del mismo vehículo
-                    VehiculoDispositivos::where('vehiculo_id', $vehiculo->id)
-                        ->whereNull('fecha_desinstalacion')
-                        ->where('id', '!=', $pivotConEseImei->id)
-                        ->where('is_principal', true)
-                        ->update(['is_principal' => false]);
-
-                    // Marcar este como principal
-                    $pivotConEseImei->update(['is_principal' => true]);
-
-                    // Actualizar el shortcut dispositivos_id en el vehículo
-                    $vehiculo->dispositivos_id = $pivotConEseImei->dispositivo_id;
-                    $acciones[] = "IMEI {$imei} marcado como dispositivo principal";
-                } else {
-                    // El IMEI no está en el historial del vehículo — buscar en catálogo
-                    $dispositivo = Dispositivos::where('imei', $imei)->first();
-                    if ($dispositivo) {
-                        // Desmarcar principal previo
-                        VehiculoDispositivos::where('vehiculo_id', $vehiculo->id)
-                            ->whereNull('fecha_desinstalacion')
-                            ->where('is_principal', true)
-                            ->update(['is_principal' => false]);
-
-                        VehiculoDispositivos::create([
-                            'vehiculo_id'      => $vehiculo->id,
-                            'dispositivo_id'   => $dispositivo->id,
-                            'imei'             => $imei,
-                            'is_principal'     => true,
-                            'fecha_instalacion' => now(),
-                        ]);
-
-                        // Descontar del stock y marcar VENDIDO (idempotente: solo si estaba en STOCK y es de la empresa)
-                        app(\App\Services\StockService::class)->marcarVendidoPorInstalacion($dispositivo);
-
-                        $vehiculo->dispositivos_id = $dispositivo->id;
-                        $acciones[] = "IMEI {$imei} instalado como nuevo dispositivo principal";
-                    } else {
-                        $acciones[] = "IMEI {$imei} no encontrado en el sistema — regístralo primero";
-                    }
+            DB::transaction(function () use ($vehiculo, $svc, $gpswoxId, $active, $imei, $simNumber, &$acciones) {
+                $vehiculo->gpswox_id              = $gpswoxId;
+                $vehiculo->gpswox_sincronizado_at = now();
+                if ($active !== null) {
+                    $vehiculo->gpswox_active = $active;
                 }
-            }
 
-            // ── 3. SIM / Línea ─────────────────────────────────────────────────
-            if (!blank($simNumber)) {
-                $vehiculo->numero = $simNumber;
-
-                $linea = Lineas::where('numero', $simNumber)->first();
-                if ($linea) {
-                    $simCard = $linea->sim_card;
-                    if ($simCard) {
-                        $vehiculo->sim_card_id = $simCard->id;
-                        $acciones[] = "SIM {$simNumber} vinculada";
-                    } else {
-                        $acciones[] = "línea {$simNumber} encontrada pero sin SIM card asignada";
-                    }
-                } else {
-                    $acciones[] = "número {$simNumber} actualizado (línea no registrada en sistema)";
+                if (!blank($simNumber)) {
+                    $svc->aplicarNumero($vehiculo, $simNumber);
+                    $acciones[] = "SIM {$simNumber} asignada";
                 }
-            }
 
-            $vehiculo->save();
+                $vehiculo->save();
+
+                if (!blank($imei)) {
+                    $asignado = $svc->aplicarImei($vehiculo, $imei);
+                    $acciones[] = $asignado
+                        ? "IMEI {$imei} asignado como principal"
+                        : "IMEI {$imei} no registrado en el sistema";
+                }
+            });
 
             $resumen = implode('; ', $acciones) ?: 'sin cambios adicionales';
 
