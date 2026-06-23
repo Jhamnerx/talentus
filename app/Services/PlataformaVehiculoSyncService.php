@@ -53,4 +53,79 @@ class PlataformaVehiculoSyncService
             $destino->sim_card_id = $linea->sim_card->id;
         }
     }
+
+    /**
+     * Asigna el dispositivo (por IMEI) como principal del vehículo destino,
+     * desinstalándolo de cualquier otro vehículo que lo tuviera activo.
+     * Persiste pivots y el shortcut dispositivos_id. Retorna true si quedó asignado.
+     */
+    public function aplicarImei(Vehiculos $destino, string $imei): bool
+    {
+        $imei = trim($imei);
+
+        if (blank($imei)) {
+            return false;
+        }
+
+        $dispositivo = Dispositivos::withoutGlobalScope(EmpresaScope::class)
+            ->where('imei', $imei)
+            ->first();
+
+        if (! $dispositivo) {
+            Log::channel('daily')->info('[PlataformaSync] IMEI no registrado en Talentus', ['imei' => $imei]);
+            return false;
+        }
+
+        $pivotDestino = VehiculoDispositivos::where('vehiculo_id', $destino->id)
+            ->where('imei', $imei)
+            ->whereNull('fecha_desinstalacion')
+            ->first();
+
+        if ($pivotDestino) {
+            VehiculoDispositivos::where('vehiculo_id', $destino->id)
+                ->whereNull('fecha_desinstalacion')
+                ->where('id', '!=', $pivotDestino->id)
+                ->update(['is_principal' => false]);
+
+            $pivotDestino->update(['is_principal' => true]);
+            $destino->dispositivos_id = $dispositivo->id;
+            $destino->save();
+
+            return true;
+        }
+
+        $pivotOtro = VehiculoDispositivos::where('dispositivo_id', $dispositivo->id)
+            ->where('vehiculo_id', '!=', $destino->id)
+            ->whereNull('fecha_desinstalacion')
+            ->first();
+
+        if ($pivotOtro) {
+            $pivotOtro->update(['fecha_desinstalacion' => now(), 'is_principal' => false]);
+
+            $anterior = Vehiculos::withoutGlobalScope(EmpresaScope::class)->find($pivotOtro->vehiculo_id);
+            if ($anterior && (int) $anterior->dispositivos_id === (int) $dispositivo->id) {
+                $anterior->dispositivos_id = null;
+                $anterior->save();
+            }
+        } else {
+            app(StockService::class)->marcarVendidoPorInstalacion($dispositivo);
+        }
+
+        VehiculoDispositivos::where('vehiculo_id', $destino->id)
+            ->whereNull('fecha_desinstalacion')
+            ->update(['is_principal' => false]);
+
+        VehiculoDispositivos::create([
+            'vehiculo_id'       => $destino->id,
+            'dispositivo_id'    => $dispositivo->id,
+            'imei'              => $imei,
+            'is_principal'      => true,
+            'fecha_instalacion' => now(),
+        ]);
+
+        $destino->dispositivos_id = $dispositivo->id;
+        $destino->save();
+
+        return true;
+    }
 }
