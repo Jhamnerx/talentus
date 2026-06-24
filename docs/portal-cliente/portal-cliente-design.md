@@ -35,14 +35,14 @@ El portal es un **proyecto independiente en Next.js** que consume una **API REST
 
 ### Decisiones de arquitectura
 
-| Tema | Decisión | Motivo |
-|------|----------|--------|
-| Frontend | **Next.js** (proyecto aparte, puerto propio, proxy httpd) | El cliente lo pidió; framework JS desacoplado, SSR/SEO, despliegue independiente. |
-| Transporte de auth | **Sanctum Personal Access Tokens** (Bearer) | Cross-domain (subdominio distinto); no se usa Sanctum SPA-cookie porque no es same-site. |
-| Almacenamiento del token en Next | **Cookie httpOnly** gestionada por Route Handlers (patrón BFF) | Evita exponer el token a JS del navegador (anti-XSS). |
-| Identidad autenticable | Tabla nueva **`cliente_users`** (cuenta por persona) | Un RUC puede tener varias personas; no contamina `Clientes` con credenciales. |
-| Entrega de PDFs | **URL temporal firmada** + visor | No infla JSON, permite caché y streaming bajo demanda. |
-| Multi-empresa | Middleware que inyecta `empresa_id` desde el cliente autenticado | `EmpresaScope` hoy depende de `session('empresa')`; la API es stateless. |
+| Tema                             | Decisión                                                         | Motivo                                                                                   |
+| -------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Frontend                         | **Next.js** (proyecto aparte, puerto propio, proxy httpd)        | El cliente lo pidió; framework JS desacoplado, SSR/SEO, despliegue independiente.        |
+| Transporte de auth               | **Sanctum Personal Access Tokens** (Bearer)                      | Cross-domain (subdominio distinto); no se usa Sanctum SPA-cookie porque no es same-site. |
+| Almacenamiento del token en Next | **Cookie httpOnly** gestionada por Route Handlers (patrón BFF)   | Evita exponer el token a JS del navegador (anti-XSS).                                    |
+| Identidad autenticable           | Tabla nueva **`cliente_users`** (cuenta por persona)             | Un RUC puede tener varias personas; no contamina `Clientes` con credenciales.            |
+| Entrega de PDFs                  | **URL temporal firmada** + visor                                 | No infla JSON, permite caché y streaming bajo demanda.                                   |
+| Multi-empresa                    | Middleware que inyecta `empresa_id` desde el cliente autenticado | `EmpresaScope` hoy depende de `session('empresa')`; la API es stateless.                 |
 
 ---
 
@@ -52,20 +52,20 @@ El portal es un **proyecto independiente en Next.js** que consume una **API REST
 
 Entidad autenticable. **No** se modifica el modelo `Clientes`.
 
-| Columna | Tipo | Notas |
-|---------|------|-------|
-| `id` | bigint PK | |
-| `cliente_id` | FK → `clientes.id` | empresa/RUC a la que pertenece |
-| `name` | string | nombre de la persona |
-| `email` | string **unique** | login |
-| `email_verified_at` | timestamp null | verificación de correo |
-| `password` | string | hash bcrypt |
-| `rol` | enum `titular`/`colaborador` | el titular es quien registró el RUC |
-| `estado` | enum `pendiente`/`aprobado`/`rechazado`/`suspendido` | controla acceso operativo |
-| `telefono` | string null | |
-| `last_login_at` | timestamp null | |
-| `remember_token` | string null | |
-| `timestamps` | | |
+| Columna             | Tipo                                                 | Notas                               |
+| ------------------- | ---------------------------------------------------- | ----------------------------------- |
+| `id`                | bigint PK                                            |                                     |
+| `cliente_id`        | FK → `clientes.id`                                   | empresa/RUC a la que pertenece      |
+| `name`              | string                                               | nombre de la persona                |
+| `email`             | string **unique**                                    | login                               |
+| `email_verified_at` | timestamp null                                       | verificación de correo              |
+| `password`          | string                                               | hash bcrypt                         |
+| `rol`               | enum `titular`/`colaborador`                         | el titular es quien registró el RUC |
+| `estado`            | enum `pendiente`/`aprobado`/`rechazado`/`suspendido` | controla acceso operativo           |
+| `telefono`          | string null                                          |                                     |
+| `last_login_at`     | timestamp null                                       |                                     |
+| `remember_token`    | string null                                          |                                     |
+| `timestamps`        |                                                      |                                     |
 
 Índices: `unique(email)`, `index(cliente_id)`, `index(estado)`.
 
@@ -101,21 +101,21 @@ class ClienteUser extends Authenticatable
 
 Todo se consulta a partir de `ClienteUser->cliente`:
 
-| Recurso del portal | Origen | Relación / FK |
-|--------------------|--------|---------------|
-| Vehículos | `Clientes::vehiculos()` | `vehiculos.clientes_id` |
-| Actas | `Vehiculos::actas()` | `actas.vehiculos_id` |
-| Certificados GPS | `Vehiculos::certificados()` | `certificados.vehiculos_id` |
-| Cert. Velocímetro | `Vehiculos::cert_velocimetros()` | `certificados_velocimetros.vehiculos_id` |
-| Cert. Antifatiga | `CertificadosAntifatiga` | por `vehiculos_id` |
-| Comprobantes | `Clientes::ventas()` → `Comprobantes` | `ventas.cliente_id` |
-| Recibos | `Clientes::recibos()` | `recibos.clientes_id` |
-| Presupuestos | `Clientes::presupuestos()` | `presupuestos.clientes_id` |
-| Contratos | `Clientes::contratos()` | `contratos.clientes_id` |
-| Órdenes de trabajo | `WorkOrder::cliente()` | `work_orders.cliente_id` |
-| Tickets | `Ticket::customer()` | `tickets.customer_id` |
-| Contactos | `Clientes::contactos()` | `contactos.clientes_id` |
-| Cobros | `Clientes::cobros()` / `Vehiculos::cobros()` | `cobros.clientes_id` / `cobros.vehiculos_id` |
+| Recurso del portal | Origen                                       | Relación / FK                                |
+| ------------------ | -------------------------------------------- | -------------------------------------------- |
+| Vehículos          | `Clientes::vehiculos()`                      | `vehiculos.clientes_id`                      |
+| Actas              | `Vehiculos::actas()`                         | `actas.vehiculos_id`                         |
+| Certificados GPS   | `Vehiculos::certificados()`                  | `certificados.vehiculos_id`                  |
+| Cert. Velocímetro  | `Vehiculos::cert_velocimetros()`             | `certificados_velocimetros.vehiculos_id`     |
+| Cert. Antifatiga   | `CertificadosAntifatiga`                     | por `vehiculos_id`                           |
+| Comprobantes       | `Clientes::ventas()` → `Comprobantes`        | `ventas.cliente_id`                          |
+| Recibos            | `Clientes::recibos()`                        | `recibos.clientes_id`                        |
+| Presupuestos       | `Clientes::presupuestos()`                   | `presupuestos.clientes_id`                   |
+| Contratos          | `Clientes::contratos()`                      | `contratos.clientes_id`                      |
+| Órdenes de trabajo | `WorkOrder::cliente()`                       | `work_orders.cliente_id`                     |
+| Tickets            | `Ticket::customer()`                         | `tickets.customer_id`                        |
+| Contactos          | `Clientes::contactos()`                      | `contactos.clientes_id`                      |
+| Cobros             | `Clientes::cobros()` / `Vehiculos::cobros()` | `cobros.clientes_id` / `cobros.vehiculos_id` |
 
 ---
 
@@ -237,6 +237,7 @@ function maskEmail(string $email): string
 ### 5.2 Verificación de correo (`GET /api/portal/auth/verify/{id}/{hash}`)
 
 Enlace firmado (`signed` middleware) enviado por correo. Al abrirlo:
+
 - Marca `email_verified_at = now()`.
 - Estado pasa a `pendiente` (esperando aprobación admin).
 - Redirige al portal Next con un mensaje "correo verificado, tu cuenta está en revisión".
@@ -287,23 +288,23 @@ Módulo Livewire nuevo en el panel de administración: **"Accesos al Portal"**.
 
 ## 7. Módulos del portal (sidebar)
 
-| # | Módulo | Endpoint base | Notas |
-|---|--------|---------------|-------|
-| 1 | Dashboard | `GET /api/portal/dashboard` | resumen: nº vehículos activos, recibos pendientes, tickets abiertos, próximos vencimientos |
-| 2 | Vehículos | `GET /api/portal/vehiculos` | **con gating** (ver §8) |
-| 3 | Actas | `GET /api/portal/actas` | filtrable por vehículo |
-| 4 | Certificados GPS | `GET /api/portal/certificados-gps` | |
-| 5 | Cert. Velocímetro | `GET /api/portal/certificados-velocimetro` | |
-| 6 | Cert. Antifatiga | `GET /api/portal/certificados-antifatiga` | |
-| 7 | Comprobantes | `GET /api/portal/comprobantes` | facturas/boletas emitidas |
-| 8 | Recibos | `GET /api/portal/recibos` | con estado de pago |
-| 9 | Presupuestos | `GET /api/portal/presupuestos` | |
-| 10 | Contratos | `GET /api/portal/contratos` | |
-| 11 | Órdenes de trabajo | `GET /api/portal/ordenes-trabajo` (+ `/{id}`) | modelo `WorkOrder` por `cliente_id` |
-| 12 | Tickets | `GET /api/portal/tickets` (+ `/{id}`) | modelo `Ticket` por `customer_id`. **Solo lectura**; el detalle incluye mensajes públicos (los internos se excluyen). Publicar mensajes no está implementado (posible futuro). |
-| 13 | Notas de crédito/débito | `GET /api/portal/notas-credito` · `/notas-debito` | modelo `Comprobantes` (tipo 07 / 08) |
-| 14 | Contactos | `GET/POST/PUT/DELETE /api/portal/contactos` | CRUD de su empresa |
-| 15 | Perfil | `GET/PUT /api/portal/auth/profile` | credenciales + datos básicos |
+| #   | Módulo                  | Endpoint base                                     | Notas                                                                                                                                                                          |
+| --- | ----------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Dashboard               | `GET /api/portal/dashboard`                       | resumen: nº vehículos activos, recibos pendientes, tickets abiertos, próximos vencimientos                                                                                     |
+| 2   | Vehículos               | `GET /api/portal/vehiculos`                       | **con gating** (ver §8)                                                                                                                                                        |
+| 3   | Actas                   | `GET /api/portal/actas`                           | filtrable por vehículo                                                                                                                                                         |
+| 4   | Certificados GPS        | `GET /api/portal/certificados-gps`                |                                                                                                                                                                                |
+| 5   | Cert. Velocímetro       | `GET /api/portal/certificados-velocimetro`        |                                                                                                                                                                                |
+| 6   | Cert. Antifatiga        | `GET /api/portal/certificados-antifatiga`         |                                                                                                                                                                                |
+| 7   | Comprobantes            | `GET /api/portal/comprobantes`                    | facturas/boletas emitidas                                                                                                                                                      |
+| 8   | Recibos                 | `GET /api/portal/recibos`                         | con estado de pago                                                                                                                                                             |
+| 9   | Presupuestos            | `GET /api/portal/presupuestos`                    |                                                                                                                                                                                |
+| 10  | Contratos               | `GET /api/portal/contratos`                       |                                                                                                                                                                                |
+| 11  | Órdenes de trabajo      | `GET /api/portal/ordenes-trabajo` (+ `/{id}`)     | modelo `WorkOrder` por `cliente_id`                                                                                                                                            |
+| 12  | Tickets                 | `GET /api/portal/tickets` (+ `/{id}`)             | modelo `Ticket` por `customer_id`. **Solo lectura**; el detalle incluye mensajes públicos (los internos se excluyen). Publicar mensajes no está implementado (posible futuro). |
+| 13  | Notas de crédito/débito | `GET /api/portal/notas-credito` · `/notas-debito` | modelo `Comprobantes` (tipo 07 / 08)                                                                                                                                           |
+| 14  | Contactos               | `GET/POST/PUT/DELETE /api/portal/contactos`       | CRUD de su empresa                                                                                                                                                             |
+| 15  | Perfil                  | `GET/PUT /api/portal/auth/profile`                | credenciales + datos básicos                                                                                                                                                   |
 
 Los PDF se obtienen con un endpoint genérico `GET /api/portal/pdf/{tipo}/{id}` que devuelve una URL firmada (§9), **no** con `{recurso}/{id}/pdf`. Solo `vehiculos`, `ordenes-trabajo` y `tickets` tienen endpoint de detalle `/{id}`; el resto son listados.
 
@@ -374,6 +375,7 @@ Prefijo: **`/api/portal`**. Salvo auth pública, todo requiere `Authorization: B
 > Lista fiel a `routes/api.php`. La referencia completa con request/response está en **§16**.
 
 ### Públicos (sin token)
+
 ```
 POST   /api/portal/auth/register                  (throttle:6,1)
 POST   /api/portal/auth/login                     (throttle:6,1)
@@ -385,6 +387,7 @@ GET    /api/portal/files/{tipo}/{id}              (signed, stream PDF)
 ```
 
 ### Autenticados (`auth:sanctum` + `abilities:portal` + `portal.empresa`)
+
 ```
 POST   /api/portal/auth/logout
 GET    /api/portal/auth/me
@@ -424,45 +427,77 @@ GET    /api/portal/pdf/{tipo}/{id}                (→ { url } firmada; tipos en
 ### Ejemplos de payload
 
 **Login OK (200):**
+
 ```json
 {
-  "success": true,
-  "token": "12|xxxxxxxxxxxxxxxxxxxxxxxx",
-  "cliente_user": { "id": 5, "name": "Jhamner S.", "email": "jha@empresa.com", "rol": "titular" },
-  "cliente": { "id": 42, "razon_social": "MI EMPRESA SAC", "ruc": "20512345678" }
+    "success": true,
+    "token": "12|xxxxxxxxxxxxxxxxxxxxxxxx",
+    "cliente_user": {
+        "id": 5,
+        "name": "Jhamner S.",
+        "email": "jha@empresa.com",
+        "rol": "titular"
+    },
+    "cliente": {
+        "id": 42,
+        "razon_social": "MI EMPRESA SAC",
+        "ruc": "20512345678"
+    }
 }
 ```
 
 **Registro RUC existente con correo (200):**
+
 ```json
 {
-  "success": true,
-  "message": "Te enviamos instrucciones a tu correo registrado.",
-  "email_hint": "jha*****@***.com"
+    "success": true,
+    "message": "Te enviamos instrucciones a tu correo registrado.",
+    "email_hint": "jha*****@***.com"
 }
 ```
 
 **Listado de vehículos (200):**
+
 ```json
 {
-  "data": [
-    {
-      "id": 10, "placa": "ABC-123", "marca": "Toyota", "modelo": "Hilux", "color": "Blanco", "year": "2022",
-      "accesible": true, "motivo": null,
-      "plan": { "nombre": "Plan Flota", "estado": "ACTIVO", "vence": "2026-09-30", "dias_restantes": 108 }
-    },
-    {
-      "id": 11, "placa": "XYZ-789", "marca": "Hyundai", "modelo": "HD65", "color": "Azul", "year": "2020",
-      "accesible": false, "motivo": "sin_cobro",
-      "plan": null
-    }
-  ]
+    "data": [
+        {
+            "id": 10,
+            "placa": "ABC-123",
+            "marca": "Toyota",
+            "modelo": "Hilux",
+            "color": "Blanco",
+            "year": "2022",
+            "accesible": true,
+            "motivo": null,
+            "plan": {
+                "nombre": "Plan Flota",
+                "estado": "ACTIVO",
+                "vence": "2026-09-30",
+                "dias_restantes": 108
+            }
+        },
+        {
+            "id": 11,
+            "placa": "XYZ-789",
+            "marca": "Hyundai",
+            "modelo": "HD65",
+            "color": "Azul",
+            "year": "2020",
+            "accesible": false,
+            "motivo": "sin_cobro",
+            "plan": null
+        }
+    ]
 }
 ```
 
 **PDF (200):**
+
 ```json
-{ "url": "https://tudominio.com/api/portal/files/acta/55?expires=1718400000&signature=ab12..." }
+{
+    "url": "https://tudominio.com/api/portal/files/acta/55?expires=1718400000&signature=ab12..."
+}
 ```
 
 ### Convención de respuestas
@@ -541,11 +576,13 @@ pm2 save
 ### 12.4 Variables de entorno
 
 **Laravel (`.env`):**
+
 ```
 PORTAL_URL=https://clientes.tudominio.com        # para enlaces de verificación/reset
 ```
 
 **Next.js (`.env`):**
+
 ```
 API_BASE_URL=https://tudominio.com/api/portal     # uso server-side (BFF)
 NEXT_PUBLIC_APP_NAME=Portal Talentus
@@ -559,6 +596,7 @@ SESSION_SECRET=...                                 # firma de cookie httpOnly
 > El frontend Next.js se construye en su propio repositorio tras cerrar la Fase 2.
 
 ### Fase 1 — Autenticación y cuenta
+
 1. Migración `cliente_users` + `cliente_password_resets`.
 2. Modelo `ClienteUser` (Authenticatable, HasApiTokens, Notifiable) + factory.
 3. Guard `cliente`, provider y password broker en `config/auth.php`.
@@ -570,23 +608,27 @@ SESSION_SECRET=...                                 # firma de cookie httpOnly
 9. **Tests** (Feature): registro casos A/B/C, login por estado, verificación, reset, aislamiento.
 
 ### Fase 2 — Aprobación admin
+
 1. Permiso `gestionar-accesos-portal` (seeder Spatie).
 2. Componente Livewire "Accesos al Portal" + vista + ruta `admin/portal/accesos`.
 3. Acciones aprobar/rechazar/suspender + notificaciones.
 4. **Tests**.
 
 ### Fase 3 — Recursos de consulta
+
 1. `PortalDashboardController` + controladores por recurso (vehículos con gating, actas, certificados, comprobantes, recibos, presupuestos, contratos, órdenes de trabajo, tickets).
 2. API Resources por recurso.
 3. Servicio de gating de vehículos.
 4. **Tests** por recurso (incluye pertenencia/aislamiento y gating).
 
 ### Fase 4 — Contactos y PDFs
+
 1. CRUD de contactos (FormRequests).
 2. Endpoint genérico `pdf/{tipo}/{id}` (→ URL firmada) + ruta firmada `files/{tipo}/{id}` que hace stream, reutilizando los generadores PDF existentes.
 3. **Tests** (CRUD, firma/expiración, pertenencia).
 
 ### Fase 5 — Infra
+
 1. `config/cors.php`, variables `.env`.
 2. Documentar despliegue Next + Apache + PM2 (este archivo).
 
@@ -665,9 +707,9 @@ Implementado en este repositorio:
 
 - **Contactos (CRUD):** `PortalContactoController` (index/store/update/destroy), `ContactoPortalRequest`, `ContactoResource`. Todo acotado por `cliente_id`; al crear se fija `clientes_id` y `empresa_id` desde el cliente. Rutas `GET/POST/PUT/DELETE /api/portal/contactos`.
 - **PDFs por URL firmada:** `PortalPdfController`:
-  - `GET /api/portal/pdf/{tipo}/{id}` (autenticado) → verifica pertenencia y devuelve `{ url }` (ruta temporal firmada, expira en `config('portal.pdf_link_minutes')`, 10 min por defecto).
-  - `GET /api/portal/files/{tipo}/{id}` (middleware `signed`, sin token) → re-verifica pertenencia con el `cliente` embebido en la firma, fija el contexto de empresa y hace **stream** del PDF reutilizando los generadores existentes (`getPDFData()` de los modelos; `WorkOrderPdfController::generate()` para órdenes).
-  - Tipos soportados: `acta`, `certificado-gps`, `certificado-velocimetro`, `certificado-antifatiga`, `contrato`, `presupuesto`, `recibo`, `orden-trabajo`.
+    - `GET /api/portal/pdf/{tipo}/{id}` (autenticado) → verifica pertenencia y devuelve `{ url }` (ruta temporal firmada, expira en `config('portal.pdf_link_minutes')`, 10 min por defecto).
+    - `GET /api/portal/files/{tipo}/{id}` (middleware `signed`, sin token) → re-verifica pertenencia con el `cliente` embebido en la firma, fija el contexto de empresa y hace **stream** del PDF reutilizando los generadores existentes (`getPDFData()` de los modelos; `WorkOrderPdfController::generate()` para órdenes).
+    - Tipos soportados: `acta`, `certificado-gps`, `certificado-velocimetro`, `certificado-antifatiga`, `contrato`, `presupuesto`, `recibo`, `orden-trabajo`.
 - Resource de presupuesto enriquecido con `serie_correlativo`/`numero`; `VehiculoResource` corregido a la columna real `year` (verificado contra `database/talentus.sql`).
 
 **Modelos de facturación (confirmado):** boletas/facturas/nota de venta → `Ventas`; notas de crédito/débito → `Comprobantes` (`tipo_comprobante_id` `07`/`08`). Endpoints: `comprobantes`, `notas-credito`, `notas-debito`.
@@ -676,13 +718,13 @@ Implementado en este repositorio:
 
 ### Estado global
 
-| Fase | Alcance | Estado |
-|------|---------|--------|
-| 1 | Autenticación y cuenta | ✅ |
-| 2 | Aprobación admin (Livewire) | ✅ |
-| 3 | Recursos de consulta | ✅ |
-| 4 | Contactos y PDFs | ✅ (todos: docs, facturación, notas y comunicación de baja) |
-| 5 | Infra (CORS, deploy Next/Apache) | pendiente |
+| Fase | Alcance                          | Estado                                                      |
+| ---- | -------------------------------- | ----------------------------------------------------------- |
+| 1    | Autenticación y cuenta           | ✅                                                          |
+| 2    | Aprobación admin (Livewire)      | ✅                                                          |
+| 3    | Recursos de consulta             | ✅                                                          |
+| 4    | Contactos y PDFs                 | ✅ (todos: docs, facturación, notas y comunicación de baja) |
+| 5    | Infra (CORS, deploy Next/Apache) | pendiente                                                   |
 
 ---
 
@@ -699,11 +741,21 @@ Implementado en este repositorio:
 ### 16.1 Autenticación (público)
 
 #### `POST /auth/register`
+
 Request:
+
 ```json
-{ "ruc": "20512345678", "name": "Jhamner S.", "email": "jha@correo.com", "password": "secret123", "password_confirmation": "secret123" }
+{
+    "ruc": "20512345678",
+    "name": "Jhamner S.",
+    "email": "jha@correo.com",
+    "password": "secret123",
+    "password_confirmation": "secret123"
+}
 ```
+
 Respuestas:
+
 ```jsonc
 // 201 — RUC existe SIN correo: cuenta creada (pendiente de verificar)
 { "success": true, "message": "Registro recibido. Revisa tu correo para verificar tu cuenta." }
@@ -719,11 +771,19 @@ Respuestas:
 ```
 
 #### `POST /auth/login`
+
 Request:
+
 ```json
-{ "email": "jha@correo.com", "password": "secret123", "device_name": "portal-web" }
+{
+    "email": "jha@correo.com",
+    "password": "secret123",
+    "device_name": "portal-web"
+}
 ```
+
 Respuestas:
+
 ```jsonc
 // 200
 {
@@ -743,22 +803,33 @@ Respuestas:
 { "success": false, "message": "Tu cuenta está en revisión. Te avisaremos cuando sea aprobada.", "estado": "pendiente" }
 ```
 
-#### `GET /auth/verify/{id}/{hash}`  *(firmado; abierto desde el correo)*
+#### `GET /auth/verify/{id}/{hash}` _(firmado; abierto desde el correo)_
+
 Marca el correo como verificado y **redirige** a `PORTAL_URL/email-verificado`. No devuelve JSON.
 
 #### `POST /auth/email/resend`
+
 Request: `{ "email": "jha@correo.com" }`
 Respuesta (neutra siempre): `{ "success": true, "message": "Si el correo está registrado y sin verificar, te enviamos un nuevo enlace." }`
 
 #### `POST /auth/forgot-password`
+
 Request: `{ "email": "jha@correo.com" }`
 Respuesta (neutra siempre): `{ "success": true, "message": "Si el correo está registrado, te enviamos instrucciones para restablecer tu contraseña." }`
 
 #### `POST /auth/reset-password`
+
 Request:
+
 ```json
-{ "token": "<token-del-correo>", "email": "jha@correo.com", "password": "nueva123", "password_confirmation": "nueva123" }
+{
+    "token": "<token-del-correo>",
+    "email": "jha@correo.com",
+    "password": "nueva123",
+    "password_confirmation": "nueva123"
+}
 ```
+
 Respuestas: `200 { success:true, message }` · `422 { success:false, message }` (token inválido/expirado). Revoca todos los tokens activos.
 
 ---
@@ -766,22 +837,44 @@ Respuestas: `200 { success:true, message }` · `422 { success:false, message }` 
 ### 16.2 Cuenta (autenticado)
 
 #### `POST /auth/logout`
+
 Respuesta: `{ "success": true, "message": "Sesión cerrada correctamente." }`
 
 #### `GET /auth/me`
+
 ```json
 {
-  "success": true,
-  "cliente_user": { "id": 5, "name": "Jhamner S.", "email": "jha@correo.com", "telefono": "999...", "rol": "titular", "estado": "aprobado" },
-  "cliente": { "id": 42, "razon_social": "MI EMPRESA SAC", "ruc": "20512345678" }
+    "success": true,
+    "cliente_user": {
+        "id": 5,
+        "name": "Jhamner S.",
+        "email": "jha@correo.com",
+        "telefono": "999...",
+        "rol": "titular",
+        "estado": "aprobado"
+    },
+    "cliente": {
+        "id": 42,
+        "razon_social": "MI EMPRESA SAC",
+        "ruc": "20512345678"
+    }
 }
 ```
 
 #### `PUT /auth/profile`
+
 Request (la contraseña es opcional; si se envía, `current_password` es obligatorio):
+
 ```json
-{ "name": "Jhamner S.", "telefono": "999111222", "current_password": "secret123", "password": "nueva123", "password_confirmation": "nueva123" }
+{
+    "name": "Jhamner S.",
+    "telefono": "999111222",
+    "current_password": "secret123",
+    "password": "nueva123",
+    "password_confirmation": "nueva123"
+}
 ```
+
 Respuesta: `{ "success": true, "message": "Perfil actualizado.", "cliente_user": { ... } }` · `422` si `current_password` no coincide.
 
 ---
@@ -789,15 +882,16 @@ Respuesta: `{ "success": true, "message": "Perfil actualizado.", "cliente_user":
 ### 16.3 Dashboard (autenticado)
 
 #### `GET /dashboard`
+
 ```json
 {
-  "success": true,
-  "data": {
-    "vehiculos_total": 12,
-    "recibos_pendientes": { "cantidad": 3, "monto": 450.00 },
-    "tickets_abiertos": 2,
-    "cobros_proximos_a_vencer": 4
-  }
+    "success": true,
+    "data": {
+        "vehiculos_total": 12,
+        "recibos_pendientes": { "cantidad": 3, "monto": 450.0 },
+        "tickets_abiertos": 2,
+        "cobros_proximos_a_vencer": 4
+    }
 }
 ```
 
@@ -805,16 +899,30 @@ Respuesta: `{ "success": true, "message": "Perfil actualizado.", "cliente_user":
 
 ### 16.4 Vehículos (autenticado)
 
-#### `GET /vehiculos`  ·  `GET /vehiculos/{id}`
+#### `GET /vehiculos` · `GET /vehiculos/{id}`
+
 Item (`VehiculoResource`):
+
 ```json
 {
-  "id": 10, "placa": "ABC-123", "marca": "Toyota", "modelo": "Hilux", "color": "Blanco", "year": "2022",
-  "accesible": true, "motivo": null,
-  "plan": { "nombre": "Plan Flota", "estado": "ACTIVO", "vence": "2026-09-30", "dias_restantes": 108 },
-  "dispositivo": { "imei": "86xxxxxxxxxxxxx" }
+    "id": 10,
+    "placa": "ABC-123",
+    "marca": "Toyota",
+    "modelo": "Hilux",
+    "color": "Blanco",
+    "year": "2022",
+    "accesible": true,
+    "motivo": null,
+    "plan": {
+        "nombre": "Plan Flota",
+        "estado": "ACTIVO",
+        "vence": "2026-09-30",
+        "dias_restantes": 108
+    },
+    "dispositivo": { "imei": "86xxxxxxxxxxxxx" }
 }
 ```
+
 - `accesible` (bool): el vehículo tiene cobro vigente (`ACTIVO`/`CORTESIA`) o el cliente tiene recibo pendiente.
 - `motivo` cuando `accesible=false`: `suspendido` · `cancelado` · `sin_cobro`.
 - `plan` es `null` si no hay cobro vigente.
@@ -824,24 +932,65 @@ Item (`VehiculoResource`):
 ### 16.5 Certificados y actas (autenticado)
 
 #### `GET /actas` — `ActaResource`
+
 ```json
-{ "id": 55, "numero": "0001", "codigo": "ACT-0001", "fecha": "2026-01-10", "inicio_cobertura": "2026/01/10", "fin_cobertura": "2027/01/10", "plataforma": "GPSWox", "vehiculo": { "id": 10, "placa": "ABC-123" }, "pdf_url": "https://tudominio.com/api/portal/files/acta/55?cliente=42&expires=...&signature=..." }
+{
+    "id": 55,
+    "numero": "0001",
+    "codigo": "ACT-0001",
+    "fecha": "2026-01-10",
+    "inicio_cobertura": "2026/01/10",
+    "fin_cobertura": "2027/01/10",
+    "plataforma": "GPSWox",
+    "vehiculo": { "id": 10, "placa": "ABC-123" },
+    "pdf_url": "https://tudominio.com/api/portal/files/acta/55?cliente=42&expires=...&signature=..."
+}
 ```
+
 Los certificados GPS/velocímetro/antifatiga siguen el mismo patrón e incluyen su propio `pdf_url` (`certificado-gps`/`certificado-velocimetro`/`certificado-antifatiga`).
 
 #### `GET /certificados-gps` — `CertificadoGpsResource`
+
 ```json
-{ "id": 7, "numero": "0007", "codigo": "GPS-0007", "fecha": "2026-01-10", "fecha_instalacion": "2026-01-10", "fin_cobertura": "2027-01-10", "vehiculo": { "id": 10, "placa": "ABC-123" }, "pdf_url": "https://.../api/portal/files/certificado-gps/7?cliente=42&..." }
+{
+    "id": 7,
+    "numero": "0007",
+    "codigo": "GPS-0007",
+    "fecha": "2026-01-10",
+    "fecha_instalacion": "2026-01-10",
+    "fin_cobertura": "2027-01-10",
+    "vehiculo": { "id": 10, "placa": "ABC-123" },
+    "pdf_url": "https://.../api/portal/files/certificado-gps/7?cliente=42&..."
+}
 ```
 
 #### `GET /certificados-velocimetro` — `CertificadoVelocimetroResource`
+
 ```json
-{ "id": 4, "numero": "0004", "codigo": "VEL-0004", "fecha": "2026-01-10", "velocimetro_modelo": "VDO", "vehiculo": { "id": 10, "placa": "ABC-123" }, "pdf_url": "https://.../api/portal/files/certificado-velocimetro/4?cliente=42&..." }
+{
+    "id": 4,
+    "numero": "0004",
+    "codigo": "VEL-0004",
+    "fecha": "2026-01-10",
+    "velocimetro_modelo": "VDO",
+    "vehiculo": { "id": 10, "placa": "ABC-123" },
+    "pdf_url": "https://.../api/portal/files/certificado-velocimetro/4?cliente=42&..."
+}
 ```
 
 #### `GET /certificados-antifatiga` — `CertificadoAntifatigaResource`
+
 ```json
-{ "id": 2, "fecha_emision": "2026-01-10", "fecha_instalacion": "2026-01-10", "inicio_cobertura": "2026-01-10", "fin_cobertura": "2027-01-10", "imei_personalizado": null, "vehiculo": { "id": 10, "placa": "ABC-123" }, "pdf_url": "https://.../api/portal/files/certificado-antifatiga/2?cliente=42&..." }
+{
+    "id": 2,
+    "fecha_emision": "2026-01-10",
+    "fecha_instalacion": "2026-01-10",
+    "inicio_cobertura": "2026-01-10",
+    "fin_cobertura": "2027-01-10",
+    "imei_personalizado": null,
+    "vehiculo": { "id": 10, "placa": "ABC-123" },
+    "pdf_url": "https://.../api/portal/files/certificado-antifatiga/2?cliente=42&..."
+}
 ```
 
 ---
@@ -851,59 +1000,143 @@ Los certificados GPS/velocímetro/antifatiga siguen el mismo patrón e incluyen 
 > **Modelos:** boletas/facturas/nota de venta → `Ventas`. Notas de crédito/débito → `Comprobantes` (filtrado por `tipo_comprobante_id`: `07` crédito, `08` débito).
 
 #### `GET /comprobantes` — `VentaResource` (boletas, facturas y notas de venta, solo `estado = COMPLETADO`)
+
 ```json
 {
-  "id": 80, "tipo_comprobante_id": "01", "serie_correlativo": "F001-123", "fecha_emision": "2026-05-01",
-  "divisa": "PEN", "sub_total": "100.00", "igv": "18.00", "total": "118.00",
-  "estado": "COMPLETADO", "pago_estado": "UNPAID", "fe_estado": 1,
-  "anulado": true,
-  "comunicacion_baja": { "id": 15, "nombre_xml": "20512345678-RA-20260510-001", "pdf_url": "https://.../api/portal/files/comunicacion-baja/15?cliente=42&..." },
-  "pdf_url": "https://tudominio.com/api/portal/files/comprobante/80?cliente=42&expires=...&signature=..."
+    "id": 80,
+    "tipo_comprobante_id": "01",
+    "serie_correlativo": "F001-123",
+    "fecha_emision": "2026-05-01",
+    "divisa": "PEN",
+    "sub_total": "100.00",
+    "igv": "18.00",
+    "total": "118.00",
+    "estado": "COMPLETADO",
+    "pago_estado": "UNPAID",
+    "fe_estado": 1,
+    "anulado": true,
+    "comunicacion_baja": {
+        "id": 15,
+        "nombre_xml": "20512345678-RA-20260510-001",
+        "pdf_url": "https://.../api/portal/files/comunicacion-baja/15?cliente=42&..."
+    },
+    "pdf_url": "https://tudominio.com/api/portal/files/comprobante/80?cliente=42&expires=...&signature=..."
 }
 ```
+
 - `tipo_comprobante_id`: `01` factura · `03` boleta · `80`/nota de venta.
 - `anulado`: `true` cuando la venta tiene `id_baja` (comunicación de baja a SUNAT). `comunicacion_baja` es `null` si no está anulada; su PDF se obtiene con `pdf/comunicacion-baja/{id_baja}`.
 
 #### `GET /notas-credito` — `NotaResource` (modelo `Comprobantes`, tipo `07`)
+
 ```json
-{ "id": 90, "tipo": "credito", "tipo_comprobante_id": "07", "serie_correlativo": "FC01-12", "fecha_emision": "2026-05-03", "divisa": "PEN", "sub_total": "50.00", "igv": "9.00", "total": "59.00", "estado": "ACEPTADO", "fe_estado": 1, "documento_afectado": "F001-123", "motivo": "Anulación parcial", "pdf_url": "https://.../api/portal/files/nota-credito/90?cliente=42&..." }
+{
+    "id": 90,
+    "tipo": "credito",
+    "tipo_comprobante_id": "07",
+    "serie_correlativo": "FC01-12",
+    "fecha_emision": "2026-05-03",
+    "divisa": "PEN",
+    "sub_total": "50.00",
+    "igv": "9.00",
+    "total": "59.00",
+    "estado": "ACEPTADO",
+    "fe_estado": 1,
+    "documento_afectado": "F001-123",
+    "motivo": "Anulación parcial",
+    "pdf_url": "https://.../api/portal/files/nota-credito/90?cliente=42&..."
+}
 ```
 
 #### `GET /notas-debito` — `NotaResource` (modelo `Comprobantes`, tipo `08`)
+
 ```json
-{ "id": 91, "tipo": "debito", "tipo_comprobante_id": "08", "serie_correlativo": "FD01-4", "fecha_emision": "2026-05-04", "divisa": "PEN", "sub_total": "20.00", "igv": "3.60", "total": "23.60", "estado": "ACEPTADO", "fe_estado": 1, "documento_afectado": "F001-123", "motivo": "Intereses por mora", "pdf_url": "https://.../api/portal/files/nota-debito/91?cliente=42&..." }
+{
+    "id": 91,
+    "tipo": "debito",
+    "tipo_comprobante_id": "08",
+    "serie_correlativo": "FD01-4",
+    "fecha_emision": "2026-05-04",
+    "divisa": "PEN",
+    "sub_total": "20.00",
+    "igv": "3.60",
+    "total": "23.60",
+    "estado": "ACEPTADO",
+    "fe_estado": 1,
+    "documento_afectado": "F001-123",
+    "motivo": "Intereses por mora",
+    "pdf_url": "https://.../api/portal/files/nota-debito/91?cliente=42&..."
+}
 ```
 
 #### `GET /recibos` — `ReciboResource`
+
 ```json
-{ "id": 30, "serie": "R001", "numero": "45", "serie_numero": "R001-45", "fecha_emision": "2026/05/01", "fecha_pago": null, "divisa": "PEN", "total": "118.00", "estado": "COMPLETADO", "pago_estado": "UNPAID", "tipo_venta": "CONTADO", "pdf_url": "https://.../api/portal/files/recibo/30?cliente=42&..." }
+{
+    "id": 30,
+    "serie": "R001",
+    "numero": "45",
+    "serie_numero": "R001-45",
+    "fecha_emision": "2026/05/01",
+    "fecha_pago": null,
+    "divisa": "PEN",
+    "total": "118.00",
+    "estado": "COMPLETADO",
+    "pago_estado": "UNPAID",
+    "tipo_venta": "CONTADO",
+    "pdf_url": "https://.../api/portal/files/recibo/30?cliente=42&..."
+}
 ```
 
 #### `GET /presupuestos` — `PresupuestoResource`
+
 ```json
-{ "id": 12, "serie_correlativo": "P001-12", "numero": "12", "fecha": "2026/04/20", "fecha_caducidad": "2026/05/20", "total": "500.00", "total_soles": "500.00", "estado": "PENDIENTE", "pdf_url": "https://.../api/portal/files/presupuesto/12?cliente=42&..." }
+{
+    "id": 12,
+    "serie_correlativo": "P001-12",
+    "numero": "12",
+    "fecha": "2026/04/20",
+    "fecha_caducidad": "2026/05/20",
+    "total": "500.00",
+    "total_soles": "500.00",
+    "estado": "PENDIENTE",
+    "pdf_url": "https://.../api/portal/files/presupuesto/12?cliente=42&..."
+}
 ```
 
 #### `GET /contratos` — `ContratoResource`
+
 ```json
-{ "id": 9, "fecha": "2026/01/05", "fecha_emision": "2026/01/05", "estado": true, "pdf_url": "https://.../api/portal/files/contrato/9?cliente=42&..." }
+{
+    "id": 9,
+    "fecha": "2026/01/05",
+    "fecha_emision": "2026/01/05",
+    "estado": true,
+    "pdf_url": "https://.../api/portal/files/contrato/9?cliente=42&..."
+}
 ```
 
 ---
 
 ### 16.7 Órdenes de trabajo (autenticado)
 
-#### `GET /ordenes-trabajo`  ·  `GET /ordenes-trabajo/{id}` — `OrdenTrabajoResource`
+#### `GET /ordenes-trabajo` · `GET /ordenes-trabajo/{id}` — `OrdenTrabajoResource`
+
 ```json
 {
-  "id": 100, "uuid": "9b2c...", "estado": "finalizado",
-  "fecha_programada": "2026-05-01T09:00:00.000000Z", "fecha_inicio": "2026-05-01T09:15:00.000000Z", "fecha_finalizacion": "2026-05-01T11:00:00.000000Z",
-  "observaciones_final": "Instalación conforme",
-  "tipo": { "id": 1, "nombre": "Instalación GPS" },
-  "vehiculo": { "id": 10, "placa": "ABC-123" },
-  "pdf_url": "https://tudominio.com/api/portal/files/orden-trabajo/100?cliente=42&expires=...&signature=..."
+    "id": 100,
+    "uuid": "9b2c...",
+    "estado": "finalizado",
+    "fecha_programada": "2026-05-01T09:00:00.000000Z",
+    "fecha_inicio": "2026-05-01T09:15:00.000000Z",
+    "fecha_finalizacion": "2026-05-01T11:00:00.000000Z",
+    "observaciones_final": "Instalación conforme",
+    "tipo": { "id": 1, "nombre": "Instalación GPS" },
+    "vehiculo": { "id": 10, "placa": "ABC-123" },
+    "pdf_url": "https://tudominio.com/api/portal/files/orden-trabajo/100?cliente=42&expires=...&signature=..."
 }
 ```
+
 `estado`: `pendiente` · `en_proceso` · `finalizado` · `cancelado`.
 
 ---
@@ -913,17 +1146,41 @@ Los certificados GPS/velocímetro/antifatiga siguen el mismo patrón e incluyen 
 > El portal **no** permite crear tickets ni publicar mensajes; solo consultar los del cliente. Si se requiere interacción, es una ampliación futura.
 
 #### `GET /tickets` — `TicketResource` (lista, sin `mensajes`)
+
 ```json
-{ "id": 21, "code": "TK-2026-000021", "subject": "GPS sin señal", "description": "...", "status": "open", "priority": "high", "last_activity_at": "2026-05-02T14:00:00.000000Z", "resolved_at": null, "closed_at": null, "created_at": "2026-05-01T10:00:00.000000Z", "categoria": "Soporte técnico" }
+{
+    "id": 21,
+    "code": "TK-2026-000021",
+    "subject": "GPS sin señal",
+    "description": "...",
+    "status": "open",
+    "priority": "high",
+    "last_activity_at": "2026-05-02T14:00:00.000000Z",
+    "resolved_at": null,
+    "closed_at": null,
+    "created_at": "2026-05-01T10:00:00.000000Z",
+    "categoria": "Soporte técnico"
+}
 ```
 
 #### `GET /tickets/{id}` — incluye `mensajes` (solo públicos; los internos se excluyen)
+
 ```json
 {
-  "id": 21, "code": "TK-2026-000021", "subject": "GPS sin señal", "status": "open", "priority": "high", "categoria": "Soporte técnico",
-  "mensajes": [
-    { "id": 200, "body": "Hemos recibido tu reporte.", "autor": "Soporte Talentus", "created_at": "2026-05-01T10:05:00.000000Z" }
-  ]
+    "id": 21,
+    "code": "TK-2026-000021",
+    "subject": "GPS sin señal",
+    "status": "open",
+    "priority": "high",
+    "categoria": "Soporte técnico",
+    "mensajes": [
+        {
+            "id": 200,
+            "body": "Hemos recibido tu reporte.",
+            "autor": "Soporte Talentus",
+            "created_at": "2026-05-01T10:05:00.000000Z"
+        }
+    ]
 }
 ```
 
@@ -932,38 +1189,73 @@ Los certificados GPS/velocímetro/antifatiga siguen el mismo patrón e incluyen 
 ### 16.9 Contactos (autenticado, CRUD)
 
 #### `GET /contactos` — `ContactoResource` (paginado)
+
 ```json
-{ "id": 3, "nombre": "Ana Pérez", "cargo": "Gerente", "numero_documento": "44556677", "telefono": "999...", "email": "ana@empresa.com", "birthday": "1990-05-20", "is_gerente": true, "is_cobros": false, "descripcion": null, "nota": null }
+{
+    "id": 3,
+    "nombre": "Ana Pérez",
+    "cargo": "Gerente",
+    "numero_documento": "44556677",
+    "telefono": "999...",
+    "email": "ana@empresa.com",
+    "birthday": "1990-05-20",
+    "is_gerente": true,
+    "is_cobros": false,
+    "descripcion": null,
+    "nota": null
+}
 ```
 
 #### `POST /contactos`
+
 Request (`nombre` y `numero_documento` obligatorios):
+
 ```json
-{ "nombre": "Ana Pérez", "numero_documento": "44556677", "cargo": "Gerente", "telefono": "999111222", "email": "ana@empresa.com", "birthday": "1990-05-20", "is_gerente": true, "is_cobros": false, "descripcion": "", "nota": "" }
+{
+    "nombre": "Ana Pérez",
+    "numero_documento": "44556677",
+    "cargo": "Gerente",
+    "telefono": "999111222",
+    "email": "ana@empresa.com",
+    "birthday": "1990-05-20",
+    "is_gerente": true,
+    "is_cobros": false,
+    "descripcion": "",
+    "nota": ""
+}
 ```
+
 Respuesta `201`: `{ "success": true, "data": { ...ContactoResource } }`
 
 #### `PUT /contactos/{id}`
+
 Mismo body que store. Respuesta `200`: `{ "success": true, "data": { ... } }` · `404` si no pertenece al cliente.
 
 #### `DELETE /contactos/{id}`
+
 Respuesta: `{ "success": true, "message": "Contacto eliminado." }`
 
 ---
 
 ### 16.10 PDFs
 
-#### `GET /pdf/{tipo}/{id}`  *(autenticado)*
+#### `GET /pdf/{tipo}/{id}` _(autenticado)_
+
 `tipo` ∈ `acta` · `certificado-gps` · `certificado-velocimetro` · `certificado-antifatiga` · `contrato` · `presupuesto` · `recibo` · `orden-trabajo` · `comprobante` · `nota-credito` · `nota-debito` · `comunicacion-baja`.
 
 Generadores reutilizados: `getPDFData()` (actas, certificados, contrato, presupuesto, recibo), `WorkOrderPdfController::generate()` (OT), y `getPdf()` de facturación electrónica vía Greenter (`comprobante`→`Ventas`, `nota-credito`/`nota-debito`→`Comprobantes`, `comunicacion-baja`→`EnvioResumen`). Todos hacen stream de PDF real (DomPDF/Greenter).
 Verifica pertenencia y devuelve una URL temporal firmada (expira en `PORTAL_PDF_LINK_MINUTES`, 10 min):
+
 ```json
-{ "url": "https://tudominio.com/api/portal/files/recibo/30?cliente=42&expires=1718400000&signature=ab12..." }
+{
+    "url": "https://tudominio.com/api/portal/files/recibo/30?cliente=42&expires=1718400000&signature=ab12..."
+}
 ```
+
 `404` si el `tipo` no es válido o el documento no pertenece al cliente.
 
-#### `GET /files/{tipo}/{id}`  *(firmado, sin token)*
+#### `GET /files/{tipo}/{id}` _(firmado, sin token)_
+
 Hace **stream** del PDF (`Content-Type: application/pdf`, inline). La firma es la autorización; re-verifica pertenencia con el `cliente` embebido. El frontend la usa en un `<iframe>`/visor o para descarga directa.
 
 > **Ventas, notas y comunicación de baja:** ✅ ya cableados vía el método `getPdf()` de cada modelo (`Ventas`, `Comprobantes`, `EnvioResumen`), que renderiza con Greenter + DomPDF. El PDF de **recibo** también está completo (`Recibos::getPDFData()` → `pdf.recibo.pdf`).

@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Clientes;
 
 use App\Models\Clientes;
+use App\Models\Sector;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -10,6 +11,7 @@ class ClientesIndex extends Component
 {
     use WithPagination;
     public $search;
+    public $sector_id = '';
     public $from = '';
     public $to = '';
     public $modalOpenImport = false;
@@ -24,51 +26,39 @@ class ClientesIndex extends Component
 
     public function render()
     {
-        $desde = $this->from;
-        $hasta = $this->to;
-        $clientes = Clientes::with('sector')
-            ->where('razon_social', 'like', '%' . $this->search . '%')
-            ->orwhere('numero_documento', 'like', '%' . $this->search . '%')
-            ->orwhere(
-                function ($query) {
-                    return $query
-                        ->where('email', 'like', '%' . $this->search . '%')
-                        ->orwhere('web_site', 'like', '%' . $this->search . '%')
-                        ->orwhere('direccion', 'like', '%' . $this->search . '%')
-                        ->orwhere('telefono', 'like', '%' . $this->search . '%');
-                }
-            )->orwhereHas('tipoDocumento', function ($query) {
-                $query->where('descripcion', 'like', '%' . $this->search . '%');
+        $sectores = Sector::activos()->get(['id', 'nombre']);
+
+        $clientes = Clientes::with(['sector', 'tipoDocumento'])
+            ->when($this->search, function ($query) {
+                $search = '%' . $this->search . '%';
+                $query->where(function ($q) use ($search) {
+                    $q->where('razon_social', 'like', $search)
+                        ->orWhere('numero_documento', 'like', $search)
+                        ->orWhere('email', 'like', $search)
+                        ->orWhere('web_site', 'like', $search)
+                        ->orWhere('direccion', 'like', $search)
+                        ->orWhere('telefono', 'like', $search)
+                        ->orWhereHas('tipoDocumento', fn ($t) => $t->where('descripcion', 'like', $search));
+                });
             })
-            ->orderBy('id', 'desc')
+            ->when($this->sector_id, fn ($query) => $query->where('sector_id', $this->sector_id))
+            ->when($this->from, function ($query) {
+                $query->whereBetween('created_at', [$this->from . ' 00:00:00', $this->to . ' 23:59:59']);
+            })
+            ->orderByDesc('id')
             ->paginate(10);
 
-        if (!empty($desde)) {
+        return view('livewire.admin.clientes.clientes-index', compact('clientes', 'sectores'));
+    }
 
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
 
-            $clientes = Clientes::with('sector')->whereRaw(
-                "(created_at >= ? AND created_at <= ?)",
-                [
-                    $desde . " 00:00:00",
-                    $hasta . " 23:59:59"
-                ]
-            )->whereRaw(
-                "(razon_social like ? OR numero_documento like ? OR web_site like ? OR email like ? OR telefono like ?)",
-                [
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%'
-                ]
-            )
-                ->orderBy('id', 'desc')
-                ->paginate(10);
-        }
-
-
-
-        return view('livewire.admin.clientes.clientes-index', compact('clientes'));
+    public function updatedSectorId(): void
+    {
+        $this->resetPage();
     }
 
     public function updateClientes()
@@ -102,6 +92,8 @@ class ClientesIndex extends Component
                 $this->to = '';
                 break;
         }
+
+        $this->resetPage();
     }
 
     public function openModalImport()

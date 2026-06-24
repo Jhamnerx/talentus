@@ -1,4 +1,4 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-450 mx-auto">
     <!-- Page header -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
@@ -52,6 +52,17 @@
                     <button
                         class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-rose-500 hover:text-rose-600">Eliminar</button>
                 </div>
+            </div>
+
+            <!-- Filtro por sector -->
+            <div class="relative">
+                <select wire:model.live="sector_id"
+                    class="form-select min-w-44 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600">
+                    <option value="">Todos los sectores</option>
+                    @foreach ($sectores as $sector)
+                        <option value="{{ $sector->id }}">{{ $sector->nombre }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Dropdown -->
@@ -316,8 +327,9 @@
                                     <div class="text-left font-medium text-sky-600">{{ $cliente->web_site }}
                                     </div>
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                    <div class="text-left font-medium text-emerald-500">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 align-top">
+                                    <div class="text-left font-medium text-emerald-500 max-w-xs line-clamp-2"
+                                        title="{{ $cliente->direccion }}">
                                         {{ $cliente->direccion }}
                                     </div>
                                 </td>
@@ -415,6 +427,24 @@
                                             </button>
                                         @endcan
 
+                                        {{-- Acceso al portal --}}
+                                        @can('gestionar-accesos-portal')
+                                            <button
+                                                wire:click.prevent="$dispatch('abrir-modal-acceso-portal', { clienteId: {{ $cliente->id }} })"
+                                                title="Acceso al portal"
+                                                class="p-1.5 rounded-lg text-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/30 transition-colors">
+                                                <span class="sr-only">Acceso al portal</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="7.5" cy="15.5" r="3.5" />
+                                                    <path d="M10 13l8.5-8.5" />
+                                                    <path d="M16 7l2 2" />
+                                                    <path d="M18.5 4.5l2 2" />
+                                                </svg>
+                                            </button>
+                                        @endcan
+
                                         {{-- Eliminar cliente --}}
                                         @can('eliminar-cliente')
                                             <button wire:click.prevent='openModalDelete({{ $cliente->id }})'
@@ -459,6 +489,7 @@
 
     @livewire('admin.clientes.ver-contactos')
     @livewire('admin.clientes.contactos.save')
+    @livewire('admin.clientes.acceso-portal')
 </div>
 
 <script>

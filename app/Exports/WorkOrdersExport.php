@@ -76,7 +76,7 @@ class WorkOrdersExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder 
                     $this->fecha_final . " 23:59:59"
                 ]
             )
-            ->where('work_orders.tecnico_id', $this->tecnico_id)
+            ->when($this->tecnico_id !== 'todos', fn($q) => $q->where('work_orders.tecnico_id', $this->tecnico_id))
             ->when($this->estado, fn($q) => $q->where('work_orders.estado', $this->estado))
             ->with(['vehiculo', 'tipo', 'cliente', 'tecnico', 'creador', 'accessories', 'deviceHistory'])
             ->orderBy('estado')
@@ -95,7 +95,7 @@ class WorkOrdersExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder 
         // Total general solo de finalizadas
         $totalCostoFinalizadas = $this->sumTotalCostWorkOrders($workOrders, 'finalizado');
 
-        $tecnico = User::find($this->tecnico_id);
+        $tecnico = $this->tecnico_id !== 'todos' ? User::find($this->tecnico_id) : null;
 
         return view('exports.work-orders', [
             'workOrdersGrouped' => $workOrdersGrouped,

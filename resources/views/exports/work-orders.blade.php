@@ -11,7 +11,7 @@
                 <td></td>
                 <td colspan="2">
                     <div class="text-center">
-                        <strong>{{ $tecnico->name }}</strong>
+                        <strong>{{ $tecnico?->name ?? 'Todos los técnicos' }}</strong>
                     </div>
                 </td>
             </tr>
@@ -59,7 +59,7 @@
                     <td colspan="7" style="padding: 8px;">
                         <strong style="font-size: 14px;">ESTADO: {{ strtoupper($estadoLabel) }}</strong>
                     </td>
-                    <td colspan="6" style="padding: 8px; text-align: right;">
+                    <td colspan="7" style="padding: 8px; text-align: right;">
                         @if ($estadoKey === 'finalizado')
                             <strong>Total a Pagar: S/. {{ number_format($totalEstado, 2) }}</strong>
                         @else
@@ -74,6 +74,7 @@
                 <thead>
                     <tr>
                         <td><strong>Código</strong></td>
+                        <td><strong>Técnico</strong></td>
                         <td><strong>Tipo de Orden</strong></td>
                         <td><strong>Cliente</strong></td>
                         <td><strong>Vehículo</strong></td>
@@ -97,6 +98,7 @@
                         @endphp
                         <tr>
                             <td>{{ str_pad($orden->id, 5, '0', STR_PAD_LEFT) }}</td>
+                            <td>{{ $orden->tecnico?->name ?? '-' }}</td>
                             <td>{{ $orden->tipo_data['nombre'] ?? $orden->tipo->nombre }}</td>
                             <td>{{ $orden->cliente->razon_social }}</td>
                             <td>{{ $orden->vehiculo->marca }} {{ $orden->vehiculo->modelo }}</td>
@@ -128,7 +130,7 @@
                         {{-- Detalles de Accesorios si existen --}}
                         @if ($orden->accessories->count() > 0)
                             <tr>
-                                <td colspan="13" style="background-color: #f3f4f6; padding-left: 20px;">
+                                <td colspan="14" style="background-color: #f3f4f6; padding-left: 20px;">
                                     <strong>Accesorios:</strong>
                                     @foreach ($orden->accessories as $accessory)
                                         {{ $accessory->nombre }} ({{ $accessory->cantidad }} x S/.
@@ -141,7 +143,7 @@
                         {{-- Detalles de Dispositivos si existen --}}
                         @if ($orden->deviceHistory->count() > 0)
                             <tr>
-                                <td colspan="13" style="background-color: #f9fafb; padding-left: 20px;">
+                                <td colspan="14" style="background-color: #f9fafb; padding-left: 20px;">
                                     <strong>Historial Dispositivos:</strong>
                                     @foreach ($orden->deviceHistory as $history)
                                         @if ($history->accion_imei !== 'ninguna')
@@ -162,7 +164,7 @@
                     {{-- Subtotal por Estado --}}
                     @if ($estadoKey === 'finalizado')
                         <tr style="background-color: #fef3c7; font-weight: bold;">
-                            <td colspan="11" style="text-align: right; padding: 8px;">SUBTOTAL
+                            <td colspan="12" style="text-align: right; padding: 8px;">SUBTOTAL
                                 {{ strtoupper($estadoLabel) }}:</td>
                             <td colspan="2" style="padding: 8px;">S/. {{ number_format($totalEstado, 2) }}</td>
                         </tr>
@@ -174,8 +176,8 @@
         {{-- Resumen Final --}}
         <table border="1" style="margin-top: 20px;">
             <tr style="background-color: #10b981; color: white;">
-                <td colspan="11" style="text-align: right; padding: 10px; font-size: 14px;">
-                    <strong>TOTAL A PAGAR AL TÉCNICO (Solo Finalizadas):</strong>
+                <td colspan="12" style="text-align: right; padding: 10px; font-size: 14px;">
+                    <strong>{{ $tecnico ? 'TOTAL A PAGAR AL TÉCNICO (Solo Finalizadas):' : 'TOTAL GENERAL (Solo Finalizadas):' }}</strong>
                 </td>
                 <td colspan="2" style="padding: 10px; font-size: 14px;">
                     <strong>S/. {{ number_format($total_costo_finalizadas, 2) }}</strong>
@@ -185,7 +187,7 @@
     @else
         <table border="1">
             <tr>
-                <td colspan="13" style="text-align: center; padding: 20px;">
+                <td colspan="14" style="text-align: center; padding: 20px;">
                     No se encontraron órdenes de trabajo con los parámetros especificados
                 </td>
             </tr>
