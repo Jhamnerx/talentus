@@ -4,7 +4,7 @@ namespace App\Livewire\Admin\Vehiculos;
 
 use Livewire\Component;
 use App\Models\Vehiculos;
-use App\Http\Controllers\Admin\FotaWebApiController;
+use App\Services\FotaWebService;
 
 class Show extends Component
 {
@@ -13,7 +13,7 @@ class Show extends Component
     public function mount()
     {
 
-        $api = new FotaWebApiController();
+        $api = app(FotaWebService::class);
 
         if ($this->vehiculo->dispositivos) {
 

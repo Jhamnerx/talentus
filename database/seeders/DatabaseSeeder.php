@@ -87,6 +87,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(WorkOrderTypeSeeder::class);
         // $this->call(TicketCategorySeeder::class);
         // $this->call(PlanSeeder::class);
-        $this->call(SlaPlanRulesSeeder::class);
+        //$this->call(SlaPlanRulesSeeder::class);
     }
 }

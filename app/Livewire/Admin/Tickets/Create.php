@@ -8,6 +8,7 @@ use App\Models\TicketCategory;
 use App\Enums\TicketStatus;
 use App\Enums\TicketPriority;
 use App\Mail\TicketCustomerMail;
+use App\Services\TicketWhatsAppService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
@@ -80,7 +81,14 @@ class Create extends Component
             $data['assigned_to'] = Auth::user()->id;
         }
 
-        $ticket = Ticket::with('customer')->find(Ticket::create($data)->id);
+        $ticket = Ticket::with(['customer', 'assignedTo'])->find(Ticket::create($data)->id);
+
+        if ($ticket->assignedTo && $ticket->assigned_to !== Auth::user()->id) {
+            try {
+                app(TicketWhatsAppService::class)->notifyAssigned($ticket, $ticket->assignedTo);
+            } catch (\Throwable) {
+            }
+        }
 
         if ($ticket->customer?->email) {
             try {
