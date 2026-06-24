@@ -48,18 +48,25 @@ class EnviarMensajeClienteJob implements ShouldQueue
             return;
         }
 
-        // 1. Resolve recipient numbers
+        // 1. Resolve recipient numbers: gerentes y responsables de cobros (sin borrados),
+        //    normalizados a formato internacional (código de país 51).
         $numeros = $workOrder->cliente?->contactos()
-            ->where('is_gerente', true)
+            ->whereNull('contactos.deleted_at')
+            ->where(function ($query) {
+                $query->where('is_gerente', true)
+                    ->orWhere('is_cobros', true);
+            })
             ->pluck('telefono')
+            ->map(fn ($telefono) => normalize_wa_number($telefono))
             ->filter()
+            ->unique()
             ->values()
             ->toArray();
 
         if (empty($numeros)) {
-            $fallback = $workOrder->cliente?->telefono;
-            if (!$fallback) {
-                Log::warning('EnviarMensajeClienteJob: cliente sin contacto gerente ni teléfono', [
+            $fallback = normalize_wa_number($workOrder->cliente?->telefono);
+            if ($fallback === '') {
+                Log::warning('EnviarMensajeClienteJob: cliente sin contacto (gerente/cobros) ni teléfono', [
                     'work_order_id' => $workOrder->id,
                 ]);
                 return;
