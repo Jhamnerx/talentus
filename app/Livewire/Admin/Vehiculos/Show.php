@@ -15,10 +15,11 @@ class Show extends Component
 
         $api = app(FotaWebService::class);
 
-        if ($this->vehiculo->dispositivos) {
+        $imei = $this->vehiculo->dispositivoPrincipal?->dispositivo?->imei;
 
+        if ($imei) {
 
-            $info = $api->getDevice($this->vehiculo->dispositivoPrincipal->dispositivo->imei);
+            $info = $api->getDevice($imei);
 
 
             if ($info) {

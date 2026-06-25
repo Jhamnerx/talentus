@@ -96,7 +96,6 @@ class ReporteAlertaService
             . "🔗 {$url}";
 
         $usuarios = User::role('monitoreo')
-            ->where('empresa_id', $reporte->empresa_id)
             ->whereNotNull('telefonos')
             ->where('telefonos', '!=', '')
             ->get();
