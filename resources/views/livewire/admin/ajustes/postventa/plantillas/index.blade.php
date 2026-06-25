@@ -37,8 +37,16 @@
                         @foreach ($plantillas as $plantilla)
                             <tr wire:key="plantilla-{{ $plantilla->id }}" class="hover:bg-gray-50 dark:hover:bg-gray-900/20 transition">
                                 <td class="px-4 py-3">
-                                    <span class="font-medium text-gray-800 dark:text-gray-100">
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">
                                         {{ $plantilla->sector?->nombre ?? '— Por defecto —' }}
+                                    </div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-semibold
+                                        @if ($plantilla->tipo_cliente === 'nuevo') bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400
+                                        @elseif ($plantilla->tipo_cliente === 'recurrente') bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400
+                                        @else bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 @endif">
+                                        @if ($plantilla->tipo_cliente === 'nuevo') Cliente nuevo
+                                        @elseif ($plantilla->tipo_cliente === 'recurrente') Cliente recurrente
+                                        @else Ambos @endif
                                     </span>
                                 </td>
                                 <td class="px-4 py-3 max-w-xs">
