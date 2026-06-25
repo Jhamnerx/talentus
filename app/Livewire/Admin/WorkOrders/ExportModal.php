@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Exports\WorkOrdersExport;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use WireUi\Traits\WireUiActions;
 
@@ -22,7 +23,8 @@ class ExportModal extends Component
     protected function rules()
     {
         return [
-            'export_tecnico_id' => 'required|exists:users,id',
+            // 'todos' exporta las OTs de todos los técnicos; si no, debe ser un técnico válido.
+            'export_tecnico_id' => ['required', Rule::when($this->export_tecnico_id !== 'todos', ['exists:users,id'])],
             'export_fecha_inicial' => 'required|date',
             'export_fecha_final' => 'required|date|after_or_equal:export_fecha_inicial',
         ];
@@ -32,6 +34,7 @@ class ExportModal extends Component
     {
         return [
             'export_tecnico_id.required' => 'Debe seleccionar un técnico',
+            'export_tecnico_id.exists' => 'El técnico seleccionado no es válido',
             'export_fecha_inicial.required' => 'La fecha inicial es requerida',
             'export_fecha_final.required' => 'La fecha final es requerida',
             'export_fecha_final.after_or_equal' => 'La fecha final debe ser posterior a la inicial',

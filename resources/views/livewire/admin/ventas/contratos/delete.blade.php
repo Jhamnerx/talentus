@@ -1,4 +1,4 @@
-<x-form.modal.card title="Eliminar Contrato" wire:model.live="modalDelete" width="md">
+<x-form.modal.card title="Eliminar Contrato" wire:model.live="openModalDelete" width="md">
     <div class="flex gap-4">
         <!-- Icon -->
         <div class="flex-shrink-0">

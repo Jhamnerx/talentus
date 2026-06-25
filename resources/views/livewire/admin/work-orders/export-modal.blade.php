@@ -7,6 +7,7 @@
             </p>
 
             <x-form.select wire:model="export_tecnico_id" label="Técnico *" placeholder="Seleccione un técnico">
+                <x-select.option label="Todos los técnicos" value="todos" />
                 @foreach ($tecnicos as $tecnico)
                     <x-select.option label="{{ $tecnico->name }}" value="{{ $tecnico->id }}" />
                 @endforeach
@@ -32,7 +33,8 @@
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                 <p class="text-sm text-blue-800 dark:text-blue-300">
                     <strong>Nota:</strong> El archivo se descargará automáticamente con todas las órdenes de trabajo
-                    del técnico seleccionado en el rango de fechas especificado.
+                    del técnico seleccionado (o de <strong>todos los técnicos</strong>) en el rango de fechas
+                    especificado.
                 </p>
             </div>
         </div>

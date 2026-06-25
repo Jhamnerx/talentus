@@ -1,4 +1,4 @@
-<x-form.modal.card title="Eliminar Registro" wire:model.live="modalDelete" width="md">
+<x-form.modal.card title="Eliminar Registro" wire:model.live="openModalDelete" width="md">
     <div class="flex gap-4">
         <!-- Icon -->
         <div class="flex-shrink-0">
@@ -14,7 +14,7 @@
         <!-- Content -->
         <div class="flex-1">
             <p class="text-sm text-gray-600 dark:text-gray-400">
-                EstÃ¡s seguro de eliminar este Presupuesto?.
+                Estás seguro de eliminar este Presupuesto?.
             </p>
         </div>
     </div>

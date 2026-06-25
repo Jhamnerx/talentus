@@ -14,7 +14,7 @@
         <!-- Content -->
         <div class="flex-1">
             <p class="text-sm text-gray-600 dark:text-gray-400">
-                Estas seguro de eliminar Guia remisÃ­on?.
+                Estas seguro de eliminar Guia remisíon?.
             </p>
         </div>
     </div>

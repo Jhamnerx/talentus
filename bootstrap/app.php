@@ -39,6 +39,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'tracking.auth' => \App\Http\Middleware\AllowedTrackingIp::class,
             'whatsapp.internal' => \App\Http\Middleware\VerifyInternalToken::class,
+            // Portal de cliente (Sanctum abilities + contexto de empresa)
+            'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+            'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+            'portal.empresa' => \App\Http\Middleware\SetPortalEmpresa::class,
         ]);
     })->withSchedule(function (Schedule $schedule) {
         $schedule->command('backup:clean')->daily()->at('01:00');

@@ -85,6 +85,33 @@
 
 
     @livewireScripts
+
+    <script>
+        // Selección masiva (select-all) compartida por los listados del admin.
+        // Evita "uncheckParent/toggleAll is not defined" en tablas que no definen
+        // su propio x-data. Los listados con handleSelect propio tienen precedencia.
+        (function () {
+            function updateBulkCount() {
+                const countEl = document.querySelector('.table-items-action');
+                if (!countEl) return;
+                const n = document.querySelectorAll('input.table-item:checked').length;
+                const countSpan = document.querySelector('.table-items-count');
+                if (countSpan) countSpan.innerHTML = n;
+                n > 0 ? countEl.classList.remove('hidden') : countEl.classList.add('hidden');
+            }
+            window.toggleAll = function (e) {
+                const checked = !!(e && e.target && e.target.checked);
+                document.querySelectorAll('input.table-item').forEach((el) => { el.checked = checked; });
+                updateBulkCount();
+            };
+            window.uncheckParent = function () {
+                const parent = document.getElementById('parent-checkbox');
+                if (parent) parent.checked = false;
+                updateBulkCount();
+            };
+        })();
+    </script>
+
     @stack('modals')
     @stack('scripts')
 </body>

@@ -1,16 +1,13 @@
 <x-admin-layout ruta="vehiculos-reportes">
 
-    <!-- Table -->
-
-
     @livewire('admin.vehiculos.reportes.index')
 
-    @livewire('admin.vehiculos.reportes.show-contactos')
+    {{-- Modales --}}
     @livewire('admin.vehiculos.reportes.save')
     @livewire('admin.vehiculos.reportes.edit')
     @livewire('admin.vehiculos.reportes.delete')
-    @livewire('admin.vehiculos.reportes.show-detalle')
     @livewire('admin.vehiculos.reportes.recordatorio')
+    @livewire('admin.vehiculos.reportes.show-contactos')
     @livewire('admin.vehiculos.reportes.estado-transmision')
 
 </x-admin-layout>
