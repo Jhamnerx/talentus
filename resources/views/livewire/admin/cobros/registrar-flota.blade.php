@@ -18,7 +18,7 @@
                     {{ count($vehiculo_ids) }} vehículo(s) seleccionado(s)
                 </p>
             @elseif ($cliente_id && $vehiculos->isEmpty())
-                <p class="text-xs text-amber-500 mt-1">Este cliente no tiene vehículos registrados.</p>
+                <p class="text-xs text-amber-500 mt-1">Este cliente no tiene placas pendientes de registrar (todas ya tienen un cobro activo o suspendido).</p>
             @endif
         </div>
 
