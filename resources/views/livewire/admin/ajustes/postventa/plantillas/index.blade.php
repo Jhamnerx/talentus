@@ -26,7 +26,7 @@
                 <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20">
                         <tr>
-                            <th class="px-4 py-3 text-left">Sector</th>
+                            <th class="px-4 py-3 text-left">Sector / Tipo</th>
                             <th class="px-4 py-3 text-left">Cuerpo del mensaje</th>
                             <th class="px-4 py-3 text-center">Archivo</th>
                             <th class="px-4 py-3 text-center">Estado</th>

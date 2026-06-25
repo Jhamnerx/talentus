@@ -26,10 +26,19 @@ class ConfiguracionPostventa extends Component
         $this->validate();
 
         $empresa = Empresa::find(session('empresa'));
-        if ($empresa) {
-            $empresa->postventa_dias_cliente_nuevo = $this->dias;
-            $empresa->save();
+
+        if (! $empresa) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'No se encontró la empresa activa.',
+            );
+            return;
         }
+
+        $empresa->postventa_dias_cliente_nuevo = $this->dias;
+        $empresa->save();
 
         $this->dispatch(
             'notify-toast',
