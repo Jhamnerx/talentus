@@ -30,7 +30,7 @@ class Edit extends Component
         $this->sector_id       = $plantilla->sector_id;
         $this->cuerpo          = $plantilla->cuerpo;
         $this->activo          = $plantilla->activo;
-        $this->tipo_cliente    = $plantilla->tipo_cliente;
+        $this->tipo_cliente    = $plantilla->tipo_cliente ?? 'ambos';
         $this->archivoActual   = $plantilla->archivo_url;
         $this->archivo         = null;
         $this->openModal       = true;
