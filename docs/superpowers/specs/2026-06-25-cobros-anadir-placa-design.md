@@ -97,18 +97,21 @@ las que ya tengan cobro activo/suspendido, avisando.
 
 ### 5. Pruebas
 
-Feature test de `RegistrarFlota` (PHPUnit):
+**Decisión del usuario: solo prueba manual.** El proyecto no tiene una BD de pruebas segura
+(`phpunit.xml` tiene SQLite comentado → usaría el MySQL real y `RefreshDatabase` lo borraría) ni
+factories para `Cobros`/`Plan`/`PeriodoCobro`. No se escribe feature test; se valida con:
 
-1. `abrir($clienteId)` con cobro previo activo → hereda `plan_id`, `periodo`, `divisa`,
-   `tipo_comprobante`, `monto`, `descuento` del último cobro activo.
-2. `abrir($clienteId)` excluye del listado los vehículos con cobro `ACTIVO`/`SUSPENDIDO`.
-3. `abrir($clienteId)` sin cobro previo → abre en blanco con `cliente_id` fijado.
-4. `guardar()` con N placas → crea N `Cobros` y N `PeriodoCobro` `PENDIENTE`/`INICIAL`.
-5. `abrir(null)` mantiene el comportamiento de flota en blanco (no regresión).
+1. `php -l` sobre los archivos PHP modificados (sintaxis).
+2. Prueba manual en el navegador (escenarios abajo).
 
-**Nota de entorno:** existe la indicación de **no** ejecutar `php artisan test` contra la BD real
-(`RefreshDatabase` la borra). Antes de correr las pruebas se confirmará la vía (conexión/BD de
-pruebas dedicada vs. solo validación de sintaxis con `php -l`).
+Escenarios de verificación manual:
+
+- Cliente con flota activa → "+ Añadir placa" abre el modal con plan/periodo/divisa/tipo/monto del
+  último cobro activo y muestra **solo** placas sin cobro.
+- Marcar y guardar → se crean los cobros y aparecen en la lista; "Cobrar seleccionados" funciona.
+- Cliente sin cobro previo → modal en blanco con el cliente fijado.
+- Cliente con todas sus placas ya con cobro → select vacío + aviso "sin placas pendientes".
+- Botón "Registrar flota" del toolbar superior → sigue abriendo en blanco (sin regresión).
 
 ## Archivos afectados
 
