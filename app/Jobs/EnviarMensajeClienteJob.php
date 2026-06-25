@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Empresa;
 use App\Models\PostventaPlantilla;
 use App\Models\Sector;
 use App\Models\WorkOrder;
@@ -107,8 +108,14 @@ class EnviarMensajeClienteJob implements ShouldQueue
     private function resolverPlantilla(WorkOrder $workOrder): ?PostventaPlantilla
     {
         $empresaId = $workOrder->empresa_id;
-        $sectorId  = null;
 
+        $umbral = (int) (Empresa::withoutGlobalScopes()
+            ->whereKey($empresaId)
+            ->value('postventa_dias_cliente_nuevo') ?? 30);
+
+        $tipo = $workOrder->cliente?->tipoPostventa($umbral) ?? 'recurrente';
+
+        $sectorId = null;
         if ($workOrder->sector) {
             $nombre   = trim(explode(',', $workOrder->sector)[0]);
             $sectorId = Sector::withoutGlobalScopes()
@@ -117,23 +124,34 @@ class EnviarMensajeClienteJob implements ShouldQueue
                 ->value('id');
         }
 
-        if ($sectorId) {
-            $plantilla = PostventaPlantilla::withoutGlobalScopes()
-                ->where('empresa_id', $empresaId)
-                ->where('sector_id', $sectorId)
-                ->where('activo', true)
-                ->first();
+        // Orden de preferencia: sector+tipo, sector+ambos, default+tipo, default+ambos.
+        $candidatos = [];
+        if ($sectorId !== null) {
+            $candidatos[] = ['sector_id' => $sectorId, 'tipo_cliente' => $tipo];
+            $candidatos[] = ['sector_id' => $sectorId, 'tipo_cliente' => 'ambos'];
+        }
+        $candidatos[] = ['sector_id' => null, 'tipo_cliente' => $tipo];
+        $candidatos[] = ['sector_id' => null, 'tipo_cliente' => 'ambos'];
 
+        foreach ($candidatos as $criterio) {
+            $query = PostventaPlantilla::withoutGlobalScopes()
+                ->where('empresa_id', $empresaId)
+                ->where('tipo_cliente', $criterio['tipo_cliente'])
+                ->where('activo', true);
+
+            if ($criterio['sector_id'] === null) {
+                $query->whereNull('sector_id');
+            } else {
+                $query->where('sector_id', $criterio['sector_id']);
+            }
+
+            $plantilla = $query->first();
             if ($plantilla) {
                 return $plantilla;
             }
         }
 
-        return PostventaPlantilla::withoutGlobalScopes()
-            ->where('empresa_id', $empresaId)
-            ->whereNull('sector_id')
-            ->where('activo', true)
-            ->first();
+        return null;
     }
 
     private function reemplazarVariables(string $cuerpo, WorkOrder $workOrder): string
