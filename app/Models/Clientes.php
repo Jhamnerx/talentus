@@ -112,6 +112,21 @@ class Clientes extends Model
         return $this->belongsTo(Sector::class, 'sector_id');
     }
 
+    /**
+     * Clasifica al cliente para la mensajería post-venta.
+     * NUEVO: tiene exactamente 1 vehículo no eliminado Y se registró hace <= $umbralDias.
+     * RECURRENTE: cualquier otro caso.
+     */
+    public function tipoPostventa(int $umbralDias): string
+    {
+        $esPrimerVehiculo = $this->vehiculos()->withoutTrashed()->count() === 1;
+
+        $recienRegistrado = $this->created_at !== null
+            && $this->created_at->gte(now()->subDays($umbralDias));
+
+        return ($esPrimerVehiculo && $recienRegistrado) ? 'nuevo' : 'recurrente';
+    }
+
 
     /**
      * Nota: a diferencia de vehiculos() (que usa withTrashed()), estas
