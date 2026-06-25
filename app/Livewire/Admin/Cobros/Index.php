@@ -118,13 +118,13 @@ class Index extends Component
         $tipo    = $primerCobro->tipo_pago ?? 'FACTURA';
         $cliente = $primerCobro->clientes;
 
-        $periodoIdsJson = $periodos->pluck('id')->toJson();
+        $periodoIds = $periodos->pluck('id')->implode(',');
 
         session(['cobro_redirect_back' => route('admin.cobros.index')]);
 
         if ($tipo === 'RECIBO') {
             $this->redirect(
-                route('admin.ventas.recibos.create', ['periodo_ids' => $periodoIdsJson]),
+                route('admin.ventas.recibos.create', ['periodo_ids' => $periodoIds]),
                 navigate: true
             );
             return;
@@ -132,14 +132,14 @@ class Index extends Component
 
         if (($cliente?->tipo_documento_id ?? null) == 6) {
             $this->redirect(
-                route('admin.factura.create', ['periodo_ids' => $periodoIdsJson]),
+                route('admin.factura.create', ['periodo_ids' => $periodoIds]),
                 navigate: true
             );
             return;
         }
 
         $this->redirect(
-            route('admin.boleta.create', ['periodo_ids' => $periodoIdsJson]),
+            route('admin.boleta.create', ['periodo_ids' => $periodoIds]),
             navigate: true
         );
     }

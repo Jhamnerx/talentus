@@ -22,7 +22,7 @@ class RecibosController extends Controller
 
     public function create($periodo_ids = null)
     {
-        $periodo_ids = $periodo_ids ? json_decode($periodo_ids, true) : [];
+        $periodo_ids = $periodo_ids ? array_values(array_filter(array_map('intval', explode(',', $periodo_ids)))) : [];
         $presupuesto_id = request()->query('presupuesto_id');
         return view('admin.ventas.recibos.create', compact('periodo_ids', 'presupuesto_id'));
     }

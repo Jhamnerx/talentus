@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Portal\PortalOrdenTrabajoController;
 use App\Http\Controllers\Api\Portal\PortalTicketController;
 use App\Http\Controllers\Api\Portal\PortalContactoController;
 use App\Http\Controllers\Api\Portal\PortalPdfController;
+use App\Http\Controllers\Api\Portal\PortalUsuarioController;
 use App\Http\Controllers\Api\ConsultasApiController;
 use App\Http\Controllers\Api\ContactoApiController;
 use App\Http\Controllers\Api\MobileAuthController;
@@ -122,6 +123,12 @@ Route::prefix('portal')->name('api.portal.')->group(function () {
         Route::post('contactos', [PortalContactoController::class, 'store'])->name('contactos.store');
         Route::put('contactos/{id}', [PortalContactoController::class, 'update'])->name('contactos.update');
         Route::delete('contactos/{id}', [PortalContactoController::class, 'destroy'])->name('contactos.destroy');
+
+        // Gestión de usuarios de la cuenta (solo el titular)
+        Route::get('usuarios', [PortalUsuarioController::class, 'index'])->name('usuarios.index');
+        Route::post('usuarios', [PortalUsuarioController::class, 'store'])->name('usuarios.store');
+        Route::put('usuarios/{id}', [PortalUsuarioController::class, 'update'])->name('usuarios.update');
+        Route::delete('usuarios/{id}', [PortalUsuarioController::class, 'destroy'])->name('usuarios.destroy');
 
         // Solicitud de URL firmada para previsualizar un PDF
         Route::get('pdf/{tipo}/{id}', [PortalPdfController::class, 'link'])->name('pdf.link');
