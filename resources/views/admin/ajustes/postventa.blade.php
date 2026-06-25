@@ -13,6 +13,7 @@
 
                 <div class="grow">
                     <div class="p-6 space-y-6">
+                        @livewire('admin.ajustes.postventa.configuracion-postventa')
                         @livewire('admin.ajustes.postventa.plantillas.index')
                         @livewire('admin.ajustes.postventa.plantillas.save')
                         @livewire('admin.ajustes.postventa.plantillas.edit')
