@@ -66,7 +66,7 @@ class Index extends Component
 
     public function openModalDelete(CertificadosAntifatiga $certificado)
     {
-        $this->dispatch('EliminarActa', certificado: $certificado);
+        $this->dispatch('EliminarAntifatiga', certificado: $certificado);
     }
 
     public function openModalShow(CertificadosAntifatiga $certificado)

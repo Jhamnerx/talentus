@@ -14,7 +14,7 @@
         <!-- Content -->
         <div class="flex-1">
             <p class="text-sm text-gray-600 dark:text-gray-400">
-                EstÃ¡s seguro de eliminar esta compra?.
+                Estás seguro de eliminar esta compra?.
             </p>
         </div>
     </div>

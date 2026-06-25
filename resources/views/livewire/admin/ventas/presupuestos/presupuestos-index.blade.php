@@ -120,7 +120,7 @@
                     class="text-slate-400 font-medium dark:text-slate-500">{{ $presupuestos->total() }}</span>
             </h2>
         </header>
-        <div>
+        <div x-data="handleSelect">
             <!-- Table -->
             <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
@@ -565,6 +565,35 @@
         {{ $presupuestos->links() }}
 
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('handleSelect', () => ({
+                selectall: false,
+                selectAction() {
+                    const countEl = document.querySelector('.table-items-action');
+                    if (!countEl) return;
+                    const checkboxes = document.querySelectorAll('input.table-item:checked');
+                    const countSpan = document.querySelector('.table-items-count');
+                    if (countSpan) countSpan.innerHTML = checkboxes.length;
+                    checkboxes.length > 0 ? countEl.classList.remove('hidden') : countEl.classList.add('hidden');
+                },
+                toggleAll() {
+                    this.selectall = !this.selectall;
+                    document.querySelectorAll('input.table-item').forEach((el) => {
+                        el.checked = this.selectall;
+                    });
+                    this.selectAction();
+                },
+                uncheckParent() {
+                    this.selectall = false;
+                    const parent = document.getElementById('parent-checkbox');
+                    if (parent) parent.checked = false;
+                    this.selectAction();
+                }
+            }))
+        })
+    </script>
 
 
 </div>
