@@ -17,6 +17,7 @@ class Edit extends Component
     public ?int                  $sector_id      = null;
     public string                $cuerpo         = '';
     public bool                  $activo         = true;
+    public string                $tipo_cliente   = 'ambos';
     public                       $archivo        = null;
     public ?string               $archivoActual  = null;
 
@@ -29,6 +30,7 @@ class Edit extends Component
         $this->sector_id       = $plantilla->sector_id;
         $this->cuerpo          = $plantilla->cuerpo;
         $this->activo          = $plantilla->activo;
+        $this->tipo_cliente    = $plantilla->tipo_cliente;
         $this->archivoActual   = $plantilla->archivo_url;
         $this->archivo         = null;
         $this->openModal       = true;
@@ -45,10 +47,11 @@ class Edit extends Component
     protected function rules(): array
     {
         return [
-            'sector_id' => 'nullable|exists:sectores,id',
-            'cuerpo'    => 'required|string|max:2000',
-            'activo'    => 'boolean',
-            'archivo'   => 'nullable|file|mimetypes:application/pdf,video/mp4,video/quicktime,video/x-msvideo|max:16384',
+            'sector_id'   => 'nullable|exists:sectores,id',
+            'cuerpo'      => 'required|string|max:2000',
+            'activo'      => 'boolean',
+            'tipo_cliente' => 'required|in:nuevo,recurrente,ambos',
+            'archivo'     => 'nullable|file|mimetypes:application/pdf,video/mp4,video/quicktime,video/x-msvideo|max:16384',
         ];
     }
 
@@ -70,6 +73,7 @@ class Edit extends Component
             'sector_id'    => $validated['sector_id'],
             'cuerpo'       => $validated['cuerpo'],
             'activo'       => $validated['activo'],
+            'tipo_cliente' => $validated['tipo_cliente'],
             'archivo_url'  => $archivoUrl,
             'archivo_tipo' => $archivoTipo,
         ]);

@@ -508,21 +508,35 @@
                                     <tr
                                         class="bg-indigo-100 dark:bg-indigo-900/40 border-t-2 border-indigo-200 dark:border-indigo-700">
                                         <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-2">
-                                            <div class="flex items-center gap-2">
-                                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
-                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                </svg>
-                                                <span class="font-bold text-sm text-indigo-900 dark:text-indigo-100">
-                                                    {{ $clienteNombre }}
-                                                </span>
-                                                @if ($clienteContacto)
-                                                    <span class="text-xs text-indigo-700 dark:text-indigo-300">
-                                                        • {{ $clienteContacto }}
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2">
+                                                    <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                    </svg>
+                                                    <span class="font-bold text-sm text-indigo-900 dark:text-indigo-100">
+                                                        {{ $clienteNombre }}
                                                     </span>
-                                                @endif
+                                                    @if ($clienteContacto)
+                                                        <span class="text-xs text-indigo-700 dark:text-indigo-300">
+                                                            • {{ $clienteContacto }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                @can('admin.cobros.create')
+                                                    <button
+                                                        wire:click="$dispatch('abrirRegistrarFlota', { clienteId: {{ $cobro->clientes_id }} })"
+                                                        class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 dark:text-indigo-200 hover:text-indigo-900 dark:hover:text-white bg-white/70 dark:bg-indigo-800/50 hover:bg-white dark:hover:bg-indigo-700 border border-indigo-300 dark:border-indigo-600 rounded-md px-2 py-1 transition"
+                                                        title="Añadir placa a este cliente heredando su configuración">
+                                                        <svg class="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                                                        </svg>
+                                                        Añadir placa
+                                                    </button>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>

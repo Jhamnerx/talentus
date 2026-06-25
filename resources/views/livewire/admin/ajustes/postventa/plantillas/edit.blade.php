@@ -17,6 +17,18 @@
                 </div>
 
                 <div class="col-span-12">
+                    <label class="block text-sm font-medium mb-1">Tipo de cliente</label>
+                    <select wire:model.live="tipo_cliente" class="form-select w-full">
+                        <option value="ambos">Ambos (nuevo y recurrente)</option>
+                        <option value="nuevo">Cliente nuevo</option>
+                        <option value="recurrente">Cliente recurrente</option>
+                    </select>
+                    @error('tipo_cliente')
+                        <p class="mt-1 text-pink-600 text-sm">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="col-span-12">
                     <label class="block text-sm font-medium mb-1">
                         Cuerpo del mensaje
                         <span class="text-xs font-normal text-gray-400 ml-1">Variables: {placa} {cliente} {fecha_instalacion} {fecha_cierre}</span>

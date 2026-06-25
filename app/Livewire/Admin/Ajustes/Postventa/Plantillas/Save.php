@@ -15,6 +15,7 @@ class Save extends Component
     public ?int    $sector_id   = null;
     public string  $cuerpo      = '';
     public bool    $activo      = true;
+    public string  $tipo_cliente = 'ambos';
     public         $archivo     = null;
 
     protected $listeners = ['openModalSavePlantilla' => 'open'];
@@ -22,8 +23,9 @@ class Save extends Component
     public function open(): void
     {
         $this->reset();
-        $this->activo    = true;
-        $this->openModal = true;
+        $this->activo       = true;
+        $this->tipo_cliente = 'ambos';
+        $this->openModal    = true;
     }
 
     public function close(): void
@@ -36,10 +38,11 @@ class Save extends Component
     protected function rules(): array
     {
         return [
-            'sector_id' => 'nullable|exists:sectores,id',
-            'cuerpo'    => 'required|string|max:2000',
-            'activo'    => 'boolean',
-            'archivo'   => 'nullable|file|mimetypes:application/pdf,video/mp4,video/quicktime,video/x-msvideo|max:16384',
+            'sector_id'   => 'nullable|exists:sectores,id',
+            'cuerpo'      => 'required|string|max:2000',
+            'activo'      => 'boolean',
+            'tipo_cliente' => 'required|in:nuevo,recurrente,ambos',
+            'archivo'     => 'nullable|file|mimetypes:application/pdf,video/mp4,video/quicktime,video/x-msvideo|max:16384',
         ];
     }
 
@@ -55,6 +58,7 @@ class Save extends Component
             'sector_id'    => $validated['sector_id'],
             'cuerpo'       => $validated['cuerpo'],
             'activo'       => $validated['activo'],
+            'tipo_cliente' => $validated['tipo_cliente'],
             'archivo_url'  => $archivoUrl,
             'archivo_tipo' => $archivoTipo,
         ]);

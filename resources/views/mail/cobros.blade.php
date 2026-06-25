@@ -123,7 +123,7 @@
                         @foreach ($vehiculos as $detalle)
                             <tr>
                                 <td>{{ $detalle['placa'] }}</td>
-                                <td>{{ $detalle['fecha_vencimiento']->format('d-m-Y') }}</td>
+                                <td>{{ $detalle['fecha_vencimiento'] ? \Illuminate\Support\Carbon::parse($detalle['fecha_vencimiento'])->format('d-m-Y') : '—' }}</td>
                                 <td>
                                     <a href="{{ config('app.url') . '/admin/cobros/' . $detalle['cobro_id'] }}">
                                         {{ $detalle['cobro_id'] }}

@@ -69,7 +69,7 @@ class RegistrarFlota extends Component
         $this->planes = Plan::where('is_active', true)->orderBy('sort_order')->get();
     }
 
-    public function abrir(): void
+    public function abrir(?int $clienteId = null): void
     {
         $this->loadPlanes();
         $this->reset(['cliente_id', 'vehiculo_ids', 'plan_id', 'monto', 'descuento', 'nota']);
@@ -79,20 +79,70 @@ class RegistrarFlota extends Component
         $this->tipo_comprobante = 'FACTURA';
         $this->fecha_inicio     = Carbon::today()->format('Y-m-d');
         $this->fecha_fin        = Carbon::today()->addMonthNoOverflow()->format('Y-m-d');
-        $this->modalOpen        = true;
+
+        if ($clienteId) {
+            $this->prefillDesdeCliente($clienteId);
+        }
+
+        $this->modalOpen = true;
+    }
+
+    /**
+     * Modo "Añadir placa": fija el cliente, carga sus placas disponibles y hereda
+     * la configuración de su último cobro ACTIVO (si existe). Todo queda editable.
+     */
+    private function prefillDesdeCliente(int $clienteId): void
+    {
+        $this->cliente_id = $clienteId;
+        $this->cargarVehiculosDisponibles();
+
+        $ultimoCobro = Cobros::activos()
+            ->where('clientes_id', $clienteId)
+            ->latest('id')
+            ->first();
+
+        if (!$ultimoCobro) {
+            return;
+        }
+
+        $this->plan_id          = $ultimoCobro->plan_id;
+        $this->periodo          = $ultimoCobro->periodo ?? 'MENSUAL';
+        $this->divisa           = $ultimoCobro->divisa ?? 'PEN';
+        $this->tipo_comprobante = $ultimoCobro->tipo_pago ?? 'FACTURA';
+        $this->monto            = (float) ($ultimoCobro->monto ?? 0);
+        $this->descuento        = (float) ($ultimoCobro->descuento ?? 0);
+        $this->nota             = $ultimoCobro->nota;
+        $this->fecha_fin        = $this->calcularFechaFin($this->fecha_inicio, $this->periodo);
     }
 
     public function updatedClienteId(): void
     {
         $this->vehiculo_ids = [];
+        $this->cargarVehiculosDisponibles();
+    }
 
-        if ($this->cliente_id) {
-            $this->vehiculos = Vehiculos::where('clientes_id', $this->cliente_id)
-                ->orderBy('placa')
-                ->get(['id', 'placa', 'marca', 'modelo']);
-        } else {
+    /**
+     * Carga los vehículos del cliente seleccionado que aún NO tienen un cobro
+     * ACTIVO o SUSPENDIDO (es decir, las placas disponibles para registrar).
+     */
+    private function cargarVehiculosDisponibles(): void
+    {
+        if (!$this->cliente_id) {
             $this->vehiculos = collect();
+            return;
         }
+
+        $vehiculosConCobro = Cobros::query()
+            ->where('clientes_id', $this->cliente_id)
+            ->whereIn('estado', [CobroEstado::ACTIVO, CobroEstado::SUSPENDIDO])
+            ->pluck('vehiculos_id')
+            ->filter()
+            ->all();
+
+        $this->vehiculos = Vehiculos::where('clientes_id', $this->cliente_id)
+            ->whereNotIn('id', $vehiculosConCobro)
+            ->orderBy('placa')
+            ->get(['id', 'placa', 'marca', 'modelo']);
     }
 
     public function updatedPlanId(): void

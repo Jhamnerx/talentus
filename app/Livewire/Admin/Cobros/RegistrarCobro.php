@@ -251,11 +251,11 @@ class RegistrarCobro extends Component
 
             if ($this->cobrar_ahora) {
                 $cliente = Clientes::find($this->cliente_id);
-                $periodoIdsJson = json_encode([$periodo->id]);
+                $periodoIds = (string) $periodo->id;
 
                 if ($this->tipo_comprobante === 'RECIBO') {
                     $this->redirect(
-                        route('admin.ventas.recibos.create', ['periodo_ids' => $periodoIdsJson]),
+                        route('admin.ventas.recibos.create', ['periodo_ids' => $periodoIds]),
                         navigate: true
                     );
                     return;
@@ -263,14 +263,14 @@ class RegistrarCobro extends Component
 
                 if (($cliente?->tipo_documento_id ?? null) == 6) {
                     $this->redirect(
-                        route('admin.factura.create', ['periodo_ids' => $periodoIdsJson]),
+                        route('admin.factura.create', ['periodo_ids' => $periodoIds]),
                         navigate: true
                     );
                     return;
                 }
 
                 $this->redirect(
-                    route('admin.boleta.create', ['periodo_ids' => $periodoIdsJson]),
+                    route('admin.boleta.create', ['periodo_ids' => $periodoIds]),
                     navigate: true
                 );
                 return;

@@ -1,11 +1,10 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto" wire:poll.30s>
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
 
     {{-- Header --}}
     <div class="sm:flex sm:justify-between sm:items-center mb-6">
         <div>
             <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Reportes de Monitoreo</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Alertas automáticas y manuales · se actualiza cada
-                30s</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Alertas automáticas y manuales</p>
         </div>
         <div class="flex flex-wrap gap-2 mt-4 sm:mt-0">
             <x-form.button wire:click.prevent="openModalEstadoTransmision" outline secondary icon="signal"
