@@ -273,8 +273,16 @@ class PagosModal extends Component
 
         $updateData = ['pago_estado' => $nuevoEstado];
 
-        // Para Recibos también actualizar estado
+        // Solo Recibos tiene columna fecha_pago / estado. La fecha de pago refleja
+        // el último pago real registrado (no la fecha de creación); se limpia si no
+        // quedan pagos.
         if ($this->modelType === 'Recibos') {
+            $ultimoPago = $this->model->payments()
+                ->orderByDesc('fecha')
+                ->orderByDesc('id')
+                ->first();
+
+            $updateData['fecha_pago'] = $ultimoPago?->fecha;
             $updateData['estado'] = $nuevoEstado === 'PAID' ? 'COMPLETADO' : $this->model->estado;
         }
 
