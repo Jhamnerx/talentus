@@ -129,7 +129,16 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
 
                     $esPen      = strtoupper($v->divisa ?? 'PEN') === 'PEN';
                     $total      = (float) $v->total;
-                    $estadoPago = $isAnulada ? 'ANULADO' : ($hasNC ? 'CON NC' : ($esPaid ? 'PAGADO' : 'PENDIENTE'));
+
+                    // Monto realmente cobrado segun los pagos registrados (fuente de verdad)
+                    $pagado     = (!$isAnulada && !$hasNC) ? (float) $v->payments->sum('monto') : 0.0;
+                    $saldo      = round($total - $pagado, 2);
+                    $estadoPago = $isAnulada ? 'ANULADO'
+                        : ($hasNC ? 'CON NC'
+                        : (round($pagado, 2) >= round($total, 2) ? 'PAGADO'
+                        : ($pagado > 0 ? 'PARCIAL' : 'PENDIENTE')));
+                    $abonadoCol = ($isAnulada || $hasNC) ? '' : $pagado;
+                    $saldoCol   = ($isAnulada || $hasNC) ? '' : $saldo;
                     $sortPrefix = ($isAnulada || $hasNC) ? 'ZZZZ_' : '';
 
                     $row = [
@@ -168,6 +177,8 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                             $v->forma_pago ?? '',
                         ], $financiero, [
                             $estadoPago,
+                            $abonadoCol,
+                            $saldoCol,
                             $vto?->format('d/m/Y') ?? '',
                             $diasRetraso > 0 ? $diasRetraso : '',
                         ]);
@@ -182,6 +193,8 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                             $v->forma_pago ?? '',
                         ], $financiero, [
                             $estadoPago,
+                            $abonadoCol,
+                            $saldoCol,
                             $vto?->format('d/m/Y') ?? '',
                             $diasRetraso > 0 ? $diasRetraso : '',
                         ]);
@@ -208,10 +221,21 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                 ->get()
                 ->each(function ($r) use (&$items) {
                     $fecha     = Carbon::parse($r->fecha_emision);
-                    $esPaid    = $r->pago_estado === 'PAID';
-                    $fechaPago = $r->fecha_pago ? Carbon::parse($r->fecha_pago) : null;
                     $esPen     = strtoupper($r->divisa ?? 'PEN') === 'PEN';
                     $total     = (float) $r->total;
+
+                    // Monto cobrado y fecha del ultimo pago segun los pagos reales (fuente de verdad)
+                    $pagado    = (float) $r->payments->sum('monto');
+                    $saldo     = round($total - $pagado, 2);
+                    $estadoPago = round($pagado, 2) >= round($total, 2) ? 'PAGADO'
+                        : ($pagado > 0 ? 'PARCIAL' : 'PENDIENTE');
+
+                    $ultimoPago = $r->payments
+                        ->sortByDesc(fn($p) => $p->fecha)
+                        ->first();
+                    $fechaPago = $ultimoPago?->fecha
+                        ? Carbon::parse($ultimoPago->fecha)
+                        : ($r->fecha_pago ? Carbon::parse($r->fecha_pago) : null);
 
                     $row = [
                         '_group'    => $this->getGroupLabel($fecha),
@@ -229,7 +253,9 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                             $r->tipo_venta ?? '',
                             $esPen  ? $total : 0.00,
                             !$esPen ? $total : 0.00,
-                            $esPaid ? 'PAGADO' : 'PENDIENTE',
+                            $estadoPago,
+                            $pagado,
+                            $saldo,
                             $fechaPago?->format('d/m/Y') ?? '',
                             '',  // recibos no tienen dias de retraso
                         ];
@@ -250,7 +276,9 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                             '',  // igv
                             $total,
                             $esPen ? 'SOLES' : 'DOLARES',
-                            $esPaid ? 'PAGADO' : 'PENDIENTE',
+                            $estadoPago,
+                            $pagado,
+                            $saldo,
                             $fechaPago?->format('d/m/Y') ?? '',
                             '',  // dias de retraso
                         ];
@@ -305,50 +333,53 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                 ->each(function ($v) use (&$resumen, $hoy) {
                     $esPen  = strtoupper($v->divisa ?? 'PEN') === 'PEN';
                     $total  = (float) $v->total;
-                    $esPaid = $v->pago_estado === 'PAID';
 
                     // Facturado total
                     $esPen ? $resumen['facturado_pen'] += $total : $resumen['facturado_usd'] += $total;
 
-                    if ($esPaid) {
-                        // Cobrado: sumar pagos reales
-                        foreach ($v->payments as $p) {
-                            $monto = (float) $p->monto;
-                            $div   = strtoupper($p->divisa ?? 'PEN') === 'PEN';
-                            $div ? $resumen['cobrado_pen'] += $monto : $resumen['cobrado_usd'] += $monto;
+                    // Cobrado: sumar SIEMPRE los pagos reales (incluye abonos parciales)
+                    $pagado = 0.0;
+                    foreach ($v->payments as $p) {
+                        $monto = (float) $p->monto;
+                        $div   = strtoupper($p->divisa ?? 'PEN') === 'PEN';
+                        $div ? $resumen['cobrado_pen'] += $monto : $resumen['cobrado_usd'] += $monto;
+                        $pagado += $monto;
 
-                            // Por destino (omitir destinos sin label)
-                            $dest = $this->destinoLabel($p);
-                            if ($dest !== '') {
-                                $resumen['destinos'][$dest] ??= ['pen' => 0.0, 'usd' => 0.0];
-                                $div
-                                    ? $resumen['destinos'][$dest]['pen'] += $monto
-                                    : $resumen['destinos'][$dest]['usd'] += $monto;
-                            }
-
-                            // Por método
-                            $met = $p->paymentMethod?->description ?? 'Sin método';
-                            $resumen['metodos'][$met] ??= ['pen' => 0.0, 'usd' => 0.0];
+                        // Por destino (omitir destinos sin label)
+                        $dest = $this->destinoLabel($p);
+                        if ($dest !== '') {
+                            $resumen['destinos'][$dest] ??= ['pen' => 0.0, 'usd' => 0.0];
                             $div
-                                ? $resumen['metodos'][$met]['pen'] += $monto
-                                : $resumen['metodos'][$met]['usd'] += $monto;
+                                ? $resumen['destinos'][$dest]['pen'] += $monto
+                                : $resumen['destinos'][$dest]['usd'] += $monto;
                         }
-                    } else {
-                        $esPen ? $resumen['por_cobrar_pen'] += $total : $resumen['por_cobrar_usd'] += $total;
+
+                        // Por método
+                        $met = $p->paymentMethod?->description ?? 'Sin método';
+                        $resumen['metodos'][$met] ??= ['pen' => 0.0, 'usd' => 0.0];
+                        $div
+                            ? $resumen['metodos'][$met]['pen'] += $monto
+                            : $resumen['metodos'][$met]['usd'] += $monto;
+                    }
+
+                    // Saldo pendiente (total - abonado). Solo lo no cobrado va a por cobrar.
+                    $saldo = round($total - $pagado, 2);
+                    if ($saldo > 0) {
+                        $esPen ? $resumen['por_cobrar_pen'] += $saldo : $resumen['por_cobrar_usd'] += $saldo;
 
                         $vto         = $v->fecha_vencimiento ? Carbon::parse($v->fecha_vencimiento) : null;
                         $diasRetraso = ($vto && $vto->lt($hoy)) ? (int) $vto->diffInDays($hoy) : 0;
 
                         if ($diasRetraso > 0) {
-                            $esPen ? $resumen['vencido_pen'] += $total : $resumen['vencido_usd'] += $total;
+                            $esPen ? $resumen['vencido_pen'] += $saldo : $resumen['vencido_usd'] += $saldo;
                         }
 
                         $resumen['por_cobrar_docs'][] = [
                             'tipo'         => 'VENTA',
                             'documento'    => $v->serie_correlativo ?? '',
                             'cliente'      => $v->cliente?->razon_social ?? '',
-                            'total_pen'    => $esPen ? $total : 0,
-                            'total_usd'    => !$esPen ? $total : 0,
+                            'total_pen'    => $esPen ? $saldo : 0,
+                            'total_usd'    => !$esPen ? $saldo : 0,
                             'vto'          => $vto?->format('d/m/Y') ?? '',
                             'dias_retraso' => $diasRetraso,
                         ];
@@ -399,39 +430,43 @@ class ReporteVentasRecibosExport implements WithMultipleSheets
                 ->each(function ($r) use (&$resumen) {
                     $esPen  = strtoupper($r->divisa ?? 'PEN') === 'PEN';
                     $total  = (float) $r->total;
-                    $esPaid = $r->pago_estado === 'PAID';
 
                     $esPen ? $resumen['facturado_pen'] += $total : $resumen['facturado_usd'] += $total;
 
-                    if ($esPaid) {
-                        foreach ($r->payments as $p) {
-                            $monto = (float) $p->monto;
-                            $div   = strtoupper($p->divisa ?? 'PEN') === 'PEN';
-                            $div ? $resumen['cobrado_pen'] += $monto : $resumen['cobrado_usd'] += $monto;
+                    // Cobrado: sumar SIEMPRE los pagos reales (incluye abonos parciales)
+                    $pagado = 0.0;
+                    foreach ($r->payments as $p) {
+                        $monto = (float) $p->monto;
+                        $div   = strtoupper($p->divisa ?? 'PEN') === 'PEN';
+                        $div ? $resumen['cobrado_pen'] += $monto : $resumen['cobrado_usd'] += $monto;
+                        $pagado += $monto;
 
-                            $dest = $this->destinoLabel($p);
-                            if ($dest !== '') {
-                                $resumen['destinos'][$dest] ??= ['pen' => 0.0, 'usd' => 0.0];
-                                $div
-                                    ? $resumen['destinos'][$dest]['pen'] += $monto
-                                    : $resumen['destinos'][$dest]['usd'] += $monto;
-                            }
-
-                            $met = $p->paymentMethod?->description ?? 'Sin método';
-                            $resumen['metodos'][$met] ??= ['pen' => 0.0, 'usd' => 0.0];
+                        $dest = $this->destinoLabel($p);
+                        if ($dest !== '') {
+                            $resumen['destinos'][$dest] ??= ['pen' => 0.0, 'usd' => 0.0];
                             $div
-                                ? $resumen['metodos'][$met]['pen'] += $monto
-                                : $resumen['metodos'][$met]['usd'] += $monto;
+                                ? $resumen['destinos'][$dest]['pen'] += $monto
+                                : $resumen['destinos'][$dest]['usd'] += $monto;
                         }
-                    } else {
-                        $esPen ? $resumen['por_cobrar_pen'] += $total : $resumen['por_cobrar_usd'] += $total;
+
+                        $met = $p->paymentMethod?->description ?? 'Sin método';
+                        $resumen['metodos'][$met] ??= ['pen' => 0.0, 'usd' => 0.0];
+                        $div
+                            ? $resumen['metodos'][$met]['pen'] += $monto
+                            : $resumen['metodos'][$met]['usd'] += $monto;
+                    }
+
+                    // Saldo pendiente (total - abonado). Solo lo no cobrado va a por cobrar.
+                    $saldo = round($total - $pagado, 2);
+                    if ($saldo > 0) {
+                        $esPen ? $resumen['por_cobrar_pen'] += $saldo : $resumen['por_cobrar_usd'] += $saldo;
 
                         $resumen['por_cobrar_docs'][] = [
                             'tipo'        => 'RECIBO',
                             'documento'   => ($r->serie ?? '') . '-' . ($r->numero ?? ''),
                             'cliente'     => $r->clientes?->razon_social ?? '',
-                            'total_pen'   => $esPen ? $total : 0,
-                            'total_usd'   => !$esPen ? $total : 0,
+                            'total_pen'   => $esPen ? $saldo : 0,
+                            'total_usd'   => !$esPen ? $saldo : 0,
                             'vto'         => '',
                             'dias_retraso' => 0,
                         ];
